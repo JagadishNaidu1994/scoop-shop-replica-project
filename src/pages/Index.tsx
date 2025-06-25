@@ -2,7 +2,7 @@
 import React from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import CultureCupSection from '@/components/CultureCupSection';
+import WellnessBanner from '@/components/WellnessBanner';
 import ProductShowcase from '@/components/ProductShowcase';
 import SuperNaturalSection from '@/components/SuperNaturalSection';
 import BrandLogoSection from '@/components/BrandLogoSection';
@@ -12,7 +12,7 @@ const Index = () => {
     <div className="min-h-screen">
       <Header />
       <main>
-        <CultureCupSection />
+        <WellnessBanner />
         <ProductShowcase />
         <SuperNaturalSection />
         <BrandLogoSection />
