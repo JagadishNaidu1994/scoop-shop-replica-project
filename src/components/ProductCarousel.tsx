@@ -50,11 +50,11 @@ const ProductCarousel = () => {
   const getImagePosition = (index: number) => {
     const diff = index - currentIndex;
     if (diff === 0) return 'translate-x-0 scale-110 z-20 opacity-100';
-    if (diff === 1 || diff === -(images.length - 1)) return 'translate-x-32 scale-90 z-10 opacity-60';
-    if (diff === -1 || diff === images.length - 1) return '-translate-x-32 scale-90 z-10 opacity-60';
-    if (diff === 2 || diff === -(images.length - 2)) return 'translate-x-64 scale-75 z-0 opacity-30';
-    if (diff === -2 || diff === images.length - 2) return '-translate-x-64 scale-75 z-0 opacity-30';
-    return 'translate-x-96 scale-50 z-0 opacity-0';
+    if (diff === 1 || diff === -(images.length - 1)) return 'translate-x-80 scale-90 z-10 opacity-60';
+    if (diff === -1 || diff === images.length - 1) return '-translate-x-80 scale-90 z-10 opacity-60';
+    if (diff === 2 || diff === -(images.length - 2)) return 'translate-x-[20rem] scale-75 z-0 opacity-30';
+    if (diff === -2 || diff === images.length - 2) return '-translate-x-[20rem] scale-75 z-0 opacity-30';
+    return 'translate-x-[30rem] scale-50 z-0 opacity-0';
   };
 
   return (
@@ -66,7 +66,7 @@ const ProductCarousel = () => {
           </h2>
         </div>
 
-        <div className="relative flex items-center justify-center h-80 overflow-hidden">
+        <div className="relative flex items-center justify-center h-80 overflow-hidden px-8">
           {/* Left Arrow */}
           <button
             onClick={prevSlide}
@@ -76,13 +76,13 @@ const ProductCarousel = () => {
           </button>
 
           {/* Images Container */}
-          <div className="relative w-full h-full flex items-center justify-center">
+          <div className="relative w-full max-w-6xl h-full flex items-center justify-center">
             {images.map((image, index) => (
               <div
                 key={index}
                 className={`absolute transition-all duration-500 ease-in-out ${getImagePosition(index)}`}
               >
-                <div className="w-48 h-64 rounded-lg overflow-hidden shadow-xl">
+                <div className="w-56 h-72 rounded-lg overflow-hidden shadow-xl">
                   <img
                     src={image.src}
                     alt={image.alt}
