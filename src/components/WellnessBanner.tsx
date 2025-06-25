@@ -51,17 +51,6 @@ const WellnessBanner = () => {
               🧠 Ask SpoiledBrain
             </button>
           </div>
-
-          {/* Hero green capsule */}
-          <div className="flex justify-center mb-16">
-            <div className="relative">
-              <img 
-                src="/lovable-uploads/362012c4-dfba-48a8-afca-59e8f36ec3cf.png"
-                alt="Green SpoiledChild Capsule"
-                className="w-64 h-auto transform rotate-45"
-              />
-            </div>
-          </div>
         </div>
 
         {/* Animated bottles section */}
