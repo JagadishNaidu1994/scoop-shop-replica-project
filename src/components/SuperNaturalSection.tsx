@@ -1,7 +1,59 @@
-
 import React from 'react';
 
 const SuperNaturalSection = () => {
+  const brandLogos = [
+    {
+      src: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80",
+      alt: "Brand 1",
+      name: "TechCorp"
+    },
+    {
+      src: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80",
+      alt: "Brand 2",
+      name: "CodeFlow"
+    },
+    {
+      src: "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80",
+      alt: "Brand 3",
+      name: "DevTools"
+    },
+    {
+      src: "https://images.unsplash.com/photo-1483058712412-4245e9b90334?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80",
+      alt: "Brand 4",
+      name: "AppleTech"
+    },
+    {
+      src: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80",
+      alt: "Brand 5",
+      name: "GlassCorp"
+    },
+    {
+      src: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80",
+      alt: "Brand 6",
+      name: "InnovateLab"
+    },
+    {
+      src: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80",
+      alt: "Brand 7",
+      name: "DataFlow"
+    },
+    {
+      src: "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80",
+      alt: "Brand 8",
+      name: "CloudSys"
+    },
+    {
+      src: "https://images.unsplash.com/photo-1483058712412-4245e9b90334?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80",
+      alt: "Brand 9",
+      name: "PixelPro"
+    },
+    {
+      src: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80",
+      alt: "Brand 10",
+      name: "MetaTech"
+    }
+  ];
+
   return (
     <>
       {/* Blue wavy section */}
@@ -94,14 +146,40 @@ const SuperNaturalSection = () => {
         </div>
       </section>
 
-      {/* Retail partners section */}
-      <section className="bg-gray-100 py-12">
-        <div className="container mx-auto px-4 text-center">
-          <h3 className="text-lg font-bold mb-6">FIND ALEC'S ICE CREAM AT A STORE NEAR YOU</h3>
-          <div className="flex justify-center items-center space-x-8 text-gray-600">
-            <span className="bg-green-600 text-white px-4 py-2 rounded">WHOLE FOODS</span>
-            <span className="bg-blue-600 text-white px-4 py-2 rounded">GELSON'S</span>
-            <span className="bg-green-700 text-white px-4 py-2 rounded">SPROUTS</span>
+      {/* Scrolling brand logos section */}
+      <section className="bg-gray-100 py-12 overflow-hidden">
+        <div className="container mx-auto px-4 text-center mb-8">
+          <h3 className="text-lg font-bold">TRUSTED BY LEADING BRANDS</h3>
+        </div>
+        
+        <div className="relative">
+          <div className="flex animate-scroll-left space-x-12">
+            {/* First set of logos */}
+            {brandLogos.map((brand, index) => (
+              <div
+                key={`first-${index}`}
+                className="flex-shrink-0 w-32 h-20 bg-white rounded-lg shadow-md flex items-center justify-center p-4 hover:shadow-lg transition-shadow"
+              >
+                <img
+                  src={brand.src}
+                  alt={brand.alt}
+                  className="max-w-full max-h-full object-contain grayscale hover:grayscale-0 transition-all duration-300"
+                />
+              </div>
+            ))}
+            {/* Duplicate set for seamless loop */}
+            {brandLogos.map((brand, index) => (
+              <div
+                key={`second-${index}`}
+                className="flex-shrink-0 w-32 h-20 bg-white rounded-lg shadow-md flex items-center justify-center p-4 hover:shadow-lg transition-shadow"
+              >
+                <img
+                  src={brand.src}
+                  alt={brand.alt}
+                  className="max-w-full max-h-full object-contain grayscale hover:grayscale-0 transition-all duration-300"
+                />
+              </div>
+            ))}
           </div>
         </div>
       </section>
