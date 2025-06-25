@@ -23,6 +23,7 @@ const WellnessBanner = () => {
   // Calculate animation progress based on scroll
   const animationProgress = Math.min(scrollY / 500, 1);
   const greenCapsuleY = -200 + (animationProgress * 250); // Starts above, lands in center
+  const greenCapsuleScale = 0.3 + (animationProgress * 0.4); // Starts big (0.7), ends small (0.7 total)
 
   return (
     <div className="min-h-screen bg-gray-50 relative overflow-hidden">
@@ -78,8 +79,8 @@ const WellnessBanner = () => {
             </svg>
           </button>
 
-          {/* Bottom row capsules */}
-          <div className="flex justify-center items-end space-x-4 relative">
+          {/* Bottom row capsules - now with 4 capsules and space in center */}
+          <div className="flex justify-center items-end space-x-8 relative">
             {/* Purple capsule */}
             <div className={`transform transition-all duration-1000 ${showBottles ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0'}`}>
               <img 
@@ -101,9 +102,9 @@ const WellnessBanner = () => {
             {/* Center space for green capsule with animated landing */}
             <div className="w-20 relative">
               <div 
-                className="absolute transition-all duration-1000 ease-out"
+                className="absolute transition-all duration-1000 ease-out z-10"
                 style={{ 
-                  transform: `translateY(${greenCapsuleY}px)`,
+                  transform: `translateY(${greenCapsuleY}px) scale(${greenCapsuleScale})`,
                   left: '50%',
                   marginLeft: '-40px'
                 }}
