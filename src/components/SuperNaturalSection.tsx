@@ -55,6 +55,44 @@ const SuperNaturalSection = () => {
     }
   ];
 
+  const nutritionalBenefits = [
+    {
+      icon: "🌱",
+      label: "PLANT BASED",
+      description: "Made from plants"
+    },
+    {
+      icon: "🥛",
+      label: "DAIRY FREE",
+      description: "No dairy ingredients"
+    },
+    {
+      icon: "🍯",
+      label: "0g SUGAR",
+      description: "Zero added sugar"
+    },
+    {
+      icon: "🔢",
+      label: "10 CALORIES",
+      description: "Low calorie treat"
+    },
+    {
+      icon: "🌾",
+      label: "GLUTEN FREE",
+      description: "No gluten ingredients"
+    },
+    {
+      icon: "🥑",
+      label: "KETO",
+      description: "Keto friendly"
+    },
+    {
+      icon: "🧬",
+      label: "NON-GMO",
+      description: "No GMO ingredients"
+    }
+  ];
+
   return (
     <>
       {/* Blue wavy section */}
@@ -73,6 +111,19 @@ const SuperNaturalSection = () => {
               <span className="font-bold">Forbes</span>
               <span className="font-bold">Prevention</span>
               <span className="font-bold">EatThis.NotThat</span>
+            </div>
+          </div>
+
+          {/* Nutritional Benefits Icons */}
+          <div className="mt-16">
+            <div className="flex flex-wrap justify-center items-center gap-8 md:gap-12">
+              {nutritionalBenefits.map((benefit, index) => (
+                <div key={index} className="flex flex-col items-center text-white">
+                  <div className="text-4xl mb-2">{benefit.icon}</div>
+                  <div className="text-sm font-bold mb-1">{benefit.label}</div>
+                  <div className="text-xs text-blue-200">{benefit.description}</div>
+                </div>
+              ))}
             </div>
           </div>
         </div>
