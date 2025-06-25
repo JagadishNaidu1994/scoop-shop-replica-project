@@ -50,39 +50,46 @@ const ProductCarousel = () => {
   const getImagePosition = (index: number) => {
     const diff = index - currentIndex;
     if (diff === 0) return 'translate-x-0 scale-110 z-20 opacity-100';
-    if (diff === 1 || diff === -(images.length - 1)) return 'translate-x-80 scale-90 z-10 opacity-60';
-    if (diff === -1 || diff === images.length - 1) return '-translate-x-80 scale-90 z-10 opacity-60';
-    if (diff === 2 || diff === -(images.length - 2)) return 'translate-x-[20rem] scale-75 z-0 opacity-30';
-    if (diff === -2 || diff === images.length - 2) return '-translate-x-[20rem] scale-75 z-0 opacity-30';
-    return 'translate-x-[30rem] scale-50 z-0 opacity-0';
+    if (diff === 1 || diff === -(images.length - 1)) return 'translate-x-96 scale-90 z-10 opacity-70';
+    if (diff === -1 || diff === images.length - 1) return '-translate-x-96 scale-90 z-10 opacity-70';
+    if (diff === 2 || diff === -(images.length - 2)) return 'translate-x-[28rem] scale-75 z-0 opacity-40';
+    if (diff === -2 || diff === images.length - 2) return '-translate-x-[28rem] scale-75 z-0 opacity-40';
+    return 'translate-x-[40rem] scale-50 z-0 opacity-0';
   };
 
   return (
-    <div className={`py-16 transition-colors duration-500 ${images[currentIndex].bgColor}`}>
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold text-black mb-4">
+    <div className={`py-20 transition-colors duration-500 relative ${images[currentIndex].bgColor}`}>
+      {/* Wavy top transition */}
+      <div className="absolute top-0 left-0 w-full">
+        <svg viewBox="0 0 1200 120" className="w-full h-20 fill-current text-gray-50">
+          <path d="M0,60 C200,0 400,120 600,60 C800,0 1000,120 1200,60 L1200,0 L0,0 Z"></path>
+        </svg>
+      </div>
+
+      <div className="container mx-auto px-4 pt-16">
+        <div className="text-center mb-16">
+          <h2 className="text-5xl font-bold text-black mb-6">
             OUR SIGNATURE ICE CREAM FLAVORS
           </h2>
         </div>
 
-        <div className="relative flex items-center justify-center h-80 overflow-hidden px-8">
+        <div className="relative flex items-center justify-center h-96 overflow-hidden px-8">
           {/* Left Arrow */}
           <button
             onClick={prevSlide}
-            className="absolute left-4 z-30 p-3 rounded-full bg-white/80 hover:bg-white shadow-lg transition-all duration-200 hover:scale-110"
+            className="absolute left-8 z-30 p-4 rounded-full bg-white/90 hover:bg-white shadow-xl transition-all duration-200 hover:scale-110"
           >
-            <ArrowLeft className="w-6 h-6 text-black" />
+            <ArrowLeft className="w-8 h-8 text-black" />
           </button>
 
           {/* Images Container */}
-          <div className="relative w-full max-w-6xl h-full flex items-center justify-center">
+          <div className="relative w-full max-w-7xl h-full flex items-center justify-center">
             {images.map((image, index) => (
               <div
                 key={index}
-                className={`absolute transition-all duration-500 ease-in-out ${getImagePosition(index)}`}
+                className={`absolute transition-all duration-700 ease-in-out ${getImagePosition(index)}`}
               >
-                <div className="w-56 h-72 rounded-lg overflow-hidden shadow-xl">
+                <div className="w-72 h-80 rounded-2xl overflow-hidden shadow-2xl">
                   <img
                     src={image.src}
                     alt={image.alt}
@@ -96,35 +103,42 @@ const ProductCarousel = () => {
           {/* Right Arrow */}
           <button
             onClick={nextSlide}
-            className="absolute right-4 z-30 p-3 rounded-full bg-white/80 hover:bg-white shadow-lg transition-all duration-200 hover:scale-110"
+            className="absolute right-8 z-30 p-4 rounded-full bg-white/90 hover:bg-white shadow-xl transition-all duration-200 hover:scale-110"
           >
-            <ArrowRight className="w-6 h-6 text-black" />
+            <ArrowRight className="w-8 h-8 text-black" />
           </button>
         </div>
 
-        <div className="text-center mt-12">
-          <p className="text-black text-lg mb-4">
+        <div className="text-center mt-16">
+          <p className="text-black text-xl mb-6 font-semibold">
             OUR SIGNATURE ICE CREAM FLAVORS
           </p>
-          <div className="flex justify-center space-x-8">
-            <span className="text-black font-semibold">ORGANIC</span>
-            <span className="text-black font-semibold">REGENERATIVE</span>
-            <span className="text-black font-semibold">PROBIOTIC</span>
+          <div className="flex justify-center space-x-12">
+            <span className="text-black font-bold text-lg">ORGANIC</span>
+            <span className="text-black font-bold text-lg">REGENERATIVE</span>
+            <span className="text-black font-bold text-lg">PROBIOTIC</span>
           </div>
         </div>
 
         {/* Dots Indicator */}
-        <div className="flex justify-center mt-8 space-x-2">
+        <div className="flex justify-center mt-12 space-x-3">
           {images.map((_, index) => (
             <button
               key={index}
               onClick={() => setCurrentIndex(index)}
-              className={`w-3 h-3 rounded-full transition-all duration-200 ${
-                index === currentIndex ? 'bg-black' : 'bg-black/30'
+              className={`w-4 h-4 rounded-full transition-all duration-200 ${
+                index === currentIndex ? 'bg-black scale-125' : 'bg-black/40'
               }`}
             />
           ))}
         </div>
+      </div>
+
+      {/* Wavy bottom transition */}
+      <div className="absolute bottom-0 left-0 w-full">
+        <svg viewBox="0 0 1200 120" className="w-full h-20 fill-current text-blue-600">
+          <path d="M0,60 C300,0 600,120 900,60 C1050,30 1150,90 1200,60 L1200,120 L0,120 Z"></path>
+        </svg>
       </div>
     </div>
   );

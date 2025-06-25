@@ -138,6 +138,13 @@ const WellnessBanner = () => {
           </div>
         </div>
       </div>
+      
+      {/* Wavy transition to next section */}
+      <div className="absolute bottom-0 left-0 w-full">
+        <svg viewBox="0 0 1200 120" className="w-full h-20 fill-current text-yellow-400">
+          <path d="M0,60 C200,120 400,0 600,60 C800,120 1000,0 1200,60 L1200,120 L0,120 Z"></path>
+        </svg>
+      </div>
     </div>
   );
 };
