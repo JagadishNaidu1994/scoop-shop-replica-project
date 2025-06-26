@@ -97,14 +97,7 @@ const SuperNaturalSection = () => {
     <>
       {/* Blue wavy section */}
       <section className="bg-blue-600 relative py-20">
-        {/* Wavy top transition */}
-        <div className="absolute top-0 left-0 w-full">
-          <svg viewBox="0 0 1200 120" className="w-full h-20 fill-current text-yellow-400">
-            <path d="M0,60 C300,120 600,0 900,60 C1050,90 1150,30 1200,60 L1200,0 L0,0 Z"></path>
-          </svg>
-        </div>
-
-        <div className="container mx-auto px-4 text-center pt-16">
+        <div className="container mx-auto px-4 text-center">
           <div className="mb-12">
             <span className="text-white text-lg font-semibold">AS SEEN IN:</span>
             <div className="flex justify-center items-center space-x-12 mt-6 text-white text-lg">
@@ -128,9 +121,9 @@ const SuperNaturalSection = () => {
           </div>
         </div>
         
-        {/* Wavy bottom transition */}
-        <div className="absolute bottom-0 left-0 w-full">
-          <svg viewBox="0 0 1200 120" className="w-full h-20 fill-current text-gray-100">
+        {/* Single wavy bottom transition to next section */}
+        <div className="absolute bottom-0 left-0 w-full overflow-hidden">
+          <svg viewBox="0 0 1200 120" className="w-full h-24 fill-current text-gray-100" preserveAspectRatio="none">
             <path d="M0,60 C400,0 800,120 1200,60 L1200,120 L0,120 Z"></path>
           </svg>
         </div>
@@ -138,14 +131,7 @@ const SuperNaturalSection = () => {
 
       {/* Light section with Super Natural branding */}
       <section className="bg-gray-100 py-20 relative">
-        {/* Wavy top transition */}
-        <div className="absolute top-0 left-0 w-full">
-          <svg viewBox="0 0 1200 120" className="w-full h-20 fill-current text-blue-600">
-            <path d="M0,60 C400,120 800,0 1200,60 L1200,0 L0,0 Z"></path>
-          </svg>
-        </div>
-
-        <div className="container mx-auto px-4 text-center pt-16">
+        <div className="container mx-auto px-4 text-center">
           <div className="mb-16">
             <h2 className="text-5xl font-bold text-blue-600 mb-8">
               SUPER NATURAL
@@ -184,9 +170,9 @@ const SuperNaturalSection = () => {
           </div>
         </div>
 
-        {/* Wavy bottom transition */}
-        <div className="absolute bottom-0 left-0 w-full">
-          <svg viewBox="0 0 1200 120" className="w-full h-20 fill-current text-orange-400">
+        {/* Single wavy bottom transition to next section */}
+        <div className="absolute bottom-0 left-0 w-full overflow-hidden">
+          <svg viewBox="0 0 1200 120" className="w-full h-24 fill-current text-orange-400" preserveAspectRatio="none">
             <path d="M0,60 C300,120 600,0 900,80 C1050,40 1150,100 1200,60 L1200,120 L0,120 Z"></path>
           </svg>
         </div>
@@ -194,14 +180,7 @@ const SuperNaturalSection = () => {
 
       {/* Orange/Red section */}
       <section className="bg-gradient-to-r from-orange-400 to-red-500 py-20 relative">
-        {/* Wavy top transition */}
-        <div className="absolute top-0 left-0 w-full">
-          <svg viewBox="0 0 1200 120" className="w-full h-20 fill-current text-gray-100">
-            <path d="M0,60 C300,0 600,120 900,40 C1050,80 1150,20 1200,60 L1200,0 L0,0 Z"></path>
-          </svg>
-        </div>
-
-        <div className="container mx-auto px-4 pt-16">
+        <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div className="text-center lg:text-left">
               <img 
@@ -225,9 +204,9 @@ const SuperNaturalSection = () => {
           </div>
         </div>
 
-        {/* Wavy bottom transition */}
-        <div className="absolute bottom-0 left-0 w-full">
-          <svg viewBox="0 0 1200 120" className="w-full h-20 fill-current text-gray-100">
+        {/* Single wavy bottom transition to next section */}
+        <div className="absolute bottom-0 left-0 w-full overflow-hidden">
+          <svg viewBox="0 0 1200 120" className="w-full h-24 fill-current text-gray-100" preserveAspectRatio="none">
             <path d="M0,60 C200,0 400,120 600,40 C800,100 1000,20 1200,80 L1200,120 L0,120 Z"></path>
           </svg>
         </div>
@@ -235,14 +214,7 @@ const SuperNaturalSection = () => {
 
       {/* Scrolling brand logos section */}
       <section className="bg-gray-100 py-16 overflow-hidden relative">
-        {/* Wavy top transition */}
-        <div className="absolute top-0 left-0 w-full">
-          <svg viewBox="0 0 1200 120" className="w-full h-20 fill-current text-red-500">
-            <path d="M0,60 C200,120 400,0 600,80 C800,20 1000,100 1200,40 L1200,0 L0,0 Z"></path>
-          </svg>
-        </div>
-
-        <div className="container mx-auto px-4 text-center mb-12 pt-16">
+        <div className="container mx-auto px-4 text-center mb-12">
           <h3 className="text-2xl font-bold">TRUSTED BY LEADING BRANDS</h3>
         </div>
         
@@ -277,9 +249,9 @@ const SuperNaturalSection = () => {
           </div>
         </div>
 
-        {/* Wavy bottom transition */}
-        <div className="absolute bottom-0 left-0 w-full">
-          <svg viewBox="0 0 1200 120" className="w-full h-20 fill-current text-blue-600">
+        {/* Single wavy bottom transition to next section */}
+        <div className="absolute bottom-0 left-0 w-full overflow-hidden">
+          <svg viewBox="0 0 1200 120" className="w-full h-24 fill-current text-blue-600" preserveAspectRatio="none">
             <path d="M0,60 C300,0 600,120 900,60 C1050,30 1150,90 1200,60 L1200,120 L0,120 Z"></path>
           </svg>
         </div>
