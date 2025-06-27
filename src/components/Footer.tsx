@@ -1,59 +1,77 @@
 
 import React from 'react';
-import { Phone, Mail, MapPin } from 'lucide-react';
+import { Instagram, Twitter, Facebook, Youtube } from 'lucide-react';
 
 const Footer = () => {
   return (
-    <footer className="bg-blue-900 text-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          {/* Company Info */}
-          <div className="col-span-1 md:col-span-2">
-            <h3 className="text-3xl font-bold text-white mb-4">alec's</h3>
-            <p className="text-blue-200 mb-4">
-              Premium organic ice cream made with regenerative ingredients. 
-              The first ever probiotic ice cream that's good for you and the planet.
-            </p>
-            <div className="flex space-x-4">
-              <a href="#" className="text-blue-200 hover:text-yellow-300 transition-colors">Facebook</a>
-              <a href="#" className="text-blue-200 hover:text-yellow-300 transition-colors">Instagram</a>
-              <a href="#" className="text-blue-200 hover:text-yellow-300 transition-colors">Twitter</a>
-            </div>
-          </div>
-
-          {/* Quick Links */}
+    <footer className="bg-gray-900 text-white">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+          {/* Customer Service */}
           <div>
-            <h4 className="text-lg font-semibold mb-4">Quick Links</h4>
+            <h4 className="text-lg font-semibold mb-4">Customer Service</h4>
             <div className="space-y-2">
-              <a href="/products" className="block text-blue-200 hover:text-yellow-300">Products</a>
-              <a href="/culture-cup" className="block text-blue-200 hover:text-yellow-300">Culture Cup</a>
-              <a href="/stores" className="block text-blue-200 hover:text-yellow-300">Find Stores</a>
-              <a href="/about" className="block text-blue-200 hover:text-yellow-300">About Us</a>
+              <a href="#" className="block text-gray-300 hover:text-white transition-colors">Contact Us</a>
+              <a href="#" className="block text-gray-300 hover:text-white transition-colors">FAQ</a>
+              <a href="#" className="block text-gray-300 hover:text-white transition-colors">Shipping & Returns</a>
+              <a href="#" className="block text-gray-300 hover:text-white transition-colors">Size Guide</a>
             </div>
           </div>
 
-          {/* Contact Info */}
+          {/* About */}
           <div>
-            <h4 className="text-lg font-semibold mb-4">Contact</h4>
-            <div className="space-y-3">
-              <div className="flex items-center">
-                <Phone size={16} className="mr-2 text-yellow-300" />
-                <span className="text-blue-200">(555) 123-4567</span>
-              </div>
-              <div className="flex items-center">
-                <Mail size={16} className="mr-2 text-yellow-300" />
-                <span className="text-blue-200">hello@alecsicecream.com</span>
-              </div>
-              <div className="flex items-center">
-                <MapPin size={16} className="mr-2 text-yellow-300" />
-                <span className="text-blue-200">San Francisco, CA</span>
-              </div>
+            <h4 className="text-lg font-semibold mb-4">About</h4>
+            <div className="space-y-2">
+              <a href="#" className="block text-gray-300 hover:text-white transition-colors">Our Story</a>
+              <a href="#" className="block text-gray-300 hover:text-white transition-colors">Science</a>
+              <a href="#" className="block text-gray-300 hover:text-white transition-colors">Sustainability</a>
+              <a href="#" className="block text-gray-300 hover:text-white transition-colors">Careers</a>
+            </div>
+          </div>
+
+          {/* Journal */}
+          <div>
+            <h4 className="text-lg font-semibold mb-4">Journal</h4>
+            <div className="space-y-2">
+              <a href="#" className="block text-gray-300 hover:text-white transition-colors">Latest Articles</a>
+              <a href="#" className="block text-gray-300 hover:text-white transition-colors">Wellness Tips</a>
+              <a href="#" className="block text-gray-300 hover:text-white transition-colors">Recipes</a>
+              <a href="#" className="block text-gray-300 hover:text-white transition-colors">Research</a>
+            </div>
+          </div>
+
+          {/* Legal */}
+          <div>
+            <h4 className="text-lg font-semibold mb-4">Legal</h4>
+            <div className="space-y-2">
+              <a href="#" className="block text-gray-300 hover:text-white transition-colors">Privacy Policy</a>
+              <a href="#" className="block text-gray-300 hover:text-white transition-colors">Terms of Service</a>
+              <a href="#" className="block text-gray-300 hover:text-white transition-colors">Accessibility</a>
+              <a href="#" className="block text-gray-300 hover:text-white transition-colors">Cookie Policy</a>
             </div>
           </div>
         </div>
 
-        <div className="border-t border-blue-700 mt-8 pt-8 text-center">
-          <p className="text-blue-300">© 2024 Alec's Ice Cream. All rights reserved.</p>
+        {/* Social Media */}
+        <div className="flex justify-center space-x-6 mb-12">
+          <a href="#" className="text-gray-300 hover:text-white transition-colors">
+            <Instagram size={24} />
+          </a>
+          <a href="#" className="text-gray-300 hover:text-white transition-colors">
+            <Twitter size={24} />
+          </a>
+          <a href="#" className="text-gray-300 hover:text-white transition-colors">
+            <Facebook size={24} />
+          </a>
+          <a href="#" className="text-gray-300 hover:text-white transition-colors">
+            <Youtube size={24} />
+          </a>
+        </div>
+
+        {/* Large DIRTEA Branding */}
+        <div className="text-center border-t border-gray-700 pt-12">
+          <h1 className="text-8xl font-bold text-white mb-4">DIRTEA</h1>
+          <p className="text-gray-400">© 2024 DIRTEA. All rights reserved.</p>
         </div>
       </div>
     </footer>
