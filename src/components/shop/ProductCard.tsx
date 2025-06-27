@@ -21,7 +21,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
   const handleBuyNow = () => {
     const priceNumber = parseFloat(product.price.replace('£', ''));
     addToCart({
-      id: product.id,
+      product_id: product.id,
       product_name: product.name,
       product_price: priceNumber,
       product_image: product.primaryImage,
