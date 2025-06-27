@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ProductGrid from '@/components/shop/ProductGrid';
-import FilterSidebar from '@/components/shop/FilterSidebar';
 
 const Shop = () => {
   const [selectedCategory, setSelectedCategory] = useState('all');
