@@ -144,33 +144,37 @@ const ProductDetail = () => {
         </nav>
 
         {/* First Section - Enhanced Product Details */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
-          {/* Product Images with Carousel */}
-          <div className="space-y-4">
-            <div className="relative">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
+          {/* Product Images with Carousel - Adjusted height */}
+          <div className="flex flex-col h-full">
+            <div className="relative flex-1">
               <Badge className="absolute top-4 left-4 z-10 bg-black text-white">BEST SELLER</Badge>
-              <div className="aspect-square overflow-hidden rounded-lg bg-gray-100">
+              <div className="h-[600px] overflow-hidden rounded-lg bg-gray-100">
                 <img
-                  src={productImages[selectedImage] || product.primary_image}
+                  src="/lovable-uploads/8edc40eb-3dfa-45fb-8cac-fc1a12ec6a3c.png"
                   alt={product.name}
                   className="w-full h-full object-cover"
                 />
               </div>
             </div>
             
-            {/* Thumbnail Carousel */}
-            {productImages.length > 1 && (
+            {/* Thumbnail Carousel - Reduced spacing */}
+            <div className="mt-3">
               <Carousel className="w-full max-w-sm mx-auto">
                 <CarouselContent>
-                  {productImages.map((image, index) => (
-                    <CarouselItem key={index} className="basis-1/3">
+                  {[1, 2, 3, 4, 5, 6].map((index) => (
+                    <CarouselItem key={index} className="basis-1/6">
                       <button
-                        onClick={() => setSelectedImage(index)}
+                        onClick={() => setSelectedImage(index - 1)}
                         className={`w-full aspect-square rounded-lg overflow-hidden border-2 ${
-                          selectedImage === index ? 'border-black' : 'border-gray-200'
+                          selectedImage === index - 1 ? 'border-black' : 'border-gray-200'
                         }`}
                       >
-                        <img src={image} alt={`${product.name} ${index + 1}`} className="w-full h-full object-cover" />
+                        <img 
+                          src="/lovable-uploads/8edc40eb-3dfa-45fb-8cac-fc1a12ec6a3c.png" 
+                          alt={`${product.name} ${index}`} 
+                          className="w-full h-full object-cover" 
+                        />
                       </button>
                     </CarouselItem>
                   ))}
@@ -178,12 +182,12 @@ const ProductDetail = () => {
                 <CarouselPrevious />
                 <CarouselNext />
               </Carousel>
-            )}
+            </div>
           </div>
 
-          {/* Enhanced Product Info */}
-          <div className="space-y-6">
-            <div className="flex items-center space-x-2 mb-2">
+          {/* Enhanced Product Info - Reduced spacing */}
+          <div className="flex flex-col h-full space-y-3">
+            <div className="flex items-center space-x-2 mb-1">
               <div className="flex text-yellow-400">
                 {[...Array(5)].map((_, i) => (
                   <Star key={i} className="w-4 h-4 fill-current" />
@@ -193,64 +197,64 @@ const ProductDetail = () => {
             </div>
 
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">DIRTEA {product.name}</h1>
-              <p className="text-gray-600 text-lg mb-4">Energy, focus, beauty</p>
-              <p className="text-sm text-gray-600 mb-4">
+              <h1 className="text-2xl font-bold text-gray-900 mb-1">DIRTEA {product.name}</h1>
+              <p className="text-gray-600 text-base mb-2">Energy, focus, beauty</p>
+              <p className="text-sm text-gray-600 mb-3">
                 The creamiest, ceremonial-grade Matcha with Lion's Mane, Tremella, and essential B vitamins.
               </p>
-              <div className="flex items-center space-x-4 mb-4">
-                <Badge variant="outline" className="flex items-center space-x-1">
+              <div className="flex items-center space-x-3 mb-3">
+                <Badge variant="outline" className="flex items-center space-x-1 text-xs">
                   <span>⚡</span><span>Energy</span>
                 </Badge>
-                <Badge variant="outline" className="flex items-center space-x-1">
+                <Badge variant="outline" className="flex items-center space-x-1 text-xs">
                   <span>🎯</span><span>Focus</span>
                 </Badge>
-                <Badge variant="outline" className="flex items-center space-x-1">
+                <Badge variant="outline" className="flex items-center space-x-1 text-xs">
                   <span>✨</span><span>Skin</span>
                 </Badge>
               </div>
               <p className="text-sm text-gray-600">🥄 30 servings</p>
             </div>
 
-            {/* Pricing Options */}
-            <div className="border rounded-lg p-4 space-y-4">
+            {/* Pricing Options - Reduced spacing */}
+            <div className="border rounded-lg p-3 space-y-3">
               {/* One-time Purchase */}
               <div 
-                className={`p-4 border rounded-lg cursor-pointer ${subscriptionType === 'one-time' ? 'border-black bg-gray-50' : 'border-gray-200'}`}
+                className={`p-3 border rounded-lg cursor-pointer ${subscriptionType === 'one-time' ? 'border-black bg-gray-50' : 'border-gray-200'}`}
                 onClick={() => setSubscriptionType('one-time')}
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-2">
                     <input type="radio" checked={subscriptionType === 'one-time'} readOnly />
-                    <span className="font-medium">One-time Purchase</span>
+                    <span className="font-medium text-sm">One-time Purchase</span>
                   </div>
-                  <span className="text-xl font-bold">£{product.price}</span>
+                  <span className="text-lg font-bold">£{product.price}</span>
                 </div>
               </div>
 
               {/* Subscribe & Save */}
               <div 
-                className={`p-4 border rounded-lg cursor-pointer ${subscriptionType === 'subscribe' ? 'border-black bg-gray-50' : 'border-gray-200'}`}
+                className={`p-3 border rounded-lg cursor-pointer ${subscriptionType === 'subscribe' ? 'border-black bg-gray-50' : 'border-gray-200'}`}
                 onClick={() => setSubscriptionType('subscribe')}
               >
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center space-x-2">
                     <input type="radio" checked={subscriptionType === 'subscribe'} readOnly />
-                    <span className="font-medium">Subscribe & Save</span>
-                    <Badge className="bg-purple-100 text-purple-800">20% OFF</Badge>
+                    <span className="font-medium text-sm">Subscribe & Save</span>
+                    <Badge className="bg-purple-100 text-purple-800 text-xs">20% OFF</Badge>
                   </div>
                   <div className="text-right">
-                    <span className="text-xl font-bold">£{subscriptionPrice.toFixed(2)}</span>
-                    <p className="text-sm text-gray-500">£{(subscriptionPrice * 0.117).toFixed(2)} per serving</p>
+                    <span className="text-lg font-bold">£{subscriptionPrice.toFixed(2)}</span>
+                    <p className="text-xs text-gray-500">£{(subscriptionPrice * 0.117).toFixed(2)} per serving</p>
                   </div>
                 </div>
-                <p className="text-sm text-gray-600 mb-2">Pouch only, free gifts NOT included</p>
+                <p className="text-xs text-gray-600 mb-2">Pouch only, free gifts NOT included</p>
                 
                 {subscriptionType === 'subscribe' && (
                   <select 
                     value={subscriptionFrequency}
                     onChange={(e) => setSubscriptionFrequency(e.target.value)}
-                    className="w-full p-2 border rounded-md"
+                    className="w-full p-2 border rounded-md text-sm"
                   >
                     <option>Every 4 weeks (Bestseller)</option>
                     <option>Every 6 weeks</option>
@@ -260,7 +264,7 @@ const ProductDetail = () => {
               </div>
             </div>
 
-            {/* Quantity Selector */}
+            {/* Quantity Selector - Reduced spacing */}
             <div className="flex items-center space-x-4">
               <div className="flex items-center border border-gray-300 rounded-md">
                 <button
@@ -280,92 +284,92 @@ const ProductDetail = () => {
               </div>
             </div>
 
-            {/* Add to Cart Button */}
+            {/* Add to Cart Button - Reduced spacing */}
             <Button
               onClick={handleAddToCart}
-              className="w-full bg-black text-white hover:bg-gray-800 py-3 text-lg font-medium mb-4"
+              className="w-full bg-black text-white hover:bg-gray-800 py-2 text-base font-medium mb-2"
             >
               ADD TO CART - £{((subscriptionType === 'subscribe' ? subscriptionPrice : product.price) * quantity).toFixed(2)}
             </Button>
 
-            {/* Buy with Shop Pay */}
-            <Button className="w-full bg-purple-600 text-white hover:bg-purple-700 py-3 text-lg font-medium mb-4">
+            {/* Buy with Shop Pay - Reduced spacing */}
+            <Button className="w-full bg-purple-600 text-white hover:bg-purple-700 py-2 text-base font-medium mb-2">
               Buy with ShopPay
             </Button>
 
-            <p className="text-sm text-gray-500 text-center mb-4">More payment options</p>
+            <p className="text-xs text-gray-500 text-center mb-2">More payment options</p>
 
-            {/* Trust Badges */}
-            <div className="flex items-center space-x-4 text-sm text-gray-600">
+            {/* Trust Badges - Reduced spacing */}
+            <div className="flex items-center space-x-4 text-xs text-gray-600 mb-3">
               <div className="flex items-center space-x-1">
-                <div className="w-4 h-4 bg-black rounded-full"></div>
+                <div className="w-3 h-3 bg-black rounded-full"></div>
                 <span>Skip or cancel anytime</span>
               </div>
               <div className="flex items-center space-x-1">
-                <div className="w-4 h-4 bg-black rounded-full"></div>
+                <div className="w-3 h-3 bg-black rounded-full"></div>
                 <span>20% off every subscription order</span>
               </div>
             </div>
 
-            {/* Collapsible Sections */}
-            <div className="space-y-4 border-t pt-6">
+            {/* Collapsible Sections - Reduced spacing */}
+            <div className="space-y-2 border-t pt-3">
               <Collapsible>
-                <CollapsibleTrigger className="flex items-center justify-between w-full py-4 border-b">
+                <CollapsibleTrigger className="flex items-center justify-between w-full py-2 border-b text-sm">
                   <span className="font-medium">Why choose DIRTEA</span>
                   <ChevronDown className="w-4 h-4" />
                 </CollapsibleTrigger>
-                <CollapsibleContent className="py-4 text-gray-600">
+                <CollapsibleContent className="py-2 text-gray-600 text-sm">
                   Our products are made with the highest quality ingredients, sourced directly from trusted suppliers.
                 </CollapsibleContent>
               </Collapsible>
 
               <Collapsible>
-                <CollapsibleTrigger className="flex items-center justify-between w-full py-4 border-b">
+                <CollapsibleTrigger className="flex items-center justify-between w-full py-2 border-b text-sm">
                   <span className="font-medium">Ingredients</span>
                   <ChevronDown className="w-4 h-4" />
                 </CollapsibleTrigger>
-                <CollapsibleContent className="py-4 text-gray-600">
+                <CollapsibleContent className="py-2 text-gray-600 text-sm">
                   100% Organic {product.category} Powder with Lion's Mane, Tremella, and essential B vitamins.
                 </CollapsibleContent>
               </Collapsible>
 
               <Collapsible>
-                <CollapsibleTrigger className="flex items-center justify-between w-full py-4 border-b">
+                <CollapsibleTrigger className="flex items-center justify-between w-full py-2 border-b text-sm">
                   <span className="font-medium">The Science</span>
                   <ChevronDown className="w-4 h-4" />
                 </CollapsibleTrigger>
-                <CollapsibleContent className="py-4 text-gray-600">
+                <CollapsibleContent className="py-2 text-gray-600 text-sm">
                   Backed by scientific research and third-party tested for purity and potency.
                 </CollapsibleContent>
               </Collapsible>
 
               <Collapsible>
-                <CollapsibleTrigger className="flex items-center justify-between w-full py-4 border-b">
+                <CollapsibleTrigger className="flex items-center justify-between w-full py-2 border-b text-sm">
                   <span className="font-medium">How to Use</span>
                   <ChevronDown className="w-4 h-4" />
                 </CollapsibleTrigger>
-                <CollapsibleContent className="py-4 text-gray-600">
+                <CollapsibleContent className="py-2 text-gray-600 text-sm">
                   Add 1-2 teaspoons to your favorite beverage, mix well, and enjoy daily for optimal benefits.
                 </CollapsibleContent>
               </Collapsible>
             </div>
 
-            {/* Review Preview */}
-            <div className="border-t pt-6">
-              <div className="flex items-start space-x-4">
-                <div className="w-10 h-10 bg-gray-300 rounded-full overflow-hidden">
+            {/* Review Preview - Reduced spacing */}
+            <div className="border-t pt-3">
+              <div className="flex items-start space-x-3">
+                <div className="w-8 h-8 bg-gray-300 rounded-full overflow-hidden">
                   <img src="/lovable-uploads/26d45a3e-0bd4-4883-89d1-b11b087ead71.png" alt="Katarzyna W" className="w-full h-full object-cover" />
                 </div>
                 <div>
                   <div className="flex items-center space-x-2 mb-1">
-                    <span className="font-medium">Katarzyna W.</span>
+                    <span className="font-medium text-sm">Katarzyna W.</span>
                     <div className="flex text-yellow-400">
                       {[...Array(5)].map((_, i) => (
                         <Star key={i} className="w-3 h-3 fill-current" />
                       ))}
                     </div>
                   </div>
-                  <p className="text-sm text-gray-600">"I am in love with matcha. Drink every morning with dash of oat vanilla ❤️"</p>
+                  <p className="text-xs text-gray-600">"I am in love with matcha. Drink every morning with dash of oat vanilla ❤️"</p>
                 </div>
               </div>
             </div>
