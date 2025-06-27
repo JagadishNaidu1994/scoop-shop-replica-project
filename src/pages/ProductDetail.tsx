@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import HeaderNavBar from '@/components/HeaderNavBar';
@@ -36,11 +35,11 @@ const ProductDetail = () => {
 
   // Mock data for ingredients carousel
   const ingredients = [
-    { name: 'Vitamin B1', amount: '81% RI per serving', icon: '🧪' },
-    { name: 'Lion\'s Mane', amount: '500mg per serving', icon: '🍄' },
-    { name: 'Tremella', amount: '300mg per serving', icon: '🤍' },
-    { name: 'Essential B Vitamins', amount: '5 vitamins', icon: '💊' },
-    { name: 'Ceremonial Grade Matcha', amount: '2g per serving', icon: '🍵' },
+    { name: 'Vitamin B9', amount: '12% RI per serving', icon: '🟡', description: 'Essential for DNA synthesis and repair' },
+    { name: 'Lion\'s Mane', amount: '500mg per serving', icon: '🍄', description: 'Supports cognitive function and focus' },
+    { name: 'Tremella', amount: '300mg per serving', icon: '🤍', description: 'Natural beauty and hydration support' },
+    { name: 'Essential B Vitamins', amount: '5 vitamins', icon: '💊', description: 'Energy metabolism support' },
+    { name: 'Ceremonial Grade Matcha', amount: '2g per serving', icon: '🍵', description: 'Premium quality for sustained energy' },
   ];
 
   useEffect(() => {
@@ -145,9 +144,9 @@ const ProductDetail = () => {
 
         {/* First Section - Enhanced Product Details */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
-          {/* Product Images with Carousel - Adjusted height */}
+          {/* Product Images with Carousel - Updated with more bottom space */}
           <div className="flex flex-col h-full">
-            <div className="relative flex-1">
+            <div className="relative flex-1 mb-6">
               <Badge className="absolute top-4 left-4 z-10 bg-black text-white">BEST SELLER</Badge>
               <div className="h-[600px] overflow-hidden rounded-lg bg-gray-100">
                 <img
@@ -158,12 +157,12 @@ const ProductDetail = () => {
               </div>
             </div>
             
-            {/* Thumbnail Carousel - Reduced spacing */}
-            <div className="mt-3">
-              <Carousel className="w-full max-w-sm mx-auto">
+            {/* Thumbnail Carousel - Made bigger with more spacing */}
+            <div className="mt-6">
+              <Carousel className="w-full max-w-lg mx-auto">
                 <CarouselContent>
                   {[1, 2, 3, 4, 5, 6].map((index) => (
-                    <CarouselItem key={index} className="basis-1/6">
+                    <CarouselItem key={index} className="basis-1/4">
                       <button
                         onClick={() => setSelectedImage(index - 1)}
                         className={`w-full aspect-square rounded-lg overflow-hidden border-2 ${
@@ -376,30 +375,31 @@ const ProductDetail = () => {
           </div>
         </div>
 
-        {/* Second Section - Ingredients Carousel */}
-        <section className="py-16 bg-gray-50 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8">
+        {/* Second Section - Ingredients Carousel matching the reference image */}
+        <section className="py-20 bg-gray-50 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8">
           <div className="max-w-7xl mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-              {/* Left Side - Ingredients Carousel */}
-              <div>
-                <h2 className="text-4xl font-bold text-gray-900 mb-8">
+              {/* Left Side - Ingredients with Auto-scrolling Display */}
+              <div className="bg-white p-8 rounded-2xl">
+                <h2 className="text-4xl font-bold text-gray-900 mb-12 text-center">
                   Pure ingredients, powerful benefits.
                 </h2>
                 
-                <div className="space-y-8">
-                  {ingredients.map((ingredient, index) => (
-                    <div key={index} className="flex items-center space-x-4">
-                      <div className="text-2xl">{ingredient.icon}</div>
-                      <div>
-                        <h3 className="font-semibold text-lg text-gray-900">{ingredient.name}</h3>
-                        <p className="text-gray-600">{ingredient.amount}</p>
-                      </div>
+                {/* Single ingredient display that changes automatically */}
+                <div className="text-center mb-8">
+                  <div className="mb-6">
+                    <div className="text-6xl mb-4">🟡</div>
+                    <h3 className="text-2xl font-bold text-gray-900 mb-2">Vitamin B9</h3>
+                    <p className="text-lg text-gray-600 mb-2">12% RI per serving</p>
+                    <div className="w-full bg-gray-200 rounded-full h-1 mb-4">
+                      <div className="bg-yellow-400 h-1 rounded-full" style={{width: '12%'}}></div>
                     </div>
-                  ))}
+                    <p className="text-sm text-gray-500 max-w-xs mx-auto">Essential for DNA synthesis and repair</p>
+                  </div>
                 </div>
 
                 {/* Dots indicator */}
-                <div className="flex space-x-2 mt-8">
+                <div className="flex justify-center space-x-2">
                   {ingredients.map((_, index) => (
                     <div 
                       key={index} 
@@ -409,19 +409,14 @@ const ProductDetail = () => {
                 </div>
               </div>
 
-              {/* Right Side - Lifestyle Image */}
+              {/* Right Side - Lifestyle Image with Products */}
               <div className="relative">
-                <div className="aspect-square rounded-lg overflow-hidden">
+                <div className="aspect-square rounded-2xl overflow-hidden">
                   <img 
-                    src="/lovable-uploads/ce948032-9353-486e-8b45-76c4fbcff748.png" 
+                    src="/lovable-uploads/a61d3c6a-fc59-45fe-9266-350a3c40ae91.png" 
                     alt="Energy Focus Beauty lifestyle" 
                     className="w-full h-full object-cover"
                   />
-                </div>
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="text-white text-center">
-                    <h3 className="text-2xl font-semibold mb-2">Energy Focus Beauty</h3>
-                  </div>
                 </div>
               </div>
             </div>
