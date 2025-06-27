@@ -5,6 +5,7 @@ import Footer from '@/components/Footer';
 import ShopHero from '@/components/shop/ShopHero';
 import ProductGrid from '@/components/shop/ProductGrid';
 import FilterSidebar from '@/components/shop/FilterSidebar';
+import ShopBanner from '@/components/shop/ShopBanner';
 
 const Shop = () => {
   const [selectedCategory, setSelectedCategory] = useState('all');
@@ -14,8 +15,8 @@ const Shop = () => {
     <div className="min-h-screen bg-white">
       <Header />
       <main>
-        <ShopHero />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <ShopBanner />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex flex-col lg:flex-row gap-8">
             <FilterSidebar 
               selectedCategory={selectedCategory}
