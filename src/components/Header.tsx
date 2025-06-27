@@ -13,10 +13,10 @@ const Header = () => {
           {/* Desktop Navigation - Left */}
           <nav className="hidden md:flex space-x-8">
             <Link to="/shop" className="text-white hover:text-yellow-300 transition-colors font-medium">SHOP</Link>
-            <a href="/story" className="text-white hover:text-yellow-300 transition-colors font-medium">WHOLESALE</a>
-            <a href="/find-us" className="text-white hover:text-yellow-300 transition-colors font-medium">EDITORIAL</a>
-            <a href="/shop" className="text-white hover:text-yellow-300 transition-colors font-medium">OUR STORY</a>
-            <a href="/" className="text-white hover:text-yellow-300 transition-colors font-medium">SCIENCE</a>
+            <Link to="/wholesale" className="text-white hover:text-yellow-300 transition-colors font-medium">WHOLESALE</Link>
+            <a href="/editorial" className="text-white hover:text-yellow-300 transition-colors font-medium">EDITORIAL</a>
+            <a href="/story" className="text-white hover:text-yellow-300 transition-colors font-medium">OUR STORY</a>
+            <a href="/science" className="text-white hover:text-yellow-300 transition-colors font-medium">SCIENCE</a>
           </nav>
 
           {/* Logo - Center */}
@@ -54,8 +54,9 @@ const Header = () => {
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-blue-600 border-t border-blue-500">
               <Link to="/" className="block px-3 py-2 text-white hover:text-yellow-300">HOME</Link>
               <Link to="/shop" className="block px-3 py-2 text-white hover:text-yellow-300">SHOP</Link>
+              <Link to="/wholesale" className="block px-3 py-2 text-white hover:text-yellow-300">WHOLESALE</Link>
               <a href="/story" className="block px-3 py-2 text-white hover:text-yellow-300">OUR STORY</a>
-              <a href="/find-us" className="block px-3 py-2 text-white hover:text-yellow-300">FIND US</a>
+              <a href="/science" className="block px-3 py-2 text-white hover:text-yellow-300">SCIENCE</a>
             </div>
           </div>
         )}
