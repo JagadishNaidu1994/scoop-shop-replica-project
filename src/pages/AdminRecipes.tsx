@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import HeaderNavBar from '@/components/HeaderNavBar';
@@ -5,6 +6,7 @@ import Footer from '@/components/Footer';
 import SampleRecipeSeeder from '@/components/SampleRecipeSeeder';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
+import { useAdminCheck } from '@/hooks/useAdminCheck';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -28,8 +30,7 @@ interface Recipe {
 const AdminRecipes = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const { isAdmin, loading } = useAdminCheck();
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [showForm, setShowForm] = useState(false);
   const [editingRecipe, setEditingRecipe] = useState<Recipe | null>(null);
@@ -46,36 +47,14 @@ const AdminRecipes = () => {
   });
 
   useEffect(() => {
-    if (user) {
-      checkAdminStatus();
-    } else {
+    if (!loading && !user) {
       navigate('/auth');
-    }
-  }, [user, navigate]);
-
-  const checkAdminStatus = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('admin_users')
-        .select('*')
-        .eq('user_id', user?.id)
-        .single();
-
-      if (error) {
-        console.error('Not an admin user:', error);
-        navigate('/');
-        return;
-      }
-
-      setIsAdmin(true);
-      fetchRecipes();
-    } catch (error) {
-      console.error('Error checking admin status:', error);
+    } else if (!loading && !isAdmin) {
       navigate('/');
-    } finally {
-      setLoading(false);
+    } else if (!loading && isAdmin) {
+      fetchRecipes();
     }
-  };
+  }, [user, isAdmin, loading, navigate]);
 
   const fetchRecipes = async () => {
     try {

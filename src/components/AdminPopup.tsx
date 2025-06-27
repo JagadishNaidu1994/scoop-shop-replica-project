@@ -25,11 +25,10 @@ const AdminPopup = () => {
 
   const checkAdminStatus = async () => {
     try {
-      const { data, error } = await supabase
-        .from('admin_users')
-        .select('*')
-        .eq('user_id', user?.id)
-        .single();
+      // Use RPC call to avoid infinite recursion in RLS policies
+      const { data, error } = await supabase.rpc('check_user_admin', {
+        user_id: user?.id
+      });
 
       if (data && !error) {
         setIsAdmin(true);

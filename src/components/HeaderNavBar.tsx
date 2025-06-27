@@ -1,10 +1,11 @@
 
 import React, { useState, useEffect } from 'react';
-import { Menu, X, ShoppingCart, User } from 'lucide-react';
+import { Menu, X, ShoppingCart, User, Settings } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useCart } from '@/contexts/CartContext';
 import { supabase } from '@/integrations/supabase/client';
+import { useAdminCheck } from '@/hooks/useAdminCheck';
 import CartDropdown from './CartDropdown';
 
 const HeaderNavBar = () => {
@@ -13,6 +14,7 @@ const HeaderNavBar = () => {
   const [firstName, setFirstName] = useState('');
   const { user } = useAuth();
   const { getTotalItems } = useCart();
+  const { isAdmin } = useAdminCheck();
 
   useEffect(() => {
     if (user) {
@@ -97,6 +99,14 @@ const HeaderNavBar = () => {
                 </span>
               )}
               
+              {/* Admin Panel Button - Only visible for admins */}
+              {isAdmin && (
+                <Link to="/admin/recipes" className="text-black hover:text-gray-600 transition-colors font-medium flex items-center space-x-1">
+                  <Settings className="h-4 w-4" />
+                  <span>ADMIN</span>
+                </Link>
+              )}
+              
               {user ? (
                 <Link to="/account" className="text-black hover:text-gray-600 transition-colors font-medium">
                   ACCOUNT
@@ -162,6 +172,12 @@ const HeaderNavBar = () => {
                   <div className="flex flex-col space-y-2">
                     {user && firstName && (
                       <span className="text-black font-medium">Hi, {firstName}</span>
+                    )}
+                    {isAdmin && (
+                      <Link to="/admin/recipes" className="text-black font-medium flex items-center space-x-1">
+                        <Settings className="h-4 w-4" />
+                        <span>ADMIN PANEL</span>
+                      </Link>
                     )}
                     {user ? (
                       <Link to="/account" className="text-black font-medium">ACCOUNT</Link>

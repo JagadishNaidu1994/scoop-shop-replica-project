@@ -5,6 +5,7 @@ import HeaderNavBar from '@/components/HeaderNavBar';
 import Footer from '@/components/Footer';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
+import { useAdminCheck } from '@/hooks/useAdminCheck';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -27,8 +28,7 @@ interface Product {
 const AdminProducts = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const { isAdmin, loading } = useAdminCheck();
   const [products, setProducts] = useState<Product[]>([]);
   const [showForm, setShowForm] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
@@ -44,36 +44,14 @@ const AdminProducts = () => {
   });
 
   useEffect(() => {
-    if (user) {
-      checkAdminStatus();
-    } else {
+    if (!loading && !user) {
       navigate('/auth');
-    }
-  }, [user, navigate]);
-
-  const checkAdminStatus = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('admin_users')
-        .select('*')
-        .eq('user_id', user?.id)
-        .single();
-
-      if (error) {
-        console.error('Not an admin user:', error);
-        navigate('/');
-        return;
-      }
-
-      setIsAdmin(true);
-      fetchProducts();
-    } catch (error) {
-      console.error('Error checking admin status:', error);
+    } else if (!loading && !isAdmin) {
       navigate('/');
-    } finally {
-      setLoading(false);
+    } else if (!loading && isAdmin) {
+      fetchProducts();
     }
-  };
+  }, [user, isAdmin, loading, navigate]);
 
   const fetchProducts = async () => {
     // For now, we'll use mock data since we don't have a products table yet
