@@ -11,11 +11,11 @@ const Header = () => {
         <div className="flex justify-between items-center h-16">
           {/* Desktop Navigation - Left */}
           <nav className="hidden md:flex space-x-8">
-            <a href="/" className="text-white hover:text-yellow-300 transition-colors font-medium">HOME</a>
-            <a href="/culture-cup" className="text-white hover:text-yellow-300 transition-colors font-medium">CULTURE CUP</a>
-            <a href="/story" className="text-white hover:text-yellow-300 transition-colors font-medium">OUR STORY</a>
-            <a href="/find-us" className="text-white hover:text-yellow-300 transition-colors font-medium">FIND US</a>
-            <a href="/shop" className="text-white hover:text-yellow-300 transition-colors font-medium">SHOP</a>
+            <a href="/culture-cup" className="text-white hover:text-yellow-300 transition-colors font-medium">SHOP</a>
+            <a href="/story" className="text-white hover:text-yellow-300 transition-colors font-medium">WHOLESALE</a>
+            <a href="/find-us" className="text-white hover:text-yellow-300 transition-colors font-medium">EDITORIAL</a>
+            <a href="/shop" className="text-white hover:text-yellow-300 transition-colors font-medium">OUR STORY</a>
+                        <a href="/" className="text-white hover:text-yellow-300 transition-colors font-medium">SCIENCE</a>
           </nav>
 
           {/* Logo - Center */}
