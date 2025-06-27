@@ -19,13 +19,13 @@ export const useAdminCheck = () => {
 
   const checkAdminStatus = async () => {
     try {
-      // Use RPC call to avoid infinite recursion
-      const { data, error } = await supabase.rpc('check_user_admin', {
+      // Use RPC call to check admin status
+      const { data, error } = await supabase.rpc('check_user_admin' as any, {
         user_id: user?.id
       });
 
       if (data && !error) {
-        setIsAdmin(true);
+        setIsAdmin(data);
       } else {
         setIsAdmin(false);
       }

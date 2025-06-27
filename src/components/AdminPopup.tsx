@@ -25,16 +25,18 @@ const AdminPopup = () => {
 
   const checkAdminStatus = async () => {
     try {
-      // Use RPC call to avoid infinite recursion in RLS policies
-      const { data, error } = await supabase.rpc('check_user_admin', {
+      // Use RPC call to check admin status
+      const { data, error } = await supabase.rpc('check_user_admin' as any, {
         user_id: user?.id
       });
 
       if (data && !error) {
-        setIsAdmin(true);
-        // Show popup for 5 seconds when admin logs in
-        setShowPopup(true);
-        setTimeout(() => setShowPopup(false), 5000);
+        setIsAdmin(data);
+        if (data) {
+          // Show popup for 5 seconds when admin logs in
+          setShowPopup(true);
+          setTimeout(() => setShowPopup(false), 5000);
+        }
       }
     } catch (error) {
       console.log('User is not an admin');
