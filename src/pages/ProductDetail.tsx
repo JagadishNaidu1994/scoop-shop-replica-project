@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import HeaderNavBar from '@/components/HeaderNavBar';
@@ -5,8 +6,11 @@ import Footer from '@/components/Footer';
 import { supabase } from '@/integrations/supabase/client';
 import { useCart } from '@/contexts/CartContext';
 import { Button } from '@/components/ui/button';
-import { Star, Plus, Minus, Shield, Truck, RotateCcw } from 'lucide-react';
+import { Star, Plus, Minus, Shield, Truck, RotateCcw, ChevronDown, ChevronLeft, ChevronRight } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
+import { Badge } from '@/components/ui/badge';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 
 interface Product {
   id: number;
@@ -27,6 +31,17 @@ const ProductDetail = () => {
   const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(1);
   const [selectedImage, setSelectedImage] = useState(0);
+  const [subscriptionType, setSubscriptionType] = useState<'one-time' | 'subscribe'>('one-time');
+  const [subscriptionFrequency, setSubscriptionFrequency] = useState('Every 4 weeks');
+
+  // Mock data for ingredients carousel
+  const ingredients = [
+    { name: 'Vitamin B1', amount: '81% RI per serving', icon: '🧪' },
+    { name: 'Lion\'s Mane', amount: '500mg per serving', icon: '🍄' },
+    { name: 'Tremella', amount: '300mg per serving', icon: '🤍' },
+    { name: 'Essential B Vitamins', amount: '5 vitamins', icon: '💊' },
+    { name: 'Ceremonial Grade Matcha', amount: '2g per serving', icon: '🍵' },
+  ];
 
   useEffect(() => {
     if (id) {
@@ -112,6 +127,7 @@ const ProductDetail = () => {
   }
 
   const productImages = [product.primary_image, product.hover_image].filter(Boolean);
+  const subscriptionPrice = product.price * 0.8; // 20% discount for subscription
 
   return (
     <div className="min-h-screen bg-white">
@@ -127,141 +143,286 @@ const ProductDetail = () => {
           <span className="text-gray-900">{product.name}</span>
         </nav>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          {/* Product Images */}
+        {/* First Section - Enhanced Product Details */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
+          {/* Product Images with Carousel */}
           <div className="space-y-4">
-            <div className="aspect-square overflow-hidden rounded-lg bg-gray-100">
-              <img
-                src={productImages[selectedImage] || product.primary_image}
-                alt={product.name}
-                className="w-full h-full object-cover"
-              />
-            </div>
-            {productImages.length > 1 && (
-              <div className="flex space-x-2">
-                {productImages.map((image, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setSelectedImage(index)}
-                    className={`w-20 h-20 rounded-lg overflow-hidden border-2 ${
-                      selectedImage === index ? 'border-black' : 'border-gray-200'
-                    }`}
-                  >
-                    <img src={image} alt={`${product.name} ${index + 1}`} className="w-full h-full object-cover" />
-                  </button>
-                ))}
+            <div className="relative">
+              <Badge className="absolute top-4 left-4 z-10 bg-black text-white">BEST SELLER</Badge>
+              <div className="aspect-square overflow-hidden rounded-lg bg-gray-100">
+                <img
+                  src={productImages[selectedImage] || product.primary_image}
+                  alt={product.name}
+                  className="w-full h-full object-cover"
+                />
               </div>
+            </div>
+            
+            {/* Thumbnail Carousel */}
+            {productImages.length > 1 && (
+              <Carousel className="w-full max-w-sm mx-auto">
+                <CarouselContent>
+                  {productImages.map((image, index) => (
+                    <CarouselItem key={index} className="basis-1/3">
+                      <button
+                        onClick={() => setSelectedImage(index)}
+                        className={`w-full aspect-square rounded-lg overflow-hidden border-2 ${
+                          selectedImage === index ? 'border-black' : 'border-gray-200'
+                        }`}
+                      >
+                        <img src={image} alt={`${product.name} ${index + 1}`} className="w-full h-full object-cover" />
+                      </button>
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+                <CarouselPrevious />
+                <CarouselNext />
+              </Carousel>
             )}
           </div>
 
-          {/* Product Info */}
+          {/* Enhanced Product Info */}
           <div className="space-y-6">
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">{product.name}</h1>
-              <div className="flex items-center space-x-2 mb-4">
-                <div className="flex text-yellow-400">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-5 h-5 fill-current" />
-                  ))}
-                </div>
-                <span className="text-sm text-gray-600">4.8 (127 reviews)</span>
+            <div className="flex items-center space-x-2 mb-2">
+              <div className="flex text-yellow-400">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-4 h-4 fill-current" />
+                ))}
               </div>
-              <p className="text-gray-600 text-lg leading-relaxed">{product.description}</p>
+              <span className="text-sm text-gray-600">20,564 Reviews</span>
             </div>
 
-            {/* Benefits */}
-            {product.benefits && product.benefits.length > 0 && (
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900 mb-2">DIRTEA {product.name}</h1>
+              <p className="text-gray-600 text-lg mb-4">Energy, focus, beauty</p>
+              <p className="text-sm text-gray-600 mb-4">
+                The creamiest, ceremonial-grade Matcha with Lion's Mane, Tremella, and essential B vitamins.
+              </p>
+              <div className="flex items-center space-x-4 mb-4">
+                <Badge variant="outline" className="flex items-center space-x-1">
+                  <span>⚡</span><span>Energy</span>
+                </Badge>
+                <Badge variant="outline" className="flex items-center space-x-1">
+                  <span>🎯</span><span>Focus</span>
+                </Badge>
+                <Badge variant="outline" className="flex items-center space-x-1">
+                  <span>✨</span><span>Skin</span>
+                </Badge>
+              </div>
+              <p className="text-sm text-gray-600">🥄 30 servings</p>
+            </div>
+
+            {/* Pricing Options */}
+            <div className="border rounded-lg p-4 space-y-4">
+              {/* One-time Purchase */}
+              <div 
+                className={`p-4 border rounded-lg cursor-pointer ${subscriptionType === 'one-time' ? 'border-black bg-gray-50' : 'border-gray-200'}`}
+                onClick={() => setSubscriptionType('one-time')}
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-2">
+                    <input type="radio" checked={subscriptionType === 'one-time'} readOnly />
+                    <span className="font-medium">One-time Purchase</span>
+                  </div>
+                  <span className="text-xl font-bold">£{product.price}</span>
+                </div>
+              </div>
+
+              {/* Subscribe & Save */}
+              <div 
+                className={`p-4 border rounded-lg cursor-pointer ${subscriptionType === 'subscribe' ? 'border-black bg-gray-50' : 'border-gray-200'}`}
+                onClick={() => setSubscriptionType('subscribe')}
+              >
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center space-x-2">
+                    <input type="radio" checked={subscriptionType === 'subscribe'} readOnly />
+                    <span className="font-medium">Subscribe & Save</span>
+                    <Badge className="bg-purple-100 text-purple-800">20% OFF</Badge>
+                  </div>
+                  <div className="text-right">
+                    <span className="text-xl font-bold">£{subscriptionPrice.toFixed(2)}</span>
+                    <p className="text-sm text-gray-500">£{(subscriptionPrice * 0.117).toFixed(2)} per serving</p>
+                  </div>
+                </div>
+                <p className="text-sm text-gray-600 mb-2">Pouch only, free gifts NOT included</p>
+                
+                {subscriptionType === 'subscribe' && (
+                  <select 
+                    value={subscriptionFrequency}
+                    onChange={(e) => setSubscriptionFrequency(e.target.value)}
+                    className="w-full p-2 border rounded-md"
+                  >
+                    <option>Every 4 weeks (Bestseller)</option>
+                    <option>Every 6 weeks</option>
+                    <option>Every 8 weeks</option>
+                  </select>
+                )}
+              </div>
+            </div>
+
+            {/* Quantity Selector */}
+            <div className="flex items-center space-x-4">
+              <div className="flex items-center border border-gray-300 rounded-md">
+                <button
+                  onClick={decrementQuantity}
+                  className="p-2 hover:bg-gray-100"
+                  disabled={quantity <= 1}
+                >
+                  <Minus className="w-4 h-4" />
+                </button>
+                <span className="px-4 py-2 border-x border-gray-300">{quantity}</span>
+                <button
+                  onClick={incrementQuantity}
+                  className="p-2 hover:bg-gray-100"
+                >
+                  <Plus className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+
+            {/* Add to Cart Button */}
+            <Button
+              onClick={handleAddToCart}
+              className="w-full bg-black text-white hover:bg-gray-800 py-3 text-lg font-medium mb-4"
+            >
+              ADD TO CART - £{((subscriptionType === 'subscribe' ? subscriptionPrice : product.price) * quantity).toFixed(2)}
+            </Button>
+
+            {/* Buy with Shop Pay */}
+            <Button className="w-full bg-purple-600 text-white hover:bg-purple-700 py-3 text-lg font-medium mb-4">
+              Buy with ShopPay
+            </Button>
+
+            <p className="text-sm text-gray-500 text-center mb-4">More payment options</p>
+
+            {/* Trust Badges */}
+            <div className="flex items-center space-x-4 text-sm text-gray-600">
+              <div className="flex items-center space-x-1">
+                <div className="w-4 h-4 bg-black rounded-full"></div>
+                <span>Skip or cancel anytime</span>
+              </div>
+              <div className="flex items-center space-x-1">
+                <div className="w-4 h-4 bg-black rounded-full"></div>
+                <span>20% off every subscription order</span>
+              </div>
+            </div>
+
+            {/* Collapsible Sections */}
+            <div className="space-y-4 border-t pt-6">
+              <Collapsible>
+                <CollapsibleTrigger className="flex items-center justify-between w-full py-4 border-b">
+                  <span className="font-medium">Why choose DIRTEA</span>
+                  <ChevronDown className="w-4 h-4" />
+                </CollapsibleTrigger>
+                <CollapsibleContent className="py-4 text-gray-600">
+                  Our products are made with the highest quality ingredients, sourced directly from trusted suppliers.
+                </CollapsibleContent>
+              </Collapsible>
+
+              <Collapsible>
+                <CollapsibleTrigger className="flex items-center justify-between w-full py-4 border-b">
+                  <span className="font-medium">Ingredients</span>
+                  <ChevronDown className="w-4 h-4" />
+                </CollapsibleTrigger>
+                <CollapsibleContent className="py-4 text-gray-600">
+                  100% Organic {product.category} Powder with Lion's Mane, Tremella, and essential B vitamins.
+                </CollapsibleContent>
+              </Collapsible>
+
+              <Collapsible>
+                <CollapsibleTrigger className="flex items-center justify-between w-full py-4 border-b">
+                  <span className="font-medium">The Science</span>
+                  <ChevronDown className="w-4 h-4" />
+                </CollapsibleTrigger>
+                <CollapsibleContent className="py-4 text-gray-600">
+                  Backed by scientific research and third-party tested for purity and potency.
+                </CollapsibleContent>
+              </Collapsible>
+
+              <Collapsible>
+                <CollapsibleTrigger className="flex items-center justify-between w-full py-4 border-b">
+                  <span className="font-medium">How to Use</span>
+                  <ChevronDown className="w-4 h-4" />
+                </CollapsibleTrigger>
+                <CollapsibleContent className="py-4 text-gray-600">
+                  Add 1-2 teaspoons to your favorite beverage, mix well, and enjoy daily for optimal benefits.
+                </CollapsibleContent>
+              </Collapsible>
+            </div>
+
+            {/* Review Preview */}
+            <div className="border-t pt-6">
+              <div className="flex items-start space-x-4">
+                <div className="w-10 h-10 bg-gray-300 rounded-full overflow-hidden">
+                  <img src="/lovable-uploads/26d45a3e-0bd4-4883-89d1-b11b087ead71.png" alt="Katarzyna W" className="w-full h-full object-cover" />
+                </div>
+                <div>
+                  <div className="flex items-center space-x-2 mb-1">
+                    <span className="font-medium">Katarzyna W.</span>
+                    <div className="flex text-yellow-400">
+                      {[...Array(5)].map((_, i) => (
+                        <Star key={i} className="w-3 h-3 fill-current" />
+                      ))}
+                    </div>
+                  </div>
+                  <p className="text-sm text-gray-600">"I am in love with matcha. Drink every morning with dash of oat vanilla ❤️"</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Second Section - Ingredients Carousel */}
+        <section className="py-16 bg-gray-50 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8">
+          <div className="max-w-7xl mx-auto">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+              {/* Left Side - Ingredients Carousel */}
               <div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-3">Key Benefits</h3>
-                <div className="grid grid-cols-2 gap-2">
-                  {product.benefits.map((benefit, index) => (
-                    <div key={index} className="flex items-center space-x-2">
-                      <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                      <span className="text-sm text-gray-700">{benefit}</span>
+                <h2 className="text-4xl font-bold text-gray-900 mb-8">
+                  Pure ingredients, powerful benefits.
+                </h2>
+                
+                <div className="space-y-8">
+                  {ingredients.map((ingredient, index) => (
+                    <div key={index} className="flex items-center space-x-4">
+                      <div className="text-2xl">{ingredient.icon}</div>
+                      <div>
+                        <h3 className="font-semibold text-lg text-gray-900">{ingredient.name}</h3>
+                        <p className="text-gray-600">{ingredient.amount}</p>
+                      </div>
                     </div>
                   ))}
                 </div>
-              </div>
-            )}
 
-            {/* Price */}
-            <div className="border-t border-gray-200 pt-6">
-              <div className="flex items-center justify-between mb-6">
-                <div>
-                  <span className="text-3xl font-bold text-gray-900">£{product.price}</span>
-                  <span className="text-sm text-gray-500 ml-2">One-time purchase</span>
+                {/* Dots indicator */}
+                <div className="flex space-x-2 mt-8">
+                  {ingredients.map((_, index) => (
+                    <div 
+                      key={index} 
+                      className={`w-2 h-2 rounded-full ${index === 0 ? 'bg-black' : 'bg-gray-300'}`}
+                    ></div>
+                  ))}
                 </div>
               </div>
 
-              {/* Quantity Selector */}
-              <div className="flex items-center space-x-4 mb-6">
-                <span className="text-sm font-medium text-gray-900">Quantity:</span>
-                <div className="flex items-center border border-gray-300 rounded-md">
-                  <button
-                    onClick={() => setQuantity(prev => Math.max(1, prev - 1))}
-                    className="p-2 hover:bg-gray-100"
-                    disabled={quantity <= 1}
-                  >
-                    <Minus className="w-4 h-4" />
-                  </button>
-                  <span className="px-4 py-2 border-x border-gray-300">{quantity}</span>
-                  <button
-                    onClick={() => setQuantity(prev => prev + 1)}
-                    className="p-2 hover:bg-gray-100"
-                  >
-                    <Plus className="w-4 h-4" />
-                  </button>
+              {/* Right Side - Lifestyle Image */}
+              <div className="relative">
+                <div className="aspect-square rounded-lg overflow-hidden">
+                  <img 
+                    src="/lovable-uploads/ce948032-9353-486e-8b45-76c4fbcff748.png" 
+                    alt="Energy Focus Beauty lifestyle" 
+                    className="w-full h-full object-cover"
+                  />
                 </div>
-              </div>
-
-              {/* Add to Cart Button */}
-              <Button
-                onClick={handleAddToCart}
-                className="w-full bg-black text-white hover:bg-gray-800 py-3 text-lg font-medium mb-4"
-              >
-                Add to Cart - £{(product.price * quantity).toFixed(2)}
-              </Button>
-
-              {/* Trust Badges */}
-              <div className="grid grid-cols-3 gap-4 pt-6 border-t border-gray-200">
-                <div className="text-center">
-                  <Shield className="w-8 h-8 mx-auto mb-2 text-gray-600" />
-                  <p className="text-xs text-gray-600">Secure Payment</p>
-                </div>
-                <div className="text-center">
-                  <Truck className="w-8 h-8 mx-auto mb-2 text-gray-600" />
-                  <p className="text-xs text-gray-600">Free Shipping</p>
-                </div>
-                <div className="text-center">
-                  <RotateCcw className="w-8 h-8 mx-auto mb-2 text-gray-600" />
-                  <p className="text-xs text-gray-600">30-Day Returns</p>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="text-white text-center">
+                    <h3 className="text-2xl font-semibold mb-2">Energy Focus Beauty</h3>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-
-        {/* Product Details Tabs */}
-        <div className="mt-16 border-t border-gray-200 pt-16">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            <div>
-              <h3 className="text-xl font-bold text-gray-900 mb-4">How to Use</h3>
-              <div className="space-y-4 text-gray-700">
-                <p>1. Add 1-2 teaspoons to your favorite beverage</p>
-                <p>2. Mix well until fully dissolved</p>
-                <p>3. Enjoy immediately for best results</p>
-                <p>4. Use daily for optimal benefits</p>
-              </div>
-            </div>
-            <div>
-              <h3 className="text-xl font-bold text-gray-900 mb-4">Ingredients</h3>
-              <p className="text-gray-700">
-                100% Organic {product.category} Powder. No artificial additives, preservatives, or fillers.
-                Sourced from premium suppliers and third-party tested for purity and potency.
-              </p>
-            </div>
-          </div>
-        </div>
+        </section>
 
         {/* Reviews Section */}
         <div className="mt-16 border-t border-gray-200 pt-16">
