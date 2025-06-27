@@ -1,20 +1,22 @@
 
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import HeaderNavBar from '@/components/HeaderNavBar';
 import Footer from '@/components/Footer';
 import { supabase } from '@/integrations/supabase/client';
+import { Link } from 'react-router-dom';
+import { sampleRecipes } from '@/data/sampleRecipes';
 
 interface Recipe {
   id: string;
   title: string;
+  description: string;
   image_url: string;
   category: string;
   read_time: string;
 }
 
 const Recipes = () => {
-  const [recipes, setRecipes] = useState<Recipe[]>([]);
+  const [dbRecipes, setDbRecipes] = useState<Recipe[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -25,106 +27,134 @@ const Recipes = () => {
     try {
       const { data, error } = await supabase
         .from('recipes')
-        .select('id, title, image_url, category, read_time')
+        .select('*')
         .eq('is_published', true)
         .order('created_at', { ascending: false });
 
       if (error) {
         console.error('Error fetching recipes:', error);
-        return;
+        setDbRecipes([]);
+      } else {
+        setDbRecipes(data || []);
       }
-
-      setRecipes(data || []);
     } catch (error) {
       console.error('Error fetching recipes:', error);
+      setDbRecipes([]);
     } finally {
       setLoading(false);
     }
   };
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-white">
-        <HeaderNavBar />
-        <div className="flex items-center justify-center min-h-screen">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-black mx-auto mb-4"></div>
-            <p className="text-gray-600">Loading recipes...</p>
-          </div>
-        </div>
-        <Footer />
-      </div>
-    );
-  }
+  // Combine database recipes with sample recipes
+  const allRecipes = [
+    ...sampleRecipes,
+    ...dbRecipes.map(recipe => ({
+      id: recipe.id,
+      title: recipe.title,
+      image: recipe.image_url || 'https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=600&h=400&fit=crop',
+      category: recipe.category || 'Recipes',
+      readTime: recipe.read_time || '5 min',
+      description: recipe.description || ''
+    }))
+  ];
 
   return (
     <div className="min-h-screen bg-white">
       <HeaderNavBar />
       
-      {/* Hero Banner */}
-      <div className="relative h-[400px] bg-gradient-to-r from-orange-100 to-green-100">
-        <div className="absolute inset-0 flex items-center">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-            <div className="flex items-center justify-between">
-              <div className="flex-1">
-                <h1 className="text-5xl font-bold text-gray-900 mb-4">Recipes</h1>
-                <p className="text-lg text-gray-700 max-w-2xl">
-                  Discover delicious and nutritious recipes featuring our functional mushroom powders. 
-                  From energizing morning smoothies to calming evening lattes, find your perfect blend 
-                  for every moment of the day.
-                </p>
-              </div>
-              <div className="flex-1 flex justify-center">
-                <img 
-                  src="https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=600&h=400&fit=crop" 
-                  alt="DIRTEA Products" 
-                  className="max-w-md rounded-lg shadow-lg"
-                />
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Hero Section */}
+        <div className="py-16 text-center">
+          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+            Recipes & Rituals
+          </h1>
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            Discover delicious ways to incorporate our functional mushrooms and matcha into your daily routine. 
+            From energizing morning lattes to calming evening elixirs.
+          </p>
+        </div>
+
+        {/* Featured Recipe */}
+        {allRecipes.length > 0 && (
+          <div className="mb-16">
+            <div className="relative overflow-hidden rounded-2xl bg-gray-900 text-white">
+              <img
+                src={allRecipes[0].image}
+                alt={allRecipes[0].title}
+                className="absolute inset-0 w-full h-full object-cover opacity-60"
+              />
+              <div className="relative px-8 py-16 md:px-16 md:py-24">
+                <div className="max-w-lg">
+                  <span className="inline-block px-3 py-1 bg-white text-gray-900 text-sm font-medium rounded-full mb-4">
+                    Featured Recipe
+                  </span>
+                  <h2 className="text-3xl md:text-4xl font-bold mb-4">{allRecipes[0].title}</h2>
+                  <p className="text-lg mb-6 opacity-90">{allRecipes[0].description}</p>
+                  <Link
+                    to={`/recipes/${allRecipes[0].id}`}
+                    className="inline-block bg-white text-gray-900 px-8 py-3 rounded-full font-medium hover:bg-gray-100 transition-colors"
+                  >
+                    View Recipe
+                  </Link>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </div>
+        )}
 
-      {/* Recipe Grid */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        {recipes.length === 0 ? (
-          <div className="text-center py-16">
-            <p className="text-gray-600 text-lg">No recipes available at the moment.</p>
+        {/* Recipe Categories */}
+        <div className="mb-12">
+          <div className="flex flex-wrap justify-center gap-4">
+            {['All', 'Drinks', 'Smoothies', 'Snacks', 'Breakfast'].map((category) => (
+              <button
+                key={category}
+                className="px-6 py-2 border border-gray-300 rounded-full hover:border-gray-900 hover:bg-gray-900 hover:text-white transition-colors"
+              >
+                {category}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Recipe Grid */}
+        {loading ? (
+          <div className="flex items-center justify-center py-16">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-black"></div>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {recipes.map((recipe) => (
-              <Link 
-                key={recipe.id} 
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pb-16">
+            {allRecipes.slice(1).map((recipe) => (
+              <Link
+                key={recipe.id}
                 to={`/recipes/${recipe.id}`}
-                className="group cursor-pointer"
+                className="group block"
               >
-                <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-                  <div className="aspect-w-16 aspect-h-9">
-                    <img 
-                      src={recipe.image_url || 'https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=400&h=400&fit=crop'} 
-                      alt={recipe.title}
-                      className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
+                <div className="aspect-[4/3] overflow-hidden rounded-lg mb-4">
+                  <img
+                    src={recipe.image}
+                    alt={recipe.title}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between text-sm text-gray-500">
+                    <span>{recipe.category}</span>
+                    <span>{recipe.readTime}</span>
                   </div>
-                  <div className="p-6">
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="text-sm font-medium text-gray-500 uppercase tracking-wide">
-                        {recipe.category || 'Recipe'}
-                      </span>
-                      <span className="text-sm text-gray-400">{recipe.read_time || '5 min read'}</span>
-                    </div>
-                    <h3 className="text-lg font-semibold text-gray-900 group-hover:text-gray-600 transition-colors">
-                      {recipe.title}
-                    </h3>
-                    <div className="mt-4">
-                      <span className="text-black font-medium hover:underline">READ MORE</span>
-                    </div>
-                  </div>
+                  <h3 className="text-xl font-semibold text-gray-900 group-hover:text-gray-600 transition-colors">
+                    {recipe.title}
+                  </h3>
+                  <p className="text-gray-600 line-clamp-2">{recipe.description}</p>
                 </div>
               </Link>
             ))}
+          </div>
+        )}
+
+        {allRecipes.length === 0 && !loading && (
+          <div className="text-center py-16">
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">No recipes available</h3>
+            <p className="text-gray-600">Check back soon for delicious new recipes!</p>
           </div>
         )}
       </main>

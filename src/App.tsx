@@ -9,6 +9,7 @@ import { CartProvider } from "@/contexts/CartContext";
 import AdminPopup from "@/components/AdminPopup";
 import Index from "./pages/Index";
 import Shop from "./pages/Shop";
+import ProductDetail from "./pages/ProductDetail";
 import Recipes from "./pages/Recipes";
 import RecipeDetail from "./pages/RecipeDetail";
 import Journal from "./pages/Journal";
@@ -38,6 +39,7 @@ const App = () => (
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/shop" element={<Shop />} />
+              <Route path="/products/:id" element={<ProductDetail />} />
               <Route path="/recipes" element={<Recipes />} />
               <Route path="/recipes/:id" element={<RecipeDetail />} />
               <Route path="/journal" element={<Journal />} />

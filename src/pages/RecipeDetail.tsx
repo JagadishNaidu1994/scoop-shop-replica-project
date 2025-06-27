@@ -1,27 +1,28 @@
 
-import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import HeaderNavBar from '@/components/HeaderNavBar';
 import Footer from '@/components/Footer';
-import ProductCard from '@/components/shop/ProductCard';
 import { supabase } from '@/integrations/supabase/client';
+import { sampleRecipes } from '@/data/sampleRecipes';
+import { Clock, Users, ChefHat } from 'lucide-react';
 
 interface Recipe {
   id: string;
   title: string;
-  description: string;
-  image_url: string;
-  date_published: string;
-  category: string;
-  read_time: string;
-  ingredients: string[];
-  instructions: string[];
-  nutritional_benefits: string[];
+  description?: string;
+  image_url?: string;
+  category?: string;
+  read_time?: string;
+  ingredients?: string[];
+  instructions?: string[];
+  nutritional_benefits?: string[];
 }
 
 const RecipeDetail = () => {
   const { id } = useParams();
-  const [recipe, setRecipe] = useState<Recipe | null>(null);
+  const navigate = useNavigate();
+  const [recipe, setRecipe] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -32,6 +33,15 @@ const RecipeDetail = () => {
 
   const fetchRecipe = async () => {
     try {
+      // First check if it's a sample recipe
+      const sampleRecipe = sampleRecipes.find(r => r.id === id);
+      if (sampleRecipe) {
+        setRecipe(sampleRecipe);
+        setLoading(false);
+        return;
+      }
+
+      // If not found in samples, check database
       const { data, error } = await supabase
         .from('recipes')
         .select('*')
@@ -41,50 +51,35 @@ const RecipeDetail = () => {
 
       if (error) {
         console.error('Error fetching recipe:', error);
+        navigate('/recipes');
         return;
       }
 
-      setRecipe(data);
+      setRecipe({
+        id: data.id,
+        title: data.title,
+        description: data.description,
+        image: data.image_url,
+        category: data.category,
+        readTime: data.read_time,
+        ingredients: data.ingredients,
+        instructions: data.instructions,
+        benefits: data.nutritional_benefits
+      });
     } catch (error) {
       console.error('Error fetching recipe:', error);
+      navigate('/recipes');
     } finally {
       setLoading(false);
     }
   };
-
-  const relatedProducts = [
-    {
-      id: 1,
-      name: 'focus powder',
-      price: '£30',
-      primaryImage: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=400&fit=crop',
-      hoverImage: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=400&fit=crop'
-    },
-    {
-      id: 2,
-      name: 'matcha powder',
-      price: '£25',
-      primaryImage: 'https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=400&h=400&fit=crop',
-      hoverImage: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=400&fit=crop'
-    },
-    {
-      id: 3,
-      name: 'lions mane powder',
-      price: '£28',
-      primaryImage: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=400&fit=crop',
-      hoverImage: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=400&h=400&fit=crop'
-    }
-  ];
 
   if (loading) {
     return (
       <div className="min-h-screen bg-white">
         <HeaderNavBar />
         <div className="flex items-center justify-center min-h-screen">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-black mx-auto mb-4"></div>
-            <p className="text-gray-600">Loading recipe...</p>
-          </div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-black"></div>
         </div>
         <Footer />
       </div>
@@ -95,16 +90,15 @@ const RecipeDetail = () => {
     return (
       <div className="min-h-screen bg-white">
         <HeaderNavBar />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="text-center py-16">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+          <div className="text-center">
             <h1 className="text-2xl font-bold text-gray-900 mb-4">Recipe Not Found</h1>
-            <p className="text-gray-600 mb-8">The recipe you're looking for doesn't exist or has been removed.</p>
-            <Link 
-              to="/recipes" 
-              className="bg-black text-white px-6 py-3 rounded-full font-medium hover:bg-gray-800 transition-colors"
+            <button
+              onClick={() => navigate('/recipes')}
+              className="bg-black text-white px-6 py-2 rounded-full hover:bg-gray-800 transition-colors"
             >
               Back to Recipes
-            </Link>
+            </button>
           </div>
         </div>
         <Footer />
@@ -116,104 +110,114 @@ const RecipeDetail = () => {
     <div className="min-h-screen bg-white">
       <HeaderNavBar />
       
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Back Button */}
-        <div className="mb-8">
-          <Link 
-            to="/recipes" 
-            className="inline-flex items-center text-black hover:text-gray-600 transition-colors font-medium"
-          >
-            ← Back to Recipes
-          </Link>
-        </div>
+      <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Breadcrumb */}
+        <nav className="flex text-sm text-gray-500 mb-8">
+          <button onClick={() => navigate('/')} className="hover:text-gray-700">Home</button>
+          <span className="mx-2">/</span>
+          <button onClick={() => navigate('/recipes')} className="hover:text-gray-700">Recipes</button>
+          <span className="mx-2">/</span>
+          <span className="text-gray-900">{recipe.title}</span>
+        </nav>
 
-        {/* Recipe Header - Side by Side Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-12">
-          {/* Recipe Image */}
-          <div className="aspect-w-4 aspect-h-3">
-            <img 
-              src={recipe.image_url || 'https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=600&h=400&fit=crop'} 
+        {/* Recipe Header */}
+        <div className="mb-12">
+          <div className="aspect-[16/9] overflow-hidden rounded-2xl mb-8">
+            <img
+              src={recipe.image || 'https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=800&h=600&fit=crop'}
               alt={recipe.title}
-              className="w-full h-full object-cover rounded-lg shadow-lg"
+              className="w-full h-full object-cover"
             />
           </div>
-
-          {/* Recipe Info */}
-          <div className="flex flex-col justify-center">
-            <div className="text-sm text-gray-500 mb-2">
-              {recipe.date_published ? new Date(recipe.date_published).toLocaleDateString('en-US', { 
-                year: 'numeric', 
-                month: 'long', 
-                day: 'numeric' 
-              }) : 'Recently Published'}
-            </div>
-            <h1 className="text-4xl font-bold text-gray-900 mb-6">{recipe.title}</h1>
-            <p className="text-lg text-gray-700 mb-8">{recipe.description}</p>
+          
+          <div className="text-center mb-8">
+            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">{recipe.title}</h1>
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto mb-6">
+              {recipe.description}
+            </p>
             
-            {/* Nutritional Benefits */}
-            {recipe.nutritional_benefits && recipe.nutritional_benefits.length > 0 && (
-              <div className="mb-8">
-                <h3 className="text-xl font-semibold text-gray-900 mb-4">Benefits</h3>
-                <ul className="space-y-2">
-                  {recipe.nutritional_benefits.map((benefit, index) => (
-                    <li key={index} className="flex items-start">
-                      <span className="text-green-500 mr-2">•</span>
-                      <span className="text-gray-700">{benefit}</span>
-                    </li>
-                  ))}
-                </ul>
+            <div className="flex items-center justify-center space-x-8 text-sm text-gray-500">
+              <div className="flex items-center space-x-2">
+                <Clock className="w-4 h-4" />
+                <span>{recipe.readTime || '15 min'}</span>
               </div>
-            )}
+              <div className="flex items-center space-x-2">
+                <Users className="w-4 h-4" />
+                <span>1-2 servings</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <ChefHat className="w-4 h-4" />
+                <span>{recipe.category || 'Recipe'}</span>
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* Recipe Details */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
           {/* Ingredients */}
-          <div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">Ingredients</h2>
-            <ul className="space-y-3">
-              {recipe.ingredients && recipe.ingredients.map((ingredient, index) => (
-                <li key={index} className="flex items-start">
-                  <span className="text-black mr-3">•</span>
-                  <span className="text-gray-700">{ingredient}</span>
-                </li>
-              ))}
-            </ul>
+          <div className="lg:col-span-1">
+            <div className="bg-gray-50 rounded-2xl p-8 sticky top-8">
+              <h2 className="text-2xl font-bold text-gray-900 mb-6">Ingredients</h2>
+              <ul className="space-y-3">
+                {recipe.ingredients?.map((ingredient: string, index: number) => (
+                  <li key={index} className="flex items-start space-x-3">
+                    <div className="w-2 h-2 bg-black rounded-full mt-2 flex-shrink-0"></div>
+                    <span className="text-gray-700">{ingredient}</span>
+                  </li>
+                ))}
+              </ul>
+              
+              {recipe.benefits && recipe.benefits.length > 0 && (
+                <div className="mt-8 pt-8 border-t border-gray-200">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Benefits</h3>
+                  <ul className="space-y-2">
+                    {recipe.benefits.map((benefit: string, index: number) => (
+                      <li key={index} className="flex items-start space-x-3">
+                        <div className="w-2 h-2 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>
+                        <span className="text-sm text-gray-600">{benefit}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
           </div>
 
           {/* Instructions */}
-          <div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">Instructions</h2>
-            <ol className="space-y-4">
-              {recipe.instructions && recipe.instructions.map((instruction, index) => (
-                <li key={index} className="flex items-start">
-                  <span className="bg-black text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-medium mr-4 mt-0.5 flex-shrink-0">
+          <div className="lg:col-span-2">
+            <h2 className="text-2xl font-bold text-gray-900 mb-8">Instructions</h2>
+            <div className="space-y-6">
+              {recipe.instructions?.map((instruction: string, index: number) => (
+                <div key={index} className="flex space-x-4">
+                  <div className="flex-shrink-0 w-8 h-8 bg-black text-white rounded-full flex items-center justify-center text-sm font-medium">
                     {index + 1}
-                  </span>
-                  <span className="text-gray-700">{instruction}</span>
-                </li>
+                  </div>
+                  <p className="text-gray-700 pt-1 leading-relaxed">{instruction}</p>
+                </div>
               ))}
-            </ol>
+            </div>
+
+            {/* Tips Section */}
+            <div className="mt-12 p-6 bg-amber-50 rounded-2xl">
+              <h3 className="text-lg font-semibold text-gray-900 mb-3">Chef's Tips</h3>
+              <ul className="space-y-2 text-gray-700">
+                <li>• For best results, use high-quality, organic ingredients</li>
+                <li>• Store any leftover powder in a cool, dry place</li>
+                <li>• Feel free to adjust sweetness to your taste</li>
+                <li>• This recipe can be doubled for meal prep</li>
+              </ul>
+            </div>
           </div>
         </div>
 
-        {/* Related Products - Always Visible */}
-        <div className="mb-16">
-          <h2 className="text-2xl font-bold text-gray-900 mb-8">Related Products</h2>
-          <div className="flex items-center mb-6">
-            <div className="flex text-yellow-400">
-              {[...Array(5)].map((_, i) => (
-                <span key={i}>★</span>
-              ))}
-            </div>
-            <span className="ml-2 text-sm text-gray-600">4.9 | 18,133 reviews</span>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {relatedProducts.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
-          </div>
+        {/* Back to Recipes */}
+        <div className="text-center mt-16 pt-16 border-t border-gray-200">
+          <button
+            onClick={() => navigate('/recipes')}
+            className="bg-black text-white px-8 py-3 rounded-full hover:bg-gray-800 transition-colors"
+          >
+            ← Back to All Recipes
+          </button>
         </div>
       </main>
 
