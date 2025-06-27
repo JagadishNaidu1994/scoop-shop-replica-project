@@ -82,6 +82,9 @@ const HeaderNavBar = () => {
               <Link to="/story" className="text-black hover:text-gray-600 transition-colors font-medium">
                 OUR STORY
               </Link>
+              <Link to="/wholesale" className="text-black hover:text-gray-600 transition-colors font-medium">
+                WHOLESALE
+              </Link>
               <Link to="/refer" className="text-black hover:text-gray-600 transition-colors font-medium">
                 REFER A FRIEND
               </Link>
@@ -179,6 +182,7 @@ const HeaderNavBar = () => {
                 <Link to="/journal" className="block px-3 py-2 text-black hover:text-gray-600 font-medium">JOURNAL</Link>
                 <Link to="/science" className="block px-3 py-2 text-black hover:text-gray-600 font-medium">SCIENCE</Link>
                 <Link to="/story" className="block px-3 py-2 text-black hover:text-gray-600 font-medium">OUR STORY</Link>
+                <Link to="/wholesale" className="block px-3 py-2 text-black hover:text-gray-600 font-medium">WHOLESALE</Link>
                 <Link to="/refer" className="block px-3 py-2 text-black hover:text-gray-600 font-medium">REFER A FRIEND</Link>
                 <div className="px-3 py-2 space-y-2">
                   <Link to="/shop">

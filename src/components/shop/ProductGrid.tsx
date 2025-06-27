@@ -42,14 +42,14 @@ const ProductGrid: React.FC<ProductGridProps> = ({ selectedCategory = 'all', pri
         return;
       }
 
-      // Transform data to match expected format
+      // Transform data to match expected format with better images
       const transformedProducts = data.map(product => ({
         id: product.id,
         name: product.name,
         price: product.price,
-        primary_image: product.primary_image || 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=400&fit=crop',
-        hover_image: product.hover_image || 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=400&fit=crop',
-        description: product.description || '',
+        primary_image: getProductImage(product.category, 'primary'),
+        hover_image: getProductImage(product.category, 'hover'),
+        description: getProductDescription(product.category),
         category: product.category || '',
         benefits: product.benefits || []
       }));
@@ -61,6 +61,35 @@ const ProductGrid: React.FC<ProductGridProps> = ({ selectedCategory = 'all', pri
     } finally {
       setLoading(false);
     }
+  };
+
+  const getProductImage = (category: string, type: 'primary' | 'hover') => {
+    const imageMap = {
+      'Matcha': {
+        primary: 'https://images.unsplash.com/photo-1515823064-d6e0c04616a7?w=400&h=400&fit=crop&bg=f5f5f5',
+        hover: 'https://images.unsplash.com/photo-1544787219-7f47ccb76574'
+      },
+      'Mushrooms': {
+        primary: 'https://images.unsplash.com/photo-1584464491033-06628f3a6b7b?w=400&h=400&fit=crop&bg=f5f5f5',
+        hover: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4'
+      },
+      'Blends': {
+        primary: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=400&h=400&fit=crop&bg=f5f5f5',
+        hover: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b'
+      }
+    };
+
+    return imageMap[category as keyof typeof imageMap]?.[type] || 
+           'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=400&fit=crop&bg=f5f5f5';
+  };
+
+  const getProductDescription = (category: string) => {
+    const descriptions = {
+      'Matcha': 'Focus, energy, antioxidants',
+      'Mushrooms': 'Cognitive support, immunity',
+      'Blends': 'Balanced wellness blend'
+    };
+    return descriptions[category as keyof typeof descriptions] || 'Premium quality supplement';
   };
 
   if (loading) {
@@ -90,7 +119,8 @@ const ProductGrid: React.FC<ProductGridProps> = ({ selectedCategory = 'all', pri
             name: product.name,
             price: `£${product.price}`,
             primaryImage: product.primary_image,
-            hoverImage: product.hover_image
+            hoverImage: product.hover_image,
+            description: product.description
           }} 
         />
       ))}
