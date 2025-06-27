@@ -2,9 +2,11 @@
 import React, { useState } from 'react';
 import { Menu, X, ShoppingCart, User } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useAuth } from '@/contexts/AuthContext';
 
 const HeaderNavBar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { user } = useAuth();
 
   return (
     <>
@@ -47,9 +49,15 @@ const HeaderNavBar = () => {
                   SHOP DIRTEA
                 </button>
               </Link>
-              <button className="text-black hover:text-gray-600 transition-colors font-medium">
-                ACCOUNT
-              </button>
+              {user ? (
+                <Link to="/account" className="text-black hover:text-gray-600 transition-colors font-medium">
+                  ACCOUNT
+                </Link>
+              ) : (
+                <Link to="/auth" className="text-black hover:text-gray-600 transition-colors font-medium">
+                  ACCOUNT
+                </Link>
+              )}
               <button className="text-black hover:text-gray-600 transition-colors font-medium">
                 CART
               </button>
@@ -81,7 +89,11 @@ const HeaderNavBar = () => {
                     </button>
                   </Link>
                   <div className="flex space-x-4">
-                    <button className="text-black font-medium">ACCOUNT</button>
+                    {user ? (
+                      <Link to="/account" className="text-black font-medium">ACCOUNT</Link>
+                    ) : (
+                      <Link to="/auth" className="text-black font-medium">ACCOUNT</Link>
+                    )}
                     <button className="text-black font-medium">CART</button>
                   </div>
                 </div>
