@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import HeaderNavBar from '@/components/HeaderNavBar';
@@ -37,10 +36,16 @@ const ProductDetail = () => {
 
   const fetchProduct = async () => {
     try {
+      const productId = parseInt(id as string);
+      if (isNaN(productId)) {
+        navigate('/shop');
+        return;
+      }
+
       const { data, error } = await supabase
         .from('products')
         .select('*')
-        .eq('id', id)
+        .eq('id', productId)
         .eq('is_active', true)
         .single();
 
@@ -63,11 +68,11 @@ const ProductDetail = () => {
     if (!product) return;
     
     addToCart({
-      id: product.id,
-      name: product.name,
-      price: product.price,
+      product_id: product.id,
+      product_name: product.name,
+      product_price: product.price,
       quantity: quantity,
-      image: product.primary_image
+      product_image: product.primary_image
     });
     
     toast({
@@ -193,7 +198,7 @@ const ProductDetail = () => {
                 <span className="text-sm font-medium text-gray-900">Quantity:</span>
                 <div className="flex items-center border border-gray-300 rounded-md">
                   <button
-                    onClick={decrementQuantity}
+                    onClick={() => setQuantity(prev => Math.max(1, prev - 1))}
                     className="p-2 hover:bg-gray-100"
                     disabled={quantity <= 1}
                   >
@@ -201,7 +206,7 @@ const ProductDetail = () => {
                   </button>
                   <span className="px-4 py-2 border-x border-gray-300">{quantity}</span>
                   <button
-                    onClick={incrementQuantity}
+                    onClick={() => setQuantity(prev => prev + 1)}
                     className="p-2 hover:bg-gray-100"
                   >
                     <Plus className="w-4 h-4" />
