@@ -28,7 +28,7 @@ const ProductShowcaseGrid = () => {
           {/* Right Side - Product Image */}
           <div className="relative">
             <img 
-              src="https://drive.google.com/file/d/1XEcAuEs6XEUXna5LeJSoWJBUXRGjNit" 
+              src="/images/Home_Landing_1.png" 
               alt="DIRTEA product pouring into cup"
               className="w-full h-auto rounded-lg"
             />
