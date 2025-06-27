@@ -9,6 +9,27 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      admin_users: {
+        Row: {
+          created_at: string
+          id: string
+          role: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       cart_items: {
         Row: {
           created_at: string | null
@@ -152,12 +173,66 @@ export type Database = {
         }
         Relationships: []
       }
+      recipes: {
+        Row: {
+          category: string | null
+          created_at: string
+          created_by: string | null
+          date_published: string | null
+          description: string | null
+          id: string
+          image_url: string | null
+          ingredients: string[] | null
+          instructions: string[] | null
+          is_published: boolean | null
+          nutritional_benefits: string[] | null
+          read_time: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string
+          created_by?: string | null
+          date_published?: string | null
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          ingredients?: string[] | null
+          instructions?: string[] | null
+          is_published?: boolean | null
+          nutritional_benefits?: string[] | null
+          read_time?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          category?: string | null
+          created_at?: string
+          created_by?: string | null
+          date_published?: string | null
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          ingredients?: string[] | null
+          instructions?: string[] | null
+          is_published?: boolean | null
+          nutritional_benefits?: string[] | null
+          read_time?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      make_user_admin: {
+        Args: { user_email: string }
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never
