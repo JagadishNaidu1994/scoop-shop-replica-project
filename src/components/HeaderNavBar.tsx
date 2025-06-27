@@ -19,16 +19,13 @@ const HeaderNavBar = () => {
           <div className="flex justify-between items-center h-16">
             {/* Logo - Left */}
             <div className="flex-shrink-0">
-              <Link to="/shop">
+              <Link to="/">
                 <h1 className="text-2xl font-bold text-black">DIRTEA</h1>
               </Link>
             </div>
 
             {/* Desktop Navigation - Center */}
             <nav className="hidden md:flex space-x-8">
-              <Link to="/shop" className="text-black hover:text-gray-600 transition-colors font-medium">
-                SHOP
-              </Link>
               <Link to="/science" className="text-black hover:text-gray-600 transition-colors font-medium">
                 SCIENCE
               </Link>
@@ -42,9 +39,11 @@ const HeaderNavBar = () => {
 
             {/* Action buttons - Right */}
             <div className="hidden md:flex items-center space-x-4">
+              <Link to="/shop">
               <button className="bg-black text-white px-6 py-2 rounded-full font-medium hover:bg-gray-800 transition-colors">
                 SHOP DIRTEA
               </button>
+                </Link>
               <button className="text-black hover:text-gray-600 transition-colors font-medium">
                 ACCOUNT
               </button>
