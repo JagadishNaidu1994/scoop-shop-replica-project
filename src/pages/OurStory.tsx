@@ -1,10 +1,11 @@
+
 import React from 'react';
-import Header from '../components/Header';
+import HeaderNavBar from '@/components/HeaderNavBar';
 
 const OurStory = () => {
   return (
     <div className="min-h-screen bg-white">
-      <Header />
+      <HeaderNavBar />
       
       {/* Hero Banner Section */}
       <section className="relative h-screen bg-black overflow-hidden">

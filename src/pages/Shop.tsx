@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import Header from '@/components/Header';
+import HeaderNavBar from '@/components/HeaderNavBar';
 import Footer from '@/components/Footer';
 import ProductGrid from '@/components/shop/ProductGrid';
 
@@ -10,7 +10,7 @@ const Shop = () => {
 
   return (
     <div className="min-h-screen bg-white">
-      <Header />
+      <HeaderNavBar />
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Page Header */}
         <div className="py-8 border-b border-gray-200">

@@ -8,13 +8,13 @@ const HeaderNavBar = () => {
 
   return (
     <>
-      {/* Top promotional banner */}
-      <div className="bg-gray-100 text-center py-2 text-sm font-medium text-black">
+      {/* Top promotional banner - now sticky */}
+      <div className="bg-gray-100 text-center py-2 text-sm font-medium text-black sticky top-0 z-50">
         20% OFF EVERY SUBSCRIPTION ORDER
       </div>
       
-      {/* Main header */}
-      <header className="bg-white shadow-sm sticky top-0 z-50 border-b border-gray-100">
+      {/* Main header - now sticky positioned below the banner */}
+      <header className="bg-white shadow-sm sticky top-8 z-40 border-b border-gray-100">
         <div className="w-full px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             {/* Logo - Left */}
@@ -26,6 +26,9 @@ const HeaderNavBar = () => {
 
             {/* Desktop Navigation - Center */}
             <nav className="hidden md:flex space-x-8">
+              <Link to="/shop" className="text-black hover:text-gray-600 transition-colors font-medium">
+                SHOP
+              </Link>
               <Link to="/science" className="text-black hover:text-gray-600 transition-colors font-medium">
                 SCIENCE
               </Link>
@@ -40,10 +43,10 @@ const HeaderNavBar = () => {
             {/* Action buttons - Right */}
             <div className="hidden md:flex items-center space-x-4">
               <Link to="/shop">
-              <button className="bg-black text-white px-6 py-2 rounded-full font-medium hover:bg-gray-800 transition-colors">
-                SHOP DIRTEA
-              </button>
-                </Link>
+                <button className="bg-black text-white px-6 py-2 rounded-full font-medium hover:bg-gray-800 transition-colors">
+                  SHOP DIRTEA
+                </button>
+              </Link>
               <button className="text-black hover:text-gray-600 transition-colors font-medium">
                 ACCOUNT
               </button>
@@ -72,9 +75,11 @@ const HeaderNavBar = () => {
                 <Link to="/story" className="block px-3 py-2 text-black hover:text-gray-600 font-medium">OUR STORY</Link>
                 <Link to="/refer" className="block px-3 py-2 text-black hover:text-gray-600 font-medium">REFER A FRIEND</Link>
                 <div className="px-3 py-2 space-y-2">
-                  <button className="w-full bg-black text-white px-6 py-2 rounded-full font-medium">
-                    SHOP DIRTEA
-                  </button>
+                  <Link to="/shop">
+                    <button className="w-full bg-black text-white px-6 py-2 rounded-full font-medium">
+                      SHOP DIRTEA
+                    </button>
+                  </Link>
                   <div className="flex space-x-4">
                     <button className="text-black font-medium">ACCOUNT</button>
                     <button className="text-black font-medium">CART</button>
