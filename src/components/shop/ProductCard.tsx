@@ -31,12 +31,12 @@ const ProductCard = ({ product }: ProductCardProps) => {
 
   return (
     <div 
-      className="group cursor-pointer relative overflow-hidden rounded-lg"
+      className="group cursor-pointer relative overflow-hidden bg-gray-100"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
       {/* Product Image Container */}
-      <div className="relative h-80 overflow-hidden rounded-lg">
+      <div className="relative h-80 overflow-hidden">
         {/* Primary Image */}
         <img 
           src={product.primaryImage}
@@ -57,7 +57,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
 
         {/* Product Name - Top Left */}
         <div className="absolute top-4 left-4 z-10">
-          <h3 className={`text-lg font-semibold transition-colors duration-300 ${
+          <h3 className={`text-lg font-bold transition-colors duration-300 ${
             isHovered ? 'text-white' : 'text-black'
           }`}>
             {product.name}
@@ -89,7 +89,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
       </div>
 
       {/* Product Description - Below Image */}
-      <div className="mt-4 text-center">
+      <div className="mt-4 px-2">
         <p className="text-sm text-black">{product.description}</p>
       </div>
     </div>

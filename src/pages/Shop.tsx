@@ -13,13 +13,12 @@ const Shop = () => {
       <HeaderNavBar />
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Page Header */}
-        {/* <div className="py-8 border-b border-gray-200">
+        <div className="py-8 border-b border-gray-200">
           <h1 className="text-3xl font-bold text-gray-900 mb-4">Best Sellers</h1>
           <p className="text-gray-600 max-w-3xl">
-            These DIRTEA power blends have been - our mile-bestselling products. Each one has a unique 
-            selling proposition, helping the most popular and trending functional adaptogenic ingredients.
+            Save 20% on every subscription order—no code needed. Get the best of DIRTEA by shopping our best selling mushroom products. Shop the most popular mushroom powders and organic super blends.
           </p>
-        </div> */}
+        </div>
 
         <div className="py-8">
           <ProductGrid 
