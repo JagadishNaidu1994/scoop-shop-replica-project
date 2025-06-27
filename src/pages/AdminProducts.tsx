@@ -16,12 +16,13 @@ interface Product {
   id: number;
   name: string;
   description: string;
-  price: string;
+  price: number;
   primary_image: string;
   hover_image: string;
   category: string;
   benefits: string[];
   is_active: boolean;
+  in_stock: boolean;
   created_at: string;
 }
 
@@ -40,7 +41,8 @@ const AdminProducts = () => {
     hover_image: '',
     category: '',
     benefits: '',
-    is_active: true
+    is_active: true,
+    in_stock: true
   });
 
   useEffect(() => {
@@ -54,22 +56,21 @@ const AdminProducts = () => {
   }, [user, isAdmin, loading, navigate]);
 
   const fetchProducts = async () => {
-    // For now, we'll use mock data since we don't have a products table yet
-    const mockProducts: Product[] = [
-      {
-        id: 1,
-        name: 'focus gummies',
-        description: 'Focus, memory, cognition',
-        price: '£27',
-        primary_image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=400&fit=crop',
-        hover_image: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=400&fit=crop',
-        category: 'Gummies',
-        benefits: ['Focus', 'Memory', 'Cognition'],
-        is_active: true,
-        created_at: new Date().toISOString()
+    try {
+      const { data, error } = await supabase
+        .from('products')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        console.error('Error fetching products:', error);
+        return;
       }
-    ];
-    setProducts(mockProducts);
+
+      setProducts(data || []);
+    } catch (error) {
+      console.error('Error fetching products:', error);
+    }
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -83,9 +84,47 @@ const AdminProducts = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // For now, just show success message since we don't have products table
-    toast({ title: "Product functionality coming soon!" });
-    resetForm();
+    const productData = {
+      name: formData.name,
+      description: formData.description,
+      price: parseFloat(formData.price),
+      primary_image: formData.primary_image,
+      hover_image: formData.hover_image,
+      category: formData.category,
+      benefits: formData.benefits.split(',').map(b => b.trim()).filter(b => b),
+      is_active: formData.is_active,
+      in_stock: formData.in_stock,
+      created_by: user?.id
+    };
+
+    try {
+      if (editingProduct) {
+        const { error } = await supabase
+          .from('products')
+          .update(productData)
+          .eq('id', editingProduct.id);
+
+        if (error) throw error;
+        toast({ title: "Product updated successfully!" });
+      } else {
+        const { error } = await supabase
+          .from('products')
+          .insert([productData]);
+
+        if (error) throw error;
+        toast({ title: "Product created successfully!" });
+      }
+
+      resetForm();
+      fetchProducts();
+    } catch (error) {
+      console.error('Error saving product:', error);
+      toast({ 
+        title: "Error saving product", 
+        description: "Please try again.",
+        variant: "destructive"
+      });
+    }
   };
 
   const resetForm = () => {
@@ -97,10 +136,49 @@ const AdminProducts = () => {
       hover_image: '',
       category: '',
       benefits: '',
-      is_active: true
+      is_active: true,
+      in_stock: true
     });
     setShowForm(false);
     setEditingProduct(null);
+  };
+
+  const handleEdit = (product: Product) => {
+    setEditingProduct(product);
+    setFormData({
+      name: product.name,
+      description: product.description || '',
+      price: product.price.toString(),
+      primary_image: product.primary_image || '',
+      hover_image: product.hover_image || '',
+      category: product.category || '',
+      benefits: product.benefits?.join(', ') || '',
+      is_active: product.is_active,
+      in_stock: product.in_stock
+    });
+    setShowForm(true);
+  };
+
+  const handleDelete = async (id: number) => {
+    if (!confirm('Are you sure you want to delete this product?')) return;
+
+    try {
+      const { error } = await supabase
+        .from('products')
+        .delete()
+        .eq('id', id);
+
+      if (error) throw error;
+      toast({ title: "Product deleted successfully!" });
+      fetchProducts();
+    } catch (error) {
+      console.error('Error deleting product:', error);
+      toast({ 
+        title: "Error deleting product", 
+        description: "Please try again.",
+        variant: "destructive"
+      });
+    }
   };
 
   if (loading) {
@@ -147,7 +225,9 @@ const AdminProducts = () => {
 
         {showForm && (
           <div className="bg-gray-50 p-6 rounded-lg mb-8">
-            <h2 className="text-xl font-semibold mb-4">Add New Product</h2>
+            <h2 className="text-xl font-semibold mb-4">
+              {editingProduct ? 'Edit Product' : 'Add New Product'}
+            </h2>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
@@ -165,9 +245,10 @@ const AdminProducts = () => {
                   <Input
                     id="price"
                     name="price"
+                    type="number"
+                    step="0.01"
                     value={formData.price}
                     onChange={handleInputChange}
-                    placeholder="£27"
                     required
                   />
                 </div>
@@ -230,21 +311,34 @@ const AdminProducts = () => {
                 </div>
               </div>
 
-              <div className="flex items-center space-x-2">
-                <input
-                  type="checkbox"
-                  id="is_active"
-                  name="is_active"
-                  checked={formData.is_active}
-                  onChange={handleInputChange}
-                  className="rounded"
-                />
-                <Label htmlFor="is_active">Active Product</Label>
+              <div className="flex items-center space-x-4">
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    id="is_active"
+                    name="is_active"
+                    checked={formData.is_active}
+                    onChange={handleInputChange}
+                    className="rounded"
+                  />
+                  <Label htmlFor="is_active">Active Product</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    id="in_stock"
+                    name="in_stock"
+                    checked={formData.in_stock}
+                    onChange={handleInputChange}
+                    className="rounded"
+                  />
+                  <Label htmlFor="in_stock">In Stock</Label>
+                </div>
               </div>
 
               <div className="flex space-x-4">
                 <Button type="submit" className="bg-black text-white hover:bg-gray-800">
-                  Create Product
+                  {editingProduct ? 'Update Product' : 'Create Product'}
                 </Button>
                 <Button type="button" onClick={resetForm} variant="outline">
                   Cancel
@@ -254,12 +348,47 @@ const AdminProducts = () => {
           </div>
         )}
 
-        <div className="bg-white border rounded-lg p-6">
-          <h2 className="text-xl font-semibold mb-4">Product Management</h2>
-          <p className="text-gray-600">
-            Product management functionality will be implemented after setting up the products database table. 
-            For now, you can manage recipes from the Recipe Management page.
-          </p>
+        {/* Product List */}
+        <div className="space-y-4">
+          <h2 className="text-xl font-semibold">All Products ({products.length})</h2>
+          {products.length === 0 ? (
+            <p className="text-gray-600">No products created yet.</p>
+          ) : (
+            <div className="grid gap-4">
+              {products.map((product) => (
+                <div key={product.id} className="bg-white border rounded-lg p-4 shadow-sm">
+                  <div className="flex justify-between items-start">
+                    <div className="flex-1">
+                      <h3 className="font-semibold text-lg">{product.name}</h3>
+                      <p className="text-gray-600 text-sm">{product.description}</p>
+                      <div className="flex items-center space-x-4 mt-2 text-sm text-gray-500">
+                        <span>Price: £{product.price}</span>
+                        <span>Category: {product.category || 'N/A'}</span>
+                        <span>Status: {product.is_active ? 'Active' : 'Inactive'}</span>
+                        <span>Stock: {product.in_stock ? 'In Stock' : 'Out of Stock'}</span>
+                      </div>
+                    </div>
+                    <div className="flex space-x-2 ml-4">
+                      <Button
+                        onClick={() => handleEdit(product)}
+                        variant="outline"
+                        size="sm"
+                      >
+                        Edit
+                      </Button>
+                      <Button
+                        onClick={() => handleDelete(product.id)}
+                        variant="destructive"
+                        size="sm"
+                      >
+                        Delete
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </main>
 

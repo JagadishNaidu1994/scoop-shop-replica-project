@@ -10,7 +10,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { Settings, ShoppingCart, BookOpen } from 'lucide-react';
+import { Settings, ShoppingCart, BookOpen, FileText } from 'lucide-react';
 
 const AdminPopup = () => {
   const { user } = useAuth();
@@ -69,6 +69,12 @@ const AdminPopup = () => {
               <Button variant="outline" className="w-full justify-start">
                 <ShoppingCart className="h-4 w-4 mr-2" />
                 Manage Products
+              </Button>
+            </Link>
+            <Link to="/admin/journals">
+              <Button variant="outline" className="w-full justify-start">
+                <FileText className="h-4 w-4 mr-2" />
+                Manage Journals
               </Button>
             </Link>
           </div>

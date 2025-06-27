@@ -73,6 +73,9 @@ const HeaderNavBar = () => {
               <Link to="/recipes" className="text-black hover:text-gray-600 transition-colors font-medium">
                 RECIPES
               </Link>
+              <Link to="/journal" className="text-black hover:text-gray-600 transition-colors font-medium">
+                JOURNAL
+              </Link>
               <Link to="/science" className="text-black hover:text-gray-600 transition-colors font-medium">
                 SCIENCE
               </Link>
@@ -101,10 +104,23 @@ const HeaderNavBar = () => {
               
               {/* Admin Panel Button - Only visible for admins */}
               {isAdmin && (
-                <Link to="/admin/recipes" className="text-black hover:text-gray-600 transition-colors font-medium flex items-center space-x-1">
-                  <Settings className="h-4 w-4" />
-                  <span>ADMIN</span>
-                </Link>
+                <div className="relative group">
+                  <button className="text-black hover:text-gray-600 transition-colors font-medium flex items-center space-x-1">
+                    <Settings className="h-4 w-4" />
+                    <span>ADMIN</span>
+                  </button>
+                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+                    <Link to="/admin/recipes" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                      Manage Recipes
+                    </Link>
+                    <Link to="/admin/products" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                      Manage Products
+                    </Link>
+                    <Link to="/admin/journals" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                      Manage Journals
+                    </Link>
+                  </div>
+                </div>
               )}
               
               {user ? (
@@ -160,6 +176,7 @@ const HeaderNavBar = () => {
               <div className="px-2 pt-2 pb-3 space-y-1 bg-white border-t border-gray-100">
                 <Link to="/shop" className="block px-3 py-2 text-black hover:text-gray-600 font-medium">SHOP</Link>
                 <Link to="/recipes" className="block px-3 py-2 text-black hover:text-gray-600 font-medium">RECIPES</Link>
+                <Link to="/journal" className="block px-3 py-2 text-black hover:text-gray-600 font-medium">JOURNAL</Link>
                 <Link to="/science" className="block px-3 py-2 text-black hover:text-gray-600 font-medium">SCIENCE</Link>
                 <Link to="/story" className="block px-3 py-2 text-black hover:text-gray-600 font-medium">OUR STORY</Link>
                 <Link to="/refer" className="block px-3 py-2 text-black hover:text-gray-600 font-medium">REFER A FRIEND</Link>
@@ -174,10 +191,20 @@ const HeaderNavBar = () => {
                       <span className="text-black font-medium">Hi, {firstName}</span>
                     )}
                     {isAdmin && (
-                      <Link to="/admin/recipes" className="text-black font-medium flex items-center space-x-1">
-                        <Settings className="h-4 w-4" />
-                        <span>ADMIN PANEL</span>
-                      </Link>
+                      <>
+                        <Link to="/admin/recipes" className="text-black font-medium flex items-center space-x-1">
+                          <Settings className="h-4 w-4" />
+                          <span>ADMIN - RECIPES</span>
+                        </Link>
+                        <Link to="/admin/products" className="text-black font-medium flex items-center space-x-1">
+                          <Settings className="h-4 w-4" />
+                          <span>ADMIN - PRODUCTS</span>
+                        </Link>
+                        <Link to="/admin/journals" className="text-black font-medium flex items-center space-x-1">
+                          <Settings className="h-4 w-4" />
+                          <span>ADMIN - JOURNALS</span>
+                        </Link>
+                      </>
                     )}
                     {user ? (
                       <Link to="/account" className="text-black font-medium">ACCOUNT</Link>

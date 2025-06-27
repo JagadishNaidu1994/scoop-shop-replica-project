@@ -11,8 +11,11 @@ import Index from "./pages/Index";
 import Shop from "./pages/Shop";
 import Recipes from "./pages/Recipes";
 import RecipeDetail from "./pages/RecipeDetail";
+import Journal from "./pages/Journal";
+import JournalDetail from "./pages/JournalDetail";
 import AdminRecipes from "./pages/AdminRecipes";
 import AdminProducts from "./pages/AdminProducts";
+import AdminJournals from "./pages/AdminJournals";
 import Science from "./pages/Science";
 import Wholesale from "./pages/Wholesale";
 import OurStory from "./pages/OurStory";
@@ -37,8 +40,11 @@ const App = () => (
               <Route path="/shop" element={<Shop />} />
               <Route path="/recipes" element={<Recipes />} />
               <Route path="/recipes/:id" element={<RecipeDetail />} />
+              <Route path="/journal" element={<Journal />} />
+              <Route path="/journal/:id" element={<JournalDetail />} />
               <Route path="/admin/recipes" element={<AdminRecipes />} />
               <Route path="/admin/products" element={<AdminProducts />} />
+              <Route path="/admin/journals" element={<AdminJournals />} />
               <Route path="/science" element={<Science />} />
               <Route path="/story" element={<OurStory />} />
               <Route path="/refer" element={<Shop />} />

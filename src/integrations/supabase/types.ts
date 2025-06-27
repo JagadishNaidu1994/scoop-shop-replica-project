@@ -66,6 +66,51 @@ export type Database = {
         }
         Relationships: []
       }
+      journals: {
+        Row: {
+          author: string | null
+          category: string | null
+          content: string
+          created_at: string | null
+          created_by: string | null
+          excerpt: string | null
+          id: string
+          image_url: string | null
+          is_published: boolean | null
+          read_time: string | null
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          author?: string | null
+          category?: string | null
+          content: string
+          created_at?: string | null
+          created_by?: string | null
+          excerpt?: string | null
+          id?: string
+          image_url?: string | null
+          is_published?: boolean | null
+          read_time?: string | null
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          author?: string | null
+          category?: string | null
+          content?: string
+          created_at?: string | null
+          created_by?: string | null
+          excerpt?: string | null
+          id?: string
+          image_url?: string | null
+          is_published?: boolean | null
+          read_time?: string | null
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       order_items: {
         Row: {
           created_at: string | null
@@ -140,6 +185,54 @@ export type Database = {
           total_amount?: number
           updated_at?: string | null
           user_id?: string | null
+        }
+        Relationships: []
+      }
+      products: {
+        Row: {
+          benefits: string[] | null
+          category: string | null
+          created_at: string | null
+          created_by: string | null
+          description: string | null
+          hover_image: string | null
+          id: number
+          in_stock: boolean | null
+          is_active: boolean | null
+          name: string
+          price: number
+          primary_image: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          benefits?: string[] | null
+          category?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          hover_image?: string | null
+          id?: number
+          in_stock?: boolean | null
+          is_active?: boolean | null
+          name: string
+          price: number
+          primary_image?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          benefits?: string[] | null
+          category?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          hover_image?: string | null
+          id?: number
+          in_stock?: boolean | null
+          is_active?: boolean | null
+          name?: string
+          price?: number
+          primary_image?: string | null
+          updated_at?: string | null
         }
         Relationships: []
       }
@@ -231,6 +324,10 @@ export type Database = {
     Functions: {
       check_user_admin: {
         Args: { user_id: string }
+        Returns: boolean
+      }
+      get_user_admin_status: {
+        Args: { check_user_id: string }
         Returns: boolean
       }
       make_user_admin: {

@@ -1,84 +1,94 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import ProductCard from './ProductCard';
+import { supabase } from '@/integrations/supabase/client';
 
-interface ProductGridProps {
-  selectedCategory: string;
-  priceRange: number[];
+interface Product {
+  id: number;
+  name: string;
+  price: number;
+  primary_image: string;
+  hover_image: string;
+  description: string;
+  category: string;
+  benefits: string[];
 }
 
-const ProductGrid = ({ selectedCategory, priceRange }: ProductGridProps) => {
-  const products = [
-    {
-      id: 1,
-      name: 'focus gummies',
-      description: 'Focus, memory, cognition',
-      price: '£27',
-      primaryImage: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=400&fit=crop',
-      hoverImage: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=400&fit=crop'
-    },
-    {
-      id: 2,
-      name: 'focus powder',
-      description: 'Focus, cognition, immunity',
-      price: '£30',
-      primaryImage: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=400&fit=crop',
-      hoverImage: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=400&fit=crop'
-    },
-    {
-      id: 3,
-      name: 'immunity powder',
-      description: 'Energy, defence, immunity',
-      price: '£30',
-      primaryImage: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=400&fit=crop',
-      hoverImage: 'https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=400&h=400&fit=crop'
-    },
-    {
-      id: 4,
-      name: 'calm powder',
-      description: 'Calm, relax, immunity',
-      price: '£30',
-      primaryImage: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=400&fit=crop',
-      hoverImage: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=400&fit=crop'
-    },
-    {
-      id: 5,
-      name: 'performance powder',
-      description: 'Performance, energy, focus',
-      price: '£30',
-      primaryImage: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=400&fit=crop',
-      hoverImage: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=400&h=400&fit=crop'
-    },
-    {
-      id: 6,
-      name: 'beauty powder',
-      description: 'Hair, skin, nails',
-      price: '£30',
-      primaryImage: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=400&fit=crop',
-      hoverImage: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=400&fit=crop'
-    },
-    {
-      id: 7,
-      name: 'pures boxset',
-      description: 'Energy, focus, immunity',
-      price: '£133',
-      primaryImage: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=400&fit=crop',
-      hoverImage: 'https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=400&h=400&fit=crop'
-    },
-    {
-      id: 8,
-      name: 'beauty gummies',
-      description: 'Hair, skin, nails',
-      price: '£27',
-      primaryImage: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=400&fit=crop',
-      hoverImage: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=400&fit=crop'
+const ProductGrid = () => {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  const fetchProducts = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('products')
+        .select('*')
+        .eq('is_active', true)
+        .eq('in_stock', true)
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        console.error('Error fetching products:', error);
+        // Fallback to mock data if no products in database
+        setProducts([]);
+        return;
+      }
+
+      // Transform data to match expected format
+      const transformedProducts = data.map(product => ({
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        primaryImage: product.primary_image || 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=400&fit=crop',
+        hoverImage: product.hover_image || 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=400&fit=crop',
+        description: product.description || '',
+        category: product.category || '',
+        benefits: product.benefits || []
+      }));
+
+      setProducts(transformedProducts);
+    } catch (error) {
+      console.error('Error fetching products:', error);
+      setProducts([]);
+    } finally {
+      setLoading(false);
     }
-  ];
+  };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center py-16">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-black"></div>
+      </div>
+    );
+  }
+
+  if (products.length === 0) {
+    return (
+      <div className="text-center py-16">
+        <h3 className="text-xl font-semibold text-gray-900 mb-2">No products available</h3>
+        <p className="text-gray-600">Check back soon for new products!</p>
+      </div>
+    );
+  }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
       {products.map((product) => (
-        <ProductCard key={product.id} product={product} />
+        <ProductCard 
+          key={product.id} 
+          product={{
+            id: product.id,
+            name: product.name,
+            price: `£${product.price}`,
+            primaryImage: product.primaryImage,
+            hoverImage: product.hoverImage
+          }} 
+        />
       ))}
     </div>
   );
