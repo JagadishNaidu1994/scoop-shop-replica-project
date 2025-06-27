@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import HeaderNavBar from '@/components/HeaderNavBar';
 import Footer from '@/components/Footer';
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import ProductCard from '@/components/shop/ProductCard';
 
 const RecipeDetail = () => {
@@ -42,7 +41,6 @@ const RecipeDetail = () => {
     {
       id: 1,
       name: 'focus powder',
-      description: 'Focus, cognition, immunity',
       price: '£30',
       primaryImage: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=400&fit=crop',
       hoverImage: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=400&fit=crop'
@@ -50,7 +48,6 @@ const RecipeDetail = () => {
     {
       id: 2,
       name: 'matcha powder',
-      description: 'Energy, focus, antioxidants',
       price: '£25',
       primaryImage: 'https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=400&h=400&fit=crop',
       hoverImage: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=400&fit=crop'
@@ -58,7 +55,6 @@ const RecipeDetail = () => {
     {
       id: 3,
       name: 'lions mane powder',
-      description: 'Cognitive support, focus',
       price: '£28',
       primaryImage: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=400&fit=crop',
       hoverImage: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=400&h=400&fit=crop'
@@ -143,32 +139,22 @@ const RecipeDetail = () => {
           </div>
         </div>
 
-        {/* Related Products Accordion */}
+        {/* Related Products - Always Visible */}
         <div className="mb-16">
-          <Accordion type="single" collapsible className="w-full">
-            <AccordionItem value="related-products">
-              <AccordionTrigger className="text-xl font-semibold">
-                Related Products
-              </AccordionTrigger>
-              <AccordionContent>
-                <div className="pt-6">
-                  <div className="flex items-center mb-6">
-                    <div className="flex text-yellow-400">
-                      {[...Array(5)].map((_, i) => (
-                        <span key={i}>★</span>
-                      ))}
-                    </div>
-                    <span className="ml-2 text-sm text-gray-600">4.9 | 18,133 reviews</span>
-                  </div>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    {relatedProducts.map((product) => (
-                      <ProductCard key={product.id} product={product} />
-                    ))}
-                  </div>
-                </div>
-              </AccordionContent>
-            </AccordionItem>
-          </Accordion>
+          <h2 className="text-2xl font-bold text-gray-900 mb-8">Related Products</h2>
+          <div className="flex items-center mb-6">
+            <div className="flex text-yellow-400">
+              {[...Array(5)].map((_, i) => (
+                <span key={i}>★</span>
+              ))}
+            </div>
+            <span className="ml-2 text-sm text-gray-600">4.9 | 18,133 reviews</span>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {relatedProducts.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
         </div>
       </main>
 
