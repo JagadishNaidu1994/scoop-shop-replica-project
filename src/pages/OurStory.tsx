@@ -1,4 +1,3 @@
-
 import React from 'react';
 import Header from '../components/Header';
 
@@ -57,31 +56,71 @@ const OurStory = () => {
         </div>
       </section>
 
-      {/* DIRTEA Story Section */}
-      <section className="py-20 px-4 bg-gray-50">
+      {/* The DIRTEA Story Section */}
+      <section className="py-20 px-4 bg-gray-900 text-white">
         <div className="max-w-7xl mx-auto">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <div className="relative order-2 lg:order-1">
+          <div className="text-center mb-16">
+            <h2 className="text-5xl lg:text-6xl font-light mb-6">
+              The DIRTEA story
+            </h2>
+            <p className="text-xl text-gray-300 max-w-4xl mx-auto leading-relaxed">
+              In 2016, we discovered the power of functional mushrooms and 
+              experienced a transformation in our energy, focus, and resilience.
+            </p>
+          </div>
+          
+          {/* 4 Image Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="relative group">
               <img 
-                src="https://images.unsplash.com/photo-1544787219-7f47181a629a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-                alt="Tea ceremony"
-                className="w-full h-96 object-cover rounded-lg shadow-lg"
+                src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+                alt="Two brothers"
+                className="w-full h-96 object-cover rounded-lg"
               />
+              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6 rounded-b-lg">
+                <p className="text-white text-sm leading-relaxed">
+                  Two brothers, with one goal: To redefine daily rituals with functional mushrooms.
+                </p>
+              </div>
             </div>
-            <div className="space-y-6 order-1 lg:order-2">
-              <h2 className="text-4xl lg:text-5xl font-light text-black">
-                The DIRTEA story
-              </h2>
-              <p className="text-lg text-gray-700 leading-relaxed">
-                Our founder Simon was struggling with chronic fatigue and brain fog. After years 
-                of trying different solutions, he discovered the power of functional mushrooms 
-                through a friend's recommendation. The transformation was remarkable - clearer 
-                thinking, sustained energy, and better sleep.
-              </p>
-              <p className="text-lg text-gray-700 leading-relaxed">
-                Inspired by this life-changing experience, Simon founded DIRTEA to share these 
-                incredible adaptogens with the world, making them accessible and enjoyable for everyone.
-              </p>
+            
+            <div className="relative group">
+              <img 
+                src="https://images.unsplash.com/photo-1544787219-7f47181a629a?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+                alt="Ancient tea ceremony"
+                className="w-full h-96 object-cover rounded-lg"
+              />
+              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6 rounded-b-lg">
+                <p className="text-white text-sm leading-relaxed">
+                  Drawing inspiration from ancient ingredients all over the world.
+                </p>
+              </div>
+            </div>
+            
+            <div className="relative group">
+              <img 
+                src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+                alt="Mountain landscape"
+                className="w-full h-96 object-cover rounded-lg"
+              />
+              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6 rounded-b-lg">
+                <p className="text-white text-sm leading-relaxed">
+                  They visited mushroom growers and extractors all over the world.
+                </p>
+              </div>
+            </div>
+            
+            <div className="relative group">
+              <img 
+                src="https://images.unsplash.com/photo-1571115764595-644a1f56a55c?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+                alt="Mushroom blend preparation"
+                className="w-full h-96 object-cover rounded-lg"
+              />
+              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6 rounded-b-lg">
+                <p className="text-white text-sm leading-relaxed">
+                  Their goal was to create the purest most potent functional mushroom blends ever.
+                </p>
+              </div>
             </div>
           </div>
         </div>
