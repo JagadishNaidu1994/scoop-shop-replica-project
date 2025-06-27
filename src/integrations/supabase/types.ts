@@ -9,11 +9,125 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      cart_items: {
+        Row: {
+          created_at: string | null
+          id: string
+          product_id: number
+          product_image: string | null
+          product_name: string
+          product_price: number
+          quantity: number
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          product_id: number
+          product_image?: string | null
+          product_name: string
+          product_price: number
+          quantity?: number
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          product_id?: number
+          product_image?: string | null
+          product_name?: string
+          product_price?: number
+          quantity?: number
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      order_items: {
+        Row: {
+          created_at: string | null
+          id: string
+          order_id: string | null
+          product_id: number
+          product_name: string
+          product_price: number
+          quantity: number
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          order_id?: string | null
+          product_id: number
+          product_name: string
+          product_price: number
+          quantity: number
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          order_id?: string | null
+          product_id?: number
+          product_name?: string
+          product_price?: number
+          quantity?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "order_items_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      orders: {
+        Row: {
+          billing_address: Json | null
+          created_at: string | null
+          id: string
+          order_number: string
+          payment_method: string | null
+          shipping_address: Json | null
+          status: string | null
+          total_amount: number
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          billing_address?: Json | null
+          created_at?: string | null
+          id?: string
+          order_number: string
+          payment_method?: string | null
+          shipping_address?: Json | null
+          status?: string | null
+          total_amount: number
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          billing_address?: Json | null
+          created_at?: string | null
+          id?: string
+          order_number?: string
+          payment_method?: string | null
+          shipping_address?: Json | null
+          status?: string | null
+          total_amount?: number
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
           created_at: string | null
           email: string | null
+          first_name: string | null
           full_name: string | null
           id: string
           updated_at: string | null
@@ -22,6 +136,7 @@ export type Database = {
           avatar_url?: string | null
           created_at?: string | null
           email?: string | null
+          first_name?: string | null
           full_name?: string | null
           id: string
           updated_at?: string | null
@@ -30,6 +145,7 @@ export type Database = {
           avatar_url?: string | null
           created_at?: string | null
           email?: string | null
+          first_name?: string | null
           full_name?: string | null
           id?: string
           updated_at?: string | null
