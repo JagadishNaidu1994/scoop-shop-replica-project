@@ -19,7 +19,7 @@ const HeaderNavBar = () => {
           <div className="flex justify-between items-center h-16">
             {/* Logo - Left */}
             <div className="flex-shrink-0">
-              <Link to="/">
+              <Link to="/shop">
                 <h1 className="text-2xl font-bold text-black">DIRTEA</h1>
               </Link>
             </div>
