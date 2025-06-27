@@ -87,11 +87,6 @@ const ProductCard = ({ product }: ProductCardProps) => {
           </div>
         </div>
       </div>
-
-      {/* Product Description - Below Image */}
-      <div className="mt-4 px-2">
-        <p className="text-sm text-black">{product.description}</p>
-      </div>
     </div>
   );
 };

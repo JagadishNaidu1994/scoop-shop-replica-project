@@ -3,10 +3,39 @@ import React, { useState } from 'react';
 import HeaderNavBar from '@/components/HeaderNavBar';
 import Footer from '@/components/Footer';
 import ProductGrid from '@/components/shop/ProductGrid';
+import ProductCard from '@/components/shop/ProductCard';
 
 const Shop = () => {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [priceRange, setPriceRange] = useState([0, 100]);
+
+  // Additional products for "You may also like" section
+  const additionalProducts = [
+    {
+      id: 9,
+      name: 'focus gummies',
+      description: 'Lion\'s Mane, Cordyceps, Ginseng',
+      price: '£27',
+      primaryImage: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=400&fit=crop',
+      hoverImage: 'https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=400&h=400&fit=crop'
+    },
+    {
+      id: 10,
+      name: 'focus powder',
+      description: 'Focus, Cognitive, Immunity',
+      price: '£30',
+      primaryImage: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=400&fit=crop',
+      hoverImage: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=400&fit=crop'
+    },
+    {
+      id: 11,
+      name: 'immunity powder',
+      description: 'Energy, Balance, Immunity',
+      price: '£30',
+      primaryImage: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=400&fit=crop',
+      hoverImage: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=400&h=400&fit=crop'
+    }
+  ];
 
   return (
     <div className="min-h-screen bg-white">
@@ -40,37 +69,9 @@ const Shop = () => {
             <span className="ml-2 text-sm text-gray-600">4.6 | 183 REVIEWS</span>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* Similar products - first 3 products */}
-            <div className="bg-gray-50 rounded-lg p-6 text-center">
-              <img 
-                src="https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=300&h=300&fit=crop" 
-                alt="Focus Gummies" 
-                className="w-full h-48 object-cover rounded-lg mb-4"
-              />
-              <h3 className="font-semibold text-gray-900 mb-2">focus gummies</h3>
-              <p className="text-sm text-gray-600 mb-4">Lion's Mane, Cordyceps, Ginseng</p>
-              <p className="text-lg font-bold">£27</p>
-            </div>
-            <div className="bg-gray-50 rounded-lg p-6 text-center">
-              <img 
-                src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=300&h=300&fit=crop" 
-                alt="Focus Powder" 
-                className="w-full h-48 object-cover rounded-lg mb-4"
-              />
-              <h3 className="font-semibold text-gray-900 mb-2">focus powder</h3>
-              <p className="text-sm text-gray-600 mb-4">Focus, Cognitive, Immunity</p>
-              <p className="text-lg font-bold">£30</p>
-            </div>
-            <div className="bg-gray-50 rounded-lg p-6 text-center">
-              <img 
-                src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=300&h=300&fit=crop" 
-                alt="Immunity Powder" 
-                className="w-full h-48 object-cover rounded-lg mb-4"
-              />
-              <h3 className="font-semibold text-gray-900 mb-2">immunity powder</h3>
-              <p className="text-sm text-gray-600 mb-4">Energy, Balance, Immunity</p>
-              <p className="text-lg font-bold">£30</p>
-            </div>
+            {additionalProducts.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
           </div>
         </div>
       </main>
