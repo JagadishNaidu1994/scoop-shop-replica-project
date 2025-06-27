@@ -4,8 +4,8 @@ import { Button } from '@/components/ui/button';
 
 const SubHeroBanner = () => {
   return (
-    <section className="bg-orange-400 py-16">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <section className="bg-orange-400 py-16 w-full">
+      <div className="w-full px-4 sm:px-6 lg:px-8 text-center">
         <h2 className="text-4xl lg:text-5xl font-bold text-white mb-6">
           Ancient ingredients for modern wellness
         </h2>

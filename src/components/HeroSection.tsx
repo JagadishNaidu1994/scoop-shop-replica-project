@@ -4,8 +4,8 @@ import { Button } from '@/components/ui/button';
 
 const HeroSection = () => {
   return (
-    <section className="bg-gray-50 min-h-screen flex items-center">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+    <section className="bg-gray-50 min-h-screen flex items-center w-full">
+      <div className="w-full px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
         {/* Left Content */}
         <div className="space-y-8 animate-fade-in">
           <h1 className="text-5xl lg:text-6xl font-bold text-black leading-tight">

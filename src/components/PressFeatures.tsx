@@ -8,8 +8,8 @@ const PressFeatures = () => {
   ];
 
   return (
-    <section className="py-16 bg-white border-y border-gray-100">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="py-16 bg-white border-y border-gray-100 w-full">
+      <div className="w-full px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h2 className="text-2xl font-bold text-black mb-4">Loved by one million people worldwide</h2>
           <div className="flex justify-center">
