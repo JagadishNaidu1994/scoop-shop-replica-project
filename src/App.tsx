@@ -8,6 +8,8 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import { CartProvider } from "@/contexts/CartContext";
 import Index from "./pages/Index";
 import Shop from "./pages/Shop";
+import Recipes from "./pages/Recipes";
+import RecipeDetail from "./pages/RecipeDetail";
 import Science from "./pages/Science";
 import Wholesale from "./pages/Wholesale";
 import OurStory from "./pages/OurStory";
@@ -29,6 +31,8 @@ const App = () => (
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/shop" element={<Shop />} />
+              <Route path="/recipes" element={<Recipes />} />
+              <Route path="/recipes/:id" element={<RecipeDetail />} />
               <Route path="/science" element={<Science />} />
               <Route path="/story" element={<OurStory />} />
               <Route path="/refer" element={<Shop />} />
