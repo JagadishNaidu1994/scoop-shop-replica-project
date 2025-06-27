@@ -6,9 +6,6 @@ import ProductGrid from '@/components/shop/ProductGrid';
 import ProductCard from '@/components/shop/ProductCard';
 
 const Shop = () => {
-  const [selectedCategory, setSelectedCategory] = useState('all');
-  const [priceRange, setPriceRange] = useState([0, 100]);
-
   // Additional products for "You may also like" section
   const additionalProducts = [
     {
@@ -50,10 +47,7 @@ const Shop = () => {
         </div>
 
         <div className="py-8">
-          <ProductGrid 
-            selectedCategory={selectedCategory}
-            priceRange={priceRange}
-          />
+          <ProductGrid />
         </div>
 
         {/* You may also like section */}

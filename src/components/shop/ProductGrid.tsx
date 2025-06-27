@@ -14,7 +14,12 @@ interface Product {
   benefits: string[];
 }
 
-const ProductGrid = () => {
+interface ProductGridProps {
+  selectedCategory?: string;
+  priceRange?: number[];
+}
+
+const ProductGrid: React.FC<ProductGridProps> = ({ selectedCategory = 'all', priceRange = [0, 100] }) => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -33,7 +38,6 @@ const ProductGrid = () => {
 
       if (error) {
         console.error('Error fetching products:', error);
-        // Fallback to mock data if no products in database
         setProducts([]);
         return;
       }
@@ -43,8 +47,8 @@ const ProductGrid = () => {
         id: product.id,
         name: product.name,
         price: product.price,
-        primaryImage: product.primary_image || 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=400&fit=crop',
-        hoverImage: product.hover_image || 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=400&fit=crop',
+        primary_image: product.primary_image || 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=400&fit=crop',
+        hover_image: product.hover_image || 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=400&fit=crop',
         description: product.description || '',
         category: product.category || '',
         benefits: product.benefits || []
@@ -85,8 +89,8 @@ const ProductGrid = () => {
             id: product.id,
             name: product.name,
             price: `£${product.price}`,
-            primaryImage: product.primaryImage,
-            hoverImage: product.hoverImage
+            primaryImage: product.primary_image,
+            hoverImage: product.hover_image
           }} 
         />
       ))}
