@@ -70,6 +70,8 @@ const Auth = () => {
   };
 
   return (
+           <HeaderNavBar />
+
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
        <HeaderNavBar />
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
