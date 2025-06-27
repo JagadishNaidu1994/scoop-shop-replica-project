@@ -15,7 +15,7 @@ const Header = () => {
             <Link to="/shop" className="text-white hover:text-yellow-300 transition-colors font-medium">SHOP</Link>
             <Link to="/wholesale" className="text-white hover:text-yellow-300 transition-colors font-medium">WHOLESALE</Link>
             <a href="/editorial" className="text-white hover:text-yellow-300 transition-colors font-medium">EDITORIAL</a>
-            <a href="/story" className="text-white hover:text-yellow-300 transition-colors font-medium">OUR STORY</a>
+            <Link to="/story" className="text-white hover:text-yellow-300 transition-colors font-medium">OUR STORY</Link>
             <a href="/science" className="text-white hover:text-yellow-300 transition-colors font-medium">SCIENCE</a>
           </nav>
 
@@ -55,7 +55,7 @@ const Header = () => {
               <Link to="/" className="block px-3 py-2 text-white hover:text-yellow-300">HOME</Link>
               <Link to="/shop" className="block px-3 py-2 text-white hover:text-yellow-300">SHOP</Link>
               <Link to="/wholesale" className="block px-3 py-2 text-white hover:text-yellow-300">WHOLESALE</Link>
-              <a href="/story" className="block px-3 py-2 text-white hover:text-yellow-300">OUR STORY</a>
+              <Link to="/story" className="block px-3 py-2 text-white hover:text-yellow-300">OUR STORY</Link>
               <a href="/science" className="block px-3 py-2 text-white hover:text-yellow-300">SCIENCE</a>
             </div>
           </div>
