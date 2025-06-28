@@ -1,5 +1,6 @@
 
 import React, { useState } from 'react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const ProductShowcaseGrid = () => {
   const [selectedImage, setSelectedImage] = useState(0);
@@ -28,40 +29,22 @@ const ProductShowcaseGrid = () => {
     }
   ];
 
+  const nextImage = () => {
+    setSelectedImage((prev) => (prev + 1) % products.length);
+  };
+
+  const prevImage = () => {
+    setSelectedImage((prev) => (prev - 1 + products.length) % products.length);
+  };
+
   return (
     <section className="py-20 bg-gray-50 w-full">
       <div className="w-full px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-          {/* Left Half - Content and Thumbnails */}
+          {/* Left Half - Images on top, Content on bottom */}
           <div className="space-y-8">
-            {/* Main Heading */}
-            <div className="space-y-4">
-              <h2 className="text-4xl font-bold text-black">
-                Discover our award winning range of Super Blends to optimise your daily routine
-              </h2>
-            </div>
-
-            {/* Product Categories */}
-            <div className="space-y-6">
-              <div>
-                <h3 className="text-2xl font-bold text-black mb-2">DIRTEA Coffee</h3>
-                <h4 className="text-xl font-semibold text-gray-600 mb-2">DIRTEA Matcha</h4>
-                <h4 className="text-xl font-semibold text-gray-600">DIRTEA Cacao</h4>
-              </div>
-            </div>
-
-            {/* Action Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4">
-              <button className="bg-black text-white px-8 py-3 rounded-full font-medium hover:bg-gray-800 transition-colors">
-                SHOP NOW
-              </button>
-              <button className="border-2 border-black text-black px-8 py-3 rounded-full font-medium hover:bg-black hover:text-white transition-colors">
-                EXPLORE THE FULL RANGE
-              </button>
-            </div>
-
             {/* Product Thumbnails */}
-            <div className="flex space-x-4">
+            <div className="flex space-x-4 justify-center lg:justify-start">
               {products.map((product, index) => (
                 <button
                   key={product.id}
@@ -81,6 +64,44 @@ const ProductShowcaseGrid = () => {
               ))}
             </div>
 
+            {/* Main Heading */}
+            <div className="space-y-4">
+              <h2 className="text-4xl font-bold text-black">
+                Discover our award winning range of Super Blends to optimise your daily routine
+              </h2>
+            </div>
+
+            {/* Product Categories with Dynamic Colors */}
+            <div className="space-y-6">
+              <div>
+                <h3 className={`text-2xl font-bold mb-2 transition-colors duration-300 ${
+                  selectedImage === 0 ? 'text-black' : 'text-gray-600'
+                }`}>
+                  DIRTEA Coffee
+                </h3>
+                <h4 className={`text-xl font-semibold mb-2 transition-colors duration-300 ${
+                  selectedImage === 1 ? 'text-black' : 'text-gray-600'
+                }`}>
+                  DIRTEA Matcha
+                </h4>
+                <h4 className={`text-xl font-semibold transition-colors duration-300 ${
+                  selectedImage === 2 ? 'text-black' : 'text-gray-600'
+                }`}>
+                  DIRTEA Cacao
+                </h4>
+              </div>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex flex-col sm:flex-row gap-4">
+              <button className="bg-black text-white px-8 py-3 rounded-full font-medium hover:bg-gray-800 transition-colors">
+                SHOP NOW
+              </button>
+              <button className="border-2 border-black text-black px-8 py-3 rounded-full font-medium hover:bg-black hover:text-white transition-colors">
+                EXPLORE THE FULL RANGE
+              </button>
+            </div>
+
             {/* Selected Product Info */}
             <div className="space-y-2">
               <h4 className="text-lg font-semibold text-black">
@@ -92,7 +113,7 @@ const ProductShowcaseGrid = () => {
             </div>
           </div>
 
-          {/* Right Half - Main Product Image */}
+          {/* Right Half - Main Product Image with Carousel Controls */}
           <div className="relative">
             <div className="aspect-square overflow-hidden rounded-lg bg-white">
               <img 
@@ -101,6 +122,21 @@ const ProductShowcaseGrid = () => {
                 className="w-full h-full object-cover transition-all duration-500 ease-in-out"
               />
             </div>
+            
+            {/* Carousel Controls */}
+            <button
+              onClick={prevImage}
+              className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 backdrop-blur-sm p-2 rounded-full shadow-lg hover:bg-white transition-colors"
+            >
+              <ChevronLeft className="w-6 h-6 text-black" />
+            </button>
+            
+            <button
+              onClick={nextImage}
+              className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 backdrop-blur-sm p-2 rounded-full shadow-lg hover:bg-white transition-colors"
+            >
+              <ChevronRight className="w-6 h-6 text-black" />
+            </button>
             
             {/* Image Counter */}
             <div className="absolute bottom-4 right-4 bg-white/80 backdrop-blur-sm px-3 py-1 rounded-full text-sm font-medium">
