@@ -1,9 +1,6 @@
-
 import React from 'react';
-
 const DirteaStandard = () => {
-  return (
-    <section className="py-20 bg-gray-50 w-full">
+  return <section className="py-20 bg-gray-50 w-full">
       <div className="w-full px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           {/* Left Content */}
@@ -30,16 +27,10 @@ const DirteaStandard = () => {
 
           {/* Right Image */}
           <div className="relative">
-            <img 
-              src="https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
-              alt="Hands holding mushroom coffee cup"
-              className="w-full h-auto rounded-lg"
-            />
+            <img alt="Hands holding mushroom coffee cup" className="w-full h-auto rounded-lg" src="/lovable-uploads/da6fe5b0-6a57-4ada-a9b8-042646881f03.png" />
           </div>
         </div>
       </div>
-    </section>
-  );
+    </section>;
 };
-
 export default DirteaStandard;
