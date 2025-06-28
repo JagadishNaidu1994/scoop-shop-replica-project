@@ -1,13 +1,13 @@
 
 import React from 'react';
-import Header from '@/components/Header';
+import HeaderNavBar from '@/components/HeaderNavBar';
 import Footer from '@/components/Footer';
 import { Phone, Mail, MapPin, Coffee, Users, Award, Truck } from 'lucide-react';
 
 const Wholesale = () => {
   return (
     <div className="min-h-screen bg-white">
-      <Header />
+      <HeaderNavBar />
       
       {/* Hero Section */}
       <section className="relative bg-gradient-to-br from-amber-50 to-orange-100 py-20">

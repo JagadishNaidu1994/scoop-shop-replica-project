@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Menu, X, ShoppingCart, User, Settings } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -11,9 +12,24 @@ const HeaderNavBar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [firstName, setFirstName] = useState('');
+  const [currentPromoIndex, setCurrentPromoIndex] = useState(0);
   const { user } = useAuth();
   const { getTotalItems } = useCart();
   const { isAdmin } = useAdminCheck();
+
+  const promoMessages = [
+    '15% OFF EVERY SUBSCRIPTION',
+    '10% OFF FIRST ORDER', 
+    'FREE SHIPPING ON ORDERS ABOVE INR 1000',
+    'REFER A FRIEND & GET 150 OFF'
+  ];
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentPromoIndex((prev) => (prev + 1) % promoMessages.length);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     if (user) {
@@ -38,7 +54,6 @@ const HeaderNavBar = () => {
         return;
       }
 
-      // Use first_name if available, otherwise extract from full_name
       const displayName = data?.first_name || data?.full_name?.split(' ')[0] || '';
       setFirstName(displayName);
     } catch (error) {
@@ -46,11 +61,17 @@ const HeaderNavBar = () => {
     }
   };
 
+  const handleCartClick = () => {
+    setIsCartOpen(!isCartOpen);
+  };
+
   return (
     <>
       {/* Top promotional banner - now sticky */}
       <div className="bg-gray-100 text-center py-2 text-sm font-medium text-black sticky top-0 z-50">
-        20% OFF EVERY SUBSCRIPTION ORDER
+        <div className="animate-fade-in">
+          {promoMessages[currentPromoIndex]}
+        </div>
       </div>
       
       {/* Main header - now sticky positioned below the banner */}
@@ -94,14 +115,12 @@ const HeaderNavBar = () => {
                 </button>
               </Link>
               
-              {/* Show user's first name if logged in */}
               {user && firstName && (
                 <span className="text-black font-medium">
                   Hi, {firstName}
                 </span>
               )}
               
-              {/* Admin Panel Button - Only visible for admins */}
               {isAdmin && (
                 <div className="relative group">
                   <button className="text-black hover:text-gray-600 transition-colors font-medium flex items-center space-x-1">
@@ -136,8 +155,7 @@ const HeaderNavBar = () => {
               <div className="relative">
                 <button 
                   className="text-black hover:text-gray-600 transition-colors font-medium flex items-center space-x-1"
-                  onMouseEnter={() => setIsCartOpen(true)}
-                  onMouseLeave={() => setIsCartOpen(false)}
+                  onClick={handleCartClick}
                 >
                   <span>CART</span>
                   {getTotalItems() > 0 && (
@@ -148,10 +166,7 @@ const HeaderNavBar = () => {
                 </button>
                 
                 {isCartOpen && (
-                  <div
-                    onMouseEnter={() => setIsCartOpen(true)}
-                    onMouseLeave={() => setIsCartOpen(false)}
-                  >
+                  <div className="relative">
                     <CartDropdown />
                   </div>
                 )}
@@ -210,14 +225,17 @@ const HeaderNavBar = () => {
                     ) : (
                       <Link to="/auth" className="text-black font-medium">ACCOUNT</Link>
                     )}
-                    <Link to="/checkout" className="text-black font-medium flex items-center space-x-1">
+                    <button
+                      onClick={handleCartClick}
+                      className="text-black font-medium flex items-center space-x-1 text-left"
+                    >
                       <span>CART</span>
                       {getTotalItems() > 0 && (
                         <span className="bg-black text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
                           {getTotalItems()}
                         </span>
                       )}
-                    </Link>
+                    </button>
                   </div>
                 </div>
               </div>

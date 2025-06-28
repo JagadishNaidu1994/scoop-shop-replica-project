@@ -5,7 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
-import { CartProvider } from "@/contexts/CartContext";
+import { CartProvider } from "@/contexts/CartProvider";
 import AdminPopup from "@/components/AdminPopup";
 import Index from "./pages/Index";
 import Shop from "./pages/Shop";
@@ -20,6 +20,7 @@ import AdminJournals from "./pages/AdminJournals";
 import Science from "./pages/Science";
 import Wholesale from "./pages/Wholesale";
 import OurStory from "./pages/OurStory";
+import ReferFriend from "./pages/ReferFriend";
 import Auth from "./pages/Auth";
 import Account from "./pages/Account";
 import Checkout from "./pages/Checkout";
@@ -49,7 +50,7 @@ const App = () => (
               <Route path="/admin/journals" element={<AdminJournals />} />
               <Route path="/science" element={<Science />} />
               <Route path="/story" element={<OurStory />} />
-              <Route path="/refer" element={<Shop />} />
+              <Route path="/refer" element={<ReferFriend />} />
               <Route path="/wholesale" element={<Wholesale />} />
               <Route path="/auth" element={<Auth />} />
               <Route path="/account" element={<Account />} />
