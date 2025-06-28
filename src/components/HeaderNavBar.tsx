@@ -73,12 +73,22 @@ const HeaderNavBar = () => {
         </div>
       </div>
       
-      {/* Main header - now sticky positioned below the banner */}
+      {/* Main header */}
       <header className="bg-white shadow-sm sticky top-8 z-40 border-b border-gray-100">
         <div className="w-full px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            {/* Logo - Left */}
-            <div className="flex-shrink-0">
+            {/* Mobile menu button - Left */}
+            <div className="md:hidden">
+              <button
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                className="text-black hover:text-gray-600"
+              >
+                {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+              </button>
+            </div>
+
+            {/* Logo - Center on mobile, Left on desktop */}
+            <div className="flex-shrink-0 md:order-first order-2">
               <Link to="/">
                 <h1 className="text-2xl font-bold text-black">DIRTEA</h1>
               </Link>
@@ -106,49 +116,65 @@ const HeaderNavBar = () => {
               </Link>
             </nav>
 
-            {/* Action buttons - Right */}
-            <div className="hidden md:flex items-center space-x-4">
-              <Link to="/shop">
-                <button className="bg-black text-white px-6 py-2 rounded-full font-medium hover:bg-gray-800 transition-colors">
-                  SHOP DIRTEA
-                </button>
-              </Link>
-              
-              {user && firstName && (
-                <span className="text-black font-medium">
-                  Hi, {firstName}
-                </span>
-              )}
-              
-              {isAdmin && (
-                <div className="relative group">
-                  <button className="text-black hover:text-gray-600 transition-colors font-medium flex items-center space-x-1">
-                    <Settings className="h-4 w-4" />
-                    <span>ADMIN</span>
+            {/* Right side icons */}
+            <div className="flex items-center space-x-4 md:order-last order-3">
+              {/* Desktop actions */}
+              <div className="hidden md:flex items-center space-x-4">
+                <Link to="/shop">
+                  <button className="bg-black text-white px-6 py-2 rounded-full font-medium hover:bg-gray-800 transition-colors">
+                    SHOP DIRTEA
                   </button>
-                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
-                    <Link to="/admin/recipes" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                      Manage Recipes
-                    </Link>
-                    <Link to="/admin/products" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                      Manage Products
-                    </Link>
-                    <Link to="/admin/journals" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                      Manage Journals
-                    </Link>
+                </Link>
+                
+                {user && firstName && (
+                  <span className="text-black font-medium">
+                    Hi, {firstName}
+                  </span>
+                )}
+                
+                {isAdmin && (
+                  <div className="relative group">
+                    <button className="text-black hover:text-gray-600 transition-colors font-medium flex items-center space-x-1">
+                      <Settings className="h-4 w-4" />
+                      <span>ADMIN</span>
+                    </button>
+                    <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+                      <Link to="/admin/recipes" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                        Manage Recipes
+                      </Link>
+                      <Link to="/admin/products" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                        Manage Products
+                      </Link>
+                      <Link to="/admin/journals" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                        Manage Journals
+                      </Link>
+                    </div>
                   </div>
-                </div>
-              )}
-              
-              {user ? (
-                <Link to="/account" className="text-black hover:text-gray-600 transition-colors font-medium">
-                  ACCOUNT
-                </Link>
-              ) : (
-                <Link to="/auth" className="text-black hover:text-gray-600 transition-colors font-medium">
-                  ACCOUNT
-                </Link>
-              )}
+                )}
+                
+                {user ? (
+                  <Link to="/account" className="text-black hover:text-gray-600 transition-colors font-medium">
+                    ACCOUNT
+                  </Link>
+                ) : (
+                  <Link to="/auth" className="text-black hover:text-gray-600 transition-colors font-medium">
+                    ACCOUNT
+                  </Link>
+                )}
+              </div>
+
+              {/* Mobile account icon */}
+              <div className="md:hidden">
+                {user ? (
+                  <Link to="/account" className="text-black hover:text-gray-600 transition-colors">
+                    <User size={24} />
+                  </Link>
+                ) : (
+                  <Link to="/auth" className="text-black hover:text-gray-600 transition-colors">
+                    <User size={24} />
+                  </Link>
+                )}
+              </div>
               
               {/* Cart with dropdown */}
               <div className="relative">
@@ -156,7 +182,8 @@ const HeaderNavBar = () => {
                   className="text-black hover:text-gray-600 transition-colors font-medium flex items-center space-x-1"
                   onClick={handleCartClick}
                 >
-                  <span>CART</span>
+                  <ShoppingCart size={24} className="md:hidden" />
+                  <span className="hidden md:inline">CART</span>
                   {getTotalItems() > 0 && (
                     <span className="bg-black text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
                       {getTotalItems()}
@@ -171,70 +198,84 @@ const HeaderNavBar = () => {
                 )}
               </div>
             </div>
-
-            {/* Mobile menu button */}
-            <div className="md:hidden">
-              <button
-                onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="text-black hover:text-gray-600"
-              >
-                {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-              </button>
-            </div>
           </div>
 
-          {/* Mobile Navigation */}
+          {/* Mobile Navigation Menu */}
           {isMenuOpen && (
-            <div className="md:hidden">
-              <div className="px-2 pt-2 pb-3 space-y-1 bg-white border-t border-gray-100">
-                <Link to="/recipes" className="block px-3 py-2 text-black hover:text-gray-600 font-medium">RECIPES</Link>
-                <Link to="/journal" className="block px-3 py-2 text-black hover:text-gray-600 font-medium">JOURNAL</Link>
-                <Link to="/science" className="block px-3 py-2 text-black hover:text-gray-600 font-medium">SCIENCE</Link>
-                <Link to="/story" className="block px-3 py-2 text-black hover:text-gray-600 font-medium">OUR STORY</Link>
-                <Link to="/wholesale" className="block px-3 py-2 text-black hover:text-gray-600 font-medium">WHOLESALE</Link>
-                <Link to="/refer" className="block px-3 py-2 text-black hover:text-gray-600 font-medium">REFER A FRIEND</Link>
-                <div className="px-3 py-2 space-y-2">
-                  <Link to="/shop">
-                    <button className="w-full bg-black text-white px-6 py-2 rounded-full font-medium">
-                      SHOP DIRTEA
-                    </button>
-                  </Link>
-                  <div className="flex flex-col space-y-2">
-                    {user && firstName && (
-                      <span className="text-black font-medium">Hi, {firstName}</span>
-                    )}
-                    {isAdmin && (
-                      <>
-                        <Link to="/admin/recipes" className="text-black font-medium flex items-center space-x-1">
-                          <Settings className="h-4 w-4" />
-                          <span>ADMIN - RECIPES</span>
-                        </Link>
-                        <Link to="/admin/products" className="text-black font-medium flex items-center space-x-1">
-                          <Settings className="h-4 w-4" />
-                          <span>ADMIN - PRODUCTS</span>
-                        </Link>
-                        <Link to="/admin/journals" className="text-black font-medium flex items-center space-x-1">
-                          <Settings className="h-4 w-4" />
-                          <span>ADMIN - JOURNALS</span>
-                        </Link>
-                      </>
-                    )}
-                    {user ? (
-                      <Link to="/account" className="text-black font-medium">ACCOUNT</Link>
-                    ) : (
-                      <Link to="/auth" className="text-black font-medium">ACCOUNT</Link>
-                    )}
-                    <button
-                      onClick={handleCartClick}
-                      className="text-black font-medium flex items-center space-x-1 text-left"
-                    >
-                      <span>CART</span>
-                      {getTotalItems() > 0 && (
-                        <span className="bg-black text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                          {getTotalItems()}
-                        </span>
-                      )}
-                    </button>
+            <div className="md:hidden fixed inset-0 top-24 bg-white z-50">
+              <div className="flex flex-col h-full">
+                {/* Close button */}
+                <div className="flex justify-end p-4">
+                  <button
+                    onClick={() => setIsMenuOpen(false)}
+                    className="text-black hover:text-gray-600"
+                  >
+                    <X size={24} />
+                  </button>
+                </div>
+
+                {/* Menu items */}
+                <div className="flex-1 px-6 py-4 space-y-6">
+                  <div className="space-y-4">
+                    <Link to="/shop" className="block text-lg font-medium text-black hover:text-gray-600 border-b border-gray-200 pb-2">
+                      SHOP ALL
+                    </Link>
+                    
+                    <div className="space-y-4">
+                      <button className="flex items-center justify-between w-full text-lg font-medium text-black hover:text-gray-600 border-b border-gray-200 pb-2">
+                        SHOP BY PRODUCT
+                        <span className="text-2xl">+</span>
+                      </button>
+                      
+                      <button className="flex items-center justify-between w-full text-lg font-medium text-black hover:text-gray-600 border-b border-gray-200 pb-2">
+                        SHOP BY BENEFIT
+                        <span className="text-2xl">+</span>
+                      </button>
+                      
+                      <button className="flex items-center justify-between w-full text-lg font-medium text-black hover:text-gray-600 border-b border-gray-200 pb-2">
+                        SHOP BY MUSHROOM
+                        <span className="text-2xl">+</span>
+                      </button>
+                    </div>
+
+                    <Link to="/accessories" className="block text-lg font-medium text-black hover:text-gray-600 border-b border-gray-200 pb-2">
+                      ACCESSORIES
+                    </Link>
+                    
+                    <Link to="/science" className="block text-lg font-medium text-black hover:text-gray-600 border-b border-gray-200 pb-2">
+                      SCIENCE
+                    </Link>
+                    
+                    <Link to="/story" className="block text-lg font-medium text-black hover:text-gray-600 border-b border-gray-200 pb-2">
+                      OUR STORY
+                    </Link>
+                    
+                    <Link to="/refer" className="block text-lg font-medium text-black hover:text-gray-600 border-b border-gray-200 pb-2">
+                      REFER A FRIEND
+                    </Link>
+                  </div>
+
+                  {/* Bottom section */}
+                  <div className="mt-8 pt-8 border-t border-gray-200 space-y-4">
+                    <Link to="/auth" className="block text-base text-gray-600 hover:text-black">
+                      Log in
+                    </Link>
+                    
+                    <Link to="/refer" className="block text-base text-gray-600 hover:text-black">
+                      Refer a Friend
+                    </Link>
+                    
+                    <Link to="/account" className="block text-base text-gray-600 hover:text-black">
+                      Rewards
+                    </Link>
+                    
+                    <Link to="/faq" className="block text-base text-gray-600 hover:text-black">
+                      FAQs
+                    </Link>
+                    
+                    <Link to="/contact" className="block text-base text-gray-600 hover:text-black">
+                      Contact Us
+                    </Link>
                   </div>
                 </div>
               </div>

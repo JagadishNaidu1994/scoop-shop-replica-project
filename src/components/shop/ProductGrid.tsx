@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import ProductCard from './ProductCard';
+import MobileProductCard from './MobileProductCard';
 import { supabase } from '@/integrations/supabase/client';
 
 interface Product {
@@ -22,9 +23,20 @@ interface ProductGridProps {
 const ProductGrid: React.FC<ProductGridProps> = ({ selectedCategory = 'all', priceRange = [0, 100] }) => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     fetchProducts();
+    
+    // Check if mobile
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
   const fetchProducts = async () => {
@@ -85,9 +97,9 @@ const ProductGrid: React.FC<ProductGridProps> = ({ selectedCategory = 'all', pri
 
   const getProductDescription = (category: string) => {
     const descriptions = {
-      'Matcha': 'Focus, energy, antioxidants',
+      'Matcha': 'Energy, focus, immunity',
       'Mushrooms': 'Cognitive support, immunity',
-      'Blends': 'Balanced wellness blend'
+      'Blends': 'Energy, focus, immunity'
     };
     return descriptions[category as keyof typeof descriptions] || 'Premium quality supplement';
   };
@@ -110,20 +122,23 @@ const ProductGrid: React.FC<ProductGridProps> = ({ selectedCategory = 'all', pri
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-      {products.map((product) => (
-        <ProductCard 
-          key={product.id} 
-          product={{
-            id: product.id,
-            name: product.name,
-            price: `£${product.price}`,
-            primaryImage: product.primary_image,
-            hoverImage: product.hover_image,
-            description: product.description
-          }} 
-        />
-      ))}
+    <div className={`grid ${isMobile ? 'grid-cols-1 gap-6' : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'}`}>
+      {products.map((product) => {
+        const productData = {
+          id: product.id,
+          name: product.name,
+          price: `£${product.price}`,
+          primaryImage: product.primary_image,
+          hoverImage: product.hover_image,
+          description: product.description
+        };
+
+        return isMobile ? (
+          <MobileProductCard key={product.id} product={productData} />
+        ) : (
+          <ProductCard key={product.id} product={productData} />
+        );
+      })}
     </div>
   );
 };
