@@ -1,37 +1,111 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 
 const ProductShowcaseGrid = () => {
+  const [selectedImage, setSelectedImage] = useState(0);
+
+  const products = [
+    {
+      id: 0,
+      name: "DIRTEA Coffee",
+      description: "Arabica Beans Coffee with 100% Pure Lion's Mane Extract for Energy, Focus & Clarity",
+      thumbnail: "/lovable-uploads/50613e1a-332e-4401-ad6b-f7849805d249.png",
+      mainImage: "/lovable-uploads/50613e1a-332e-4401-ad6b-f7849805d249.png"
+    },
+    {
+      id: 1,
+      name: "NASTEA Matcha",
+      description: "Sassy Strawberry Ceremonial Matcha for a vibrant and energizing experience",
+      thumbnail: "/lovable-uploads/4d9c0a46-fb6f-49ac-b221-299e60a15fa5.png",
+      mainImage: "/lovable-uploads/4d9c0a46-fb6f-49ac-b221-299e60a15fa5.png"
+    },
+    {
+      id: 2,
+      name: "NASTEA White Chocolate",
+      description: "Witty White Chocolate Ceremonial Matcha for Energy, Balance & Focus",
+      thumbnail: "/lovable-uploads/18fa3a22-212e-489f-bdee-5bb2266db6a4.png",
+      mainImage: "/lovable-uploads/18fa3a22-212e-489f-bdee-5bb2266db6a4.png"
+    }
+  ];
+
   return (
-    <section className="py-20 bg-white w-full">
+    <section className="py-20 bg-gray-50 w-full">
       <div className="w-full px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-          {/* Left Side - Product Categories */}
-          <div className="space-y-12">
+          {/* Left Half - Content and Thumbnails */}
+          <div className="space-y-8">
+            {/* Main Heading */}
             <div className="space-y-4">
-              <p className="text-sm font-semibold text-gray-500 uppercase tracking-wider">DIRTEA Coffee</p>
-              <h3 className="text-2xl font-bold text-black">DIRTEA Matcha</h3>
-              <p className="text-gray-600">
-                Premium ceremonial grade matcha enhanced with Lion's Mane and Chaga mushrooms for sustained focus and energy.
-              </p>
+              <h2 className="text-4xl font-bold text-black">
+                Discover our award winning range of Super Blends to optimise your daily routine
+              </h2>
             </div>
-            
-            <div className="space-y-4">
-              <p className="text-sm font-semibold text-gray-500 uppercase tracking-wider">DIRTEA Cacao</p>
-              <h3 className="text-2xl font-bold text-black">DIRTEA Blends</h3>
-              <p className="text-gray-600">
-                Functional mushroom blends designed to support your daily wellness routine with adaptogens and superfoods.
+
+            {/* Product Categories */}
+            <div className="space-y-6">
+              <div>
+                <h3 className="text-2xl font-bold text-black mb-2">DIRTEA Coffee</h3>
+                <h4 className="text-xl font-semibold text-gray-600 mb-2">DIRTEA Matcha</h4>
+                <h4 className="text-xl font-semibold text-gray-600">DIRTEA Cacao</h4>
+              </div>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex flex-col sm:flex-row gap-4">
+              <button className="bg-black text-white px-8 py-3 rounded-full font-medium hover:bg-gray-800 transition-colors">
+                SHOP NOW
+              </button>
+              <button className="border-2 border-black text-black px-8 py-3 rounded-full font-medium hover:bg-black hover:text-white transition-colors">
+                EXPLORE THE FULL RANGE
+              </button>
+            </div>
+
+            {/* Product Thumbnails */}
+            <div className="flex space-x-4">
+              {products.map((product, index) => (
+                <button
+                  key={product.id}
+                  onClick={() => setSelectedImage(index)}
+                  className={`w-20 h-20 rounded-lg overflow-hidden border-2 transition-all duration-300 ${
+                    selectedImage === index 
+                      ? 'border-black shadow-lg transform scale-105' 
+                      : 'border-gray-200 hover:border-gray-400'
+                  }`}
+                >
+                  <img 
+                    src={product.thumbnail}
+                    alt={product.name}
+                    className="w-full h-full object-cover"
+                  />
+                </button>
+              ))}
+            </div>
+
+            {/* Selected Product Info */}
+            <div className="space-y-2">
+              <h4 className="text-lg font-semibold text-black">
+                {products[selectedImage].name}
+              </h4>
+              <p className="text-gray-600 text-sm">
+                {products[selectedImage].description}
               </p>
             </div>
           </div>
 
-          {/* Right Side - Product Image */}
+          {/* Right Half - Main Product Image */}
           <div className="relative">
-            <img 
-              src="/images/Home_Landing_1.png" 
-              alt="DIRTEA product pouring into cup"
-              className="w-full h-auto rounded-lg"
-            />
+            <div className="aspect-square overflow-hidden rounded-lg bg-white">
+              <img 
+                src={products[selectedImage].mainImage}
+                alt={products[selectedImage].name}
+                className="w-full h-full object-cover transition-all duration-500 ease-in-out"
+              />
+            </div>
+            
+            {/* Image Counter */}
+            <div className="absolute bottom-4 right-4 bg-white/80 backdrop-blur-sm px-3 py-1 rounded-full text-sm font-medium">
+              {selectedImage + 1}/3
+            </div>
           </div>
         </div>
       </div>
