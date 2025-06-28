@@ -62,7 +62,7 @@ const Recipes = () => {
     <div className="min-h-screen bg-white">
       <HeaderNavBar />
       
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <main className="w-full px-4 sm:px-6 lg:px-8">
         {/* Hero Section */}
         <div className="py-16 text-center">
           <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">

@@ -10,12 +10,14 @@ const CartDropdown = () => {
 
   if (items.length === 0) {
     return (
-      <div className="absolute right-0 top-full mt-2 w-80 bg-white border border-gray-200 rounded-lg shadow-lg p-4 z-50">
-        <div className="text-center py-8">
-          <ShoppingCart className="mx-auto h-12 w-12 text-gray-400 mb-4" />
-          <p className="text-gray-500 mb-4">Your cart is empty</p>
-          <Link to="/shop" className="text-black hover:text-gray-600 font-medium">
-            Start Shopping
+      <div className="absolute right-0 top-full mt-2 w-80 bg-white border border-gray-200 rounded-lg shadow-lg p-8 z-50">
+        <div className="text-center">
+          <h3 className="text-2xl font-bold text-black mb-2">Your cart is empty</h3>
+          <p className="text-gray-500 mb-6">Add some products to get started</p>
+          <Link to="/shop">
+            <Button className="bg-black text-white px-8 py-3 rounded-full hover:bg-gray-800">
+              CONTINUE SHOPPING
+            </Button>
           </Link>
         </div>
       </div>

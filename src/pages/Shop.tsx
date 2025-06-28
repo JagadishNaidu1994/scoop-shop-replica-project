@@ -37,15 +37,7 @@ const Shop = () => {
   return (
     <div className="min-h-screen bg-white">
       <HeaderNavBar />
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Page Header */}
-        <div className="py-8 border-b border-gray-200">
-          <h1 className="text-3xl font-bold text-gray-900 mb-4">Best Sellers</h1>
-          <p className="text-gray-600 max-w-3xl">
-            Save 20% on every subscription order—no code needed. Get the best of DIRTEA by shopping our best selling mushroom products. Shop the most popular mushroom powders and organic super blends.
-          </p>
-        </div>
-
+      <main className="w-full px-4 sm:px-6 lg:px-8">
         <div className="py-8">
           <ProductGrid />
         </div>

@@ -12,24 +12,9 @@ const HeaderNavBar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [firstName, setFirstName] = useState('');
-  const [currentPromoIndex, setCurrentPromoIndex] = useState(0);
   const { user } = useAuth();
   const { getTotalItems } = useCart();
   const { isAdmin } = useAdminCheck();
-
-  const promoMessages = [
-    '15% OFF EVERY SUBSCRIPTION',
-    '10% OFF FIRST ORDER', 
-    'FREE SHIPPING ON ORDERS ABOVE INR 1000',
-    'REFER A FRIEND & GET 150 OFF'
-  ];
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentPromoIndex((prev) => (prev + 1) % promoMessages.length);
-    }, 3000);
-    return () => clearInterval(interval);
-  }, []);
 
   useEffect(() => {
     if (user) {
@@ -67,10 +52,24 @@ const HeaderNavBar = () => {
 
   return (
     <>
-      {/* Top promotional banner - now sticky */}
-      <div className="bg-gray-100 text-center py-2 text-sm font-medium text-black sticky top-0 z-50">
-        <div className="animate-fade-in">
-          {promoMessages[currentPromoIndex]}
+      {/* Top promotional banner - horizontally scrolling */}
+      <div className="bg-gray-100 text-center py-2 text-sm font-medium text-black sticky top-0 z-50 overflow-hidden">
+        <div className="whitespace-nowrap animate-scroll">
+          <span className="inline-block mx-8">15% OFF EVERY SUBSCRIPTION</span>
+          <span className="inline-block mx-2">•</span>
+          <span className="inline-block mx-8">10% OFF FIRST ORDER</span>
+          <span className="inline-block mx-2">•</span>
+          <span className="inline-block mx-8">FREE SHIPPING ON ORDERS ABOVE INR 1000</span>
+          <span className="inline-block mx-2">•</span>
+          <span className="inline-block mx-8">REFER A FRIEND & GET 150 OFF</span>
+          <span className="inline-block mx-2">•</span>
+          <span className="inline-block mx-8">15% OFF EVERY SUBSCRIPTION</span>
+          <span className="inline-block mx-2">•</span>
+          <span className="inline-block mx-8">10% OFF FIRST ORDER</span>
+          <span className="inline-block mx-2">•</span>
+          <span className="inline-block mx-8">FREE SHIPPING ON ORDERS ABOVE INR 1000</span>
+          <span className="inline-block mx-2">•</span>
+          <span className="inline-block mx-8">REFER A FRIEND & GET 150 OFF</span>
         </div>
       </div>
       

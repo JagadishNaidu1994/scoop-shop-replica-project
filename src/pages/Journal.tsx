@@ -64,7 +64,7 @@ const Journal = () => {
       
       {/* Hero Section */}
       <section className="bg-gradient-to-r from-green-50 to-green-100 py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <div className="w-full px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
             JOURNAL
           </h1>
@@ -76,7 +76,7 @@ const Journal = () => {
 
       {/* Journal Grid */}
       <section className="py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="w-full px-4 sm:px-6 lg:px-8">
           {journals.length === 0 ? (
             <div className="text-center py-16">
               <h2 className="text-2xl font-bold text-gray-900 mb-4">No articles published yet</h2>
