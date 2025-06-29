@@ -1,20 +1,13 @@
-
 import React from 'react';
 import HeaderNavBar from '@/components/HeaderNavBar';
-
 const OurStory = () => {
-  return (
-    <div className="min-h-screen bg-white">
+  return <div className="min-h-screen bg-white">
       <HeaderNavBar />
       
       {/* Hero Banner Section */}
       <section className="relative h-screen bg-black overflow-hidden">
         <div className="absolute inset-0">
-          <img 
-            src="https://images.unsplash.com/photo-1559056199-641a0ac8b55e?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80"
-            alt="Tea ceremony background"
-            className="w-full h-full object-cover opacity-60"
-          />
+          <img src="https://images.unsplash.com/photo-1559056199-641a0ac8b55e?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80" alt="Tea ceremony background" className="w-full h-full object-cover opacity-60" />
         </div>
         <div className="relative z-10 flex items-center justify-center h-full px-4">
           <div className="text-center text-white max-w-4xl">
@@ -47,11 +40,7 @@ const OurStory = () => {
               </p>
             </div>
             <div className="relative">
-              <img 
-                src="https://images.unsplash.com/photo-1559056199-641a0ac8b55e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-                alt="Two people having tea"
-                className="w-full h-96 object-cover rounded-lg shadow-lg"
-              />
+              <img src="https://images.unsplash.com/photo-1559056199-641a0ac8b55e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Two people having tea" className="w-full h-96 object-cover rounded-lg shadow-lg" />
             </div>
           </div>
         </div>
@@ -73,11 +62,7 @@ const OurStory = () => {
           {/* 4 Image Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             <div className="relative group">
-              <img 
-                src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
-                alt="Two brothers"
-                className="w-full h-96 object-cover rounded-lg"
-              />
+              <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Two brothers" className="w-full h-96 object-cover rounded-lg" />
               <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6 rounded-b-lg">
                 <p className="text-white text-sm leading-relaxed">
                   Two brothers, with one goal: To redefine daily rituals with functional mushrooms.
@@ -86,11 +71,7 @@ const OurStory = () => {
             </div>
             
             <div className="relative group">
-              <img 
-                src="https://images.unsplash.com/photo-1544787219-7f47181a629a?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
-                alt="Ancient tea ceremony"
-                className="w-full h-96 object-cover rounded-lg"
-              />
+              <img src="https://images.unsplash.com/photo-1544787219-7f47181a629a?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Ancient tea ceremony" className="w-full h-96 object-cover rounded-lg" />
               <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6 rounded-b-lg">
                 <p className="text-white text-sm leading-relaxed">
                   Drawing inspiration from ancient ingredients all over the world.
@@ -99,11 +80,7 @@ const OurStory = () => {
             </div>
             
             <div className="relative group">
-              <img 
-                src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
-                alt="Mountain landscape"
-                className="w-full h-96 object-cover rounded-lg"
-              />
+              <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Mountain landscape" className="w-full h-96 object-cover rounded-lg" />
               <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6 rounded-b-lg">
                 <p className="text-white text-sm leading-relaxed">
                   They visited mushroom growers and extractors all over the world.
@@ -112,11 +89,7 @@ const OurStory = () => {
             </div>
             
             <div className="relative group">
-              <img 
-                src="https://images.unsplash.com/photo-1571115764595-644a1f56a55c?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
-                alt="Mushroom blend preparation"
-                className="w-full h-96 object-cover rounded-lg"
-              />
+              <img src="https://images.unsplash.com/photo-1571115764595-644a1f56a55c?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Mushroom blend preparation" className="w-full h-96 object-cover rounded-lg" />
               <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6 rounded-b-lg">
                 <p className="text-white text-sm leading-relaxed">
                   Their goal was to create the purest most potent functional mushroom blends ever.
@@ -161,11 +134,7 @@ const OurStory = () => {
               </p>
             </div>
             <div className="relative">
-              <img 
-                src="https://images.unsplash.com/photo-1518495973542-4542c06a5843?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-                alt="Natural mushroom pattern"
-                className="w-full h-96 object-cover rounded-lg shadow-lg"
-              />
+              <img alt="Natural mushroom pattern" className="w-full h-96 object-cover rounded-lg shadow-lg" src="/lovable-uploads/cfe9af70-3679-48c2-a090-99c899b9cfef.png" />
             </div>
           </div>
         </div>
@@ -176,11 +145,7 @@ const OurStory = () => {
         <div className="max-w-7xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <div className="relative order-2 lg:order-1">
-              <img 
-                src="https://images.unsplash.com/photo-1594736797933-d0200ba2fe65?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-                alt="Ancient wisdom"
-                className="w-full h-96 object-cover rounded-lg shadow-lg"
-              />
+              <img src="https://images.unsplash.com/photo-1594736797933-d0200ba2fe65?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Ancient wisdom" className="w-full h-96 object-cover rounded-lg shadow-lg" />
             </div>
             <div className="space-y-6 order-1 lg:order-2">
               <h2 className="text-4xl lg:text-5xl font-light text-black">
@@ -208,29 +173,17 @@ const OurStory = () => {
           </h2>
           <div className="grid md:grid-cols-3 gap-8">
             <div className="text-center group">
-              <img 
-                src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
-                alt="Clarity Focus"
-                className="w-full h-80 object-cover rounded-lg mb-6 group-hover:scale-105 transition-transform duration-300"
-              />
+              <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Clarity Focus" className="w-full h-80 object-cover rounded-lg mb-6 group-hover:scale-105 transition-transform duration-300" />
               <h3 className="text-2xl font-light text-black mb-2">Clarity Focus</h3>
               <p className="text-gray-600">Enhanced cognitive function and mental clarity</p>
             </div>
             <div className="text-center group">
-              <img 
-                src="https://images.unsplash.com/photo-1571115764595-644a1f56a55c?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
-                alt="Balance Adaptogen"
-                className="w-full h-80 object-cover rounded-lg mb-6 group-hover:scale-105 transition-transform duration-300"
-              />
+              <img src="https://images.unsplash.com/photo-1571115764595-644a1f56a55c?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Balance Adaptogen" className="w-full h-80 object-cover rounded-lg mb-6 group-hover:scale-105 transition-transform duration-300" />
               <h3 className="text-2xl font-light text-black mb-2">Balance Adaptogen</h3>
               <p className="text-gray-600">Stress support and hormonal balance</p>
             </div>
             <div className="text-center group">
-              <img 
-                src="https://images.unsplash.com/photo-1559056199-641a0ac8b55e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
-                alt="Immunity Support"
-                className="w-full h-80 object-cover rounded-lg mb-6 group-hover:scale-105 transition-transform duration-300"
-              />
+              <img src="https://images.unsplash.com/photo-1559056199-641a0ac8b55e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Immunity Support" className="w-full h-80 object-cover rounded-lg mb-6 group-hover:scale-105 transition-transform duration-300" />
               <h3 className="text-2xl font-light text-black mb-2">Immunity Support</h3>
               <p className="text-gray-600">Natural immune system enhancement</p>
             </div>
@@ -271,11 +224,7 @@ const OurStory = () => {
               </ul>
             </div>
             <div className="relative">
-              <img 
-                src="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-                alt="Quality manufacturing"
-                className="w-full h-96 object-cover rounded-lg shadow-lg"
-              />
+              <img src="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Quality manufacturing" className="w-full h-96 object-cover rounded-lg shadow-lg" />
             </div>
           </div>
         </div>
@@ -300,9 +249,7 @@ const OurStory = () => {
         <div className="max-w-4xl mx-auto">
           <h2 className="text-6xl lg:text-8xl font-light mb-8 text-black">DIRTEA</h2>
           <div className="flex justify-center space-x-2 mb-12">
-            {[...Array(6)].map((_, i) => (
-              <div key={i} className="w-3 h-3 bg-black rounded-full"></div>
-            ))}
+            {[...Array(6)].map((_, i) => <div key={i} className="w-3 h-3 bg-black rounded-full"></div>)}
           </div>
           <p className="text-2xl text-gray-600 mb-16 font-light">
             Shop for the future
@@ -347,8 +294,6 @@ const OurStory = () => {
           </div>
         </div>
       </section>
-    </div>
-  );
+    </div>;
 };
-
 export default OurStory;
