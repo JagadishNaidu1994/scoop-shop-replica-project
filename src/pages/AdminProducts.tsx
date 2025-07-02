@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
+import { ImageUpload } from '@/components/ui/image-upload';
 import { toast } from '@/hooks/use-toast';
 
 interface Product {
@@ -267,23 +268,19 @@ const AdminProducts = () => {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <Label htmlFor="primary_image">Primary Image URL</Label>
-                  <Input
-                    id="primary_image"
-                    name="primary_image"
+                  <ImageUpload
+                    label="Primary Image"
                     value={formData.primary_image}
-                    onChange={handleInputChange}
-                    placeholder="https://example.com/image.jpg"
+                    onChange={(url) => setFormData(prev => ({ ...prev, primary_image: url }))}
+                    placeholder="Primary product image"
                   />
                 </div>
                 <div>
-                  <Label htmlFor="hover_image">Hover Image URL</Label>
-                  <Input
-                    id="hover_image"
-                    name="hover_image"
+                  <ImageUpload
+                    label="Hover Image"
                     value={formData.hover_image}
-                    onChange={handleInputChange}
-                    placeholder="https://example.com/hover-image.jpg"
+                    onChange={(url) => setFormData(prev => ({ ...prev, hover_image: url }))}
+                    placeholder="Image shown on hover"
                   />
                 </div>
               </div>

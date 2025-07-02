@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
+import { ImageUpload } from '@/components/ui/image-upload';
 import { toast } from '@/hooks/use-toast';
 
 interface Journal {
@@ -274,13 +275,11 @@ const AdminJournals = () => {
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
-                  <Label htmlFor="image_url">Image URL</Label>
-                  <Input
-                    id="image_url"
-                    name="image_url"
+                  <ImageUpload
+                    label="Journal Image"
                     value={formData.image_url}
-                    onChange={handleInputChange}
-                    placeholder="https://example.com/image.jpg"
+                    onChange={(url) => setFormData(prev => ({ ...prev, image_url: url }))}
+                    placeholder="Journal featured image"
                   />
                 </div>
                 <div>
