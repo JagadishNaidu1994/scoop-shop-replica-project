@@ -1,5 +1,6 @@
 import React from 'react';
 import HeaderNavBar from '@/components/HeaderNavBar';
+import AdminImageUpload from '@/components/AdminImageUpload';
 const OurStory = () => {
   return <div className="min-h-screen bg-white">
       <HeaderNavBar />
@@ -7,7 +8,12 @@ const OurStory = () => {
       {/* Hero Banner Section */}
       <section className="relative h-screen bg-black overflow-hidden">
         <div className="absolute inset-0">
-          <img src="https://images.unsplash.com/photo-1559056199-641a0ac8b55e?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80" alt="Tea ceremony background" className="w-full h-full object-cover opacity-60" />
+          <AdminImageUpload
+            src="https://images.unsplash.com/photo-1559056199-641a0ac8b55e?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80"
+            alt="Tea ceremony background"
+            className="w-full h-full object-cover opacity-60"
+            imagePath="our-story-hero-background"
+          />
         </div>
         <div className="relative z-10 flex items-center justify-center h-full px-4">
           <div className="text-center text-white max-w-4xl">
@@ -40,7 +46,12 @@ const OurStory = () => {
               </p>
             </div>
             <div className="relative">
-              <img src="https://images.unsplash.com/photo-1559056199-641a0ac8b55e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Two people having tea" className="w-full h-96 object-cover rounded-lg shadow-lg" />
+              <AdminImageUpload
+                src="https://images.unsplash.com/photo-1559056199-641a0ac8b55e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                alt="Two people having tea"
+                className="w-full h-96 object-cover rounded-lg shadow-lg"
+                imagePath="our-story-tea-ceremony"
+              />
             </div>
           </div>
         </div>
@@ -134,7 +145,12 @@ const OurStory = () => {
               </p>
             </div>
             <div className="relative">
-              <img alt="Natural mushroom pattern" className="w-full h-96 object-cover rounded-lg shadow-lg" src="/lovable-uploads/cfe9af70-3679-48c2-a090-99c899b9cfef.png" />
+              <AdminImageUpload
+                src="/lovable-uploads/cfe9af70-3679-48c2-a090-99c899b9cfef.png"
+                alt="Natural mushroom pattern"
+                className="w-full h-96 object-cover rounded-lg shadow-lg"
+                imagePath="our-story-mushroom-pattern"
+              />
             </div>
           </div>
         </div>

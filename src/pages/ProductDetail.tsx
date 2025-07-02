@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import HeaderNavBar from '@/components/HeaderNavBar';
 import Footer from '@/components/Footer';
+import AdminImageUpload from '@/components/AdminImageUpload';
 import { supabase } from '@/integrations/supabase/client';
 import { useCart } from '@/contexts/CartContext';
 import { Button } from '@/components/ui/button';
@@ -159,10 +160,11 @@ const ProductDetail = () => {
                 BEST SELLER
               </Badge>
               <div className="aspect-square bg-gray-50 rounded-xl overflow-hidden">
-                <img
+                <AdminImageUpload
                   src="/lovable-uploads/8edc40eb-3dfa-45fb-8cac-fc1a12ec6a3c.png"
                   alt={product.name}
                   className="w-full h-full object-cover"
+                  imagePath="product-detail-main"
                 />
               </div>
             </div>
@@ -177,10 +179,11 @@ const ProductDetail = () => {
                     selectedImage === index - 1 ? 'border-black' : 'border-gray-200 hover:border-gray-300'
                   }`}
                 >
-                  <img 
-                    src="/lovable-uploads/8edc40eb-3dfa-45fb-8cac-fc1a12ec6a3c.png" 
-                    alt={`${product.name} ${index}`} 
-                    className="w-full h-full object-cover" 
+                  <AdminImageUpload
+                    src="/lovable-uploads/8edc40eb-3dfa-45fb-8cac-fc1a12ec6a3c.png"
+                    alt={`${product.name} ${index}`}
+                    className="w-full h-full object-cover"
+                    imagePath={`product-detail-thumbnail-${index}`}
                   />
                 </button>
               ))}
@@ -375,7 +378,12 @@ const ProductDetail = () => {
             <div className="border-t border-gray-200 pt-6">
               <div className="flex items-start space-x-4">
                 <div className="w-12 h-12 bg-gray-200 rounded-full overflow-hidden flex-shrink-0">
-                  <img src="/lovable-uploads/26d45a3e-0bd4-4883-89d1-b11b087ead71.png" alt="Katarzyna W" className="w-full h-full object-cover" />
+                  <AdminImageUpload
+                    src="/lovable-uploads/26d45a3e-0bd4-4883-89d1-b11b087ead71.png"
+                    alt="Katarzyna W"
+                    className="w-full h-full object-cover"
+                    imagePath="product-detail-review-avatar"
+                  />
                 </div>
                 <div className="flex-1">
                   <div className="flex items-center space-x-2 mb-2">
@@ -439,15 +447,16 @@ const ProductDetail = () => {
             </div>
 
             {/* Right Side - Lifestyle Image */}
-            <div className="relative">
-              <div className="aspect-square rounded-2xl overflow-hidden shadow-lg">
-                <img 
-                  src="/lovable-uploads/a61d3c6a-fc59-45fe-9266-350a3c40ae91.png" 
-                  alt="Energy Focus Beauty lifestyle" 
-                  className="w-full h-full object-cover"
-                />
+              <div className="relative">
+                <div className="aspect-square rounded-2xl overflow-hidden shadow-lg">
+                  <AdminImageUpload
+                    src="/lovable-uploads/a61d3c6a-fc59-45fe-9266-350a3c40ae91.png"
+                    alt="Energy Focus Beauty lifestyle"
+                    className="w-full h-full object-cover"
+                    imagePath="product-detail-lifestyle"
+                  />
+                </div>
               </div>
-            </div>
           </div>
         </section>
 

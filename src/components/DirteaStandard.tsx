@@ -1,4 +1,5 @@
 import React from 'react';
+import AdminImageUpload from './AdminImageUpload';
 const DirteaStandard = () => {
   return <section className="py-20 bg-gray-50 w-full">
       <div className="w-full px-4 sm:px-6 lg:px-8">
@@ -27,7 +28,12 @@ const DirteaStandard = () => {
 
           {/* Right Image */}
           <div className="relative">
-            <img alt="Hands holding mushroom coffee cup" className="w-full h-auto rounded-lg" src="/lovable-uploads/da6fe5b0-6a57-4ada-a9b8-042646881f03.png" />
+            <AdminImageUpload
+              src="/lovable-uploads/da6fe5b0-6a57-4ada-a9b8-042646881f03.png"
+              alt="Hands holding mushroom coffee cup"
+              className="w-full h-auto rounded-lg"
+              imagePath="dirtea-standard-hands"
+            />
           </div>
         </div>
       </div>

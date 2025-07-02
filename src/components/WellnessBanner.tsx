@@ -1,5 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
+import AdminImageUpload from './AdminImageUpload';
 
 const WellnessBanner = () => {
   const [scrollY, setScrollY] = useState(0);
@@ -72,19 +73,21 @@ const WellnessBanner = () => {
           <div className="flex justify-center items-end space-x-8 relative">
             {/* Purple capsule */}
             <div className={`transform transition-all duration-1000 ${showBottles ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0'}`}>
-              <img 
+              <AdminImageUpload
                 src="/lovable-uploads/34a12b18-2b53-4154-8791-a374723bc2f0.png"
                 alt="Purple Capsule"
                 className="w-20 h-auto"
+                imagePath="wellness-banner-purple-capsule"
               />
             </div>
 
             {/* Pink capsule */}
             <div className={`transform transition-all duration-1000 delay-200 ${showBottles ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0'}`}>
-              <img 
+              <AdminImageUpload
                 src="/lovable-uploads/5fe87a68-79b4-4785-8a77-b100edfbcbf6.png"
                 alt="Pink Capsule"
                 className="w-20 h-auto"
+                imagePath="wellness-banner-pink-capsule"
               />
             </div>
 
@@ -98,29 +101,32 @@ const WellnessBanner = () => {
                   marginLeft: '-40px'
                 }}
               >
-                <img 
+                <AdminImageUpload
                   src="/lovable-uploads/362012c4-dfba-48a8-afca-59e8f36ec3cf.png"
                   alt="Green Landing Capsule"
                   className="w-20 h-auto"
+                  imagePath="wellness-banner-green-capsule"
                 />
               </div>
             </div>
 
             {/* Red capsule */}
             <div className={`transform transition-all duration-1000 delay-400 ${showBottles ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0'}`}>
-              <img 
+              <AdminImageUpload
                 src="/lovable-uploads/fb93161d-5e4c-405d-a9f0-22e74b7cfc0d.png"
                 alt="Red Capsule"
                 className="w-20 h-auto"
+                imagePath="wellness-banner-red-capsule"
               />
             </div>
 
             {/* Orange capsule */}
             <div className={`transform transition-all duration-1000 delay-600 ${showBottles ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0'}`}>
-              <img 
+              <AdminImageUpload
                 src="/lovable-uploads/5bb3c112-8b5a-4427-a43f-d5e5fc935e8d.png"
                 alt="Orange Capsule"
                 className="w-20 h-auto"
+                imagePath="wellness-banner-orange-capsule"
               />
             </div>
           </div>
