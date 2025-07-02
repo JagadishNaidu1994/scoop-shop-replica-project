@@ -1,52 +1,40 @@
 
 import React from 'react';
-import AdminImageUpload from './AdminImageUpload';
+import { Button } from '@/components/ui/button';
 
 const FoundersSection = () => {
   return (
-    <section className="py-20 bg-gray-50">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          <div>
-            <AdminImageUpload
-              src="/lovable-uploads/a61d3c6a-fc59-45fe-9266-350a3c40ae91.png"
-              alt="Founders of DIRTEA"
-              className="w-full h-96 object-cover rounded-2xl shadow-xl"
-              imagePath="founders-image"
+    <section className="py-20 bg-gray-50 w-full">
+      <div className="w-full px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+          {/* Left Image */}
+          <div className="relative">
+            <img 
+              src="https://images.unsplash.com/photo-1521791136064-7986c2920216?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+              alt="Two founders with DIRTEA products"
+              className="w-full h-auto rounded-lg"
             />
           </div>
-          <div className="space-y-6">
-            <h2 className="text-4xl font-bold text-gray-900">Meet the Founders</h2>
-            <p className="text-lg text-gray-700 leading-relaxed">
-              Founded by health enthusiasts who discovered the incredible benefits of functional mushrooms, 
-              DIRTEA was born from a passion to make ancient wellness accessible to modern life.
+
+          {/* Right Content */}
+          <div className="space-y-8">
+            <h2 className="text-4xl font-bold text-black">Founded by two brothers on a mission</h2>
+            
+            <p className="text-lg text-gray-600 leading-relaxed">
+              After years of relying on coffee and energy drinks, we discovered the power of functional mushrooms. 
+              We started DIRTEA to share these incredible adaptogens with the world, creating blends that deliver 
+              real results without the crash.
             </p>
-            <p className="text-lg text-gray-700 leading-relaxed">
-              Our journey began with a simple mission: to create the highest quality mushroom-infused 
-              products that support your daily wellness routine without compromising on taste or effectiveness.
+            
+            <p className="text-lg text-gray-600 leading-relaxed">
+              Every product is crafted with the highest quality ingredients, rigorously tested, and designed to 
+              support your daily wellness journey. This is more than just another health drink – it's a commitment 
+              to your wellbeing.
             </p>
-            <div className="flex space-x-4">
-              <div className="text-center">
-                <AdminImageUpload
-                  src="/lovable-uploads/26d45a3e-0bd4-4883-89d1-b11b087ead71.png"
-                  alt="Co-founder 1"
-                  className="w-16 h-16 rounded-full mx-auto mb-2 object-cover"
-                  imagePath="founder-1"
-                />
-                <p className="text-sm font-medium text-gray-900">Sarah Chen</p>
-                <p className="text-xs text-gray-600">Co-founder</p>
-              </div>
-              <div className="text-center">
-                <AdminImageUpload
-                  src="/lovable-uploads/4d9c0a46-fb6f-49ac-b221-299e60a15fa5.png"
-                  alt="Co-founder 2"
-                  className="w-16 h-16 rounded-full mx-auto mb-2 object-cover"
-                  imagePath="founder-2"
-                />
-                <p className="text-sm font-medium text-gray-900">Marcus Johnson</p>
-                <p className="text-xs text-gray-600">Co-founder</p>
-              </div>
-            </div>
+            
+            <Button className="bg-black text-white px-8 py-3 rounded-full hover:bg-gray-800 transition-colors">
+              Our Story
+            </Button>
           </div>
         </div>
       </div>
