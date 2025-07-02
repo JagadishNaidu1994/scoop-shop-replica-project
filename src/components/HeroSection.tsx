@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
+import AdminImageUpload from '@/components/AdminImageUpload';
 
 const HeroSection = () => {
   return (
@@ -29,10 +30,11 @@ const HeroSection = () => {
 
         {/* Right Image */}
         <div className="relative animate-fade-in-delay">
-          <img 
-            src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+          <AdminImageUpload
+            src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
             alt="DIRTEA products on kitchen table setup"
             className="w-full h-auto rounded-lg shadow-2xl"
+            imagePath="hero-section-main"
           />
         </div>
       </div>
