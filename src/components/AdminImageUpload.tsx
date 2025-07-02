@@ -3,6 +3,7 @@ import React, { useState, useRef } from 'react';
 import { Upload, Check, X } from 'lucide-react';
 import { useAdminImage } from '@/contexts/AdminImageContext';
 import { toast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
 
 interface AdminImageUploadProps {
   src: string;
@@ -24,6 +25,7 @@ const AdminImageUpload: React.FC<AdminImageUploadProps> = ({
   const { isAdminMode, isEditingImages } = useAdminImage();
   const [isUploading, setIsUploading] = useState(false);
   const [preview, setPreview] = useState<string | null>(null);
+  const [currentImageUrl, setCurrentImageUrl] = useState(src);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -50,24 +52,63 @@ const AdminImageUpload: React.FC<AdminImageUploadProps> = ({
       return;
     }
 
+    // Create a data URL for preview
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const dataUrl = e.target?.result as string;
+      setPreview(dataUrl);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleApply = async () => {
+    if (!preview) return;
+
     setIsUploading(true);
 
     try {
-      // Create a data URL for preview
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const dataUrl = e.target?.result as string;
-        setPreview(dataUrl);
-        
-        // Here you would typically upload to your storage solution
-        // For now, we'll just show the preview and success message
-        toast({
-          title: 'Image uploaded successfully',
-          description: `Image saved to public/images/${imagePath}`,
+      // Convert data URL to blob
+      const response = await fetch(preview);
+      const blob = await response.blob();
+      
+      // Create a unique filename
+      const timestamp = Date.now();
+      const fileExtension = blob.type.split('/')[1];
+      const fileName = `${imagePath}-${timestamp}.${fileExtension}`;
+      const filePath = `images/${fileName}`;
+
+      // Upload to Supabase Storage
+      const { data, error } = await supabase.storage
+        .from('website-images')
+        .upload(filePath, blob, {
+          cacheControl: '3600',
+          upsert: true
         });
-        setIsUploading(false);
-      };
-      reader.readAsDataURL(file);
+
+      if (error) {
+        console.error('Upload error:', error);
+        toast({
+          title: 'Upload failed',
+          description: 'Failed to upload image to storage',
+          variant: 'destructive',
+        });
+        return;
+      }
+
+      // Get the public URL
+      const { data: publicData } = supabase.storage
+        .from('website-images')
+        .getPublicUrl(filePath);
+
+      // Update the current image URL
+      setCurrentImageUrl(publicData.publicUrl);
+      setPreview(null);
+      
+      toast({
+        title: 'Image updated successfully',
+        description: `Image saved as ${fileName}`,
+      });
+      
     } catch (error) {
       console.error('Error uploading image:', error);
       toast({
@@ -75,6 +116,7 @@ const AdminImageUpload: React.FC<AdminImageUploadProps> = ({
         description: 'Please try again',
         variant: 'destructive',
       });
+    } finally {
       setIsUploading(false);
     }
   };
@@ -91,12 +133,12 @@ const AdminImageUpload: React.FC<AdminImageUploadProps> = ({
   };
 
   if (!isAdminMode || !isEditingImages) {
-    return children || <img src={src} alt={alt} className={className} style={style} />;
+    return children || <img src={currentImageUrl} alt={alt} className={className} style={style} />;
   }
 
   return (
     <div className="relative group inline-block">
-      {children || <img src={preview || src} alt={alt} className={className} style={style} />}
+      {children || <img src={preview || currentImageUrl} alt={alt} className={className} style={style} />}
       
       {/* Upload overlay */}
       <div className="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center">
@@ -115,14 +157,12 @@ const AdminImageUpload: React.FC<AdminImageUploadProps> = ({
           {preview && (
             <>
               <button
-                onClick={() => {
-                  setPreview(null);
-                  toast({ title: 'Changes applied successfully' });
-                }}
+                onClick={handleApply}
+                disabled={isUploading}
                 className="bg-green-500 text-white px-3 py-2 rounded-full hover:bg-green-600 transition-colors flex items-center space-x-1 text-sm font-medium"
               >
                 <Check className="h-4 w-4" />
-                <span>Apply</span>
+                <span>{isUploading ? 'Saving...' : 'Apply'}</span>
               </button>
               <button
                 onClick={handleCancelPreview}
