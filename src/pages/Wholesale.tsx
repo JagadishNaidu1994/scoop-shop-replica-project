@@ -2,6 +2,7 @@
 import React from 'react';
 import HeaderNavBar from '@/components/HeaderNavBar';
 import Footer from '@/components/Footer';
+import AdminImageUpload from '@/components/AdminImageUpload';
 import { Phone, Mail, MapPin, Coffee, Users, Award, Truck } from 'lucide-react';
 
 const Wholesale = () => {
@@ -31,10 +32,11 @@ const Wholesale = () => {
               </div>
             </div>
             <div className="relative">
-              <img 
-                src="https://images.unsplash.com/photo-1559056199-641a0ac8b55e?w=600&h=400&fit=crop" 
-                alt="Professional coffee setup" 
+              <AdminImageUpload
+                src="https://images.unsplash.com/photo-1559056199-641a0ac8b55e?w=600&h=400&fit=crop"
+                alt="Professional coffee setup"
                 className="rounded-2xl shadow-2xl"
+                imagePath="wholesale-hero"
               />
             </div>
           </div>
@@ -55,10 +57,11 @@ const Wholesale = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
-              <img 
-                src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=600&h=500&fit=crop" 
-                alt="Coffee beans being roasted" 
+              <AdminImageUpload
+                src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=600&h=500&fit=crop"
+                alt="Coffee beans being roasted"
                 className="rounded-2xl shadow-lg w-full"
+                imagePath="wholesale-coffee-excellence"
               />
             </div>
             <div className="space-y-6">
@@ -96,10 +99,11 @@ const Wholesale = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* Barista Training */}
             <div className="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100">
-              <img 
-                src="https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=500&h=300&fit=crop" 
-                alt="Barista training session" 
+              <AdminImageUpload
+                src="https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=500&h=300&fit=crop"
+                alt="Barista training session"
                 className="w-full h-64 object-cover"
+                imagePath="wholesale-barista-training"
               />
               <div className="p-8">
                 <h3 className="text-xl font-bold text-gray-900 mb-4">Barista Training & Ongoing Support</h3>
@@ -125,10 +129,11 @@ const Wholesale = () => {
 
             {/* Equipment */}
             <div className="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100">
-              <img 
-                src="https://images.unsplash.com/photo-1559056199-641a0ac8b55e?w=500&h=300&fit=crop" 
-                alt="Professional espresso machine" 
+              <AdminImageUpload
+                src="https://images.unsplash.com/photo-1559056199-641a0ac8b55e?w=500&h=300&fit=crop"
+                alt="Professional espresso machine"
                 className="w-full h-64 object-cover"
+                imagePath="wholesale-equipment"
               />
               <div className="p-8">
                 <h3 className="text-xl font-bold text-gray-900 mb-4">Top-of-the-Line Equipment</h3>
@@ -154,10 +159,11 @@ const Wholesale = () => {
 
             {/* Sourcing */}
             <div className="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100">
-              <img 
-                src="https://images.unsplash.com/photo-1447933601403-0c6688de566e?w=500&h=300&fit=crop" 
-                alt="Coffee farm and sourcing" 
+              <AdminImageUpload
+                src="https://images.unsplash.com/photo-1447933601403-0c6688de566e?w=500&h=300&fit=crop"
+                alt="Coffee farm and sourcing"
                 className="w-full h-64 object-cover"
+                imagePath="wholesale-sourcing"
               />
               <div className="p-8">
                 <h3 className="text-xl font-bold text-gray-900 mb-4">Ethically Sourced Beans</h3>
@@ -183,10 +189,11 @@ const Wholesale = () => {
 
             {/* Sustainability */}
             <div className="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100">
-              <img 
-                src="https://images.unsplash.com/photo-1542838132-92c53300491e?w=500&h=300&fit=crop" 
-                alt="Sustainable coffee practices" 
+              <AdminImageUpload
+                src="https://images.unsplash.com/photo-1542838132-92c53300491e?w=500&h=300&fit=crop"
+                alt="Sustainable coffee practices"
                 className="w-full h-64 object-cover"
+                imagePath="wholesale-sustainability"
               />
               <div className="p-8">
                 <h3 className="text-xl font-bold text-gray-900 mb-4">Sustainable Practices</h3>
@@ -229,20 +236,22 @@ const Wholesale = () => {
               
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
                 <div className="text-center">
-                  <img 
-                    src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face" 
-                    alt="Sarah Johnson - Head of Wholesale" 
+                  <AdminImageUpload
+                    src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face"
+                    alt="Sarah Johnson - Head of Wholesale"
                     className="w-32 h-32 rounded-full mx-auto mb-4 object-cover shadow-lg"
+                    imagePath="wholesale-team-sarah"
                   />
                   <h4 className="font-bold text-gray-900 text-lg">Sarah Johnson</h4>
                   <p className="text-amber-600 font-medium">Head of Wholesale</p>
                   <p className="text-gray-600 text-sm mt-2">15+ years in coffee industry</p>
                 </div>
                 <div className="text-center">
-                  <img 
-                    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face" 
-                    alt="Mike Chen - Training Manager" 
+                  <AdminImageUpload
+                    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face"
+                    alt="Mike Chen - Training Manager"
                     className="w-32 h-32 rounded-full mx-auto mb-4 object-cover shadow-lg"
+                    imagePath="wholesale-team-mike"
                   />
                   <h4 className="font-bold text-gray-900 text-lg">Mike Chen</h4>
                   <p className="text-amber-600 font-medium">Training Manager</p>
@@ -251,10 +260,11 @@ const Wholesale = () => {
               </div>
             </div>
             <div className="relative">
-              <img 
-                src="https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=600&h=500&fit=crop" 
-                alt="Coffee roasting facility" 
+              <AdminImageUpload
+                src="https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=600&h=500&fit=crop"
+                alt="Coffee roasting facility"
                 className="rounded-2xl shadow-2xl w-full"
+                imagePath="wholesale-team-facility"
               />
             </div>
           </div>
