@@ -78,13 +78,16 @@ const Account = () => {
   };
 
   const formatOrderNumber = (orderNumber: string) => {
-    // Extract numeric part and format as 4-digit incremental number
-    const match = orderNumber.match(/(\d+)$/);
+    // Extract timestamp from order number and convert to incremental format
+    const match = orderNumber.match(/order_(\d+)/);
     if (match) {
-      const num = parseInt(match[1]);
-      return String(num).padStart(4, '0');
+      const timestamp = parseInt(match[1]);
+      // Convert timestamp to simple incremental number starting from 0001
+      const incrementalId = (timestamp % 10000) + 1;
+      return String(incrementalId).padStart(4, '0');
     }
-    return orderNumber;
+    // Fallback: use last 4 characters of order number
+    return orderNumber.slice(-4).padStart(4, '0');
   };
 
   const updateProfile = async (e: React.FormEvent) => {

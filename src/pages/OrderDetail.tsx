@@ -54,6 +54,7 @@ const OrderDetail = () => {
       });
       navigate('/account');
     } else {
+      console.log('Order data:', data);
       setOrder(data);
     }
     setOrderLoading(false);
@@ -90,13 +91,16 @@ const OrderDetail = () => {
   };
 
   const formatOrderNumber = (orderNumber: string) => {
-    // Extract numeric part and format as 4-digit incremental number
-    const match = orderNumber.match(/(\d+)$/);
+    // Extract timestamp from order number and convert to incremental format
+    const match = orderNumber.match(/order_(\d+)/);
     if (match) {
-      const num = parseInt(match[1]);
-      return String(num).padStart(4, '0');
+      const timestamp = parseInt(match[1]);
+      // Convert timestamp to simple incremental number starting from 0001
+      const incrementalId = (timestamp % 10000) + 1;
+      return String(incrementalId).padStart(4, '0');
     }
-    return orderNumber;
+    // Fallback: use last 4 characters of order number
+    return orderNumber.slice(-4).padStart(4, '0');
   };
 
   const downloadInvoice = () => {
@@ -138,7 +142,7 @@ const OrderDetail = () => {
           </div>
           <div>
             <strong>Order ID:</strong> ${order.id}<br>
-            <strong>Payment Method:</strong> ${order.payment_method || 'N/A'}
+            <strong>Payment Method:</strong> ${order.payment_method || 'Card'}
           </div>
         </div>
 
@@ -147,11 +151,11 @@ const OrderDetail = () => {
           <div class="address">
             ${order.billing_address ? `
               ${order.billing_address.name || ''}<br>
+              ${order.billing_address.phone ? order.billing_address.phone + '<br>' : ''}
               ${order.billing_address.address_line_1 || ''}<br>
               ${order.billing_address.address_line_2 ? order.billing_address.address_line_2 + '<br>' : ''}
               ${order.billing_address.city || ''}, ${order.billing_address.postal_code || ''}<br>
-              ${order.billing_address.country || ''}<br>
-              ${order.billing_address.phone || ''}
+              ${order.billing_address.country || ''}
             ` : 'No billing address provided'}
           </div>
         </div>
@@ -161,11 +165,11 @@ const OrderDetail = () => {
           <div class="address">
             ${order.shipping_address ? `
               ${order.shipping_address.name || ''}<br>
+              ${order.shipping_address.phone ? order.shipping_address.phone + '<br>' : ''}
               ${order.shipping_address.address_line_1 || ''}<br>
               ${order.shipping_address.address_line_2 ? order.shipping_address.address_line_2 + '<br>' : ''}
               ${order.shipping_address.city || ''}, ${order.shipping_address.postal_code || ''}<br>
-              ${order.shipping_address.country || ''}<br>
-              ${order.shipping_address.phone || ''}
+              ${order.shipping_address.country || ''}
             ` : 'No shipping address provided'}
           </div>
         </div>
@@ -302,11 +306,11 @@ const OrderDetail = () => {
             </div>
             <div>
               <p className="text-sm text-gray-600">Payment Method</p>
-              <p className="font-medium capitalize">{order.payment_method || 'N/A'}</p>
+              <p className="font-medium capitalize">{order.payment_method || 'Card'}</p>
             </div>
             <div>
               <p className="text-sm text-gray-600">Order ID</p>
-              <p className="font-medium">{order.id}</p>
+              <p className="font-medium text-xs text-gray-500">{order.id}</p>
             </div>
           </div>
         </div>
@@ -314,30 +318,41 @@ const OrderDetail = () => {
         {/* Order Items */}
         <div className="bg-white border border-gray-200 rounded-lg p-6 mb-6">
           <h2 className="text-xl font-semibold text-black mb-4">Order Items</h2>
-          <div className="space-y-4">
-            {order.order_items?.map((item: any) => (
-              <div key={item.id} className="flex items-center space-x-4 py-4 border-b border-gray-100 last:border-b-0">
-                <div className="flex-shrink-0 w-16 h-16 bg-gray-100 rounded-lg flex items-center justify-center">
-                  <Package className="h-8 w-8 text-gray-400" />
-                </div>
-                <div className="flex-1">
-                  <Link 
-                    to={`/products/${item.product_id}`}
-                    className="font-medium text-black hover:text-gray-700 transition-colors"
-                  >
-                    {item.product_name}
-                  </Link>
-                  <div className="flex items-center space-x-4 mt-1 text-sm text-gray-600">
-                    <span>Qty: {item.quantity}</span>
-                    <span>Unit Price: £{item.product_price}</span>
+          {order.order_items && order.order_items.length > 0 ? (
+            <div className="space-y-4">
+              {order.order_items.map((item: any) => (
+                <div key={item.id} className="flex items-center space-x-4 py-4 border-b border-gray-100 last:border-b-0">
+                  <div className="flex-shrink-0 w-16 h-16 bg-gray-100 rounded-lg overflow-hidden">
+                    <img 
+                      src="https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=200&h=200&fit=crop"
+                      alt={item.product_name}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <div className="flex-1">
+                    <Link 
+                      to={`/products/${item.product_id}`}
+                      className="font-medium text-black hover:text-gray-700 transition-colors block"
+                    >
+                      {item.product_name}
+                    </Link>
+                    <div className="flex items-center space-x-4 mt-1 text-sm text-gray-600">
+                      <span>Qty: {item.quantity}</span>
+                      <span>Unit Price: £{item.product_price}</span>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <p className="font-semibold text-black">£{(item.product_price * item.quantity).toFixed(2)}</p>
                   </div>
                 </div>
-                <div className="text-right">
-                  <p className="font-semibold text-black">£{(item.product_price * item.quantity).toFixed(2)}</p>
-                </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-8">
+              <Package className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+              <p className="text-gray-500">No items found for this order</p>
+            </div>
+          )}
           
           {/* Order Total */}
           <div className="mt-6 pt-4 border-t border-gray-200">
@@ -353,12 +368,15 @@ const OrderDetail = () => {
           <div className="bg-white border border-gray-200 rounded-lg p-6 mb-6">
             <h2 className="text-xl font-semibold text-black mb-4">Shipping Address</h2>
             <div className="text-gray-700">
-              <p className="font-medium">{order.shipping_address.name}</p>
-              {order.shipping_address.phone && <p>{order.shipping_address.phone}</p>}
-              <p>{order.shipping_address.address_line_1}</p>
+              {order.shipping_address.name && <p className="font-medium">{order.shipping_address.name}</p>}
+              {order.shipping_address.phone && <p className="text-sm text-gray-600">{order.shipping_address.phone}</p>}
+              {order.shipping_address.address_line_1 && <p>{order.shipping_address.address_line_1}</p>}
               {order.shipping_address.address_line_2 && <p>{order.shipping_address.address_line_2}</p>}
-              <p>{order.shipping_address.city}, {order.shipping_address.postal_code}</p>
-              <p>{order.shipping_address.country}</p>
+              <p>
+                {order.shipping_address.city && order.shipping_address.city}
+                {order.shipping_address.postal_code && `, ${order.shipping_address.postal_code}`}
+              </p>
+              {order.shipping_address.country && <p>{order.shipping_address.country}</p>}
             </div>
           </div>
         )}
@@ -368,12 +386,15 @@ const OrderDetail = () => {
           <div className="bg-white border border-gray-200 rounded-lg p-6 mb-6">
             <h2 className="text-xl font-semibold text-black mb-4">Billing Address</h2>
             <div className="text-gray-700">
-              <p className="font-medium">{order.billing_address.name}</p>
-              {order.billing_address.phone && <p>{order.billing_address.phone}</p>}
-              <p>{order.billing_address.address_line_1}</p>
+              {order.billing_address.name && <p className="font-medium">{order.billing_address.name}</p>}
+              {order.billing_address.phone && <p className="text-sm text-gray-600">{order.billing_address.phone}</p>}
+              {order.billing_address.address_line_1 && <p>{order.billing_address.address_line_1}</p>}
               {order.billing_address.address_line_2 && <p>{order.billing_address.address_line_2}</p>}
-              <p>{order.billing_address.city}, {order.billing_address.postal_code}</p>
-              <p>{order.billing_address.country}</p>
+              <p>
+                {order.billing_address.city && order.billing_address.city}
+                {order.billing_address.postal_code && `, ${order.billing_address.postal_code}`}
+              </p>
+              {order.billing_address.country && <p>{order.billing_address.country}</p>}
             </div>
           </div>
         )}
