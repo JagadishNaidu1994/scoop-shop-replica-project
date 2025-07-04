@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import HeaderNavBar from '@/components/HeaderNavBar';
@@ -7,11 +6,12 @@ import AdminImageUpload from '@/components/AdminImageUpload';
 import { supabase } from '@/integrations/supabase/client';
 import { useCart } from '@/contexts/CartContext';
 import { Button } from '@/components/ui/button';
-import { Star, Plus, Minus, ChevronDown, Heart, Share2, Truck, Shield, RefreshCw, Award, CheckCircle, X } from 'lucide-react';
+import { Star, Plus, Minus, ChevronDown, Heart, Share2, Truck, Shield, RefreshCw, Award, CheckCircle, X, Microscope, Leaf, Users, Globe, Zap, Brain, Sparkles, TrendingUp, Camera, Play } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 import { Badge } from '@/components/ui/badge';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 interface Product {
   id: number;
@@ -581,6 +581,475 @@ const ProductDetail = () => {
               </div>
             </TabsContent>
           </Tabs>
+        </section>
+
+        {/* Scientific Research & Testing Section */}
+        <section className="mb-20">
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center space-x-3 bg-gradient-to-r from-blue-50 to-indigo-50 px-6 py-3 rounded-full mb-6">
+              <Microscope className="w-6 h-6 text-blue-600" />
+              <span className="text-blue-800 font-semibold">Science-Backed Excellence</span>
+            </div>
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">
+              Proven by Research,<br />
+              <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                Validated by Results
+              </span>
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+              Every ingredient is meticulously tested and scientifically validated to deliver optimal benefits for your mind and body.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
+            {/* Lab Testing Card */}
+            <Card className="relative overflow-hidden border-0 bg-gradient-to-br from-blue-50 to-indigo-100 hover:shadow-xl transition-all duration-500 group">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-200/30 to-purple-200/30 rounded-full -translate-y-16 translate-x-16"></div>
+              <CardHeader className="relative">
+                <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+                  <Microscope className="w-8 h-8 text-white" />
+                </div>
+                <CardTitle className="text-xl font-bold text-gray-900">Third-Party Lab Tested</CardTitle>
+                <CardDescription className="text-gray-600">
+                  Independent verification for purity, potency, and safety standards.
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm font-medium text-gray-700">Heavy Metals</span>
+                    <Badge className="bg-green-100 text-green-800 border-green-200">✓ Passed</Badge>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm font-medium text-gray-700">Pesticides</span>
+                    <Badge className="bg-green-100 text-green-800 border-green-200">✓ Passed</Badge>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm font-medium text-gray-700">Microbiology</span>
+                    <Badge className="bg-green-100 text-green-800 border-green-200">✓ Passed</Badge>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Clinical Studies Card */}
+            <Card className="relative overflow-hidden border-0 bg-gradient-to-br from-purple-50 to-pink-100 hover:shadow-xl transition-all duration-500 group">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-purple-200/30 to-pink-200/30 rounded-full -translate-y-16 translate-x-16"></div>
+              <CardHeader className="relative">
+                <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-600 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+                  <Brain className="w-8 h-8 text-white" />
+                </div>
+                <CardTitle className="text-xl font-bold text-gray-900">Clinical Research</CardTitle>
+                <CardDescription className="text-gray-600">
+                  Backed by peer-reviewed studies on cognitive enhancement and wellness.
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div className="text-center">
+                    <div className="text-3xl font-bold text-purple-600 mb-1">73%</div>
+                    <div className="text-sm text-gray-600">Improved Focus</div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-4 text-center">
+                    <div>
+                      <div className="text-xl font-bold text-purple-600">12</div>
+                      <div className="text-xs text-gray-600">Studies</div>
+                    </div>
+                    <div>
+                      <div className="text-xl font-bold text-purple-600">2,847</div>
+                      <div className="text-xs text-gray-600">Participants</div>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Innovation Card */}
+            <Card className="relative overflow-hidden border-0 bg-gradient-to-br from-emerald-50 to-teal-100 hover:shadow-xl transition-all duration-500 group">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-emerald-200/30 to-teal-200/30 rounded-full -translate-y-16 translate-x-16"></div>
+              <CardHeader className="relative">
+                <div className="w-16 h-16 bg-gradient-to-r from-emerald-500 to-teal-600 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+                  <Zap className="w-8 h-8 text-white" />
+                </div>
+                <CardTitle className="text-xl font-bold text-gray-900">Bioavailability Enhanced</CardTitle>
+                <CardDescription className="text-gray-600">
+                  Advanced extraction methods for maximum nutrient absorption.
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-3 h-3 bg-emerald-500 rounded-full"></div>
+                    <span className="text-sm text-gray-700">Dual extraction process</span>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <div className="w-3 h-3 bg-emerald-500 rounded-full"></div>
+                    <span className="text-sm text-gray-700">Nano-encapsulation tech</span>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <div className="w-3 h-3 bg-emerald-500 rounded-full"></div>
+                    <span className="text-sm text-gray-700">95% absorption rate</span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Research Metrics */}
+          <div className="bg-gradient-to-r from-gray-900 to-black rounded-3xl p-12 text-white">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+              <div>
+                <div className="text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent mb-2">50+</div>
+                <div className="text-gray-300 text-sm uppercase tracking-wide">Research Papers</div>
+              </div>
+              <div>
+                <div className="text-4xl font-bold bg-gradient-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent mb-2">99.9%</div>
+                <div className="text-gray-300 text-sm uppercase tracking-wide">Purity Level</div>
+              </div>
+              <div>
+                <div className="text-4xl font-bold bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent mb-2">15+</div>
+                <div className="text-gray-300 text-sm uppercase tracking-wide">Years R&D</div>
+              </div>
+              <div>
+                <div className="text-4xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent mb-2">100%</div>
+                <div className="text-gray-300 text-sm uppercase tracking-wide">Natural Sourced</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Sustainability & Ethics Section */}
+        <section className="mb-20">
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center space-x-3 bg-gradient-to-r from-green-50 to-emerald-50 px-6 py-3 rounded-full mb-6">
+              <Leaf className="w-6 h-6 text-green-600" />
+              <span className="text-green-800 font-semibold">Planet & People First</span>
+            </div>
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">
+              Sustainable by Design,<br />
+              <span className="bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
+                Ethical at Heart
+              </span>
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+              Our commitment extends beyond quality products to regenerative practices that benefit communities and restore ecosystems.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-12">
+            {/* Sustainability Image */}
+            <div className="relative">
+              <div className="aspect-[4/3] rounded-3xl overflow-hidden bg-gradient-to-br from-green-100 to-emerald-200">
+                <AdminImageUpload
+                  src="/lovable-uploads/a61d3c6a-fc59-45fe-9266-350a3c40ae91.png"
+                  alt="Sustainable farming practices"
+                  className="w-full h-full object-cover"
+                  imagePath="sustainability-hero"
+                />
+              </div>
+              <div className="absolute -bottom-6 -right-6 bg-white rounded-2xl p-6 shadow-xl border">
+                <div className="flex items-center space-x-3">
+                  <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center">
+                    <Globe className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <div className="font-bold text-gray-900">Carbon Negative</div>
+                    <div className="text-sm text-gray-600">Since 2020</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Sustainability Features */}
+            <div className="space-y-8">
+              <div className="flex items-start space-x-4">
+                <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-emerald-600 rounded-2xl flex items-center justify-center flex-shrink-0">
+                  <Leaf className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">Regenerative Agriculture</h3>
+                  <p className="text-gray-600 leading-relaxed">
+                    We partner with farmers who use regenerative practices that improve soil health, increase biodiversity, and sequester carbon from the atmosphere.
+                  </p>
+                  <div className="flex items-center space-x-4 mt-3">
+                    <Badge className="bg-green-100 text-green-800 border-green-200">Soil Health +40%</Badge>
+                    <Badge className="bg-green-100 text-green-800 border-green-200">Biodiversity +60%</Badge>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex items-start space-x-4">
+                <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center flex-shrink-0">
+                  <Globe className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">Fair Trade Certified</h3>
+                  <p className="text-gray-600 leading-relaxed">
+                    Every ingredient is sourced through fair trade partnerships, ensuring farmers receive fair compensation and communities thrive.
+                  </p>
+                  <div className="flex items-center space-x-4 mt-3">
+                    <Badge className="bg-blue-100 text-blue-800 border-blue-200">1,200+ Farmers</Badge>
+                    <Badge className="bg-blue-100 text-blue-800 border-blue-200">12 Countries</Badge>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex items-start space-x-4">
+                <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-600 rounded-2xl flex items-center justify-center flex-shrink-0">
+                  <RefreshCw className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">Zero Waste Packaging</h3>
+                  <p className="text-gray-600 leading-relaxed">
+                    Our packaging is 100% recyclable, made from post-consumer materials, and designed for minimal environmental impact.
+                  </p>
+                  <div className="flex items-center space-x-4 mt-3">
+                    <Badge className="bg-purple-100 text-purple-800 border-purple-200">100% Recyclable</Badge>
+                    <Badge className="bg-purple-100 text-purple-800 border-purple-200">Carbon Neutral Shipping</Badge>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Impact Metrics */}
+          <div className="bg-gradient-to-r from-green-600 to-emerald-700 rounded-3xl p-12 text-white">
+            <h3 className="text-3xl font-bold text-center mb-12">Our Impact This Year</h3>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+              <div className="text-center">
+                <div className="text-4xl font-bold mb-2">2.5M</div>
+                <div className="text-green-100 text-sm uppercase tracking-wide">Trees Planted</div>
+              </div>
+              <div className="text-center">
+                <div className="text-4xl font-bold mb-2">500T</div>
+                <div className="text-green-100 text-sm uppercase tracking-wide">CO₂ Offset</div>
+              </div>
+              <div className="text-center">
+                <div className="text-4xl font-bold mb-2">95%</div>
+                <div className="text-green-100 text-sm uppercase tracking-wide">Waste Diverted</div>
+              </div>
+              <div className="text-center">
+                <div className="text-4xl font-bold mb-2">£2M</div>
+                <div className="text-green-100 text-sm uppercase tracking-wide">Fair Trade Premium</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Community & Lifestyle Section */}
+        <section className="mb-20">
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center space-x-3 bg-gradient-to-r from-purple-50 to-pink-50 px-6 py-3 rounded-full mb-6">
+              <Users className="w-6 h-6 text-purple-600" />
+              <span className="text-purple-800 font-semibold">Join the Movement</span>
+            </div>
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">
+              More Than a Product,<br />
+              <span className="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+                It's a Lifestyle
+              </span>
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+              Join thousands of wellness enthusiasts who've transformed their daily routine with DIRTEA's premium matcha blends.
+            </p>
+          </div>
+
+          {/* Community Stats */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
+            <div className="bg-gradient-to-br from-purple-50 to-pink-100 rounded-2xl p-6 text-center">
+              <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <Users className="w-8 h-8 text-white" />
+              </div>
+              <div className="text-2xl font-bold text-gray-900 mb-1">250K+</div>
+              <div className="text-sm text-gray-600">Community Members</div>
+            </div>
+            <div className="bg-gradient-to-br from-blue-50 to-indigo-100 rounded-2xl p-6 text-center">
+              <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <Camera className="w-8 h-8 text-white" />
+              </div>
+              <div className="text-2xl font-bold text-gray-900 mb-1">50K+</div>
+              <div className="text-sm text-gray-600">Daily Posts</div>
+            </div>
+            <div className="bg-gradient-to-br from-emerald-50 to-teal-100 rounded-2xl p-6 text-center">
+              <div className="w-16 h-16 bg-gradient-to-r from-emerald-500 to-teal-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <TrendingUp className="w-8 h-8 text-white" />
+              </div>
+              <div className="text-2xl font-bold text-gray-900 mb-1">4.9★</div>
+              <div className="text-sm text-gray-600">Average Rating</div>
+            </div>
+            <div className="bg-gradient-to-br from-orange-50 to-red-100 rounded-2xl p-6 text-center">
+              <div className="w-16 h-16 bg-gradient-to-r from-orange-500 to-red-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <Sparkles className="w-8 h-8 text-white" />
+              </div>
+              <div className="text-2xl font-bold text-gray-900 mb-1">1M+</div>
+              <div className="text-sm text-gray-600">Lives Transformed</div>
+            </div>
+          </div>
+
+          {/* Social Proof & UGC */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-12">
+            {/* User Generated Content */}
+            <div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-8">Real Stories, Real Results</h3>
+              <div className="space-y-6">
+                {[
+                  {
+                    name: "Sarah Chen",
+                    handle: "@sarahwellness",
+                    content: "6 months with DIRTEA matcha and I've never felt more energized! The Lion's Mane really helps with my focus during work.",
+                    image: "/lovable-uploads/8edc40eb-3dfa-45fb-8cac-fc1a12ec6a3c.png",
+                    verified: true
+                  },
+                  {
+                    name: "Marcus Thompson",
+                    handle: "@marcusfitness",
+                    content: "Replaced my morning coffee with this matcha blend. The sustained energy without crashes is incredible. Best decision ever!",
+                    image: "/lovable-uploads/8edc40eb-3dfa-45fb-8cac-fc1a12ec6a3c.png",
+                    verified: true
+                  },
+                  {
+                    name: "Emma Rodriguez",
+                    handle: "@emmahealthy",
+                    content: "The ceremonial grade quality is unmatched. Plus knowing it's sustainably sourced makes me feel even better about my choice.",
+                    image: "/lovable-uploads/8edc40eb-3dfa-45fb-8cac-fc1a12ec6a3c.png",
+                    verified: true
+                  }
+                ].map((testimonial, index) => (
+                  <Card key={index} className="border-0 bg-gradient-to-r from-gray-50 to-gray-100 hover:shadow-lg transition-all duration-300">
+                    <CardContent className="p-6">
+                      <div className="flex items-start space-x-4">
+                        <div className="w-12 h-12 rounded-full overflow-hidden flex-shrink-0">
+                          <AdminImageUpload
+                            src={testimonial.image}
+                            alt={testimonial.name}
+                            className="w-full h-full object-cover"
+                            imagePath={`testimonial-${index + 1}`}
+                          />
+                        </div>
+                        <div className="flex-1">
+                          <div className="flex items-center space-x-2 mb-2">
+                            <span className="font-semibold text-gray-900">{testimonial.name}</span>
+                            {testimonial.verified && (
+                              <CheckCircle className="w-4 h-4 text-blue-500" />
+                            )}
+                            <span className="text-gray-500 text-sm">{testimonial.handle}</span>
+                          </div>
+                          <p className="text-gray-700 leading-relaxed">{testimonial.content}</p>
+                          <div className="flex text-yellow-400 mt-3">
+                            {[...Array(5)].map((_, i) => (
+                              <Star key={i} className="w-4 h-4 fill-current" />
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </div>
+
+            {/* Lifestyle Content */}
+            <div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-8">Your Wellness Journey Starts Here</h3>
+              <div className="space-y-6">
+                <Card className="border-0 bg-gradient-to-br from-purple-50 to-pink-100 hover:shadow-xl transition-all duration-500 group cursor-pointer">
+                  <CardContent className="p-8">
+                    <div className="flex items-center justify-between mb-6">
+                      <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-600 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                        <Play className="w-8 h-8 text-white" />
+                      </div>
+                      <Badge className="bg-white/80 text-purple-800 border-0">NEW</Badge>
+                    </div>
+                    <h4 className="text-xl font-bold text-gray-900 mb-3">Morning Ritual Masterclass</h4>
+                    <p className="text-gray-600 leading-relaxed mb-4">
+                      Learn how to create the perfect morning routine with our wellness experts. Free 30-minute workshop.
+                    </p>
+                    <Button className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700">
+                      Watch Now
+                    </Button>
+                  </CardContent>
+                </Card>
+
+                <Card className="border-0 bg-gradient-to-br from-blue-50 to-indigo-100 hover:shadow-xl transition-all duration-500 group cursor-pointer">
+                  <CardContent className="p-8">
+                    <div className="flex items-center justify-between mb-6">
+                      <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                        <Users className="w-8 h-8 text-white" />
+                      </div>
+                      <Badge className="bg-white/80 text-blue-800 border-0">EXCLUSIVE</Badge>
+                    </div>
+                    <h4 className="text-xl font-bold text-gray-900 mb-3">VIP Community Access</h4>
+                    <p className="text-gray-600 leading-relaxed mb-4">
+                      Join our exclusive community of wellness enthusiasts. Get recipes, tips, and connect with like-minded people.
+                    </p>
+                    <Button className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700">
+                      Join Community
+                    </Button>
+                  </CardContent>
+                </Card>
+
+                <Card className="border-0 bg-gradient-to-br from-emerald-50 to-teal-100 hover:shadow-xl transition-all duration-500 group cursor-pointer">
+                  <CardContent className="p-8">
+                    <div className="flex items-center justify-between mb-6">
+                      <div className="w-16 h-16 bg-gradient-to-r from-emerald-500 to-teal-600 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                        <Sparkles className="w-8 h-8 text-white" />
+                      </div>
+                      <Badge className="bg-white/80 text-emerald-800 border-0">POPULAR</Badge>
+                    </div>
+                    <h4 className="text-xl font-bold text-gray-900 mb-3">30-Day Transformation</h4>
+                    <p className="text-gray-600 leading-relaxed mb-4">
+                      Follow our proven 30-day wellness program and track your progress with our mobile app.
+                    </p>
+                    <Button className="w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700">
+                      Start Challenge
+                    </Button>
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
+          </div>
+
+          {/* Call to Action */}
+          <div className="bg-gradient-to-r from-gray-900 via-purple-900 to-gray-900 rounded-3xl p-12 text-center text-white">
+            <div className="max-w-3xl mx-auto">
+              <h3 className="text-4xl font-bold mb-6">
+                Ready to Transform Your Morning?
+              </h3>
+              <p className="text-xl text-gray-300 mb-8 leading-relaxed">
+                Join thousands who've already discovered the power of premium, sustainable wellness. Your journey to better health starts with a single sip.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Button
+                  onClick={handleAddToCart}
+                  size="lg"
+                  className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-8 py-4 text-lg font-semibold rounded-xl"
+                >
+                  Start Your Journey - £{((subscriptionType === 'subscribe' ? subscriptionPrice : product.price) * quantity).toFixed(2)}
+                </Button>
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="border-2 border-white/20 text-white hover:bg-white/10 px-8 py-4 text-lg font-semibold rounded-xl"
+                >
+                  Learn More
+                </Button>
+              </div>
+              <div className="flex items-center justify-center space-x-6 mt-8 text-sm text-gray-400">
+                <div className="flex items-center space-x-2">
+                  <Truck className="w-4 h-4" />
+                  <span>Free shipping</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Shield className="w-4 h-4" />
+                  <span>30-day guarantee</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RefreshCw className="w-4 h-4" />
+                  <span>Cancel anytime</span>
+                </div>
+              </div>
+            </div>
+          </div>
         </section>
       </main>
 
