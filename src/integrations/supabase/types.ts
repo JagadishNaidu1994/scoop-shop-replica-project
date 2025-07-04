@@ -66,6 +66,33 @@ export type Database = {
         }
         Relationships: []
       }
+      email_signups: {
+        Row: {
+          created_at: string
+          email: string
+          has_used_free_shipping: boolean
+          id: string
+          signup_date: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          has_used_free_shipping?: boolean
+          id?: string
+          signup_date?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          has_used_free_shipping?: boolean
+          id?: string
+          signup_date?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       journals: {
         Row: {
           author: string | null
