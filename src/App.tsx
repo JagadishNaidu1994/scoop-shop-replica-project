@@ -32,6 +32,9 @@ import OrderDetail from "./pages/OrderDetail";
 import Checkout from "./pages/Checkout";
 import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
+import TermsOfService from "./pages/TermsOfService";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import StoreLocator from "./pages/StoreLocator";
 
 const queryClient = new QueryClient();
 
@@ -69,6 +72,9 @@ const App = () => (
                 <Route path="/orders/:id" element={<OrderDetail />} />
                 <Route path="/checkout" element={<Checkout />} />
                 <Route path="/contact" element={<Contact />} />
+                <Route path="/terms" element={<TermsOfService />} />
+                <Route path="/privacy" element={<PrivacyPolicy />} />
+                <Route path="/stores" element={<StoreLocator />} />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />
               </Routes>
