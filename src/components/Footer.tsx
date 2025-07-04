@@ -64,8 +64,8 @@ const Footer = () => {
 
         {/* Large DIRTEA Branding */}
         <div className="text-center border-t border-gray-700 pt-12">
-          <h1 className="text-8xl font-bold text-white mb-4">DIRTEA</h1>
-          <p className="text-gray-400">© 2024 DIRTEA. All rights reserved.</p>
+          <h1 className="text-8xl font-bold text-white mb-4">NASTEA</h1>
+          <p className="text-gray-400">© 2024 NASTEA. All rights reserved.</p>
         </div>
       </div>
     </footer>
