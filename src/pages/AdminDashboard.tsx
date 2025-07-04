@@ -422,6 +422,66 @@ const AdminDashboard = () => {
     </Card>
   );
 
+  const renderProductsManagement = () => (
+    <Card>
+      <CardHeader>
+        <CardTitle>Products Management</CardTitle>
+        <CardDescription>
+          Manage your product catalog and inventory
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <div className="text-center py-8">
+          <ShoppingBag className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+          <p className="text-gray-500">Products management functionality will be implemented here</p>
+          <Button className="mt-4" onClick={() => navigate('/admin/products')}>
+            Go to Full Products Admin
+          </Button>
+        </div>
+      </CardContent>
+    </Card>
+  );
+
+  const renderRecipesManagement = () => (
+    <Card>
+      <CardHeader>
+        <CardTitle>Recipes Management</CardTitle>
+        <CardDescription>
+          Manage your recipe collection and content
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <div className="text-center py-8">
+          <BookOpen className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+          <p className="text-gray-500">Recipes management functionality will be implemented here</p>
+          <Button className="mt-4" onClick={() => navigate('/admin/recipes')}>
+            Go to Full Recipes Admin
+          </Button>
+        </div>
+      </CardContent>
+    </Card>
+  );
+
+  const renderJournalsManagement = () => (
+    <Card>
+      <CardHeader>
+        <CardTitle>Journals Management</CardTitle>
+        <CardDescription>
+          Manage your journal articles and blog posts
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <div className="text-center py-8">
+          <Newspaper className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+          <p className="text-gray-500">Journals management functionality will be implemented here</p>
+          <Button className="mt-4" onClick={() => navigate('/admin/journals')}>
+            Go to Full Journals Admin
+          </Button>
+        </div>
+      </CardContent>
+    </Card>
+  );
+
   const renderUserManagement = () => (
     <div className="space-y-6">
       <Card>
@@ -706,6 +766,12 @@ const AdminDashboard = () => {
     switch (activeTab) {
       case 'orders':
         return renderOrderManagement();
+      case 'products':
+        return renderProductsManagement();
+      case 'recipes':
+        return renderRecipesManagement();
+      case 'journals':
+        return renderJournalsManagement();
       case 'users':
         return renderUserManagement();
       case 'reports':
@@ -717,6 +783,48 @@ const AdminDashboard = () => {
     }
   };
 
+  const getPageTitle = () => {
+    switch (activeTab) {
+      case 'orders':
+        return 'Order Management';
+      case 'products':
+        return 'Products Management';
+      case 'recipes':
+        return 'Recipes Management';
+      case 'journals':
+        return 'Journals Management';
+      case 'users':
+        return 'User Management';
+      case 'reports':
+        return 'Reports & Analytics';
+      case 'settings':
+        return 'Settings';
+      default:
+        return 'Admin Dashboard';
+    }
+  };
+
+  const getPageDescription = () => {
+    switch (activeTab) {
+      case 'orders':
+        return 'Manage customer orders and subscriptions';
+      case 'products':
+        return 'Manage your product catalog and inventory';
+      case 'recipes':
+        return 'Manage your recipe collection and content';
+      case 'journals':
+        return 'Manage your journal articles and blog posts';
+      case 'users':
+        return 'Manage users and permissions';
+      case 'reports':
+        return 'View detailed analytics and reports';
+      case 'settings':
+        return 'Configure store settings';
+      default:
+        return 'Overview of your store performance';
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <HeaderNavBar />
@@ -724,25 +832,19 @@ const AdminDashboard = () => {
       <div className="flex">
         <AdminSidebar />
         
-        <div className="flex-1 p-8">
+        <div className="flex-1 p-8 transition-all duration-300 ease-in-out">
           <div className="mb-8">
             <h1 className="text-3xl font-bold text-black">
-              {activeTab === 'dashboard' ? 'Admin Dashboard' : 
-               activeTab === 'orders' ? 'Order Management' :
-               activeTab === 'users' ? 'User Management' :
-               activeTab === 'reports' ? 'Reports & Analytics' :
-               activeTab === 'settings' ? 'Settings' : 'Admin Dashboard'}
+              {getPageTitle()}
             </h1>
             <p className="text-gray-600 mt-2">
-              {activeTab === 'dashboard' ? 'Overview of your store performance' : 
-               activeTab === 'orders' ? 'Manage customer orders and subscriptions' :
-               activeTab === 'users' ? 'Manage users and permissions' :
-               activeTab === 'reports' ? 'View detailed analytics and reports' :
-               activeTab === 'settings' ? 'Configure store settings' : 'Manage your store'}
+              {getPageDescription()}
             </p>
           </div>
 
-          {renderContent()}
+          <div className="transition-all duration-300 ease-in-out transform">
+            {renderContent()}
+          </div>
         </div>
       </div>
 
