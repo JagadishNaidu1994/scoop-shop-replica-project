@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import HeaderNavBar from '@/components/HeaderNavBar';
@@ -32,31 +31,58 @@ const OrderDetail = () => {
   const fetchOrderDetails = async () => {
     if (!user || !id) return;
 
+    console.log('Fetching order details for ID:', id);
     setOrderLoading(true);
-    const { data, error } = await supabase
-      .from('orders')
-      .select(`
-        *,
-        order_items (
-          *
-        )
-      `)
-      .eq('id', id)
-      .eq('user_id', user.id)
-      .single();
+    
+    try {
+      // First fetch the order
+      const { data: orderData, error: orderError } = await supabase
+        .from('orders')
+        .select('*')
+        .eq('id', id)
+        .eq('user_id', user.id)
+        .single();
 
-    if (error) {
-      console.error('Error fetching order details:', error);
+      if (orderError) {
+        console.error('Error fetching order:', orderError);
+        toast({
+          title: "Error",
+          description: "Failed to load order details",
+          variant: "destructive"
+        });
+        navigate('/account');
+        return;
+      }
+
+      // Then fetch the order items separately
+      const { data: orderItemsData, error: itemsError } = await supabase
+        .from('order_items')
+        .select('*')
+        .eq('order_id', id);
+
+      if (itemsError) {
+        console.error('Error fetching order items:', itemsError);
+      }
+
+      console.log('Order data:', orderData);
+      console.log('Order items data:', orderItemsData);
+
+      // Combine the data
+      const completeOrder = {
+        ...orderData,
+        order_items: orderItemsData || []
+      };
+
+      setOrder(completeOrder);
+    } catch (error) {
+      console.error('Error in fetchOrderDetails:', error);
       toast({
         title: "Error",
         description: "Failed to load order details",
         variant: "destructive"
       });
-      navigate('/account');
-    } else {
-      console.log('Order data:', data);
-      setOrder(data);
     }
+    
     setOrderLoading(false);
   };
 
@@ -351,6 +377,8 @@ const OrderDetail = () => {
             <div className="text-center py-8">
               <Package className="h-12 w-12 text-gray-400 mx-auto mb-4" />
               <p className="text-gray-500">No items found for this order</p>
+              <p className="text-sm text-gray-400 mt-2">Order ID: {id}</p>
+              <p className="text-sm text-gray-400">Total items in array: {order.order_items?.length || 0}</p>
             </div>
           )}
           
