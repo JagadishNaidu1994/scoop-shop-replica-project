@@ -14,7 +14,6 @@ const Footer = () => {
               <a href="#" className="block text-gray-300 hover:text-white transition-colors">Contact Us</a>
               <a href="#" className="block text-gray-300 hover:text-white transition-colors">FAQ</a>
               <a href="#" className="block text-gray-300 hover:text-white transition-colors">Shipping & Returns</a>
-              <a href="#" className="block text-gray-300 hover:text-white transition-colors">Size Guide</a>
             </div>
           </div>
 
@@ -24,8 +23,6 @@ const Footer = () => {
             <div className="space-y-2">
               <a href="#" className="block text-gray-300 hover:text-white transition-colors">Our Story</a>
               <a href="#" className="block text-gray-300 hover:text-white transition-colors">Science</a>
-              <a href="#" className="block text-gray-300 hover:text-white transition-colors">Sustainability</a>
-              <a href="#" className="block text-gray-300 hover:text-white transition-colors">Careers</a>
             </div>
           </div>
 
@@ -33,10 +30,7 @@ const Footer = () => {
           <div>
             <h4 className="text-lg font-semibold mb-4">Journal</h4>
             <div className="space-y-2">
-              <a href="#" className="block text-gray-300 hover:text-white transition-colors">Latest Articles</a>
-              <a href="#" className="block text-gray-300 hover:text-white transition-colors">Wellness Tips</a>
-              <a href="#" className="block text-gray-300 hover:text-white transition-colors">Recipes</a>
-              <a href="#" className="block text-gray-300 hover:text-white transition-colors">Research</a>
+              <a href="/recipes" className="block text-gray-300 hover:text-white transition-colors">Recipes</a>
             </div>
           </div>
 
