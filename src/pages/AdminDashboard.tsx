@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useLocation, useSearchParams } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
@@ -55,8 +54,11 @@ const AdminDashboard = () => {
         console.log('Fetched orders with items:', ordersData);
         setOrders(ordersData);
         
-        // Calculate stats
-        const totalRevenue = ordersData.reduce((sum, order) => sum + parseFloat(order.total_amount), 0);
+        // Calculate stats - ensure we're working with numbers
+        const totalRevenue = ordersData.reduce((sum, order) => {
+          const amount = typeof order.total_amount === 'string' ? parseFloat(order.total_amount) : order.total_amount;
+          return sum + (amount || 0);
+        }, 0);
         const pendingOrders = ordersData.filter(order => order.status === 'pending').length;
         
         setStats(prev => ({
@@ -228,7 +230,7 @@ const AdminDashboard = () => {
                   <div>
                     <p className="font-medium">Order #{formatOrderNumber(order.order_number)}</p>
                     <p className="text-sm text-gray-600">
-                      {new Date(order.created_at).toLocaleDateString()} • £{order.total_amount}
+                      {new Date(order.created_at).toLocaleDateString()} • £{typeof order.total_amount === 'string' ? parseFloat(order.total_amount).toFixed(2) : order.total_amount.toFixed(2)}
                     </p>
                     <p className="text-sm text-gray-500">
                       Items: {order.order_items?.length || 0}
@@ -286,7 +288,7 @@ const AdminDashboard = () => {
                       </td>
                       <td className="p-2">{new Date(order.created_at).toLocaleDateString()}</td>
                       <td className="p-2">{order.order_items?.length || 0} items</td>
-                      <td className="p-2">£{order.total_amount}</td>
+                      <td className="p-2">£{typeof order.total_amount === 'string' ? parseFloat(order.total_amount).toFixed(2) : order.total_amount.toFixed(2)}</td>
                       <td className="p-2">
                         <Badge className={getStatusBadgeColor(order.status)}>
                           {order.status}
@@ -540,7 +542,7 @@ const AdminDashboard = () => {
                   <div className="space-y-2 text-sm">
                     <div><strong>Order Date:</strong> {new Date(selectedOrder.created_at).toLocaleDateString()}</div>
                     <div><strong>Payment Method:</strong> {selectedOrder.payment_method || 'card'}</div>
-                    <div><strong>Total Amount:</strong> £{selectedOrder.total_amount}</div>
+                    <div><strong>Total Amount:</strong> £{typeof selectedOrder.total_amount === 'string' ? parseFloat(selectedOrder.total_amount).toFixed(2) : selectedOrder.total_amount.toFixed(2)}</div>
                     <div><strong>Status:</strong> <Badge className={getStatusBadgeColor(selectedOrder.status)}>{selectedOrder.status}</Badge></div>
                   </div>
                 </div>
@@ -575,8 +577,8 @@ const AdminDashboard = () => {
                             </div>
                           </div>
                           <div className="text-right">
-                            <p className="font-medium">£{(item.product_price * item.quantity).toFixed(2)}</p>
-                            <p className="text-sm text-gray-600">£{item.product_price} each</p>
+                            <p className="font-medium">£{(typeof item.product_price === 'string' ? parseFloat(item.product_price) : item.product_price * item.quantity).toFixed(2)}</p>
+                            <p className="text-sm text-gray-600">£{typeof item.product_price === 'string' ? parseFloat(item.product_price).toFixed(2) : item.product_price.toFixed(2)} each</p>
                           </div>
                         </div>
                       ))}
