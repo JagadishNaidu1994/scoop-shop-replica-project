@@ -64,6 +64,7 @@ const AdminDashboard = () => {
           variant: "destructive"
         });
       } else {
+        console.log('Fetched orders with items:', data);
         setOrders(data || []);
       }
     } catch (error) {
@@ -256,7 +257,7 @@ const AdminDashboard = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              £{orders.reduce((sum, order) => sum + parseFloat(order.total_amount), 0).toFixed(2)}
+              £{orders.reduce((sum, order) => sum + (parseFloat(order.total_amount?.toString() || '0')), 0).toFixed(2)}
             </div>
             <p className="text-xs text-muted-foreground">
               +15% from last month
@@ -551,7 +552,7 @@ const AdminDashboard = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-green-600">
-              £{orders.reduce((sum, order) => sum + parseFloat(order.total_amount), 0).toFixed(2)}
+              £{orders.reduce((sum, order) => sum + (parseFloat(order.total_amount?.toString() || '0')), 0).toFixed(2)}
             </div>
             <p className="text-sm text-gray-600">Total revenue this month</p>
           </CardContent>
@@ -834,26 +835,29 @@ const AdminDashboard = () => {
                 <h3 className="font-semibold mb-3">Order Items</h3>
                 <div className="border rounded-lg overflow-hidden">
                   {selectedOrder.order_items && selectedOrder.order_items.length > 0 ? (
-                    <Table>
-                      <TableHeader>
-                        <TableRow>
-                          <TableHead>Product</TableHead>
-                          <TableHead>Quantity</TableHead>
-                          <TableHead>Price</TableHead>
-                          <TableHead>Total</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {selectedOrder.order_items.map((item: any) => (
-                          <TableRow key={item.id}>
-                            <TableCell>{item.product_name}</TableCell>
-                            <TableCell>{item.quantity}</TableCell>
-                            <TableCell>£{item.product_price}</TableCell>
-                            <TableCell>£{(item.product_price * item.quantity).toFixed(2)}</TableCell>
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
+                    <div className="space-y-4 p-4">
+                      {selectedOrder.order_items.map((item: any) => (
+                        <div key={item.id} className="flex items-center space-x-4 py-4 border-b border-gray-100 last:border-b-0">
+                          <div className="flex-shrink-0 w-16 h-16 bg-gray-100 rounded-lg overflow-hidden">
+                            <img 
+                              src="https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=200&h=200&fit=crop"
+                              alt={item.product_name}
+                              className="w-full h-full object-cover"
+                            />
+                          </div>
+                          <div className="flex-1">
+                            <h4 className="font-medium text-black">{item.product_name}</h4>
+                            <div className="flex items-center space-x-4 mt-1 text-sm text-gray-600">
+                              <span>Qty: {item.quantity}</span>
+                              <span>Unit Price: £{parseFloat(item.product_price?.toString() || '0').toFixed(2)}</span>
+                            </div>
+                          </div>
+                          <div className="text-right">
+                            <p className="font-semibold text-black">£{(parseFloat(item.product_price?.toString() || '0') * item.quantity).toFixed(2)}</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
                   ) : (
                     <div className="p-8 text-center">
                       <Package className="h-12 w-12 text-gray-400 mx-auto mb-4" />
