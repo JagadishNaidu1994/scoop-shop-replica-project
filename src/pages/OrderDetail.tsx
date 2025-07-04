@@ -3,11 +3,14 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import HeaderNavBar from '@/components/HeaderNavBar';
 import Footer from '@/components/Footer';
+import OrderTracking from '@/components/OrderTracking';
+import ReturnRequest from '@/components/ReturnRequest';
 import { Button } from '@/components/ui/button';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
-import { ArrowLeft, Package, Truck, CheckCircle, Clock } from 'lucide-react';
+import { ArrowLeft, Package, Truck, CheckCircle, Clock, Download } from 'lucide-react';
 
 const OrderDetail = () => {
   const { id } = useParams();
@@ -91,22 +94,24 @@ const OrderDetail = () => {
   };
 
   const formatOrderNumber = (orderNumber: string) => {
-    // Extract timestamp from order number and convert to incremental format
     const match = orderNumber.match(/order_(\d+)/);
     if (match) {
       const timestamp = parseInt(match[1]);
-      // Convert timestamp to simple incremental number starting from 0001
       const incrementalId = (timestamp % 10000) + 1;
       return String(incrementalId).padStart(4, '0');
     }
-    // Fallback: use last 4 characters of order number
     return orderNumber.slice(-4).padStart(4, '0');
+  };
+
+  const canRequestReturn = (order: any) => {
+    if (!order) return false;
+    const daysSinceOrder = (Date.now() - new Date(order.created_at).getTime()) / (1000 * 60 * 60 * 24);
+    return daysSinceOrder <= 30 && ['delivered', 'shipped'].includes(order.status?.toLowerCase());
   };
 
   const downloadInvoice = () => {
     if (!order) return;
 
-    // Create invoice HTML content
     const invoiceHTML = `
       <!DOCTYPE html>
       <html>
@@ -137,7 +142,7 @@ const OrderDetail = () => {
         <div class="order-info">
           <div>
             <strong>Invoice #:</strong> ${formatOrderNumber(order.order_number)}<br>
-            <strong>Order Date:</strong> ${new Date(order.created_at).toLocaleDateString('en-GB')}<br>
+            <strong>Order Date:</strong> ${new Date(order.created_at).toLocaleDateString('en-IN')}<br>
             <strong>Status:</strong> ${order.status?.charAt(0).toUpperCase() + order.status?.slice(1)}
           </div>
           <div>
@@ -147,28 +152,13 @@ const OrderDetail = () => {
         </div>
 
         <div class="section">
-          <div class="section-title">Bill To:</div>
-          <div class="address">
-            ${order.billing_address ? `
-              ${order.billing_address.name || ''}<br>
-              ${order.billing_address.phone ? order.billing_address.phone + '<br>' : ''}
-              ${order.billing_address.address_line_1 || ''}<br>
-              ${order.billing_address.address_line_2 ? order.billing_address.address_line_2 + '<br>' : ''}
-              ${order.billing_address.city || ''}, ${order.billing_address.postal_code || ''}<br>
-              ${order.billing_address.country || ''}
-            ` : 'No billing address provided'}
-          </div>
-        </div>
-
-        <div class="section">
           <div class="section-title">Ship To:</div>
           <div class="address">
             ${order.shipping_address ? `
-              ${order.shipping_address.name || ''}<br>
+              ${order.shipping_address.firstName} ${order.shipping_address.lastName}<br>
               ${order.shipping_address.phone ? order.shipping_address.phone + '<br>' : ''}
-              ${order.shipping_address.address_line_1 || ''}<br>
-              ${order.shipping_address.address_line_2 ? order.shipping_address.address_line_2 + '<br>' : ''}
-              ${order.shipping_address.city || ''}, ${order.shipping_address.postal_code || ''}<br>
+              ${order.shipping_address.address || ''}<br>
+              ${order.shipping_address.city || ''}, ${order.shipping_address.postalCode || ''}<br>
               ${order.shipping_address.country || ''}
             ` : 'No shipping address provided'}
           </div>
@@ -190,13 +180,17 @@ const OrderDetail = () => {
                 <tr>
                   <td>${item.product_name}</td>
                   <td>${item.quantity}</td>
-                  <td>£${item.product_price}</td>
-                  <td>£${(item.product_price * item.quantity).toFixed(2)}</td>
+                  <td>₹${item.product_price}</td>
+                  <td>₹${(item.product_price * item.quantity).toFixed(2)}</td>
                 </tr>
               `).join('') || ''}
               <tr class="total-row">
+                <td colspan="3">Shipping</td>
+                <td>₹${order.shipping_cost || 0}</td>
+              </tr>
+              <tr class="total-row">
                 <td colspan="3">Total Amount</td>
-                <td>£${order.total_amount}</td>
+                <td>₹${order.total_amount}</td>
               </tr>
             </tbody>
           </table>
@@ -210,7 +204,6 @@ const OrderDetail = () => {
       </html>
     `;
 
-    // Create and download the invoice
     const blob = new Blob([invoiceHTML], { type: 'text/html' });
     const url = window.URL.createObjectURL(blob);
     const link = document.createElement('a');
@@ -265,7 +258,6 @@ const OrderDetail = () => {
       <HeaderNavBar />
       
       <div className="max-w-4xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-        {/* Back Button */}
         <div className="mb-6">
           <Button 
             variant="ghost" 
@@ -277,13 +269,12 @@ const OrderDetail = () => {
           </Button>
         </div>
 
-        {/* Order Header */}
         <div className="bg-white border border-gray-200 rounded-lg p-6 mb-6">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4">
             <div>
               <h1 className="text-2xl font-bold text-black">Order #{formatOrderNumber(order.order_number)}</h1>
               <p className="text-gray-600 mt-1">
-                Placed on {new Date(order.created_at).toLocaleDateString('en-GB', { 
+                Placed on {new Date(order.created_at).toLocaleDateString('en-IN', { 
                   weekday: 'long', 
                   year: 'numeric', 
                   month: 'long', 
@@ -302,109 +293,118 @@ const OrderDetail = () => {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 border-t border-gray-200">
             <div>
               <p className="text-sm text-gray-600">Total Amount</p>
-              <p className="font-semibold text-lg">£{order.total_amount}</p>
+              <p className="font-semibold text-lg">₹{order.total_amount}</p>
             </div>
             <div>
               <p className="text-sm text-gray-600">Payment Method</p>
               <p className="font-medium capitalize">{order.payment_method || 'Card'}</p>
             </div>
             <div>
-              <p className="text-sm text-gray-600">Order ID</p>
-              <p className="font-medium text-xs text-gray-500">{order.id}</p>
+              <p className="text-sm text-gray-600">Shipping Cost</p>
+              <p className="font-medium">₹{order.shipping_cost || 0}</p>
             </div>
           </div>
         </div>
 
-        {/* Order Items */}
-        <div className="bg-white border border-gray-200 rounded-lg p-6 mb-6">
-          <h2 className="text-xl font-semibold text-black mb-4">Order Items</h2>
-          {order.order_items && order.order_items.length > 0 ? (
-            <div className="space-y-4">
-              {order.order_items.map((item: any) => (
-                <div key={item.id} className="flex items-center space-x-4 py-4 border-b border-gray-100 last:border-b-0">
-                  <div className="flex-shrink-0 w-16 h-16 bg-gray-100 rounded-lg overflow-hidden">
-                    <img 
-                      src="https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=200&h=200&fit=crop"
-                      alt={item.product_name}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <div className="flex-1">
-                    <Link 
-                      to={`/products/${item.product_id}`}
-                      className="font-medium text-black hover:text-gray-700 transition-colors block"
-                    >
-                      {item.product_name}
-                    </Link>
-                    <div className="flex items-center space-x-4 mt-1 text-sm text-gray-600">
-                      <span>Qty: {item.quantity}</span>
-                      <span>Unit Price: £{item.product_price}</span>
+        <Tabs defaultValue="details" className="space-y-6">
+          <TabsList className="grid w-full grid-cols-3">
+            <TabsTrigger value="details">Order Details</TabsTrigger>
+            <TabsTrigger value="tracking">Tracking</TabsTrigger>
+            <TabsTrigger value="returns" disabled={!canRequestReturn(order)}>
+              Returns
+            </TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="details" className="space-y-6">
+            <div className="bg-white border border-gray-200 rounded-lg p-6">
+              <h2 className="text-xl font-semibold text-black mb-4">Order Items</h2>
+              {order.order_items && order.order_items.length > 0 ? (
+                <div className="space-y-4">
+                  {order.order_items.map((item: any) => (
+                    <div key={item.id} className="flex items-center space-x-4 py-4 border-b border-gray-100 last:border-b-0">
+                      <div className="flex-shrink-0 w-16 h-16 bg-gray-100 rounded-lg overflow-hidden">
+                        <img 
+                          src="https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=200&h=200&fit=crop"
+                          alt={item.product_name}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                      <div className="flex-1">
+                        <Link 
+                          to={`/products/${item.product_id}`}
+                          className="font-medium text-black hover:text-gray-700 transition-colors block"
+                        >
+                          {item.product_name}
+                        </Link>
+                        <div className="flex items-center space-x-4 mt-1 text-sm text-gray-600">
+                          <span>Qty: {item.quantity}</span>
+                          <span>Unit Price: ₹{item.product_price}</span>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <p className="font-semibold text-black">₹{(item.product_price * item.quantity).toFixed(2)}</p>
+                      </div>
                     </div>
-                  </div>
-                  <div className="text-right">
-                    <p className="font-semibold text-black">£{(item.product_price * item.quantity).toFixed(2)}</p>
-                  </div>
+                  ))}
                 </div>
-              ))}
+              ) : (
+                <div className="text-center py-8">
+                  <Package className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                  <p className="text-gray-500">No items found for this order</p>
+                </div>
+              )}
+              
+              <div className="mt-6 pt-4 border-t border-gray-200">
+                <div className="flex justify-between items-center mb-2">
+                  <span className="text-gray-600">Subtotal</span>
+                  <span>₹{(order.total_amount - (order.shipping_cost || 0)).toFixed(2)}</span>
+                </div>
+                <div className="flex justify-between items-center mb-2">
+                  <span className="text-gray-600">Shipping</span>
+                  <span>₹{(order.shipping_cost || 0).toFixed(2)}</span>
+                </div>
+                <div className="flex justify-between items-center text-lg font-semibold">
+                  <span>Total</span>
+                  <span>₹{order.total_amount}</span>
+                </div>
+              </div>
             </div>
-          ) : (
-            <div className="text-center py-8">
-              <Package className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-              <p className="text-gray-500">No items found for this order</p>
-            </div>
-          )}
-          
-          {/* Order Total */}
-          <div className="mt-6 pt-4 border-t border-gray-200">
-            <div className="flex justify-between items-center">
-              <span className="text-lg font-semibold text-black">Total</span>
-              <span className="text-xl font-bold text-black">£{order.total_amount}</span>
-            </div>
-          </div>
-        </div>
 
-        {/* Shipping Address */}
-        {order.shipping_address && (
-          <div className="bg-white border border-gray-200 rounded-lg p-6 mb-6">
-            <h2 className="text-xl font-semibold text-black mb-4">Shipping Address</h2>
-            <div className="text-gray-700">
-              {order.shipping_address.name && <p className="font-medium">{order.shipping_address.name}</p>}
-              {order.shipping_address.phone && <p className="text-sm text-gray-600">{order.shipping_address.phone}</p>}
-              {order.shipping_address.address_line_1 && <p>{order.shipping_address.address_line_1}</p>}
-              {order.shipping_address.address_line_2 && <p>{order.shipping_address.address_line_2}</p>}
-              <p>
-                {order.shipping_address.city && order.shipping_address.city}
-                {order.shipping_address.postal_code && `, ${order.shipping_address.postal_code}`}
-              </p>
-              {order.shipping_address.country && <p>{order.shipping_address.country}</p>}
-            </div>
-          </div>
-        )}
+            {order.shipping_address && (
+              <div className="bg-white border border-gray-200 rounded-lg p-6">
+                <h2 className="text-xl font-semibold text-black mb-4">Shipping Address</h2>
+                <div className="text-gray-700">
+                  <p className="font-medium">{order.shipping_address.firstName} {order.shipping_address.lastName}</p>
+                  {order.shipping_address.phone && <p className="text-sm text-gray-600">{order.shipping_address.phone}</p>}
+                  <p>{order.shipping_address.address}</p>
+                  <p>{order.shipping_address.city}, {order.shipping_address.postalCode}</p>
+                  <p>{order.shipping_address.country}</p>
+                </div>
+              </div>
+            )}
+          </TabsContent>
 
-        {/* Billing Address */}
-        {order.billing_address && (
-          <div className="bg-white border border-gray-200 rounded-lg p-6 mb-6">
-            <h2 className="text-xl font-semibold text-black mb-4">Billing Address</h2>
-            <div className="text-gray-700">
-              {order.billing_address.name && <p className="font-medium">{order.billing_address.name}</p>}
-              {order.billing_address.phone && <p className="text-sm text-gray-600">{order.billing_address.phone}</p>}
-              {order.billing_address.address_line_1 && <p>{order.billing_address.address_line_1}</p>}
-              {order.billing_address.address_line_2 && <p>{order.billing_address.address_line_2}</p>}
-              <p>
-                {order.billing_address.city && order.billing_address.city}
-                {order.billing_address.postal_code && `, ${order.billing_address.postal_code}`}
-              </p>
-              {order.billing_address.country && <p>{order.billing_address.country}</p>}
-            </div>
-          </div>
-        )}
+          <TabsContent value="tracking">
+            <OrderTracking orderId={order.id} />
+          </TabsContent>
 
-        {/* Action Buttons */}
-        <div className="flex flex-col sm:flex-row gap-4">
+          <TabsContent value="returns">
+            {canRequestReturn(order) ? (
+              <ReturnRequest order={order} onReturnRequested={fetchOrderDetails} />
+            ) : (
+              <div className="text-center py-8">
+                <p className="text-gray-500">Return requests are only available for delivered orders within 30 days of purchase.</p>
+              </div>
+            )}
+          </TabsContent>
+        </Tabs>
+
+        <div className="flex flex-col sm:flex-row gap-4 mt-8">
           <Button 
             onClick={downloadInvoice}
             className="bg-black text-white hover:bg-gray-800"
           >
+            <Download className="h-4 w-4 mr-2" />
             Download Invoice
           </Button>
           <Button 

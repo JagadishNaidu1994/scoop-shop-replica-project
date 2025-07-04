@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import HeaderNavBar from '@/components/HeaderNavBar';
 import Footer from '@/components/Footer';
+import ShippingCalculator from '@/components/ShippingCalculator';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -17,6 +18,7 @@ const Checkout = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
+  const [selectedShippingMethod, setSelectedShippingMethod] = useState<any>(null);
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -25,7 +27,7 @@ const Checkout = () => {
     address: '',
     city: '',
     postalCode: '',
-    country: 'United Kingdom'
+    country: 'India'
   });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -33,6 +35,18 @@ const Checkout = () => {
       ...prev,
       [e.target.name]: e.target.value
     }));
+  };
+
+  const handleShippingSelect = (method: any) => {
+    setSelectedShippingMethod(method);
+  };
+
+  const getShippingCost = () => {
+    return selectedShippingMethod?.total_cost || 0;
+  };
+
+  const getFinalTotal = () => {
+    return getTotalPrice() + getShippingCost();
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -46,18 +60,25 @@ const Checkout = () => {
       return;
     }
 
+    if (!selectedShippingMethod) {
+      toast({
+        title: "Select shipping method",
+        description: "Please select a shipping method to continue",
+        variant: "destructive"
+      });
+      return;
+    }
+
     setLoading(true);
     try {
-      // Generate order number
-      const orderNumber = `DIRTEA-${Date.now()}`;
+      const orderNumber = `order_${Date.now()}`;
       
-      // Create order
       const { data: order, error: orderError } = await supabase
         .from('orders')
         .insert({
           user_id: user.id,
           order_number: orderNumber,
-          total_amount: getTotalPrice(),
+          total_amount: getFinalTotal(),
           status: 'pending',
           shipping_address: {
             firstName: formData.firstName,
@@ -65,7 +86,8 @@ const Checkout = () => {
             address: formData.address,
             city: formData.city,
             postalCode: formData.postalCode,
-            country: formData.country
+            country: formData.country,
+            phone: formData.phone
           },
           billing_address: {
             firstName: formData.firstName,
@@ -73,16 +95,18 @@ const Checkout = () => {
             address: formData.address,
             city: formData.city,
             postalCode: formData.postalCode,
-            country: formData.country
+            country: formData.country,
+            phone: formData.phone
           },
-          payment_method: 'card'
+          payment_method: 'card',
+          shipping_method_id: selectedShippingMethod.id,
+          shipping_cost: getShippingCost()
         })
         .select()
         .single();
 
       if (orderError) throw orderError;
 
-      // Create order items
       const orderItems = items.map(item => ({
         order_id: order.id,
         product_id: item.product_id,
@@ -97,7 +121,6 @@ const Checkout = () => {
 
       if (itemsError) throw itemsError;
 
-      // Clear cart
       await clearCart();
 
       toast({
@@ -142,7 +165,6 @@ const Checkout = () => {
         <h1 className="text-3xl font-bold text-black mb-8">Checkout</h1>
         
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          {/* Checkout Form */}
           <div>
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
@@ -235,6 +257,13 @@ const Checkout = () => {
                 </div>
               </div>
 
+              <div className="mt-8">
+                <ShippingCalculator 
+                  orderTotal={getTotalPrice()} 
+                  onShippingSelect={handleShippingSelect}
+                />
+              </div>
+
               <div>
                 <h2 className="text-xl font-semibold mb-4">Payment Information</h2>
                 <div className="bg-gray-50 p-4 rounded-lg">
@@ -247,15 +276,14 @@ const Checkout = () => {
 
               <Button
                 type="submit"
-                disabled={loading}
+                disabled={loading || !selectedShippingMethod}
                 className="w-full bg-black text-white hover:bg-gray-800 py-3"
               >
-                {loading ? 'Processing...' : 'Place Order'}
+                {loading ? 'Processing...' : `Place Order - ₹${getFinalTotal().toFixed(2)}`}
               </Button>
             </form>
           </div>
 
-          {/* Order Summary */}
           <div>
             <div className="bg-gray-50 p-6 rounded-lg">
               <h2 className="text-xl font-semibold mb-4">Order Summary</h2>
@@ -273,16 +301,26 @@ const Checkout = () => {
                       <p className="text-gray-600">Quantity: {item.quantity}</p>
                     </div>
                     <div className="text-right">
-                      <p className="font-medium">£{(item.product_price * item.quantity).toFixed(2)}</p>
+                      <p className="font-medium">₹{(item.product_price * item.quantity).toFixed(2)}</p>
                     </div>
                   </div>
                 ))}
               </div>
               
-              <div className="border-t border-gray-200 mt-4 pt-4">
+              <div className="border-t border-gray-200 mt-4 pt-4 space-y-2">
                 <div className="flex justify-between items-center">
-                  <span className="text-lg font-semibold">Total</span>
-                  <span className="text-lg font-semibold">£{getTotalPrice().toFixed(2)}</span>
+                  <span>Subtotal</span>
+                  <span>₹{getTotalPrice().toFixed(2)}</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span>Shipping</span>
+                  <span>
+                    {getShippingCost() === 0 ? 'FREE' : `₹${getShippingCost().toFixed(2)}`}
+                  </span>
+                </div>
+                <div className="flex justify-between items-center text-lg font-semibold border-t pt-2">
+                  <span>Total</span>
+                  <span>₹{getFinalTotal().toFixed(2)}</span>
                 </div>
               </div>
             </div>
