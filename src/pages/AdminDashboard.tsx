@@ -1,28 +1,36 @@
 
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import HeaderNavBar from '@/components/HeaderNavBar';
 import Footer from '@/components/Footer';
+import AdminSidebar from '@/components/AdminSidebar';
 import { useAuth } from '@/contexts/AuthContext';
 import { useAdminCheck } from '@/hooks/useAdminCheck';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
-import { Package, Users, FileText, Settings, Eye, Truck, Edit } from 'lucide-react';
+import { Package, Users, FileText, Settings, Eye, Truck, Edit, Plus, UserPlus, BarChart3, TrendingUp, DollarSign } from 'lucide-react';
 
 const AdminDashboard = () => {
   const { user, loading } = useAuth();
   const { isAdmin, loading: adminLoading } = useAdminCheck();
   const navigate = useNavigate();
   const { toast } = useToast();
+  const [searchParams] = useSearchParams();
+  const activeTab = searchParams.get('tab') || 'dashboard';
+  
   const [orders, setOrders] = useState<any[]>([]);
   const [ordersLoading, setOrdersLoading] = useState(true);
   const [selectedOrder, setSelectedOrder] = useState<any>(null);
   const [showOrderModal, setShowOrderModal] = useState(false);
+  const [newUserEmail, setNewUserEmail] = useState('');
+  const [newUserRole, setNewUserRole] = useState('user');
 
   useEffect(() => {
     if (!loading && !adminLoading) {
@@ -30,9 +38,11 @@ const AdminDashboard = () => {
         navigate('/');
         return;
       }
-      fetchOrders();
+      if (activeTab === 'orders' || activeTab === 'dashboard') {
+        fetchOrders();
+      }
     }
-  }, [user, isAdmin, loading, adminLoading, navigate]);
+  }, [user, isAdmin, loading, adminLoading, navigate, activeTab]);
 
   const fetchOrders = async () => {
     setOrdersLoading(true);
@@ -127,7 +137,6 @@ const AdminDashboard = () => {
   };
 
   const integrateWithShiprocket = (order: any) => {
-    // Shiprocket integration placeholder
     const shiprocketData = {
       order_id: order.order_number,
       order_date: order.created_at,
@@ -164,7 +173,6 @@ const AdminDashboard = () => {
   };
 
   const integrateWithDelhivery = (order: any) => {
-    // Delhivery integration placeholder
     const delhiveryData = {
       shipments: [{
         name: `${order.shipping_address?.firstName || ''} ${order.shipping_address?.lastName || ''}`,
@@ -208,6 +216,477 @@ const AdminDashboard = () => {
     });
   };
 
+  const handleAddUser = async () => {
+    if (!newUserEmail) {
+      toast({
+        title: "Error",
+        description: "Please enter a valid email address",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    toast({
+      title: "User Management",
+      description: `Would add user ${newUserEmail} with role ${newUserRole}. This feature will be implemented with proper user invitation system.`
+    });
+    setNewUserEmail('');
+    setNewUserRole('user');
+  };
+
+  const renderDashboardOverview = () => (
+    <div className="space-y-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Total Orders</CardTitle>
+            <Package className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{orders.length}</div>
+            <p className="text-xs text-muted-foreground">
+              +2 from last month
+            </p>
+          </CardContent>
+        </Card>
+        
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Revenue</CardTitle>
+            <DollarSign className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">
+              £{orders.reduce((sum, order) => sum + parseFloat(order.total_amount), 0).toFixed(2)}
+            </div>
+            <p className="text-xs text-muted-foreground">
+              +15% from last month
+            </p>
+          </CardContent>
+        </Card>
+        
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Pending Orders</CardTitle>
+            <Clock className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">
+              {orders.filter(order => order.status === 'pending').length}
+            </div>
+            <p className="text-xs text-muted-foreground">
+              Needs attention
+            </p>
+          </CardContent>
+        </Card>
+        
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Delivered</CardTitle>
+            <TrendingUp className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">
+              {orders.filter(order => order.status === 'delivered').length}
+            </div>
+            <p className="text-xs text-muted-foreground">
+              +8% from last month
+            </p>
+          </CardContent>
+        </Card>
+      </div>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Recent Orders</CardTitle>
+          <CardDescription>Latest orders from your customers</CardDescription>
+        </CardHeader>
+        <CardContent>
+          {orders.slice(0, 5).length > 0 ? (
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Order #</TableHead>
+                  <TableHead>Customer</TableHead>
+                  <TableHead>Date</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead>Total</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {orders.slice(0, 5).map((order) => (
+                  <TableRow key={order.id}>
+                    <TableCell>#{formatOrderNumber(order.order_number)}</TableCell>
+                    <TableCell>
+                      {order.shipping_address?.firstName} {order.shipping_address?.lastName}
+                    </TableCell>
+                    <TableCell>{new Date(order.created_at).toLocaleDateString()}</TableCell>
+                    <TableCell>
+                      <Badge className={`${getStatusColor(order.status)} border`}>
+                        {order.status}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>£{order.total_amount}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          ) : (
+            <div className="text-center py-8">
+              <Package className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+              <p className="text-gray-500">No orders found</p>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+    </div>
+  );
+
+  const renderOrderManagement = () => (
+    <Card>
+      <CardHeader>
+        <CardTitle>Order Management</CardTitle>
+        <CardDescription>
+          View and manage all customer orders and subscriptions
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        {ordersLoading ? (
+          <div className="text-center py-8">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-black mx-auto mb-4"></div>
+            <p className="text-gray-600">Loading orders...</p>
+          </div>
+        ) : orders.length === 0 ? (
+          <div className="text-center py-8">
+            <Package className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+            <p className="text-gray-500">No orders found</p>
+          </div>
+        ) : (
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Order #</TableHead>
+                <TableHead>Customer</TableHead>
+                <TableHead>Date</TableHead>
+                <TableHead>Items</TableHead>
+                <TableHead>Total</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead>Actions</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {orders.map((order) => (
+                <TableRow 
+                  key={order.id} 
+                  className="cursor-pointer hover:bg-gray-50"
+                  onClick={() => handleOrderClick(order)}
+                >
+                  <TableCell className="font-mono">
+                    #{formatOrderNumber(order.order_number)}
+                  </TableCell>
+                  <TableCell>
+                    {order.shipping_address?.firstName} {order.shipping_address?.lastName}
+                  </TableCell>
+                  <TableCell>
+                    {new Date(order.created_at).toLocaleDateString()}
+                  </TableCell>
+                  <TableCell>
+                    {order.order_items?.length || 0} items
+                  </TableCell>
+                  <TableCell className="font-semibold">
+                    £{order.total_amount}
+                  </TableCell>
+                  <TableCell>
+                    <Badge className={`${getStatusColor(order.status)} border`}>
+                      {order.status}
+                    </Badge>
+                  </TableCell>
+                  <TableCell>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleOrderClick(order);
+                      }}
+                    >
+                      <Eye className="h-4 w-4" />
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        )}
+      </CardContent>
+    </Card>
+  );
+
+  const renderUserManagement = () => (
+    <div className="space-y-6">
+      <Card>
+        <CardHeader>
+          <CardTitle>Add New User</CardTitle>
+          <CardDescription>
+            Add new users and assign permissions
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <Label htmlFor="userEmail">Email Address</Label>
+              <Input
+                id="userEmail"
+                type="email"
+                placeholder="user@example.com"
+                value={newUserEmail}
+                onChange={(e) => setNewUserEmail(e.target.value)}
+              />
+            </div>
+            <div>
+              <Label htmlFor="userRole">Role</Label>
+              <Select value={newUserRole} onValueChange={setNewUserRole}>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="user">User</SelectItem>
+                  <SelectItem value="admin">Admin</SelectItem>
+                  <SelectItem value="editor">Editor</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="flex items-end">
+              <Button onClick={handleAddUser} className="w-full">
+                <UserPlus className="h-4 w-4 mr-2" />
+                Add User
+              </Button>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>User Permissions</CardTitle>
+          <CardDescription>
+            Manage user access to different sections
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="p-4 border rounded-lg">
+                <h4 className="font-semibold mb-2">Orders Management</h4>
+                <p className="text-sm text-gray-600 mb-3">View and manage customer orders</p>
+                <div className="space-y-2">
+                  <label className="flex items-center space-x-2">
+                    <input type="checkbox" defaultChecked />
+                    <span className="text-sm">View Orders</span>
+                  </label>
+                  <label className="flex items-center space-x-2">
+                    <input type="checkbox" defaultChecked />
+                    <span className="text-sm">Update Status</span>
+                  </label>
+                </div>
+              </div>
+              
+              <div className="p-4 border rounded-lg">
+                <h4 className="font-semibold mb-2">Products Management</h4>
+                <p className="text-sm text-gray-600 mb-3">Manage product catalog</p>
+                <div className="space-y-2">
+                  <label className="flex items-center space-x-2">
+                    <input type="checkbox" defaultChecked />
+                    <span className="text-sm">View Products</span>
+                  </label>
+                  <label className="flex items-center space-x-2">
+                    <input type="checkbox" />
+                    <span className="text-sm">Edit Products</span>
+                  </label>
+                </div>
+              </div>
+              
+              <div className="p-4 border rounded-lg">
+                <h4 className="font-semibold mb-2">Content Management</h4>
+                <p className="text-sm text-gray-600 mb-3">Manage recipes and journals</p>
+                <div className="space-y-2">
+                  <label className="flex items-center space-x-2">
+                    <input type="checkbox" />
+                    <span className="text-sm">Edit Recipes</span>
+                  </label>
+                  <label className="flex items-center space-x-2">
+                    <input type="checkbox" />
+                    <span className="text-sm">Edit Journals</span>
+                  </label>
+                </div>
+              </div>
+              
+              <div className="p-4 border rounded-lg">
+                <h4 className="font-semibold mb-2">System Settings</h4>
+                <p className="text-sm text-gray-600 mb-3">Access system configuration</p>
+                <div className="space-y-2">
+                  <label className="flex items-center space-x-2">
+                    <input type="checkbox" />
+                    <span className="text-sm">System Config</span>
+                  </label>
+                  <label className="flex items-center space-x-2">
+                    <input type="checkbox" />
+                    <span className="text-sm">User Management</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+
+  const renderReports = () => (
+    <div className="space-y-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <Card>
+          <CardHeader>
+            <CardTitle>Sales Report</CardTitle>
+            <CardDescription>Monthly sales performance</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold text-green-600">
+              £{orders.reduce((sum, order) => sum + parseFloat(order.total_amount), 0).toFixed(2)}
+            </div>
+            <p className="text-sm text-gray-600">Total revenue this month</p>
+          </CardContent>
+        </Card>
+        
+        <Card>
+          <CardHeader>
+            <CardTitle>Order Analytics</CardTitle>
+            <CardDescription>Order status breakdown</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-2">
+              <div className="flex justify-between">
+                <span>Pending</span>
+                <span>{orders.filter(o => o.status === 'pending').length}</span>
+              </div>
+              <div className="flex justify-between">
+                <span>Delivered</span>
+                <span>{orders.filter(o => o.status === 'delivered').length}</span>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+        
+        <Card>
+          <CardHeader>
+            <CardTitle>Customer Insights</CardTitle>
+            <CardDescription>Customer behavior metrics</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold text-blue-600">
+              {new Set(orders.map(o => o.user_id)).size}
+            </div>
+            <p className="text-sm text-gray-600">Unique customers</p>
+          </CardContent>
+        </Card>
+      </div>
+      
+      <Card>
+        <CardHeader>
+          <CardTitle>Export Reports</CardTitle>
+          <CardDescription>Download detailed reports</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <Button variant="outline">
+              <FileText className="h-4 w-4 mr-2" />
+              Orders Report
+            </Button>
+            <Button variant="outline">
+              <BarChart3 className="h-4 w-4 mr-2" />  
+              Sales Analytics
+            </Button>
+            <Button variant="outline">
+              <Users className="h-4 w-4 mr-2" />
+              Customer Report
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+
+  const renderSettings = () => (
+    <div className="space-y-6">
+      <Card>
+        <CardHeader>
+          <CardTitle>Store Settings</CardTitle>
+          <CardDescription>Configure your store preferences</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <Label htmlFor="storeName">Store Name</Label>
+              <Input id="storeName" defaultValue="DIRTEA" />
+            </div>
+            <div>
+              <Label htmlFor="storeEmail">Store Email</Label>
+              <Input id="storeEmail" type="email" placeholder="store@dirtea.com" />
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+      
+      <Card>
+        <CardHeader>
+          <CardTitle>Shipping Settings</CardTitle>
+          <CardDescription>Configure shipping options</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <h4 className="font-medium">Free Shipping Threshold</h4>
+                <p className="text-sm text-gray-600">Orders above this amount get free shipping</p>
+              </div>
+              <Input className="w-32" defaultValue="50" />
+            </div>
+            <div className="flex items-center justify-between">
+              <div>
+                <h4 className="font-medium">Standard Shipping Cost</h4>
+                <p className="text-sm text-gray-600">Default shipping cost</p>
+              </div>
+              <Input className="w-32" defaultValue="5.99" />
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+      
+      <Card>
+        <CardHeader>
+          <CardTitle>Notification Settings</CardTitle>
+          <CardDescription>Configure email notifications</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="space-y-4">
+            <label className="flex items-center space-x-2">
+              <input type="checkbox" defaultChecked />
+              <span>New order notifications</span>
+            </label>
+            <label className="flex items-center space-x-2">
+              <input type="checkbox" defaultChecked />
+              <span>Low stock alerts</span>
+            </label>
+            <label className="flex items-center space-x-2">
+              <input type="checkbox" />
+              <span>Customer review notifications</span>
+            </label>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+
   if (loading || adminLoading) {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
@@ -223,167 +702,48 @@ const AdminDashboard = () => {
     return null;
   }
 
+  const renderContent = () => {
+    switch (activeTab) {
+      case 'orders':
+        return renderOrderManagement();
+      case 'users':
+        return renderUserManagement();
+      case 'reports':
+        return renderReports();
+      case 'settings':
+        return renderSettings();
+      default:
+        return renderDashboardOverview();
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <HeaderNavBar />
       
-      <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-black">Admin Dashboard</h1>
-          <p className="text-gray-600 mt-2">Manage orders, users, and system settings</p>
+      <div className="flex">
+        <AdminSidebar />
+        
+        <div className="flex-1 p-8">
+          <div className="mb-8">
+            <h1 className="text-3xl font-bold text-black">
+              {activeTab === 'dashboard' ? 'Admin Dashboard' : 
+               activeTab === 'orders' ? 'Order Management' :
+               activeTab === 'users' ? 'User Management' :
+               activeTab === 'reports' ? 'Reports & Analytics' :
+               activeTab === 'settings' ? 'Settings' : 'Admin Dashboard'}
+            </h1>
+            <p className="text-gray-600 mt-2">
+              {activeTab === 'dashboard' ? 'Overview of your store performance' : 
+               activeTab === 'orders' ? 'Manage customer orders and subscriptions' :
+               activeTab === 'users' ? 'Manage users and permissions' :
+               activeTab === 'reports' ? 'View detailed analytics and reports' :
+               activeTab === 'settings' ? 'Configure store settings' : 'Manage your store'}
+            </p>
+          </div>
+
+          {renderContent()}
         </div>
-
-        <Tabs defaultValue="orders" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="orders" className="flex items-center gap-2">
-              <Package className="h-4 w-4" />
-              Orders
-            </TabsTrigger>
-            <TabsTrigger value="users" className="flex items-center gap-2">
-              <Users className="h-4 w-4" />
-              Users
-            </TabsTrigger>
-            <TabsTrigger value="reports" className="flex items-center gap-2">
-              <FileText className="h-4 w-4" />
-              Reports
-            </TabsTrigger>
-            <TabsTrigger value="settings" className="flex items-center gap-2">
-              <Settings className="h-4 w-4" />
-              Settings
-            </TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="orders" className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>Order Management</CardTitle>
-                <CardDescription>
-                  View and manage all customer orders and subscriptions
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                {ordersLoading ? (
-                  <div className="text-center py-8">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-black mx-auto mb-4"></div>
-                    <p className="text-gray-600">Loading orders...</p>
-                  </div>
-                ) : orders.length === 0 ? (
-                  <div className="text-center py-8">
-                    <Package className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                    <p className="text-gray-500">No orders found</p>
-                  </div>
-                ) : (
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>Order #</TableHead>
-                        <TableHead>Customer</TableHead>
-                        <TableHead>Date</TableHead>
-                        <TableHead>Items</TableHead>
-                        <TableHead>Total</TableHead>
-                        <TableHead>Status</TableHead>
-                        <TableHead>Actions</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {orders.map((order) => (
-                        <TableRow 
-                          key={order.id} 
-                          className="cursor-pointer hover:bg-gray-50"
-                          onClick={() => handleOrderClick(order)}
-                        >
-                          <TableCell className="font-mono">
-                            #{formatOrderNumber(order.order_number)}
-                          </TableCell>
-                          <TableCell>
-                            {order.shipping_address?.firstName} {order.shipping_address?.lastName}
-                          </TableCell>
-                          <TableCell>
-                            {new Date(order.created_at).toLocaleDateString()}
-                          </TableCell>
-                          <TableCell>
-                            {order.order_items?.length || 0} items
-                          </TableCell>
-                          <TableCell className="font-semibold">
-                            £{order.total_amount}
-                          </TableCell>
-                          <TableCell>
-                            <Badge className={`${getStatusColor(order.status)} border`}>
-                              {order.status}
-                            </Badge>
-                          </TableCell>
-                          <TableCell>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleOrderClick(order);
-                              }}
-                            >
-                              <Eye className="h-4 w-4" />
-                            </Button>
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                )}
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          <TabsContent value="users" className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>User Management</CardTitle>
-                <CardDescription>
-                  Manage user accounts and permissions
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="text-center py-8">
-                  <Users className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                  <p className="text-gray-500">User management coming soon</p>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          <TabsContent value="reports" className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>Reports & Analytics</CardTitle>
-                <CardDescription>
-                  View sales reports and analytics
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="text-center py-8">
-                  <FileText className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                  <p className="text-gray-500">Reports coming soon</p>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          <TabsContent value="settings" className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>System Settings</CardTitle>
-                <CardDescription>
-                  Configure system settings and preferences
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="text-center py-8">
-                  <Settings className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                  <p className="text-gray-500">Settings coming soon</p>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-        </Tabs>
       </div>
 
       {/* Order Detail Modal */}
@@ -474,26 +834,33 @@ const AdminDashboard = () => {
               <div>
                 <h3 className="font-semibold mb-3">Order Items</h3>
                 <div className="border rounded-lg overflow-hidden">
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>Product</TableHead>
-                        <TableHead>Quantity</TableHead>
-                        <TableHead>Price</TableHead>
-                        <TableHead>Total</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {selectedOrder.order_items?.map((item: any) => (
-                        <TableRow key={item.id}>
-                          <TableCell>{item.product_name}</TableCell>
-                          <TableCell>{item.quantity}</TableCell>
-                          <TableCell>£{item.product_price}</TableCell>
-                          <TableCell>£{(item.product_price * item.quantity).toFixed(2)}</TableCell>
+                  {selectedOrder.order_items && selectedOrder.order_items.length > 0 ? (
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>Product</TableHead>
+                          <TableHead>Quantity</TableHead>
+                          <TableHead>Price</TableHead>
+                          <TableHead>Total</TableHead>
                         </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
+                      </TableHeader>
+                      <TableBody>
+                        {selectedOrder.order_items.map((item: any) => (
+                          <TableRow key={item.id}>
+                            <TableCell>{item.product_name}</TableCell>
+                            <TableCell>{item.quantity}</TableCell>
+                            <TableCell>£{item.product_price}</TableCell>
+                            <TableCell>£{(item.product_price * item.quantity).toFixed(2)}</TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  ) : (
+                    <div className="p-8 text-center">
+                      <Package className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                      <p className="text-gray-500">No items found for this order</p>
+                    </div>
+                  )}
                 </div>
               </div>
 
