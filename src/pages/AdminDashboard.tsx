@@ -14,7 +14,7 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
-import { Package, Users, FileText, Settings, Eye, Truck, Edit, Plus, UserPlus, BarChart3, TrendingUp, DollarSign, Clock } from 'lucide-react';
+import { Package, Users, FileText, Settings, Eye, Truck, Edit, Plus, UserPlus, BarChart3, TrendingUp, DollarSign, Clock, ShoppingBag, BookOpen, Newspaper } from 'lucide-react';
 
 const AdminDashboard = () => {
   const { user, loading } = useAuth();
