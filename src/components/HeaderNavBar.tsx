@@ -133,23 +133,9 @@ const HeaderNavBar = () => {
                 )}
                 
                 {isAdmin && (
-                  <div className="relative group">
-                    <button className="text-black hover:text-gray-600 transition-colors font-medium flex items-center space-x-1">
-                      <Settings className="h-4 w-4" />
-                      <span>ADMIN</span>
-                    </button>
-                    <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
-                      <Link to="/admin/recipes" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                        Manage Recipes
-                      </Link>
-                      <Link to="/admin/products" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                        Manage Products
-                      </Link>
-                      <Link to="/admin/journals" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                        Manage Journals
-                      </Link>
-                    </div>
-                  </div>
+                  <Link to="/admin/dashboard" className="text-black hover:text-gray-600 transition-colors font-medium">
+                    ADMIN
+                  </Link>
                 )}
                 
                 {user ? (
