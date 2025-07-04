@@ -218,45 +218,57 @@ const HeaderNavBar = () => {
                 <div className="flex-1 px-6 py-4 space-y-6">
                   <div className="space-y-4">
                     <Link to="/shop" className="block text-lg font-medium text-black hover:text-gray-600 border-b border-gray-200 pb-2">
-                      SHOP NASTEA
+                      SHOP DIRTEA
                     </Link>
                     
                     <div className="space-y-4">
+                      <Link to="/recipes" className="block text-lg font-medium text-black hover:text-gray-600 border-b border-gray-200 pb-2">
+                        RECIPES
+                      </Link>
+                      
+                      <Link to="/journal" className="block text-lg font-medium text-black hover:text-gray-600 border-b border-gray-200 pb-2">
+                        JOURNAL
+                      </Link>
                                          
-                    <Link to="/science" className="block text-lg font-medium text-black hover:text-gray-600 border-b border-gray-200 pb-2">
-                      SCIENCE
-                    </Link>
-                    
-                    <Link to="/story" className="block text-lg font-medium text-black hover:text-gray-600 border-b border-gray-200 pb-2">
-                      OUR STORY
-                    </Link>
-                    
-                    <Link to="/refer" className="block text-lg font-medium text-black hover:text-gray-600 border-b border-gray-200 pb-2">
-                      REFER A FRIEND
-                    </Link>
-                  </div>
+                      <Link to="/science" className="block text-lg font-medium text-black hover:text-gray-600 border-b border-gray-200 pb-2">
+                        SCIENCE
+                      </Link>
+                      
+                      <Link to="/story" className="block text-lg font-medium text-black hover:text-gray-600 border-b border-gray-200 pb-2">
+                        OUR STORY
+                      </Link>
+                      
+                      <Link to="/wholesale" className="block text-lg font-medium text-black hover:text-gray-600 border-b border-gray-200 pb-2">
+                        WHOLESALE
+                      </Link>
+                      
+                      <Link to="/refer" className="block text-lg font-medium text-black hover:text-gray-600 border-b border-gray-200 pb-2">
+                        REFER A FRIEND
+                      </Link>
+                    </div>
 
-                  {/* Bottom section */}
-                  <div className="mt-8 pt-8 border-t border-gray-200 space-y-4">
-                    <Link to="/auth" className="block text-base text-gray-600 hover:text-black">
-                      Log in
-                    </Link>
-                    
-                    <Link to="/refer" className="block text-base text-gray-600 hover:text-black">
-                      Refer a Friend
-                    </Link>
-                    
-                    <Link to="/account" className="block text-base text-gray-600 hover:text-black">
-                      Rewards
-                    </Link>
-                    
-                    <Link to="/faq" className="block text-base text-gray-600 hover:text-black">
-                      FAQs
-                    </Link>
-                    
-                    <Link to="/contact" className="block text-base text-gray-600 hover:text-black">
-                      Contact Us
-                    </Link>
+                    {/* Bottom section */}
+                    <div className="mt-8 pt-8 border-t border-gray-200 space-y-4">
+                      <Link to="/auth" className="block text-base text-gray-600 hover:text-black">
+                        Log in
+                      </Link>
+                      
+                      <Link to="/refer" className="block text-base text-gray-600 hover:text-black">
+                        Refer a Friend
+                      </Link>
+                      
+                      <Link to="/account" className="block text-base text-gray-600 hover:text-black">
+                        Rewards
+                      </Link>
+                      
+                      <Link to="/faq" className="block text-base text-gray-600 hover:text-black">
+                        FAQs
+                      </Link>
+                      
+                      <Link to="/contact" className="block text-base text-gray-600 hover:text-black">
+                        Contact Us
+                      </Link>
+                    </div>
                   </div>
                 </div>
               </div>
