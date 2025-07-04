@@ -77,6 +77,16 @@ const Account = () => {
     }
   };
 
+  const formatOrderNumber = (orderNumber: string) => {
+    // Extract numeric part and format as 4-digit incremental number
+    const match = orderNumber.match(/(\d+)$/);
+    if (match) {
+      const num = parseInt(match[1]);
+      return String(num).padStart(4, '0');
+    }
+    return orderNumber;
+  };
+
   const updateProfile = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!user) return;
@@ -215,7 +225,7 @@ const Account = () => {
               >
                 <div className="flex justify-between items-start mb-2">
                   <div>
-                    <h3 className="font-semibold group-hover:text-gray-700">Order #{order.order_number}</h3>
+                    <h3 className="font-semibold group-hover:text-gray-700">Order #{formatOrderNumber(order.order_number)}</h3>
                     <p className="text-sm text-gray-600">
                       {new Date(order.created_at).toLocaleDateString()}
                     </p>

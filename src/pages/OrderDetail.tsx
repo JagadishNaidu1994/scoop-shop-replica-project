@@ -89,6 +89,140 @@ const OrderDetail = () => {
     }
   };
 
+  const formatOrderNumber = (orderNumber: string) => {
+    // Extract numeric part and format as 4-digit incremental number
+    const match = orderNumber.match(/(\d+)$/);
+    if (match) {
+      const num = parseInt(match[1]);
+      return String(num).padStart(4, '0');
+    }
+    return orderNumber;
+  };
+
+  const downloadInvoice = () => {
+    if (!order) return;
+
+    // Create invoice HTML content
+    const invoiceHTML = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>Invoice - Order #${formatOrderNumber(order.order_number)}</title>
+        <style>
+          body { font-family: Arial, sans-serif; margin: 40px; }
+          .header { text-align: center; margin-bottom: 40px; }
+          .company-name { font-size: 28px; font-weight: bold; color: #000; }
+          .invoice-title { font-size: 24px; margin: 20px 0; }
+          .order-info { display: flex; justify-content: space-between; margin: 30px 0; }
+          .section { margin: 30px 0; }
+          .section-title { font-size: 18px; font-weight: bold; margin-bottom: 10px; border-bottom: 1px solid #ccc; padding-bottom: 5px; }
+          table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+          th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
+          th { background-color: #f5f5f5; font-weight: bold; }
+          .total-row { font-weight: bold; font-size: 16px; }
+          .address { margin: 10px 0; }
+          .footer { margin-top: 50px; text-align: center; color: #666; }
+        </style>
+      </head>
+      <body>
+        <div class="header">
+          <div class="company-name">DIRTEA</div>
+          <div class="invoice-title">INVOICE</div>
+        </div>
+        
+        <div class="order-info">
+          <div>
+            <strong>Invoice #:</strong> ${formatOrderNumber(order.order_number)}<br>
+            <strong>Order Date:</strong> ${new Date(order.created_at).toLocaleDateString('en-GB')}<br>
+            <strong>Status:</strong> ${order.status?.charAt(0).toUpperCase() + order.status?.slice(1)}
+          </div>
+          <div>
+            <strong>Order ID:</strong> ${order.id}<br>
+            <strong>Payment Method:</strong> ${order.payment_method || 'N/A'}
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="section-title">Bill To:</div>
+          <div class="address">
+            ${order.billing_address ? `
+              ${order.billing_address.name || ''}<br>
+              ${order.billing_address.address_line_1 || ''}<br>
+              ${order.billing_address.address_line_2 ? order.billing_address.address_line_2 + '<br>' : ''}
+              ${order.billing_address.city || ''}, ${order.billing_address.postal_code || ''}<br>
+              ${order.billing_address.country || ''}<br>
+              ${order.billing_address.phone || ''}
+            ` : 'No billing address provided'}
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="section-title">Ship To:</div>
+          <div class="address">
+            ${order.shipping_address ? `
+              ${order.shipping_address.name || ''}<br>
+              ${order.shipping_address.address_line_1 || ''}<br>
+              ${order.shipping_address.address_line_2 ? order.shipping_address.address_line_2 + '<br>' : ''}
+              ${order.shipping_address.city || ''}, ${order.shipping_address.postal_code || ''}<br>
+              ${order.shipping_address.country || ''}<br>
+              ${order.shipping_address.phone || ''}
+            ` : 'No shipping address provided'}
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="section-title">Order Items</div>
+          <table>
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Unit Price</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${order.order_items?.map((item: any) => `
+                <tr>
+                  <td>${item.product_name}</td>
+                  <td>${item.quantity}</td>
+                  <td>£${item.product_price}</td>
+                  <td>£${(item.product_price * item.quantity).toFixed(2)}</td>
+                </tr>
+              `).join('') || ''}
+              <tr class="total-row">
+                <td colspan="3">Total Amount</td>
+                <td>£${order.total_amount}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="footer">
+          <p>Thank you for your business!</p>
+          <p>For any questions regarding this invoice, please contact our support team.</p>
+        </div>
+      </body>
+      </html>
+    `;
+
+    // Create and download the invoice
+    const blob = new Blob([invoiceHTML], { type: 'text/html' });
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `invoice-${formatOrderNumber(order.order_number)}.html`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+
+    toast({
+      title: "Success",
+      description: "Invoice downloaded successfully"
+    });
+  };
+
   if (loading || orderLoading) {
     return (
       <div className="min-h-screen bg-white">
@@ -143,7 +277,7 @@ const OrderDetail = () => {
         <div className="bg-white border border-gray-200 rounded-lg p-6 mb-6">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4">
             <div>
-              <h1 className="text-2xl font-bold text-black">Order #{order.order_number}</h1>
+              <h1 className="text-2xl font-bold text-black">Order #{formatOrderNumber(order.order_number)}</h1>
               <p className="text-gray-600 mt-1">
                 Placed on {new Date(order.created_at).toLocaleDateString('en-GB', { 
                   weekday: 'long', 
@@ -182,11 +316,21 @@ const OrderDetail = () => {
           <h2 className="text-xl font-semibold text-black mb-4">Order Items</h2>
           <div className="space-y-4">
             {order.order_items?.map((item: any) => (
-              <div key={item.id} className="flex items-center justify-between py-4 border-b border-gray-100 last:border-b-0">
+              <div key={item.id} className="flex items-center space-x-4 py-4 border-b border-gray-100 last:border-b-0">
+                <div className="flex-shrink-0 w-16 h-16 bg-gray-100 rounded-lg flex items-center justify-center">
+                  <Package className="h-8 w-8 text-gray-400" />
+                </div>
                 <div className="flex-1">
-                  <h3 className="font-medium text-black">{item.product_name}</h3>
-                  <p className="text-sm text-gray-600">Quantity: {item.quantity}</p>
-                  <p className="text-sm text-gray-600">Unit Price: £{item.product_price}</p>
+                  <Link 
+                    to={`/products/${item.product_id}`}
+                    className="font-medium text-black hover:text-gray-700 transition-colors"
+                  >
+                    {item.product_name}
+                  </Link>
+                  <div className="flex items-center space-x-4 mt-1 text-sm text-gray-600">
+                    <span>Qty: {item.quantity}</span>
+                    <span>Unit Price: £{item.product_price}</span>
+                  </div>
                 </div>
                 <div className="text-right">
                   <p className="font-semibold text-black">£{(item.product_price * item.quantity).toFixed(2)}</p>
@@ -209,7 +353,8 @@ const OrderDetail = () => {
           <div className="bg-white border border-gray-200 rounded-lg p-6 mb-6">
             <h2 className="text-xl font-semibold text-black mb-4">Shipping Address</h2>
             <div className="text-gray-700">
-              <p>{order.shipping_address.name}</p>
+              <p className="font-medium">{order.shipping_address.name}</p>
+              {order.shipping_address.phone && <p>{order.shipping_address.phone}</p>}
               <p>{order.shipping_address.address_line_1}</p>
               {order.shipping_address.address_line_2 && <p>{order.shipping_address.address_line_2}</p>}
               <p>{order.shipping_address.city}, {order.shipping_address.postal_code}</p>
@@ -223,7 +368,8 @@ const OrderDetail = () => {
           <div className="bg-white border border-gray-200 rounded-lg p-6 mb-6">
             <h2 className="text-xl font-semibold text-black mb-4">Billing Address</h2>
             <div className="text-gray-700">
-              <p>{order.billing_address.name}</p>
+              <p className="font-medium">{order.billing_address.name}</p>
+              {order.billing_address.phone && <p>{order.billing_address.phone}</p>}
               <p>{order.billing_address.address_line_1}</p>
               {order.billing_address.address_line_2 && <p>{order.billing_address.address_line_2}</p>}
               <p>{order.billing_address.city}, {order.billing_address.postal_code}</p>
@@ -234,10 +380,17 @@ const OrderDetail = () => {
 
         {/* Action Buttons */}
         <div className="flex flex-col sm:flex-row gap-4">
-          <Button className="bg-black text-white hover:bg-gray-800">
+          <Button 
+            onClick={downloadInvoice}
+            className="bg-black text-white hover:bg-gray-800"
+          >
             Download Invoice
           </Button>
-          <Button variant="outline" className="border-black text-black hover:bg-gray-100">
+          <Button 
+            variant="outline" 
+            onClick={() => navigate('/contact')}
+            className="border-black text-black hover:bg-gray-100"
+          >
             Contact Support
           </Button>
           <Link to="/shop">
