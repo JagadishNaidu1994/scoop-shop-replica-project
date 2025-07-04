@@ -3,6 +3,9 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import HeaderNavBar from '@/components/HeaderNavBar';
 import Footer from '@/components/Footer';
 import AdminSidebar from '@/components/AdminSidebar';
+import ProductsAdmin from '@/components/admin/ProductsAdmin';
+import RecipesAdmin from '@/components/admin/RecipesAdmin';
+import JournalsAdmin from '@/components/admin/JournalsAdmin';
 import { useAuth } from '@/contexts/AuthContext';
 import { useAdminCheck } from '@/hooks/useAdminCheck';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -14,7 +17,7 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
-import { Package, Users, FileText, Settings, Eye, Truck, Edit, Plus, UserPlus, BarChart3, TrendingUp, DollarSign, Clock, ShoppingBag, BookOpen, Newspaper } from 'lucide-react';
+import { Package, Users, FileText, Settings, Eye, Truck, Edit, Plus, UserPlus, BarChart3, TrendingUp, DollarSign, Clock } from 'lucide-react';
 
 const AdminDashboard = () => {
   const { user, loading } = useAuth();
@@ -422,66 +425,6 @@ const AdminDashboard = () => {
     </Card>
   );
 
-  const renderProductsManagement = () => (
-    <Card>
-      <CardHeader>
-        <CardTitle>Products Management</CardTitle>
-        <CardDescription>
-          Manage your product catalog and inventory
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <div className="text-center py-8">
-          <ShoppingBag className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-          <p className="text-gray-500">Products management functionality will be implemented here</p>
-          <Button className="mt-4" onClick={() => navigate('/admin/products')}>
-            Go to Full Products Admin
-          </Button>
-        </div>
-      </CardContent>
-    </Card>
-  );
-
-  const renderRecipesManagement = () => (
-    <Card>
-      <CardHeader>
-        <CardTitle>Recipes Management</CardTitle>
-        <CardDescription>
-          Manage your recipe collection and content
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <div className="text-center py-8">
-          <BookOpen className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-          <p className="text-gray-500">Recipes management functionality will be implemented here</p>
-          <Button className="mt-4" onClick={() => navigate('/admin/recipes')}>
-            Go to Full Recipes Admin
-          </Button>
-        </div>
-      </CardContent>
-    </Card>
-  );
-
-  const renderJournalsManagement = () => (
-    <Card>
-      <CardHeader>
-        <CardTitle>Journals Management</CardTitle>
-        <CardDescription>
-          Manage your journal articles and blog posts
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <div className="text-center py-8">
-          <Newspaper className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-          <p className="text-gray-500">Journals management functionality will be implemented here</p>
-          <Button className="mt-4" onClick={() => navigate('/admin/journals')}>
-            Go to Full Journals Admin
-          </Button>
-        </div>
-      </CardContent>
-    </Card>
-  );
-
   const renderUserManagement = () => (
     <div className="space-y-6">
       <Card>
@@ -767,11 +710,11 @@ const AdminDashboard = () => {
       case 'orders':
         return renderOrderManagement();
       case 'products':
-        return renderProductsManagement();
+        return <ProductsAdmin />;
       case 'recipes':
-        return renderRecipesManagement();
+        return <RecipesAdmin />;
       case 'journals':
-        return renderJournalsManagement();
+        return <JournalsAdmin />;
       case 'users':
         return renderUserManagement();
       case 'reports':
