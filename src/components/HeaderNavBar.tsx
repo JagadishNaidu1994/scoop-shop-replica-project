@@ -218,30 +218,11 @@ const HeaderNavBar = () => {
                 <div className="flex-1 px-6 py-4 space-y-6">
                   <div className="space-y-4">
                     <Link to="/shop" className="block text-lg font-medium text-black hover:text-gray-600 border-b border-gray-200 pb-2">
-                      SHOP ALL
+                      SHOP NASTEA
                     </Link>
                     
                     <div className="space-y-4">
-                      <button className="flex items-center justify-between w-full text-lg font-medium text-black hover:text-gray-600 border-b border-gray-200 pb-2">
-                        SHOP BY PRODUCT
-                        <span className="text-2xl">+</span>
-                      </button>
-                      
-                      <button className="flex items-center justify-between w-full text-lg font-medium text-black hover:text-gray-600 border-b border-gray-200 pb-2">
-                        SHOP BY BENEFIT
-                        <span className="text-2xl">+</span>
-                      </button>
-                      
-                      <button className="flex items-center justify-between w-full text-lg font-medium text-black hover:text-gray-600 border-b border-gray-200 pb-2">
-                        SHOP BY MUSHROOM
-                        <span className="text-2xl">+</span>
-                      </button>
-                    </div>
-
-                    <Link to="/accessories" className="block text-lg font-medium text-black hover:text-gray-600 border-b border-gray-200 pb-2">
-                      ACCESSORIES
-                    </Link>
-                    
+                                         
                     <Link to="/science" className="block text-lg font-medium text-black hover:text-gray-600 border-b border-gray-200 pb-2">
                       SCIENCE
                     </Link>
