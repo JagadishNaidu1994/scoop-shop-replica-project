@@ -90,7 +90,7 @@ const HeaderNavBar = () => {
             {/* Logo - Center on mobile, Left on desktop */}
             <div className="flex-shrink-0 md:order-first order-2">
               <Link to="/">
-                <h1 className="text-2xl font-bold text-black">DIRTEA</h1>
+                <h1 className="text-2xl font-bold text-black">NASTEA</h1>
               </Link>
             </div>
 
@@ -122,7 +122,7 @@ const HeaderNavBar = () => {
               <div className="hidden md:flex items-center space-x-4">
                 <Link to="/shop">
                   <button className="bg-black text-white px-6 py-2 rounded-full font-medium hover:bg-gray-800 transition-colors">
-                    SHOP DIRTEA
+                    SHOP NASTEA
                   </button>
                 </Link>
                 
@@ -133,10 +133,23 @@ const HeaderNavBar = () => {
                 )}
                 
                 {isAdmin && (
-                  <Link to="/admin/dashboard" className="text-black hover:text-gray-600 transition-colors font-medium flex items-center space-x-1">
-                    <Settings className="h-4 w-4" />
-                    <span>ADMIN</span>
-                  </Link>
+                  <div className="relative group">
+                    <button className="text-black hover:text-gray-600 transition-colors font-medium flex items-center space-x-1">
+                      <Settings className="h-4 w-4" />
+                      <span>ADMIN</span>
+                    </button>
+                    <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+                      <Link to="/admin/recipes" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                        Manage Recipes
+                      </Link>
+                      <Link to="/admin/products" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                        Manage Products
+                      </Link>
+                      <Link to="/admin/journals" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                        Manage Journals
+                      </Link>
+                    </div>
+                  </div>
                 )}
                 
                 {user ? (
@@ -205,7 +218,7 @@ const HeaderNavBar = () => {
                 <div className="flex-1 px-6 py-4 space-y-6">
                   <div className="space-y-4">
                     <Link to="/shop" className="block text-lg font-medium text-black hover:text-gray-600 border-b border-gray-200 pb-2">
-                      SHOP DIRTEA
+                      SHOP NASTEA
                     </Link>
                     
                     <div className="space-y-4">
@@ -232,22 +245,12 @@ const HeaderNavBar = () => {
                       <Link to="/refer" className="block text-lg font-medium text-black hover:text-gray-600 border-b border-gray-200 pb-2">
                         REFER A FRIEND
                       </Link>
-
-                      {isAdmin && (
-                        <Link to="/admin/dashboard" className="block text-lg font-medium text-black hover:text-gray-600 border-b border-gray-200 pb-2">
-                          ADMIN DASHBOARD
-                        </Link>
-                      )}
                     </div>
 
                     {/* Bottom section */}
                     <div className="mt-8 pt-8 border-t border-gray-200 space-y-4">
                       <Link to="/auth" className="block text-base text-gray-600 hover:text-black">
                         Log in
-                      </Link>
-                      
-                      <Link to="/refer" className="block text-base text-gray-600 hover:text-black">
-                        Refer a Friend
                       </Link>
                       
                       <Link to="/account" className="block text-base text-gray-600 hover:text-black">
