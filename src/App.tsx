@@ -25,6 +25,7 @@ import OurStory from "./pages/OurStory";
 import ReferFriend from "./pages/ReferFriend";
 import Auth from "./pages/Auth";
 import Account from "./pages/Account";
+import OrderDetail from "./pages/OrderDetail";
 import Checkout from "./pages/Checkout";
 import NotFound from "./pages/NotFound";
 
@@ -57,6 +58,7 @@ const App = () => (
                 <Route path="/wholesale" element={<Wholesale />} />
                 <Route path="/auth" element={<Auth />} />
                 <Route path="/account" element={<Account />} />
+                <Route path="/orders/:id" element={<OrderDetail />} />
                 <Route path="/checkout" element={<Checkout />} />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />

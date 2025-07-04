@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import HeaderNavBar from '@/components/HeaderNavBar';
@@ -9,6 +8,7 @@ import { Label } from '@/components/ui/label';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { ChevronRight } from 'lucide-react';
 
 const Account = () => {
   const { user, signOut, loading } = useAuth();
@@ -111,6 +111,10 @@ const Account = () => {
     navigate('/');
   };
 
+  const handleOrderClick = (orderId: string) => {
+    navigate(`/orders/${orderId}`);
+  };
+
   if (loading) {
     return <div className="min-h-screen bg-white flex items-center justify-center">Loading...</div>;
   }
@@ -204,26 +208,36 @@ const Account = () => {
         ) : (
           <div className="space-y-4">
             {orders.map((order: any) => (
-              <div key={order.id} className="border border-gray-200 rounded-lg p-4">
+              <div 
+                key={order.id} 
+                className="border border-gray-200 rounded-lg p-4 cursor-pointer hover:bg-gray-50 transition-colors group"
+                onClick={() => handleOrderClick(order.id)}
+              >
                 <div className="flex justify-between items-start mb-2">
                   <div>
-                    <h3 className="font-semibold">Order #{order.order_number}</h3>
+                    <h3 className="font-semibold group-hover:text-gray-700">Order #{order.order_number}</h3>
                     <p className="text-sm text-gray-600">
                       {new Date(order.created_at).toLocaleDateString()}
                     </p>
                   </div>
-                  <div className="text-right">
-                    <p className="font-semibold">£{order.total_amount}</p>
-                    <p className="text-sm text-gray-600 capitalize">{order.status}</p>
+                  <div className="text-right flex items-center">
+                    <div>
+                      <p className="font-semibold">£{order.total_amount}</p>
+                      <p className="text-sm text-gray-600 capitalize">{order.status}</p>
+                    </div>
+                    <ChevronRight className="h-5 w-5 text-gray-400 ml-2 group-hover:text-gray-600" />
                   </div>
                 </div>
                 <div className="space-y-2">
-                  {order.order_items?.map((item: any) => (
+                  {order.order_items?.slice(0, 2).map((item: any) => (
                     <div key={item.id} className="flex justify-between text-sm">
                       <span>{item.product_name} x{item.quantity}</span>
                       <span>£{(item.product_price * item.quantity).toFixed(2)}</span>
                     </div>
                   ))}
+                  {order.order_items?.length > 2 && (
+                    <p className="text-sm text-gray-500">+{order.order_items.length - 2} more items</p>
+                  )}
                 </div>
               </div>
             ))}
