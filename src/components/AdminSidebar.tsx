@@ -62,15 +62,17 @@ const AdminSidebar = () => {
   ];
 
   return (
-    <div className="w-20 bg-gradient-to-b from-teal-500 to-teal-600 h-full flex flex-col items-center py-6 shadow-lg">
+    <div className="w-64 bg-gradient-to-b from-teal-500 to-teal-600 h-full flex flex-col py-6 shadow-lg">
       {/* Logo */}
-      <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center mb-8 shadow-md">
-        <div className="w-8 h-8 bg-teal-500 rounded-full flex items-center justify-center">
-          <span className="text-white font-bold text-sm">D</span>
+      <div className="flex items-center justify-center mb-8">
+        <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-md">
+          <div className="w-8 h-8 bg-teal-500 rounded-full flex items-center justify-center">
+            <span className="text-white font-bold text-sm">D</span>
+          </div>
         </div>
       </div>
       
-      <nav className="flex flex-col space-y-4 flex-1">
+      <nav className="flex flex-col space-y-2 flex-1 px-4">
         {sidebarItems.map((item) => {
           const Icon = item.icon;
           const isActive = currentPath === '/admin/dashboard' && currentTab === item.tab;
@@ -80,31 +82,28 @@ const AdminSidebar = () => {
               key={item.path}
               to={item.path}
               className={cn(
-                "relative w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 group",
+                "relative flex items-center px-4 py-3 rounded-xl transition-all duration-300 group",
                 isActive
-                  ? "bg-white text-teal-600 shadow-lg scale-110"
-                  : "text-white hover:bg-white/20 hover:scale-105"
+                  ? "bg-white text-teal-600 shadow-lg font-medium"
+                  : "text-white hover:bg-white/10 hover:translate-x-1"
               )}
-              title={item.title}
             >
               <Icon className={cn(
-                "h-6 w-6 transition-all duration-300",
-                isActive ? "text-teal-600" : "text-white group-hover:text-white"
+                "h-5 w-5 mr-3 transition-all duration-300",
+                isActive ? "text-teal-600" : "text-white"
               )} />
+              
+              <span className={cn(
+                "text-sm font-medium transition-all duration-300",
+                isActive ? "text-teal-600" : "text-white"
+              )}>
+                {item.title}
+              </span>
               
               {/* Active indicator */}
               {isActive && (
                 <div className="absolute -right-2 top-1/2 transform -translate-y-1/2 w-1 h-8 bg-white rounded-full shadow-md" />
               )}
-              
-              {/* Tooltip */}
-              <div className={cn(
-                "absolute left-16 top-1/2 transform -translate-y-1/2 bg-gray-900 text-white px-3 py-2 rounded-lg text-sm whitespace-nowrap opacity-0 invisible transition-all duration-200 z-50",
-                "group-hover:opacity-100 group-hover:visible group-hover:translate-x-2"
-              )}>
-                {item.title}
-                <div className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-1 w-0 h-0 border-t-4 border-b-4 border-r-4 border-transparent border-r-gray-900" />
-              </div>
             </Link>
           );
         })}
