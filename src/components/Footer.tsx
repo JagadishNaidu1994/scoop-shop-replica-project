@@ -21,8 +21,8 @@ const Footer = () => {
           <div>
             <h4 className="text-lg font-semibold mb-4">About</h4>
             <div className="space-y-2">
-              <a href="#" className="block text-gray-300 hover:text-white transition-colors">Our Story</a>
-              <a href="#" className="block text-gray-300 hover:text-white transition-colors">Science</a>
+              <a href="/story" className="block text-gray-300 hover:text-white transition-colors">Our Story</a>
+              <a href="/science" className="block text-gray-300 hover:text-white transition-colors">Science</a>
             </div>
           </div>
 
