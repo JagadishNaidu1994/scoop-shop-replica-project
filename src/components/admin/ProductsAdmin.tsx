@@ -9,6 +9,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
+import { ImageUpload } from '@/components/ui/image-upload';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { Plus, Edit, Trash2, Save, X } from 'lucide-react';
@@ -253,19 +254,19 @@ const ProductsAdmin = () => {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <Label htmlFor="primary_image">Primary Image URL</Label>
-                  <Input
-                    id="primary_image"
+                  <ImageUpload
+                    label="Primary Image"
                     value={formData.primary_image}
-                    onChange={(e) => setFormData({...formData, primary_image: e.target.value})}
+                    onChange={(url) => setFormData({...formData, primary_image: url})}
+                    placeholder="Primary product image"
                   />
                 </div>
                 <div>
-                  <Label htmlFor="hover_image">Hover Image URL</Label>
-                  <Input
-                    id="hover_image"
+                  <ImageUpload
+                    label="Hover Image"
                     value={formData.hover_image}
-                    onChange={(e) => setFormData({...formData, hover_image: e.target.value})}
+                    onChange={(url) => setFormData({...formData, hover_image: url})}
+                    placeholder="Image shown on hover"
                   />
                 </div>
               </div>
