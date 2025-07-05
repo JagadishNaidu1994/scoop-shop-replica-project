@@ -90,8 +90,8 @@ const Checkout = () => {
       // Create order - Note: using the correct column name from schema
       const { data: order, error: orderError } = await supabase
         .from('orders')
-        .insert([{
-          user_id: user.id, // This should work based on the schema
+        .insert({
+          user_id: user.id,
           order_number: orderNumber,
           total_amount: totalAmount,
           shipping_cost: shippingCost,
@@ -99,7 +99,7 @@ const Checkout = () => {
           payment_method: 'card',
           shipping_address: shippingAddress,
           billing_address: shippingAddress
-        }])
+        })
         .select()
         .single();
 
@@ -302,7 +302,7 @@ const Checkout = () => {
                       </div>
                       <div className="flex-1">
                         <h4 className="font-medium text-sm">{item.product_name}</h4>
-                        <p className="text-sm text-gray-600">Qty: {item.quantity}</p>
+                        <pClassName="text-sm text-gray-600">Qty: {item.quantity}</p>
                       </div>
                       <div className="text-right">
                         <p className="font-medium">₹{(item.product_price * item.quantity).toFixed(2)}</p>
