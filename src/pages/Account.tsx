@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import HeaderNavBar from '@/components/HeaderNavBar';
@@ -27,13 +26,26 @@ import {
   Bell
 } from 'lucide-react';
 
+interface ProfileData {
+  id: string;
+  full_name?: string;
+  first_name?: string;
+  last_name?: string;
+  email?: string;
+  phone?: string;
+  gender?: string;
+  avatar_url?: string;
+  created_at?: string;
+  updated_at?: string;
+}
+
 const Account = () => {
   const { user, signOut, loading } = useAuth();
   const { addToCart } = useCart();
   const navigate = useNavigate();
   const { toast } = useToast();
   const [activeTab, setActiveTab] = useState('profile');
-  const [profile, setProfile] = useState<any>(null);
+  const [profile, setProfile] = useState<ProfileData | null>(null);
   const [updating, setUpdating] = useState(false);
   const [contactModalOpen, setContactModalOpen] = useState(false);
   const [subscriptions, setSubscriptions] = useState([
