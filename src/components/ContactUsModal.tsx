@@ -5,6 +5,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogOverlay,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -73,9 +74,10 @@ const ContactUsModal: React.FC<ContactUsModalProps> = ({ isOpen, onClose }) => {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[500px]">
-        <DialogHeader>
-          <DialogTitle className="flex items-center gap-2 text-black">
+      <DialogOverlay className="bg-black/50 backdrop-blur-sm" />
+      <DialogContent className="sm:max-w-[500px] bg-white border border-gray-200 shadow-lg">
+        <DialogHeader className="pb-4">
+          <DialogTitle className="flex items-center gap-2 text-black text-xl font-semibold">
             <MessageSquare className="h-5 w-5" />
             Contact Us
           </DialogTitle>
@@ -91,7 +93,7 @@ const ContactUsModal: React.FC<ContactUsModalProps> = ({ isOpen, onClose }) => {
                 value={formData.name}
                 onChange={handleInputChange}
                 required
-                className="mt-1 border-gray-200"
+                className="mt-1 border-gray-200 bg-white"
                 placeholder="Enter your full name"
               />
             </div>
@@ -104,7 +106,7 @@ const ContactUsModal: React.FC<ContactUsModalProps> = ({ isOpen, onClose }) => {
                 value={formData.email}
                 onChange={handleInputChange}
                 required
-                className="mt-1 border-gray-200"
+                className="mt-1 border-gray-200 bg-white"
                 placeholder="Enter your email"
               />
             </div>
@@ -119,17 +121,17 @@ const ContactUsModal: React.FC<ContactUsModalProps> = ({ isOpen, onClose }) => {
                 type="tel"
                 value={formData.phone}
                 onChange={handleInputChange}
-                className="mt-1 border-gray-200"
+                className="mt-1 border-gray-200 bg-white"
                 placeholder="+91 9876543210"
               />
             </div>
             <div>
               <Label htmlFor="category" className="text-black font-medium">Category *</Label>
               <Select value={formData.category} onValueChange={(value) => handleSelectChange('category', value)}>
-                <SelectTrigger className="mt-1 border-gray-200">
+                <SelectTrigger className="mt-1 border-gray-200 bg-white">
                   <SelectValue placeholder="Select category" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-white border border-gray-200">
                   <SelectItem value="general">General Inquiry</SelectItem>
                   <SelectItem value="order">Order Support</SelectItem>
                   <SelectItem value="product">Product Question</SelectItem>
@@ -149,7 +151,7 @@ const ContactUsModal: React.FC<ContactUsModalProps> = ({ isOpen, onClose }) => {
               value={formData.subject}
               onChange={handleInputChange}
               required
-              className="mt-1 border-gray-200"
+              className="mt-1 border-gray-200 bg-white"
               placeholder="Brief subject of your message"
             />
           </div>
@@ -163,12 +165,12 @@ const ContactUsModal: React.FC<ContactUsModalProps> = ({ isOpen, onClose }) => {
               onChange={handleInputChange}
               required
               rows={4}
-              className="mt-1 border-gray-200"
+              className="mt-1 border-gray-200 bg-white"
               placeholder="Please describe your inquiry in detail..."
             />
           </div>
 
-          <div className="bg-gray-50 p-4 rounded-lg">
+          <div className="bg-gray-50 p-4 rounded-lg border border-gray-100">
             <h4 className="font-medium text-black mb-2">Other Ways to Reach Us:</h4>
             <div className="space-y-1 text-sm">
               <div className="flex items-center gap-2 text-gray-600">
@@ -187,7 +189,7 @@ const ContactUsModal: React.FC<ContactUsModalProps> = ({ isOpen, onClose }) => {
               type="button"
               variant="outline"
               onClick={onClose}
-              className="flex-1 border-gray-300"
+              className="flex-1 border-gray-300 bg-white hover:bg-gray-50"
             >
               Cancel
             </Button>

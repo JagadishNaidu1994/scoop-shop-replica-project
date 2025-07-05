@@ -16,7 +16,15 @@ interface Order {
   total_amount: number;
   status: string;
   created_at: string;
-  order_items: any[];
+  order_items: OrderItem[];
+}
+
+interface OrderItem {
+  id: string;
+  product_id: number;
+  product_name: string;
+  product_price: number;
+  quantity: number;
 }
 
 const OrderHistory = () => {
@@ -50,6 +58,7 @@ const OrderHistory = () => {
 
       if (error) throw error;
       setOrders(data || []);
+      console.log('Fetched orders:', data);
     } catch (error) {
       console.error('Error fetching orders:', error);
       toast({
@@ -75,15 +84,15 @@ const OrderHistory = () => {
   const getStatusColor = (status: string) => {
     switch (status?.toLowerCase()) {
       case 'pending':
-        return 'bg-yellow-100 text-yellow-800';
+        return 'bg-yellow-100 text-yellow-800 border-yellow-200';
       case 'processing':
-        return 'bg-blue-100 text-blue-800';
+        return 'bg-blue-100 text-blue-800 border-blue-200';
       case 'shipped':
-        return 'bg-purple-100 text-purple-800';
+        return 'bg-purple-100 text-purple-800 border-purple-200';
       case 'delivered':
-        return 'bg-green-100 text-green-800';
+        return 'bg-green-100 text-green-800 border-green-200';
       default:
-        return 'bg-gray-100 text-gray-800';
+        return 'bg-gray-100 text-gray-800 border-gray-200';
     }
   };
 
@@ -122,7 +131,7 @@ const OrderHistory = () => {
 
   if (loading) {
     return (
-      <Card>
+      <Card className="border-gray-200 bg-white">
         <CardContent className="p-6">
           <div className="animate-pulse space-y-4">
             {[...Array(3)].map((_, i) => (
@@ -142,14 +151,14 @@ const OrderHistory = () => {
   }
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
+    <Card className="border-gray-200 bg-white">
+      <CardHeader className="border-b border-gray-100">
+        <CardTitle className="flex items-center gap-2 text-black">
           <Package className="h-5 w-5" />
           Order History
         </CardTitle>
       </CardHeader>
-      <CardContent>
+      <CardContent className="p-6">
         {orders.length === 0 ? (
           <div className="text-center py-8">
             <Package className="h-12 w-12 text-gray-400 mx-auto mb-4" />
@@ -163,10 +172,10 @@ const OrderHistory = () => {
         ) : (
           <div className="space-y-4">
             {orders.map((order) => (
-              <div key={order.id} className="border rounded-lg p-4">
+              <div key={order.id} className="border border-gray-200 rounded-lg p-4 bg-white">
                 <div className="flex justify-between items-start mb-3">
                   <div>
-                    <h3 className="font-semibold">Order #{formatOrderNumber(order.order_number)}</h3>
+                    <h3 className="font-semibold text-black">Order #{formatOrderNumber(order.order_number)}</h3>
                     <p className="text-sm text-gray-600">
                       {new Date(order.created_at).toLocaleDateString('en-IN', {
                         year: 'numeric',
@@ -175,7 +184,7 @@ const OrderHistory = () => {
                       })}
                     </p>
                   </div>
-                  <Badge className={getStatusColor(order.status)}>
+                  <Badge className={`${getStatusColor(order.status)} border`}>
                     {order.status?.charAt(0).toUpperCase() + order.status?.slice(1)}
                   </Badge>
                 </div>
@@ -185,7 +194,7 @@ const OrderHistory = () => {
                   <div className="mb-3">
                     <div className="flex gap-2 mb-2">
                       {order.order_items.slice(0, 3).map((item, index) => (
-                        <div key={index} className="w-12 h-12 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
+                        <div key={index} className="w-12 h-12 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0 border border-gray-200">
                           <img 
                             src="https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=200&h=200&fit=crop"
                             alt={item.product_name}
@@ -194,7 +203,7 @@ const OrderHistory = () => {
                         </div>
                       ))}
                       {order.order_items.length > 3 && (
-                        <div className="w-12 h-12 bg-gray-200 rounded-lg flex items-center justify-center text-xs text-gray-600">
+                        <div className="w-12 h-12 bg-gray-200 rounded-lg flex items-center justify-center text-xs text-gray-600 border border-gray-200">
                           +{order.order_items.length - 3}
                         </div>
                       )}
@@ -204,14 +213,14 @@ const OrderHistory = () => {
 
                 <div className="mb-3">
                   <p className="text-sm text-gray-600">
-                    {order.order_items.length} item{order.order_items.length !== 1 ? 's' : ''}
+                    {order.order_items?.length || 0} item{(order.order_items?.length || 0) !== 1 ? 's' : ''}
                   </p>
-                  <p className="font-semibold">₹{order.total_amount}</p>
+                  <p className="font-semibold text-black">₹{order.total_amount}</p>
                 </div>
 
                 <div className="flex gap-2 flex-wrap">
                   <Link to={`/orders/${order.id}`}>
-                    <Button variant="outline" size="sm" className="border-black text-black hover:bg-gray-100">
+                    <Button variant="outline" size="sm" className="border-black text-black hover:bg-gray-100 bg-white">
                       <Eye className="h-4 w-4 mr-1" />
                       View Details
                     </Button>
@@ -220,7 +229,7 @@ const OrderHistory = () => {
                     variant="outline" 
                     size="sm"
                     onClick={() => handleReorder(order)}
-                    className="border-black text-black hover:bg-gray-100"
+                    className="border-black text-black hover:bg-gray-100 bg-white"
                   >
                     <RotateCcw className="h-4 w-4 mr-1" />
                     Reorder
