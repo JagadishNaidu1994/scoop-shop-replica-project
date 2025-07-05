@@ -160,7 +160,7 @@ const Checkout = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <>
       <HeaderNavBar />
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -302,7 +302,7 @@ const Checkout = () => {
                       </div>
                       <div className="flex-1">
                         <h4 className="font-medium text-sm">{item.product_name}</h4>
-                        <pClassName="text-sm text-gray-600">Qty: {item.quantity}</p>
+                        <p className="text-sm text-gray-600">Qty: {item.quantity}</p>
                       </div>
                       <div className="text-right">
                         <p className="font-medium">₹{(item.product_price * item.quantity).toFixed(2)}</p>
@@ -348,7 +348,7 @@ const Checkout = () => {
       </div>
 
       <Footer />
-    </div>
+    </>
   );
 };
 
