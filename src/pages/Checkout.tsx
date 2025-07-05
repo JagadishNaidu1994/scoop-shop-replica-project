@@ -87,19 +87,21 @@ const Checkout = () => {
       // Generate order number
       const orderNumber = `order_${Date.now()}`;
       
-      // Create order - using single object for .single()
+      // Create order - using proper type casting for JSON fields
+      const orderData = {
+        user_id: user.id,
+        order_number: orderNumber,
+        total_amount: totalAmount,
+        shipping_cost: shippingCost,
+        status: 'pending',
+        payment_method: 'card',
+        shipping_address: shippingAddress as any,
+        billing_address: shippingAddress as any
+      };
+
       const { data: order, error: orderError } = await supabase
         .from('orders')
-        .insert({
-          user_id: user.id,
-          order_number: orderNumber,
-          total_amount: totalAmount,
-          shipping_cost: shippingCost,
-          status: 'pending',
-          payment_method: 'card',
-          shipping_address: shippingAddress,
-          billing_address: shippingAddress
-        })
+        .insert(orderData)
         .select()
         .single();
 
