@@ -87,7 +87,7 @@ const Checkout = () => {
       // Generate order number
       const orderNumber = `order_${Date.now()}`;
       
-      // Create order - using single object instead of array
+      // Create order - using single object (not array)
       const { data: order, error: orderError } = await supabase
         .from('orders')
         .insert({
