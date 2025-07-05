@@ -45,20 +45,33 @@ const OrderHistory = () => {
     if (!user) return;
 
     try {
+      console.log('Fetching orders for user:', user.id);
       const { data, error } = await supabase
         .from('orders')
         .select(`
-          *,
+          id,
+          order_number,
+          total_amount,
+          status,
+          created_at,
           order_items (
-            *
+            id,
+            product_id,
+            product_name,
+            product_price,
+            quantity
           )
         `)
         .eq('user_id', user.id)
         .order('created_at', { ascending: false });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error fetching orders:', error);
+        throw error;
+      }
+
+      console.log('Fetched orders with items:', data);
       setOrders(data || []);
-      console.log('Fetched orders:', data);
     } catch (error) {
       console.error('Error fetching orders:', error);
       toast({
@@ -98,10 +111,17 @@ const OrderHistory = () => {
 
   const handleReorder = async (order: Order) => {
     try {
-      // Clear current cart first
+      if (!order.order_items || order.order_items.length === 0) {
+        toast({
+          title: "Error",
+          description: "No items found in this order to reorder",
+          variant: "destructive"
+        });
+        return;
+      }
+
       await clearCart();
       
-      // Add all items from the order to cart
       for (const item of order.order_items) {
         await addToCart({
           product_id: item.product_id,
@@ -117,7 +137,6 @@ const OrderHistory = () => {
         description: `${order.order_items.length} items from order #${formatOrderNumber(order.order_number)} added to cart`
       });
 
-      // Navigate to checkout
       navigate('/checkout');
     } catch (error) {
       console.error('Error reordering:', error);
@@ -171,72 +190,77 @@ const OrderHistory = () => {
           </div>
         ) : (
           <div className="space-y-4">
-            {orders.map((order) => (
-              <div key={order.id} className="border border-gray-200 rounded-lg p-4 bg-white">
-                <div className="flex justify-between items-start mb-3">
-                  <div>
-                    <h3 className="font-semibold text-black">Order #{formatOrderNumber(order.order_number)}</h3>
-                    <p className="text-sm text-gray-600">
-                      {new Date(order.created_at).toLocaleDateString('en-IN', {
-                        year: 'numeric',
-                        month: 'short',
-                        day: 'numeric'
-                      })}
-                    </p>
-                  </div>
-                  <Badge className={`${getStatusColor(order.status)} border`}>
-                    {order.status?.charAt(0).toUpperCase() + order.status?.slice(1)}
-                  </Badge>
-                </div>
-
-                {/* Product Images Section */}
-                {order.order_items && order.order_items.length > 0 && (
-                  <div className="mb-3">
-                    <div className="flex gap-2 mb-2">
-                      {order.order_items.slice(0, 3).map((item, index) => (
-                        <div key={index} className="w-12 h-12 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0 border border-gray-200">
-                          <img 
-                            src="https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=200&h=200&fit=crop"
-                            alt={item.product_name}
-                            className="w-full h-full object-cover"
-                          />
-                        </div>
-                      ))}
-                      {order.order_items.length > 3 && (
-                        <div className="w-12 h-12 bg-gray-200 rounded-lg flex items-center justify-center text-xs text-gray-600 border border-gray-200">
-                          +{order.order_items.length - 3}
-                        </div>
-                      )}
+            {orders.map((order) => {
+              const itemCount = order.order_items?.length || 0;
+              console.log(`Order ${order.id} has ${itemCount} items:`, order.order_items);
+              
+              return (
+                <div key={order.id} className="border border-gray-200 rounded-lg p-4 bg-white">
+                  <div className="flex justify-between items-start mb-3">
+                    <div>
+                      <h3 className="font-semibold text-black">Order #{formatOrderNumber(order.order_number)}</h3>
+                      <p className="text-sm text-gray-600">
+                        {new Date(order.created_at).toLocaleDateString('en-IN', {
+                          year: 'numeric',
+                          month: 'short',
+                          day: 'numeric'
+                        })}
+                      </p>
                     </div>
+                    <Badge className={`${getStatusColor(order.status)} border`}>
+                      {order.status?.charAt(0).toUpperCase() + order.status?.slice(1)}
+                    </Badge>
                   </div>
-                )}
 
-                <div className="mb-3">
-                  <p className="text-sm text-gray-600">
-                    {order.order_items?.length || 0} item{(order.order_items?.length || 0) !== 1 ? 's' : ''}
-                  </p>
-                  <p className="font-semibold text-black">₹{order.total_amount}</p>
-                </div>
+                  {/* Product Images Section */}
+                  {itemCount > 0 && (
+                    <div className="mb-3">
+                      <div className="flex gap-2 mb-2">
+                        {order.order_items.slice(0, 3).map((item, index) => (
+                          <div key={`${item.id}-${index}`} className="w-12 h-12 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0 border border-gray-200">
+                            <img 
+                              src="https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=200&h=200&fit=crop"
+                              alt={item.product_name}
+                              className="w-full h-full object-cover"
+                            />
+                          </div>
+                        ))}
+                        {itemCount > 3 && (
+                          <div className="w-12 h-12 bg-gray-200 rounded-lg flex items-center justify-center text-xs text-gray-600 border border-gray-200">
+                            +{itemCount - 3}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
 
-                <div className="flex gap-2 flex-wrap">
-                  <Link to={`/orders/${order.id}`}>
-                    <Button variant="outline" size="sm" className="border-black text-black hover:bg-gray-100 bg-white">
-                      <Eye className="h-4 w-4 mr-1" />
-                      View Details
+                  <div className="mb-3">
+                    <p className="text-sm text-gray-600">
+                      {itemCount} item{itemCount !== 1 ? 's' : ''}
+                    </p>
+                    <p className="font-semibold text-black">₹{order.total_amount}</p>
+                  </div>
+
+                  <div className="flex gap-2 flex-wrap">
+                    <Link to={`/orders/${order.id}`}>
+                      <Button variant="outline" size="sm" className="border-black text-black hover:bg-gray-100 bg-white">
+                        <Eye className="h-4 w-4 mr-1" />
+                        View Details
+                      </Button>
+                    </Link>
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      onClick={() => handleReorder(order)}
+                      className="border-black text-black hover:bg-gray-100 bg-white"
+                    >
+                      <RotateCcw className="h-4 w-4 mr-1" />
+                      Reorder
                     </Button>
-                  </Link>
-                  <Button 
-                    variant="outline" 
-                    size="sm"
-                    onClick={() => handleReorder(order)}
-                    className="border-black text-black hover:bg-gray-100 bg-white"
-                  >
-                    <RotateCcw className="h-4 w-4 mr-1" />
-                    Reorder
-                  </Button>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
       </CardContent>

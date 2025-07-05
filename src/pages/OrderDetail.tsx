@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import HeaderNavBar from '@/components/HeaderNavBar';
@@ -36,19 +35,33 @@ const OrderDetail = () => {
     if (!user || !id) return;
 
     setOrderLoading(true);
-    const { data, error } = await supabase
-      .from('orders')
-      .select(`
-        *,
-        order_items (
-          *
-        )
-      `)
-      .eq('id', id)
-      .eq('user_id', user.id)
-      .single();
+    try {
+      console.log('Fetching order details for ID:', id);
+      
+      const { data, error } = await supabase
+        .from('orders')
+        .select(`
+          *,
+          order_items (
+            id,
+            product_id,
+            product_name,
+            product_price,
+            quantity
+          )
+        `)
+        .eq('id', id)
+        .eq('user_id', user.id)
+        .single();
 
-    if (error) {
+      if (error) {
+        console.error('Error fetching order details:', error);
+        throw error;
+      }
+
+      console.log('Fetched order details:', data);
+      setOrder(data);
+    } catch (error) {
       console.error('Error fetching order details:', error);
       toast({
         title: "Error",
@@ -56,11 +69,9 @@ const OrderDetail = () => {
         variant: "destructive"
       });
       navigate('/account');
-    } else {
-      console.log('Order data:', data);
-      setOrder(data);
+    } finally {
+      setOrderLoading(false);
     }
-    setOrderLoading(false);
   };
 
   const getStatusIcon = (status: string) => {
