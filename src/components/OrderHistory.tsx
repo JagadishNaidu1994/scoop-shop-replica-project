@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -23,8 +23,9 @@ const OrderHistory = () => {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const { user } = useAuth();
-  const { addToCart } = useCart();
+  const { addToCart, clearCart } = useCart();
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (user) {
@@ -88,6 +89,10 @@ const OrderHistory = () => {
 
   const handleReorder = async (order: Order) => {
     try {
+      // Clear current cart first
+      await clearCart();
+      
+      // Add all items from the order to cart
       for (const item of order.order_items) {
         await addToCart({
           product_id: item.product_id,
@@ -102,6 +107,9 @@ const OrderHistory = () => {
         title: "Items added to cart",
         description: `${order.order_items.length} items from order #${formatOrderNumber(order.order_number)} added to cart`
       });
+
+      // Navigate to checkout
+      navigate('/checkout');
     } catch (error) {
       console.error('Error reordering:', error);
       toast({
@@ -171,6 +179,28 @@ const OrderHistory = () => {
                     {order.status?.charAt(0).toUpperCase() + order.status?.slice(1)}
                   </Badge>
                 </div>
+
+                {/* Product Images Section */}
+                {order.order_items && order.order_items.length > 0 && (
+                  <div className="mb-3">
+                    <div className="flex gap-2 mb-2">
+                      {order.order_items.slice(0, 3).map((item, index) => (
+                        <div key={index} className="w-12 h-12 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
+                          <img 
+                            src="https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=200&h=200&fit=crop"
+                            alt={item.product_name}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                      ))}
+                      {order.order_items.length > 3 && (
+                        <div className="w-12 h-12 bg-gray-200 rounded-lg flex items-center justify-center text-xs text-gray-600">
+                          +{order.order_items.length - 3}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
 
                 <div className="mb-3">
                   <p className="text-sm text-gray-600">

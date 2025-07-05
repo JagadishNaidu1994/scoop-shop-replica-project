@@ -4,11 +4,14 @@ import { useNavigate } from 'react-router-dom';
 import HeaderNavBar from '@/components/HeaderNavBar';
 import Footer from '@/components/Footer';
 import OrderHistory from '@/components/OrderHistory';
+import ContactUsModal from '@/components/ContactUsModal';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useAuth } from '@/contexts/AuthContext';
+import { useCart } from '@/contexts/CartContext';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { 
@@ -26,15 +29,80 @@ import {
 
 const Account = () => {
   const { user, signOut, loading } = useAuth();
+  const { addToCart } = useCart();
   const navigate = useNavigate();
   const { toast } = useToast();
   const [activeTab, setActiveTab] = useState('profile');
   const [profile, setProfile] = useState<any>(null);
   const [updating, setUpdating] = useState(false);
+  const [contactModalOpen, setContactModalOpen] = useState(false);
+  const [subscriptions, setSubscriptions] = useState([
+    {
+      id: 1,
+      name: 'Monthly Tea Subscription',
+      description: 'Premium matcha blend delivered monthly',
+      price: 2499,
+      status: 'active',
+      nextBilling: '2025-02-05'
+    },
+    {
+      id: 2,
+      name: 'Newsletter',
+      description: 'Weekly updates on new products and recipes',
+      price: 0,
+      status: 'active',
+      nextBilling: null
+    }
+  ]);
+  const [addresses, setAddresses] = useState([
+    {
+      id: 1,
+      label: 'Home',
+      firstName: 'John',
+      lastName: 'Doe',
+      address: '123 Tea Street, Mumbai, Maharashtra 400001',
+      country: 'India',
+      phone: '+91 9876543210',
+      isDefault: true
+    },
+    {
+      id: 2,
+      label: 'Office',
+      firstName: 'John',
+      lastName: 'Doe',
+      address: '456 Business Park, Bangalore, Karnataka 560001',
+      country: 'India',
+      phone: '+91 9876543210',
+      isDefault: false
+    }
+  ]);
+  const [paymentMethods, setPaymentMethods] = useState([
+    {
+      id: 1,
+      type: 'visa',
+      lastFour: '1234',
+      expiryMonth: '12',
+      expiryYear: '25',
+      holderName: 'John Doe',
+      isDefault: true
+    },
+    {
+      id: 2,
+      type: 'mastercard',
+      lastFour: '5678',
+      expiryMonth: '08',
+      expiryYear: '26',
+      holderName: 'John Doe',
+      isDefault: false
+    }
+  ]);
   const [formData, setFormData] = useState({
     full_name: '',
     first_name: '',
-    email: ''
+    last_name: '',
+    email: '',
+    phone: '',
+    gender: ''
   });
 
   useEffect(() => {
@@ -68,13 +136,19 @@ const Account = () => {
         setFormData({
           full_name: data.full_name || '',
           first_name: data.first_name || '',
-          email: data.email || user.email || ''
+          last_name: data.last_name || '',
+          email: data.email || user.email || '',
+          phone: data.phone || '',
+          gender: data.gender || ''
         });
       } else {
         setFormData({
           full_name: '',
           first_name: '',
-          email: user.email || ''
+          last_name: '',
+          email: user.email || '',
+          phone: '',
+          gender: ''
         });
       }
     } catch (error) {
@@ -86,6 +160,13 @@ const Account = () => {
     setFormData(prev => ({
       ...prev,
       [e.target.name]: e.target.value
+    }));
+  };
+
+  const handleSelectChange = (name: string, value: string) => {
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
     }));
   };
 
@@ -121,6 +202,53 @@ const Account = () => {
     } finally {
       setUpdating(false);
     }
+  };
+
+  const handleSubscriptionAction = async (subscriptionId: number, action: 'manage' | 'unsubscribe') => {
+    if (action === 'unsubscribe') {
+      setSubscriptions(prev => 
+        prev.map(sub => 
+          sub.id === subscriptionId 
+            ? { ...sub, status: 'cancelled' }
+            : sub
+        )
+      );
+      toast({
+        title: "Unsubscribed",
+        description: "You have been unsubscribed successfully"
+      });
+    } else {
+      toast({
+        title: "Manage Subscription",
+        description: "Subscription management feature coming soon"
+      });
+    }
+  };
+
+  const handleSetDefaultAddress = (addressId: number) => {
+    setAddresses(prev => 
+      prev.map(addr => ({
+        ...addr,
+        isDefault: addr.id === addressId
+      }))
+    );
+    toast({
+      title: "Default address updated",
+      description: "Your default address has been changed"
+    });
+  };
+
+  const handleSetDefaultPayment = (paymentId: number) => {
+    setPaymentMethods(prev => 
+      prev.map(payment => ({
+        ...payment,
+        isDefault: payment.id === paymentId
+      }))
+    );
+    toast({
+      title: "Default payment method updated",
+      description: "Your default payment method has been changed"
+    });
   };
 
   const handleSignOut = async () => {
@@ -182,6 +310,30 @@ const Account = () => {
             </CardHeader>
             <CardContent className="p-6">
               <form onSubmit={handleUpdateProfile} className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <Label htmlFor="first_name" className="text-black font-medium">First Name</Label>
+                    <Input
+                      id="first_name"
+                      name="first_name"
+                      value={formData.first_name}
+                      onChange={handleInputChange}
+                      className="mt-2 border-gray-200"
+                    />
+                  </div>
+
+                  <div>
+                    <Label htmlFor="last_name" className="text-black font-medium">Last Name</Label>
+                    <Input
+                      id="last_name"
+                      name="last_name"
+                      value={formData.last_name}
+                      onChange={handleInputChange}
+                      className="mt-2 border-gray-200"
+                    />
+                  </div>
+                </div>
+
                 <div>
                   <Label htmlFor="email" className="text-black font-medium">Email</Label>
                   <Input
@@ -197,25 +349,31 @@ const Account = () => {
                 </div>
 
                 <div>
-                  <Label htmlFor="first_name" className="text-black font-medium">First Name</Label>
+                  <Label htmlFor="phone" className="text-black font-medium">Phone Number</Label>
                   <Input
-                    id="first_name"
-                    name="first_name"
-                    value={formData.first_name}
+                    id="phone"
+                    name="phone"
+                    type="tel"
+                    placeholder="+91 9876543210"
+                    value={formData.phone}
                     onChange={handleInputChange}
                     className="mt-2 border-gray-200"
                   />
                 </div>
 
                 <div>
-                  <Label htmlFor="full_name" className="text-black font-medium">Full Name</Label>
-                  <Input
-                    id="full_name"
-                    name="full_name"
-                    value={formData.full_name}
-                    onChange={handleInputChange}
-                    className="mt-2 border-gray-200"
-                  />
+                  <Label htmlFor="gender" className="text-black font-medium">Gender</Label>
+                  <Select value={formData.gender} onValueChange={(value) => handleSelectChange('gender', value)}>
+                    <SelectTrigger className="mt-2 border-gray-200">
+                      <SelectValue placeholder="Select gender" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="male">Male</SelectItem>
+                      <SelectItem value="female">Female</SelectItem>
+                      <SelectItem value="other">Other</SelectItem>
+                      <SelectItem value="prefer-not-to-say">Prefer not to say</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
 
                 <Button
@@ -241,26 +399,48 @@ const Account = () => {
             </CardHeader>
             <CardContent className="p-6">
               <div className="space-y-4">
-                <div className="border border-gray-200 rounded-lg p-4">
-                  <h3 className="font-semibold text-black">Monthly Tea Subscription</h3>
-                  <p className="text-gray-600 text-sm">Premium matcha blend delivered monthly</p>
-                  <div className="flex justify-between items-center mt-3">
-                    <span className="text-black font-medium">₹2,499/month</span>
-                    <Button variant="outline" size="sm" className="border-gray-300">
-                      Manage
-                    </Button>
+                {subscriptions.map((subscription) => (
+                  <div key={subscription.id} className="border border-gray-200 rounded-lg p-4">
+                    <h3 className="font-semibold text-black">{subscription.name}</h3>
+                    <p className="text-gray-600 text-sm">{subscription.description}</p>
+                    <div className="flex justify-between items-center mt-3">
+                      <div>
+                        {subscription.price > 0 ? (
+                          <span className="text-black font-medium">₹{subscription.price}/month</span>
+                        ) : (
+                          <span className={`font-medium ${subscription.status === 'active' ? 'text-green-600' : 'text-red-600'}`}>
+                            {subscription.status === 'active' ? 'Active' : 'Cancelled'}
+                          </span>
+                        )}
+                        {subscription.nextBilling && (
+                          <p className="text-xs text-gray-500">Next billing: {subscription.nextBilling}</p>
+                        )}
+                      </div>
+                      <div className="flex gap-2">
+                        {subscription.status === 'active' && (
+                          <>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="border-gray-300"
+                              onClick={() => handleSubscriptionAction(subscription.id, 'manage')}
+                            >
+                              Manage
+                            </Button>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="border-red-300 text-red-600 hover:bg-red-50"
+                              onClick={() => handleSubscriptionAction(subscription.id, 'unsubscribe')}
+                            >
+                              Unsubscribe
+                            </Button>
+                          </>
+                        )}
+                      </div>
+                    </div>
                   </div>
-                </div>
-                <div className="border border-gray-200 rounded-lg p-4">
-                  <h3 className="font-semibold text-black">Newsletter</h3>
-                  <p className="text-gray-600 text-sm">Weekly updates on new products and recipes</p>
-                  <div className="flex justify-between items-center mt-3">
-                    <span className="text-green-600 font-medium">Active</span>
-                    <Button variant="outline" size="sm" className="border-gray-300">
-                      Unsubscribe
-                    </Button>
-                  </div>
-                </div>
+                ))}
               </div>
             </CardContent>
           </Card>
@@ -336,7 +516,10 @@ const Account = () => {
                   <p className="text-gray-600">Monday - Friday: 9:00 AM - 6:00 PM</p>
                   <p className="text-gray-600">Saturday: 10:00 AM - 4:00 PM</p>
                 </div>
-                <Button className="bg-black text-white hover:bg-gray-800">
+                <Button 
+                  className="bg-black text-white hover:bg-gray-800"
+                  onClick={() => setContactModalOpen(true)}
+                >
                   Send Message
                 </Button>
               </div>
@@ -389,30 +572,41 @@ const Account = () => {
             </CardHeader>
             <CardContent className="p-6">
               <div className="space-y-4">
-                <div className="border border-gray-200 rounded-lg p-4">
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <h3 className="font-semibold text-black">Home</h3>
-                      <p className="text-gray-600">123 Tea Street, Mumbai, Maharashtra 400001</p>
-                      <p className="text-gray-600">India</p>
+                {addresses.map((address) => (
+                  <div key={address.id} className="border border-gray-200 rounded-lg p-4">
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <div className="flex items-center gap-2 mb-1">
+                          <h3 className="font-semibold text-black">{address.label}</h3>
+                          {address.isDefault && (
+                            <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">
+                              Default
+                            </span>
+                          )}
+                        </div>
+                        <p className="font-medium">{address.firstName} {address.lastName}</p>
+                        <p className="text-gray-600 text-sm">{address.phone}</p>
+                        <p className="text-gray-600">{address.address}</p>
+                        <p className="text-gray-600">{address.country}</p>
+                      </div>
+                      <div className="flex flex-col gap-2">
+                        <Button variant="outline" size="sm" className="border-gray-300">
+                          Edit
+                        </Button>
+                        {!address.isDefault && (
+                          <Button 
+                            variant="outline" 
+                            size="sm" 
+                            className="border-green-300 text-green-600 hover:bg-green-50"
+                            onClick={() => handleSetDefaultAddress(address.id)}
+                          >
+                            Set Default
+                          </Button>
+                        )}
+                      </div>
                     </div>
-                    <Button variant="outline" size="sm" className="border-gray-300">
-                      Edit
-                    </Button>
                   </div>
-                </div>
-                <div className="border border-gray-200 rounded-lg p-4">
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <h3 className="font-semibold text-black">Office</h3>
-                      <p className="text-gray-600">456 Business Park, Bangalore, Karnataka 560001</p>
-                      <p className="text-gray-600">India</p>
-                    </div>
-                    <Button variant="outline" size="sm" className="border-gray-300">
-                      Edit
-                    </Button>
-                  </div>
-                </div>
+                ))}
                 <Button className="bg-black text-white hover:bg-gray-800">
                   Add New Address
                 </Button>
@@ -432,38 +626,51 @@ const Account = () => {
             </CardHeader>
             <CardContent className="p-6">
               <div className="space-y-4">
-                <div className="border border-gray-200 rounded-lg p-4">
-                  <div className="flex justify-between items-start">
-                    <div className="flex items-center space-x-3">
-                      <div className="w-12 h-8 bg-black rounded flex items-center justify-center">
-                        <span className="text-white text-xs font-bold">VISA</span>
+                {paymentMethods.map((payment) => (
+                  <div key={payment.id} className="border border-gray-200 rounded-lg p-4">
+                    <div className="flex justify-between items-start">
+                      <div className="flex items-center space-x-3">
+                        <div className={`w-12 h-8 rounded flex items-center justify-center ${
+                          payment.type === 'visa' ? 'bg-black' : 'bg-gray-800'
+                        }`}>
+                          <span className="text-white text-xs font-bold">
+                            {payment.type === 'visa' ? 'VISA' : 'MC'}
+                          </span>
+                        </div>
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <p className="font-semibold text-black">•••• •••• •••• {payment.lastFour}</p>
+                            {payment.isDefault && (
+                              <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">
+                                Default
+                              </span>
+                            )}
+                          </div>
+                          <p className="text-gray-600 text-sm">Expires {payment.expiryMonth}/{payment.expiryYear}</p>
+                          <p className="text-gray-600 text-sm">{payment.holderName}</p>
+                        </div>
                       </div>
-                      <div>
-                        <p className="font-semibold text-black">•••• •••• •••• 1234</p>
-                        <p className="text-gray-600 text-sm">Expires 12/25</p>
+                      <div className="flex flex-col gap-2">
+                        <Button variant="outline" size="sm" className="border-gray-300">
+                          Edit
+                        </Button>
+                        {!payment.isDefault && (
+                          <Button 
+                            variant="outline" 
+                            size="sm" 
+                            className="border-green-300 text-green-600 hover:bg-green-50"
+                            onClick={() => handleSetDefaultPayment(payment.id)}
+                          >
+                            Set Default
+                          </Button>
+                        )}
+                        <Button variant="outline" size="sm" className="border-red-300 text-red-600 hover:bg-red-50">
+                          Remove
+                        </Button>
                       </div>
                     </div>
-                    <Button variant="outline" size="sm" className="border-gray-300">
-                      Remove
-                    </Button>
                   </div>
-                </div>
-                <div className="border border-gray-200 rounded-lg p-4">
-                  <div className="flex justify-between items-start">
-                    <div className="flex items-center space-x-3">
-                      <div className="w-12 h-8 bg-gray-800 rounded flex items-center justify-center">
-                        <span className="text-white text-xs font-bold">MC</span>
-                      </div>
-                      <div>
-                        <p className="font-semibold text-black">•••• •••• •••• 5678</p>
-                        <p className="text-gray-600 text-sm">Expires 08/26</p>
-                      </div>
-                    </div>
-                    <Button variant="outline" size="sm" className="border-gray-300">
-                      Remove
-                    </Button>
-                  </div>
-                </div>
+                ))}
                 <Button className="bg-black text-white hover:bg-gray-800">
                   Add Payment Method
                 </Button>
@@ -591,6 +798,11 @@ const Account = () => {
           </div>
         </div>
       </div>
+
+      <ContactUsModal 
+        isOpen={contactModalOpen} 
+        onClose={() => setContactModalOpen(false)} 
+      />
 
       <Footer />
     </div>
