@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import HeaderNavBar from '@/components/HeaderNavBar';
@@ -235,7 +236,7 @@ const OrderDetail = () => {
     return (
       <div className="min-h-screen bg-white">
         <HeaderNavBar />
-        <div className="max-w-4xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-4xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-center h-64">
             <div className="text-center">
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-black mx-auto mb-4"></div>
@@ -251,7 +252,7 @@ const OrderDetail = () => {
     return (
       <div className="min-h-screen bg-white">
         <HeaderNavBar />
-        <div className="max-w-4xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-4xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h2 className="text-2xl font-bold text-black mb-4">Order Not Found</h2>
             <p className="text-gray-600 mb-8">The order you're looking for doesn't exist or you don't have permission to view it.</p>
@@ -268,7 +269,7 @@ const OrderDetail = () => {
     <div className="min-h-screen bg-white">
       <HeaderNavBar />
       
-      <div className="max-w-4xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-4xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
         <div className="mb-6">
           <Button 
             variant="ghost" 
@@ -280,11 +281,11 @@ const OrderDetail = () => {
           </Button>
         </div>
 
-        <div className="bg-white border border-gray-200 rounded-lg p-6 mb-6">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4">
+        <div className="bg-white border border-gray-200 rounded-lg p-4 sm:p-6 mb-6">
+          <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0 mb-4">
             <div>
-              <h1 className="text-2xl font-bold text-black">Order #{formatOrderNumber(order.order_number)}</h1>
-              <p className="text-gray-600 mt-1">
+              <h1 className="text-xl sm:text-2xl font-bold text-black">Order #{formatOrderNumber(order.order_number)}</h1>
+              <p className="text-gray-600 mt-1 text-sm sm:text-base">
                 Placed on {new Date(order.created_at).toLocaleDateString('en-IN', { 
                   weekday: 'long', 
                   year: 'numeric', 
@@ -293,7 +294,7 @@ const OrderDetail = () => {
                 })}
               </p>
             </div>
-            <div className="mt-4 sm:mt-0">
+            <div className="flex-shrink-0">
               <div className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium border ${getStatusColor(order.status)}`}>
                 {getStatusIcon(order.status)}
                 <span className="ml-2 capitalize">{order.status}</span>
@@ -319,15 +320,15 @@ const OrderDetail = () => {
 
         <Tabs defaultValue="details" className="space-y-6">
           <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="details">Order Details</TabsTrigger>
-            <TabsTrigger value="tracking">Tracking</TabsTrigger>
-            <TabsTrigger value="returns" disabled={!canRequestReturn(order)}>
+            <TabsTrigger value="details" className="text-xs sm:text-sm">Order Details</TabsTrigger>
+            <TabsTrigger value="tracking" className="text-xs sm:text-sm">Tracking</TabsTrigger>
+            <TabsTrigger value="returns" disabled={!canRequestReturn(order)} className="text-xs sm:text-sm">
               Returns
             </TabsTrigger>
           </TabsList>
 
           <TabsContent value="details" className="space-y-6">
-            <div className="bg-white border border-gray-200 rounded-lg p-6">
+            <div className="bg-white border border-gray-200 rounded-lg p-4 sm:p-6">
               <h2 className="text-xl font-semibold text-black mb-4">Order Items</h2>
               {order.order_items && order.order_items.length > 0 ? (
                 <div className="space-y-4">
@@ -340,19 +341,19 @@ const OrderDetail = () => {
                           className="w-full h-full object-cover"
                         />
                       </div>
-                      <div className="flex-1">
+                      <div className="flex-1 min-w-0">
                         <Link 
                           to={`/products/${item.product_id}`}
-                          className="font-medium text-black hover:text-gray-700 transition-colors block"
+                          className="font-medium text-black hover:text-gray-700 transition-colors block truncate"
                         >
                           {item.product_name}
                         </Link>
-                        <div className="flex items-center space-x-4 mt-1 text-sm text-gray-600">
+                        <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-4 mt-1 text-sm text-gray-600">
                           <span>Qty: {item.quantity}</span>
                           <span>Unit Price: ₹{item.product_price}</span>
                         </div>
                       </div>
-                      <div className="text-right">
+                      <div className="text-right flex-shrink-0">
                         <p className="font-semibold text-black">₹{(item.product_price * item.quantity).toFixed(2)}</p>
                       </div>
                     </div>
@@ -382,9 +383,9 @@ const OrderDetail = () => {
             </div>
 
             {order.shipping_address && (
-              <div className="bg-white border border-gray-200 rounded-lg p-6">
+              <div className="bg-white border border-gray-200 rounded-lg p-4 sm:p-6">
                 <h2 className="text-xl font-semibold text-black mb-4">Shipping Address</h2>
-                <div className="text-gray-700">
+                <div className="text-gray-700 space-y-1">
                   <p className="font-medium">{order.shipping_address.firstName} {order.shipping_address.lastName}</p>
                   {order.shipping_address.phone && <p className="text-sm text-gray-600">{order.shipping_address.phone}</p>}
                   <p>{order.shipping_address.address}</p>

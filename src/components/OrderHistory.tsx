@@ -151,7 +151,7 @@ const OrderHistory = () => {
   if (loading) {
     return (
       <Card className="border-gray-200 bg-white">
-        <CardContent className="p-6">
+        <CardContent className="p-4 sm:p-6">
           <div className="animate-pulse space-y-4">
             {[...Array(3)].map((_, i) => (
               <div key={i} className="border rounded-lg p-4">
@@ -171,13 +171,13 @@ const OrderHistory = () => {
 
   return (
     <Card className="border-gray-200 bg-white">
-      <CardHeader className="border-b border-gray-100">
-        <CardTitle className="flex items-center gap-2 text-black">
+      <CardHeader className="border-b border-gray-100 p-4 sm:p-6">
+        <CardTitle className="flex items-center gap-2 text-black text-lg sm:text-xl">
           <Package className="h-5 w-5" />
           Order History
         </CardTitle>
       </CardHeader>
-      <CardContent className="p-6">
+      <CardContent className="p-4 sm:p-6">
         {orders.length === 0 ? (
           <div className="text-center py-8">
             <Package className="h-12 w-12 text-gray-400 mx-auto mb-4" />
@@ -196,9 +196,9 @@ const OrderHistory = () => {
               
               return (
                 <div key={order.id} className="border border-gray-200 rounded-lg p-4 bg-white">
-                  <div className="flex justify-between items-start mb-3">
-                    <div>
-                      <h3 className="font-semibold text-black">Order #{formatOrderNumber(order.order_number)}</h3>
+                  <div className="flex flex-col space-y-3 sm:flex-row sm:items-start sm:justify-between sm:space-y-0 mb-3">
+                    <div className="flex-1">
+                      <h3 className="font-semibold text-black text-sm sm:text-base">Order #{formatOrderNumber(order.order_number)}</h3>
                       <p className="text-sm text-gray-600">
                         {new Date(order.created_at).toLocaleDateString('en-IN', {
                           year: 'numeric',
@@ -207,15 +207,17 @@ const OrderHistory = () => {
                         })}
                       </p>
                     </div>
-                    <Badge className={`${getStatusColor(order.status)} border`}>
-                      {order.status?.charAt(0).toUpperCase() + order.status?.slice(1)}
-                    </Badge>
+                    <div className="flex-shrink-0">
+                      <Badge className={`${getStatusColor(order.status)} border text-xs`}>
+                        {order.status?.charAt(0).toUpperCase() + order.status?.slice(1)}
+                      </Badge>
+                    </div>
                   </div>
 
                   {/* Product Images Section */}
                   {itemCount > 0 && (
                     <div className="mb-3">
-                      <div className="flex gap-2 mb-2">
+                      <div className="flex gap-2 mb-2 overflow-x-auto">
                         {order.order_items.slice(0, 3).map((item, index) => (
                           <div key={`${item.id}-${index}`} className="w-12 h-12 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0 border border-gray-200">
                             <img 
@@ -226,7 +228,7 @@ const OrderHistory = () => {
                           </div>
                         ))}
                         {itemCount > 3 && (
-                          <div className="w-12 h-12 bg-gray-200 rounded-lg flex items-center justify-center text-xs text-gray-600 border border-gray-200">
+                          <div className="w-12 h-12 bg-gray-200 rounded-lg flex items-center justify-center text-xs text-gray-600 border border-gray-200 flex-shrink-0">
                             +{itemCount - 3}
                           </div>
                         )}
@@ -238,13 +240,13 @@ const OrderHistory = () => {
                     <p className="text-sm text-gray-600">
                       {itemCount} item{itemCount !== 1 ? 's' : ''}
                     </p>
-                    <p className="font-semibold text-black">₹{order.total_amount}</p>
+                    <p className="font-semibold text-black text-sm sm:text-base">₹{order.total_amount}</p>
                   </div>
 
-                  <div className="flex gap-2 flex-wrap">
-                    <Link to={`/orders/${order.id}`}>
-                      <Button variant="outline" size="sm" className="border-black text-black hover:bg-gray-100 bg-white">
-                        <Eye className="h-4 w-4 mr-1" />
+                  <div className="flex flex-col sm:flex-row gap-2">
+                    <Link to={`/orders/${order.id}`} className="flex-1 sm:flex-none">
+                      <Button variant="outline" size="sm" className="w-full sm:w-auto border-black text-black hover:bg-gray-100 bg-white text-xs sm:text-sm">
+                        <Eye className="h-3 w-3 sm:h-4 sm:w-4 mr-1" />
                         View Details
                       </Button>
                     </Link>
@@ -252,9 +254,10 @@ const OrderHistory = () => {
                       variant="outline" 
                       size="sm"
                       onClick={() => handleReorder(order)}
-                      className="border-black text-black hover:bg-gray-100 bg-white"
+                      className="w-full sm:w-auto border-black text-black hover:bg-gray-100 bg-white text-xs sm:text-sm"
+                      disabled={itemCount === 0}
                     >
-                      <RotateCcw className="h-4 w-4 mr-1" />
+                      <RotateCcw className="h-3 w-3 sm:h-4 sm:w-4 mr-1" />
                       Reorder
                     </Button>
                   </div>
