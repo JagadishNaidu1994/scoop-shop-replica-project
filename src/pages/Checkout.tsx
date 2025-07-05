@@ -87,10 +87,10 @@ const Checkout = () => {
       // Generate order number
       const orderNumber = `order_${Date.now()}`;
       
-      // Create order - using array format as required by the types
+      // Create order - using single object for .single()
       const { data: order, error: orderError } = await supabase
         .from('orders')
-        .insert([{
+        .insert({
           user_id: user.id,
           order_number: orderNumber,
           total_amount: totalAmount,
@@ -99,7 +99,7 @@ const Checkout = () => {
           payment_method: 'card',
           shipping_address: shippingAddress,
           billing_address: shippingAddress
-        }])
+        })
         .select()
         .single();
 
