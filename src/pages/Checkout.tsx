@@ -87,11 +87,11 @@ const Checkout = () => {
       // Generate order number
       const orderNumber = `order_${Date.now()}`;
       
-      // Create order
+      // Create order - Note: using the correct column name from schema
       const { data: order, error: orderError } = await supabase
         .from('orders')
-        .insert({
-          user_id: user.id,
+        .insert([{
+          user_id: user.id, // This should work based on the schema
           order_number: orderNumber,
           total_amount: totalAmount,
           shipping_cost: shippingCost,
@@ -99,7 +99,7 @@ const Checkout = () => {
           payment_method: 'card',
           shipping_address: shippingAddress,
           billing_address: shippingAddress
-        })
+        }])
         .select()
         .single();
 
@@ -110,27 +110,29 @@ const Checkout = () => {
 
       console.log('Order created successfully:', order);
 
-      // Insert order items
-      const orderItems = items.map(item => ({
-        order_id: order.id,
-        product_id: item.product_id,
-        product_name: item.product_name,
-        product_price: item.product_price,
-        quantity: item.quantity
-      }));
+      // Insert order items with proper error handling
+      if (order && order.id) {
+        const orderItems = items.map(item => ({
+          order_id: order.id,
+          product_id: item.product_id,
+          product_name: item.product_name,
+          product_price: item.product_price,
+          quantity: item.quantity
+        }));
 
-      console.log('Inserting order items:', orderItems);
+        console.log('Inserting order items:', orderItems);
 
-      const { error: itemsError } = await supabase
-        .from('order_items')
-        .insert(orderItems);
+        const { error: itemsError } = await supabase
+          .from('order_items')
+          .insert(orderItems);
 
-      if (itemsError) {
-        console.error('Error creating order items:', itemsError);
-        throw itemsError;
+        if (itemsError) {
+          console.error('Error creating order items:', itemsError);
+          throw itemsError;
+        }
+
+        console.log('Order items created successfully');
       }
-
-      console.log('Order items created successfully');
 
       // Clear cart
       await clearCart();
