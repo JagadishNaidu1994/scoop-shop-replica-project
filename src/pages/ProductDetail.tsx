@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import HeaderNavBar from '@/components/HeaderNavBar';
@@ -269,7 +270,7 @@ const ProductDetail = () => {
       <HeaderNavBar />
       
       {/* Breadcrumb */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
         <nav className="flex text-sm text-gray-500 font-medium">
           <span className="hover:text-gray-700 cursor-pointer" onClick={() => navigate('/')}>Home</span>
           <span className="mx-2">/</span>
@@ -281,16 +282,16 @@ const ProductDetail = () => {
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
         {/* Product Section with Sticky Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-20">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-20">
           {/* Left Side - Image Gallery (Sticky) */}
-          <div className="lg:sticky lg:top-8 lg:h-fit space-y-4">
+          <div className="lg:sticky lg:top-6 lg:h-fit space-y-3">
             {/* Main Image with Controls */}
             <div className="relative group">
-              <Badge className="absolute top-6 left-6 z-10 bg-gradient-to-r from-purple-600 to-pink-600 text-white text-sm font-semibold px-3 py-1 rounded-full">
+              <Badge className="absolute top-4 left-4 z-10 bg-gradient-to-r from-purple-600 to-pink-600 text-white text-xs font-semibold px-2 py-1 rounded-full">
                 BEST SELLER
               </Badge>
               
-              <div className="aspect-square bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl overflow-hidden cursor-zoom-in relative" onClick={() => setShowImageModal(true)}>
+              <div className="aspect-square bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl overflow-hidden cursor-zoom-in relative" onClick={() => setShowImageModal(true)}>
                 <AdminImageUpload 
                   src={productImages[selectedImage]} 
                   alt={product.name} 
@@ -301,47 +302,47 @@ const ProductDetail = () => {
                 {/* Navigation Arrows */}
                 <button 
                   onClick={(e) => { e.stopPropagation(); prevImage(); }}
-                  className="absolute left-4 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/80 backdrop-blur-md text-gray-800 hover:bg-white hover:shadow-lg transition-all duration-200 opacity-0 group-hover:opacity-100"
+                  className="absolute left-3 top-1/2 -translate-y-1/2 p-2 rounded-full bg-white/80 backdrop-blur-md text-gray-800 hover:bg-white hover:shadow-lg transition-all duration-200 opacity-0 group-hover:opacity-100"
                 >
-                  <ChevronLeft className="w-5 h-5" />
+                  <ChevronLeft className="w-4 h-4" />
                 </button>
                 
                 <button 
                   onClick={(e) => { e.stopPropagation(); nextImage(); }}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/80 backdrop-blur-md text-gray-800 hover:bg-white hover:shadow-lg transition-all duration-200 opacity-0 group-hover:opacity-100"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 p-2 rounded-full bg-white/80 backdrop-blur-md text-gray-800 hover:bg-white hover:shadow-lg transition-all duration-200 opacity-0 group-hover:opacity-100"
                 >
-                  <ChevronRight className="w-5 h-5" />
+                  <ChevronRight className="w-4 h-4" />
                 </button>
               </div>
               
               {/* Floating Action Buttons */}
-              <div className="absolute top-6 right-6 flex flex-col space-y-2">
+              <div className="absolute top-4 right-4 flex flex-col space-y-2">
                 <button
                   onClick={handleWishlist}
-                  className={`p-3 rounded-full backdrop-blur-md transition-all duration-200 ${
+                  className={`p-2 rounded-full backdrop-blur-md transition-all duration-200 ${
                     isWishlisted 
                       ? 'bg-red-500 text-white shadow-lg' 
                       : 'bg-white/80 text-gray-600 hover:bg-white hover:shadow-lg'
                   }`}
                 >
-                  <Heart className={`w-5 h-5 ${isWishlisted ? 'fill-current' : ''}`} />
+                  <Heart className={`w-4 h-4 ${isWishlisted ? 'fill-current' : ''}`} />
                 </button>
                 <button
                   onClick={handleShare}
-                  className="p-3 rounded-full bg-white/80 backdrop-blur-md text-gray-600 hover:bg-white hover:shadow-lg transition-all duration-200"
+                  className="p-2 rounded-full bg-white/80 backdrop-blur-md text-gray-600 hover:bg-white hover:shadow-lg transition-all duration-200"
                 >
-                  <Share2 className="w-5 h-5" />
+                  <Share2 className="w-4 h-4" />
                 </button>
               </div>
             </div>
             
             {/* Thumbnail Grid */}
-            <div className="grid grid-cols-6 gap-3">
+            <div className="grid grid-cols-6 gap-2">
               {productImages.map((image, index) => (
                 <button
                   key={index}
                   onClick={() => setSelectedImage(index)}
-                  className={`aspect-square rounded-xl overflow-hidden border-2 transition-all duration-200 ${
+                  className={`aspect-square rounded-lg overflow-hidden border-2 transition-all duration-200 ${
                     selectedImage === index 
                       ? 'border-black shadow-lg scale-105' 
                       : 'border-gray-200 hover:border-gray-300 hover:shadow-md'
@@ -358,70 +359,70 @@ const ProductDetail = () => {
             </div>
 
             {/* Image Counter */}
-            <div className="text-center text-sm text-gray-500">
+            <div className="text-center text-xs text-gray-500">
               {selectedImage + 1} / {productImages.length}
             </div>
           </div>
 
           {/* Right Side - Product Info (Scrollable) */}
-          <div className="space-y-8 lg:max-h-screen lg:overflow-y-auto lg:pr-4">
+          <div className="space-y-4 lg:max-h-screen lg:overflow-y-auto lg:pr-2">
             {/* Rating and Reviews */}
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-3">
               <div className="flex items-center space-x-1">
                 <div className="flex text-yellow-400">
                   {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-5 h-5 fill-current" />
+                    <Star key={i} className="w-4 h-4 fill-current" />
                   ))}
                 </div>
-                <span className="text-sm text-gray-600 font-medium ml-2">4.9</span>
+                <span className="text-sm text-gray-600 font-medium ml-1">4.9</span>
               </div>
-              <span className="text-sm text-gray-500">•</span>
+              <span className="text-xs text-gray-500">•</span>
               <span className="text-sm text-gray-600 font-medium">20,564 Reviews</span>
-              <span className="text-sm text-gray-500">•</span>
-              <span className="text-sm text-green-600 font-medium">✓ Verified Reviews</span>
+              <span className="text-xs text-gray-500">•</span>
+              <span className="text-sm text-green-600 font-medium">✓ Verified</span>
             </div>
 
             {/* Product Title and Description */}
-            <div className="space-y-4">
-              <h1 className="text-4xl font-bold text-gray-900 leading-tight">
+            <div className="space-y-2">
+              <h1 className="text-2xl font-bold text-gray-900 leading-tight">
                 DIRTEA {product.name}
               </h1>
-              <p className="text-xl text-gray-600 font-medium">
+              <p className="text-lg text-gray-600 font-medium">
                 Energy, focus, beauty
               </p>
-              <p className="text-gray-700 leading-relaxed text-lg">
+              <p className="text-gray-700 leading-relaxed text-sm">
                 The creamiest, ceremonial-grade Matcha with Lion's Mane, Tremella, and essential B vitamins.
               </p>
             </div>
 
             {/* Benefits Badges */}
-            <div className="flex flex-wrap gap-3">
-              <Badge variant="outline" className="flex items-center space-x-2 px-4 py-2 text-sm font-semibold bg-gradient-to-r from-yellow-50 to-orange-50 border-yellow-200">
+            <div className="flex flex-wrap gap-2">
+              <Badge variant="outline" className="flex items-center space-x-1 px-2 py-1 text-xs font-semibold bg-gradient-to-r from-yellow-50 to-orange-50 border-yellow-200">
                 <span>⚡</span><span>Energy</span>
               </Badge>
-              <Badge variant="outline" className="flex items-center space-x-2 px-4 py-2 text-sm font-semibold bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200">
+              <Badge variant="outline" className="flex items-center space-x-1 px-2 py-1 text-xs font-semibold bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200">
                 <span>🎯</span><span>Focus</span>
               </Badge>
-              <Badge variant="outline" className="flex items-center space-x-2 px-4 py-2 text-sm font-semibold bg-gradient-to-r from-pink-50 to-rose-50 border-pink-200">
+              <Badge variant="outline" className="flex items-center space-x-1 px-2 py-1 text-xs font-semibold bg-gradient-to-r from-pink-50 to-rose-50 border-pink-200">
                 <span>✨</span><span>Skin</span>
               </Badge>
             </div>
 
             {/* Servings Info */}
-            <div className="flex items-center space-x-2 text-gray-600">
-              <span className="text-2xl">🥄</span>
+            <div className="flex items-center space-x-2 text-gray-600 text-sm">
+              <span className="text-lg">🥄</span>
               <span className="font-semibold">30 servings</span>
               <span className="text-gray-400">•</span>
-              <span className="text-sm">£{(product.price / 30).toFixed(2)} per serving</span>
+              <span className="text-xs">£{(product.price / 30).toFixed(2)} per serving</span>
             </div>
 
             {/* Pricing Options */}
-            <div className="bg-gray-50 rounded-2xl p-6 space-y-4">
-              <h3 className="font-semibold text-lg text-gray-900 mb-4">Choose Your Option</h3>
+            <div className="bg-gray-50 rounded-xl p-4 space-y-3">
+              <h3 className="font-semibold text-base text-gray-900 mb-2">Choose Your Option</h3>
               
               {/* One-time Purchase */}
               <div 
-                className={`p-5 border-2 rounded-xl cursor-pointer transition-all duration-200 ${
+                className={`p-3 border-2 rounded-lg cursor-pointer transition-all duration-200 ${
                   subscriptionType === 'one-time' 
                     ? 'border-black bg-white shadow-md' 
                     : 'border-gray-200 hover:border-gray-300 bg-white/50'
@@ -429,57 +430,56 @@ const ProductDetail = () => {
                 onClick={() => setSubscriptionType('one-time')}
               >
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-4">
+                  <div className="flex items-center space-x-3">
                     <input 
                       type="radio" 
                       checked={subscriptionType === 'one-time'} 
                       readOnly 
-                      className="w-5 h-5" 
+                      className="w-4 h-4" 
                     />
                     <div>
-                      <span className="font-semibold text-lg">One-time Purchase</span>
-                      <p className="text-sm text-gray-500">No commitment, order when you want</p>
+                      <span className="font-semibold text-sm">One-time Purchase</span>
+                      <p className="text-xs text-gray-500">No commitment</p>
                     </div>
                   </div>
                   <div className="text-right">
-                    <span className="text-2xl font-bold">£{product.price}</span>
+                    <span className="text-xl font-bold">£{product.price}</span>
                   </div>
                 </div>
               </div>
 
               {/* Subscribe & Save */}
               <div 
-                className={`p-5 border-2 rounded-xl cursor-pointer transition-all duration-200 ${
+                className={`p-3 border-2 rounded-lg cursor-pointer transition-all duration-200 ${
                   subscriptionType === 'subscribe' 
                     ? 'border-black bg-white shadow-md' 
                     : 'border-gray-200 hover:border-gray-300 bg-white/50'
                 }`}
                 onClick={() => setSubscriptionType('subscribe')}
               >
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center space-x-4">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center space-x-3">
                     <input 
                       type="radio" 
                       checked={subscriptionType === 'subscribe'} 
                       readOnly 
-                      className="w-5 h-5" 
+                      className="w-4 h-4" 
                     />
                     <div>
-                      <div className="flex items-center space-x-3">
-                        <span className="font-semibold text-lg">Subscribe & Save</span>
-                        <Badge className="bg-gradient-to-r from-purple-600 to-pink-600 text-white text-xs font-bold px-2 py-1">
+                      <div className="flex items-center space-x-2">
+                        <span className="font-semibold text-sm">Subscribe & Save</span>
+                        <Badge className="bg-gradient-to-r from-purple-600 to-pink-600 text-white text-xs font-bold px-1 py-0">
                           20% OFF
                         </Badge>
                       </div>
-                      <p className="text-sm text-gray-500">Cancel anytime, skip or pause deliveries</p>
+                      <p className="text-xs text-gray-500">Cancel anytime</p>
                     </div>
                   </div>
                   <div className="text-right">
-                    <div className="flex items-center space-x-2">
-                      <span className="text-lg text-gray-400 line-through">£{product.price}</span>
-                      <span className="text-2xl font-bold text-green-600">£{subscriptionPrice.toFixed(2)}</span>
+                    <div className="flex items-center space-x-1">
+                      <span className="text-sm text-gray-400 line-through">£{product.price}</span>
+                      <span className="text-xl font-bold text-green-600">£{subscriptionPrice.toFixed(2)}</span>
                     </div>
-                    <p className="text-sm text-gray-500">£{(subscriptionPrice / 30).toFixed(2)} per serving</p>
                   </div>
                 </div>
                 
@@ -487,7 +487,7 @@ const ProductDetail = () => {
                   <select 
                     value={subscriptionFrequency} 
                     onChange={(e) => setSubscriptionFrequency(e.target.value)}
-                    className="w-full p-3 border border-gray-300 rounded-lg text-sm font-medium focus:outline-none focus:ring-2 focus:ring-black bg-white"
+                    className="w-full p-2 border border-gray-300 rounded-lg text-xs font-medium focus:outline-none focus:ring-2 focus:ring-black bg-white"
                   >
                     <option>Every 4 weeks (Bestseller)</option>
                     <option>Every 6 weeks</option>
@@ -498,93 +498,93 @@ const ProductDetail = () => {
             </div>
 
             {/* Quantity and Add to Cart */}
-            <div className="space-y-4">
-              <div className="flex items-center space-x-4">
-                <label className="font-semibold text-gray-900">Quantity:</label>
+            <div className="space-y-3">
+              <div className="flex items-center space-x-3">
+                <label className="font-semibold text-gray-900 text-sm">Quantity:</label>
                 <div className="flex items-center border-2 border-gray-300 rounded-lg">
                   <button
                     onClick={decrementQuantity}
-                    className="p-3 hover:bg-gray-100 transition-colors rounded-l-lg"
+                    className="p-2 hover:bg-gray-100 transition-colors rounded-l-lg"
                     disabled={quantity <= 1}
                   >
-                    <Minus className="w-4 h-4" />
+                    <Minus className="w-3 h-3" />
                   </button>
-                  <span className="px-6 py-3 border-x-2 border-gray-300 font-semibold min-w-[60px] text-center">
+                  <span className="px-4 py-2 border-x-2 border-gray-300 font-semibold min-w-[50px] text-center text-sm">
                     {quantity}
                   </span>
                   <button
                     onClick={incrementQuantity}
-                    className="p-3 hover:bg-gray-100 transition-colors rounded-r-lg"
+                    className="p-2 hover:bg-gray-100 transition-colors rounded-r-lg"
                   >
-                    <Plus className="w-4 h-4" />
+                    <Plus className="w-3 h-3" />
                   </button>
                 </div>
               </div>
 
               <Button
                 onClick={handleAddToCart}
-                className="w-full bg-black text-white hover:bg-gray-800 py-4 text-lg font-semibold rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl"
-                size="lg"
+                className="w-full bg-black text-white hover:bg-gray-800 py-3 text-sm font-semibold rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl"
+                size="sm"
               >
                 ADD TO CART - £{((subscriptionType === 'subscribe' ? subscriptionPrice : product.price) * quantity).toFixed(2)}
               </Button>
 
               <Button
-                className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white hover:from-purple-700 hover:to-pink-700 py-4 text-lg font-semibold rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl"
-                size="lg"
+                className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white hover:from-purple-700 hover:to-pink-700 py-3 text-sm font-semibold rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl"
+                size="sm"
               >
                 Buy with ShopPay
               </Button>
             </div>
 
             {/* Trust Indicators */}
-            <div className="grid grid-cols-2 gap-4 pt-6 border-t border-gray-200">
-              <div className="flex items-center space-x-3 text-sm text-gray-600">
-                <Truck className="w-5 h-5 text-green-600" />
+            <div className="grid grid-cols-2 gap-3 pt-3 border-t border-gray-200">
+              <div className="flex items-center space-x-2 text-xs text-gray-600">
+                <Truck className="w-4 h-4 text-green-600" />
                 <span>Free shipping over £50</span>
               </div>
-              <div className="flex items-center space-x-3 text-sm text-gray-600">
-                <Shield className="w-5 h-5 text-blue-600" />
+              <div className="flex items-center space-x-2 text-xs text-gray-600">
+                <Shield className="w-4 h-4 text-blue-600" />
                 <span>30-day money back</span>
               </div>
-              <div className="flex items-center space-x-3 text-sm text-gray-600">
-                <RefreshCw className="w-5 h-5 text-purple-600" />
+              <div className="flex items-center space-x-2 text-xs text-gray-600">
+                <RefreshCw className="w-4 h-4 text-purple-600" />
                 <span>Skip or cancel anytime</span>
               </div>
-              <div className="flex items-center space-x-3 text-sm text-gray-600">
-                <Award className="w-5 h-5 text-orange-600" />
+              <div className="flex items-center space-x-2 text-xs text-gray-600">
+                <Award className="w-4 h-4 text-orange-600" />
                 <span>Award-winning quality</span>
               </div>
             </div>
 
             {/* Collapsible Sections */}
-            <div className="pt-8 border-t border-gray-200 space-y-6">
+            <div className="pt-4 border-t border-gray-200 space-y-2">
               {/* Why choose DIRTEA Section */}
               <Collapsible>
-                <CollapsibleTrigger className="flex items-center justify-between w-full py-4 border-b border-gray-200 hover:bg-gray-50/50 transition-colors">
-                  <h3 className="text-xl font-semibold text-gray-900">Why choose DIRTEA</h3>
-                  <Plus className="w-5 h-5 text-gray-500 group-data-[state=open]:rotate-45 transition-transform" />
+                <CollapsibleTrigger className="flex items-center justify-between w-full py-2 border-b border-gray-200 hover:bg-gray-50/50 transition-colors">
+                  <h3 className="text-sm font-semibold text-gray-900">Why choose DIRTEA</h3>
+                  <Plus className="w-4 h-4 text-gray-500 group-data-[state=open]:rotate-45 transition-transform" />
                 </CollapsibleTrigger>
-                <CollapsibleContent className="pt-4 pb-2">
-                  <div className="space-y-4">
-                    <div className="flex items-start space-x-3">
-                      <div className="w-2 h-2 bg-black rounded-full mt-2 flex-shrink-0"></div>
-                      <p className="text-gray-700">DIRTEA's Matcha Super Latte isn't just delicious - it's a powerhouse for your mind and body. Crafted with 100% pure ceremonial-grade Japanese matcha, Lion's Mane, Tremella mushrooms and vitamins, our matcha powder enhances focus, beauty, energy, supports your nervous system, mental clarity, skin health, immunity, and wellbeing.</p>
+                <CollapsibleContent className="pt-2 pb-1">
+                  <div className="space-y-2">
+                    <div className="flex items-start space-x-2">
+                      <div className="w-1 h-1 bg-black rounded-full mt-1 flex-shrink-0"></div>
+                      <p className="text-xs text-gray-700">DIRTEA's Matcha Super Latte isn't just delicious - it's a powerhouse for your mind and body. Crafted with 100% pure ceremonial-grade Japanese matcha, Lion's Mane, Tremella mushrooms and vitamins, our matcha powder enhances focus, beauty, energy, supports your nervous system, mental clarity, skin health, immunity, and wellbeing.</p>
                     </div>
-                    <div className="flex items-start space-x-3">
-                      <div className="w-2 h-2 bg-black rounded-full mt-2 flex-shrink-0"></div>
-                      <p className="text-gray-700">Complete 100% plant glucans</p>
+                    <div className="flex items-start space-x-2">
+                      <div className="w-1 h-1 bg-black rounded-full mt-1 flex-shrink-0"></div>
+                      <p className="text-xs text-gray-700">Complete 100% plant glucans</p>
                     </div>
-                    <div className="flex items-start space-x-3">
-                      <div className="w-2 h-2 bg-black rounded-full mt-2 flex-shrink-0"></div>
-                      <p className="text-gray-700">Zero sugars and sweeteners added</p>
+                    <div className="flex items-start space-x-2">
+                      <div className="w-1 h-1 bg-black rounded-full mt-1 flex-shrink-0"></div>
+                      <p className="text-xs text-gray-700">Zero sugars and sweeteners added</p>
                     </div>
-                    <div className="flex items-start space-x-3">
-                      <div className="w-2 h-2 bg-black rounded-full mt-2 flex-shrink-0"></div>
-                      <p className="text-gray-700">Boost the skin and anti-ageing benefits</p>
+                    <div className="flex items-start space-x-2">
+                      <div className="w-1 h-1 bg-black rounded-full mt-1 flex-shrink-0"></div>
+                      <p className="text-xs text-gray-700">Boost the skin and anti-ageing benefits</p>
                     </div>
                   </div>
-                  <p className="text-sm text-gray-600 mt-4">
+                  <p className="text-xs text-gray-600 mt-2">
                     Feel the difference with DIRTEA Matcha Mushroom Super Latte! Elevate your daily energize and mind and stay focused!
                   </p>
                 </CollapsibleContent>
@@ -592,12 +592,12 @@ const ProductDetail = () => {
 
               {/* Ingredients Section */}
               <Collapsible>
-                <CollapsibleTrigger className="flex items-center justify-between w-full py-4 border-b border-gray-200 hover:bg-gray-50/50 transition-colors">
-                  <h3 className="text-xl font-semibold text-gray-900">Ingredients</h3>
-                  <Plus className="w-5 h-5 text-gray-500 group-data-[state=open]:rotate-45 transition-transform" />
+                <CollapsibleTrigger className="flex items-center justify-between w-full py-2 border-b border-gray-200 hover:bg-gray-50/50 transition-colors">
+                  <h3 className="text-sm font-semibold text-gray-900">Ingredients</h3>
+                  <Plus className="w-4 h-4 text-gray-500 group-data-[state=open]:rotate-45 transition-transform" />
                 </CollapsibleTrigger>
-                <CollapsibleContent className="pt-4 pb-2">
-                  <div className="space-y-2 text-sm text-gray-700">
+                <CollapsibleContent className="pt-2 pb-1">
+                  <div className="space-y-1 text-xs text-gray-700">
                     <p><strong>Organic Ceremonial-Grade Matcha Powder:</strong></p>
                     <p><strong>Organic Lion's Mane Mushroom Extract:</strong></p>
                     <p><strong>Organic Tremella Mushroom Extract:</strong></p>
@@ -615,29 +615,29 @@ const ProductDetail = () => {
 
               {/* The Science Section */}
               <Collapsible>
-                <CollapsibleTrigger className="flex items-center justify-between w-full py-4 border-b border-gray-200 hover:bg-gray-50/50 transition-colors">
-                  <h3 className="text-xl font-semibold text-gray-900">The Science</h3>
-                  <Plus className="w-5 h-5 text-gray-500 group-data-[state=open]:rotate-45 transition-transform" />
+                <CollapsibleTrigger className="flex items-center justify-between w-full py-2 border-b border-gray-200 hover:bg-gray-50/50 transition-colors">
+                  <h3 className="text-sm font-semibold text-gray-900">The Science</h3>
+                  <Plus className="w-4 h-4 text-gray-500 group-data-[state=open]:rotate-45 transition-transform" />
                 </CollapsibleTrigger>
-                <CollapsibleContent className="pt-4 pb-2">
-                  <div className="space-y-4 text-sm text-gray-700">
-                    <p>Matcha comes from the Camellia sinensis plant, like green tea, but is made by finely grinding whole tea leaves into a powder. The traditional cultivation methods cultivate a relationship with nature, using nutrients like amino and antioxidants and promotes relaxation while enhancing focus. Thus, unlike coffee, matcha cultivates a relationship in humans, it delivers an action and also promotes relaxation and internal balance that was once sought by Buddhist monks for centuries, making matcha a ritual, simply source of mental energy.</p>
+                <CollapsibleContent className="pt-2 pb-1">
+                  <div className="space-y-2 text-xs text-gray-700">
+                    <p>Matcha comes from the Camellia sinensis plant, like green tea, but is made by finely grinding whole tea leaves into a powder. The traditional cultivation methods cultivate a relationship with nature, using nutrients like amino and antioxidants and promotes relaxation while enhancing focus.</p>
                     
-                    <p><strong>Lion's Mane mushroom supports cognitive function and focus, which supports information and neural pathways responsible for critical brain function processes like cognition and memory.</strong> It contains two special compounds, hericenones and erinacines, that research is showing may stimulate the growth of brain cells. Several studies on animals suggest that Lion's Mane may support cognitive health, memory, and focus.</p>
+                    <p><strong>Lion's Mane mushroom supports cognitive function and focus,</strong> which supports information and neural pathways responsible for critical brain function processes like cognition and memory.</p>
                     
-                    <p><strong>Tremella mushroom provides a collagen and biotin boost, which supports skin health and hydration.</strong> It's been used for centuries in traditional Chinese medicine as a beauty tonic. Nature's collagen, and a revered ancient beauty superfood to encourage energy levels, and support heart health.</p>
+                    <p><strong>Tremella mushroom provides a collagen and biotin boost,</strong> which supports skin health and hydration. It's been used for centuries in traditional Chinese medicine as a beauty tonic.</p>
                   </div>
                 </CollapsibleContent>
               </Collapsible>
 
               {/* How to Use Section */}
               <Collapsible>
-                <CollapsibleTrigger className="flex items-center justify-between w-full py-4 border-b border-gray-200 hover:bg-gray-50/50 transition-colors">
-                  <h3 className="text-xl font-semibold text-gray-900">How to Use</h3>
-                  <Plus className="w-5 h-5 text-gray-500 group-data-[state=open]:rotate-45 transition-transform" />
+                <CollapsibleTrigger className="flex items-center justify-between w-full py-2 border-b border-gray-200 hover:bg-gray-50/50 transition-colors">
+                  <h3 className="text-sm font-semibold text-gray-900">How to Use</h3>
+                  <Plus className="w-4 h-4 text-gray-500 group-data-[state=open]:rotate-45 transition-transform" />
                 </CollapsibleTrigger>
-                <CollapsibleContent className="pt-4 pb-2">
-                  <div className="space-y-2 text-sm text-gray-700">
+                <CollapsibleContent className="pt-2 pb-1">
+                  <div className="space-y-1 text-xs text-gray-700">
                     <p>1. Add 1-2 tsp of DIRTEA Matcha to a cup</p>
                     <p>2. Pour 60ml of hot water (80°C or cold water)</p>
                     <p>3. Stir or whisk until frothy and smooth</p>
