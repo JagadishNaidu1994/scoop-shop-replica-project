@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import HeaderNavBar from '@/components/HeaderNavBar';
@@ -365,7 +364,7 @@ const ProductDetail = () => {
           </div>
 
           {/* Right Side - Product Info (Scrollable) */}
-          <div className="space-y-4 lg:max-h-screen lg:overflow-y-auto lg:pr-2">
+          <div className="space-y-3 lg:max-h-screen lg:overflow-y-auto lg:pr-2">
             {/* Rating and Reviews */}
             <div className="flex items-center space-x-3">
               <div className="flex items-center space-x-1">
@@ -416,125 +415,147 @@ const ProductDetail = () => {
               <span className="text-xs">£{(product.price / 30).toFixed(2)} per serving</span>
             </div>
 
-            {/* Pricing Options */}
-            <div className="bg-gray-50 rounded-xl p-4 space-y-3">
-              <h3 className="font-semibold text-base text-gray-900 mb-2">Choose Your Option</h3>
-              
+            {/* Pricing Options - Updated to match reference image */}
+            <div className="bg-gray-50 rounded-2xl p-6 border border-gray-200">
               {/* One-time Purchase */}
               <div 
-                className={`p-3 border-2 rounded-lg cursor-pointer transition-all duration-200 ${
+                className={`p-4 border-2 rounded-xl cursor-pointer transition-all duration-200 mb-4 ${
                   subscriptionType === 'one-time' 
-                    ? 'border-black bg-white shadow-md' 
-                    : 'border-gray-200 hover:border-gray-300 bg-white/50'
+                    ? 'border-gray-300 bg-white' 
+                    : 'border-gray-200 bg-white hover:border-gray-300'
                 }`}
                 onClick={() => setSubscriptionType('one-time')}
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">
-                    <input 
-                      type="radio" 
-                      checked={subscriptionType === 'one-time'} 
-                      readOnly 
-                      className="w-4 h-4" 
-                    />
+                    <div className="relative">
+                      <input 
+                        type="radio" 
+                        checked={subscriptionType === 'one-time'} 
+                        readOnly 
+                        className="w-5 h-5 text-blue-600 border-2 border-gray-300 focus:ring-blue-500" 
+                      />
+                    </div>
                     <div>
-                      <span className="font-semibold text-sm">One-time Purchase</span>
-                      <p className="text-xs text-gray-500">No commitment</p>
+                      <span className="font-medium text-gray-900">One-time Purchase</span>
                     </div>
                   </div>
                   <div className="text-right">
-                    <span className="text-xl font-bold">£{product.price}</span>
+                    <span className="text-xl font-bold text-gray-900">£{product.price.toFixed(2)}</span>
                   </div>
                 </div>
               </div>
 
               {/* Subscribe & Save */}
               <div 
-                className={`p-3 border-2 rounded-lg cursor-pointer transition-all duration-200 ${
+                className={`p-4 border-2 rounded-xl cursor-pointer transition-all duration-200 ${
                   subscriptionType === 'subscribe' 
-                    ? 'border-black bg-white shadow-md' 
-                    : 'border-gray-200 hover:border-gray-300 bg-white/50'
+                    ? 'border-blue-500 bg-blue-50' 
+                    : 'border-gray-200 bg-white hover:border-gray-300'
                 }`}
                 onClick={() => setSubscriptionType('subscribe')}
               >
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center space-x-3">
-                    <input 
-                      type="radio" 
-                      checked={subscriptionType === 'subscribe'} 
-                      readOnly 
-                      className="w-4 h-4" 
-                    />
+                    <div className="relative">
+                      <input 
+                        type="radio" 
+                        checked={subscriptionType === 'subscribe'} 
+                        readOnly 
+                        className="w-5 h-5 text-blue-600 border-2 border-gray-300 focus:ring-blue-500" 
+                      />
+                    </div>
                     <div>
                       <div className="flex items-center space-x-2">
-                        <span className="font-semibold text-sm">Subscribe & Save</span>
-                        <Badge className="bg-gradient-to-r from-purple-600 to-pink-600 text-white text-xs font-bold px-1 py-0">
+                        <span className="font-medium text-gray-900">Subscribe & Save</span>
+                        <div className="bg-gray-900 text-white text-xs font-bold px-2 py-1 rounded">
                           20% OFF
-                        </Badge>
+                        </div>
                       </div>
-                      <p className="text-xs text-gray-500">Cancel anytime</p>
+                      <p className="text-sm text-gray-600 mt-1">Pouch only, free gifts NOT included</p>
                     </div>
                   </div>
                   <div className="text-right">
-                    <div className="flex items-center space-x-1">
-                      <span className="text-sm text-gray-400 line-through">£{product.price}</span>
-                      <span className="text-xl font-bold text-green-600">£{subscriptionPrice.toFixed(2)}</span>
-                    </div>
+                    <div className="text-xl font-bold text-gray-900">£{subscriptionPrice.toFixed(0)}</div>
+                    <div className="text-sm text-gray-600">£{(subscriptionPrice / 30).toFixed(2)} per serving</div>
                   </div>
                 </div>
                 
                 {subscriptionType === 'subscribe' && (
-                  <select 
-                    value={subscriptionFrequency} 
-                    onChange={(e) => setSubscriptionFrequency(e.target.value)}
-                    className="w-full p-2 border border-gray-300 rounded-lg text-xs font-medium focus:outline-none focus:ring-2 focus:ring-black bg-white"
-                  >
-                    <option>Every 4 weeks (Bestseller)</option>
-                    <option>Every 6 weeks</option>
-                    <option>Every 8 weeks</option>
-                  </select>
+                  <div className="relative">
+                    <select 
+                      value={subscriptionFrequency} 
+                      onChange={(e) => setSubscriptionFrequency(e.target.value)}
+                      className="w-full p-3 border border-gray-300 rounded-lg text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white appearance-none pr-10"
+                    >
+                      <option>Every 4 weeks (Bestseller)</option>
+                      <option>Every 6 weeks</option>
+                      <option>Every 8 weeks</option>
+                    </select>
+                    <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-500 pointer-events-none" />
+                  </div>
                 )}
               </div>
-            </div>
 
-            {/* Quantity and Add to Cart */}
-            <div className="space-y-3">
-              <div className="flex items-center space-x-3">
-                <label className="font-semibold text-gray-900 text-sm">Quantity:</label>
-                <div className="flex items-center border-2 border-gray-300 rounded-lg">
+              {/* Quantity Selector */}
+              <div className="flex items-center justify-between mt-6 mb-4">
+                <div className="flex items-center border border-gray-300 rounded-full">
                   <button
                     onClick={decrementQuantity}
-                    className="p-2 hover:bg-gray-100 transition-colors rounded-l-lg"
+                    className="p-2 hover:bg-gray-100 transition-colors rounded-l-full"
                     disabled={quantity <= 1}
                   >
-                    <Minus className="w-3 h-3" />
+                    <Minus className="w-4 h-4" />
                   </button>
-                  <span className="px-4 py-2 border-x-2 border-gray-300 font-semibold min-w-[50px] text-center text-sm">
+                  <span className="px-4 py-2 font-medium min-w-[50px] text-center">
                     {quantity}
                   </span>
                   <button
                     onClick={incrementQuantity}
-                    className="p-2 hover:bg-gray-100 transition-colors rounded-r-lg"
+                    className="p-2 hover:bg-gray-100 transition-colors rounded-r-full"
                   >
-                    <Plus className="w-3 h-3" />
+                    <Plus className="w-4 h-4" />
                   </button>
                 </div>
               </div>
 
+              {/* Add to Cart Button */}
               <Button
                 onClick={handleAddToCart}
-                className="w-full bg-black text-white hover:bg-gray-800 py-3 text-sm font-semibold rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl"
-                size="sm"
+                className="w-full bg-gray-900 text-white hover:bg-black py-4 text-base font-semibold rounded-xl transition-all duration-200 mb-3"
               >
-                ADD TO CART - £{((subscriptionType === 'subscribe' ? subscriptionPrice : product.price) * quantity).toFixed(2)}
+                ADD TO CART - £{((subscriptionType === 'subscribe' ? subscriptionPrice : product.price) * quantity).toFixed(0)}
               </Button>
 
+              {/* Buy with ShopPay */}
               <Button
-                className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white hover:from-purple-700 hover:to-pink-700 py-3 text-sm font-semibold rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl"
-                size="sm"
+                className="w-full bg-blue-600 text-white hover:bg-blue-700 py-4 text-base font-semibold rounded-xl transition-all duration-200 mb-3"
               >
                 Buy with ShopPay
               </Button>
+
+              {/* More payment options */}
+              <div className="text-center">
+                <button className="text-sm text-gray-600 hover:text-gray-800 underline">
+                  More payment options
+                </button>
+              </div>
+
+              {/* Benefits */}
+              <div className="mt-6 space-y-3">
+                <div className="flex items-center space-x-2">
+                  <div className="w-6 h-6 bg-gray-900 rounded-full flex items-center justify-center">
+                    <CheckCircle className="w-4 h-4 text-white" />
+                  </div>
+                  <span className="text-sm text-gray-700">Skip or cancel anytime</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <div className="w-6 h-6 bg-gray-900 rounded-full flex items-center justify-center">
+                    <CheckCircle className="w-4 h-4 text-white" />
+                  </div>
+                  <span className="text-sm text-gray-700">20% off every subscription order</span>
+                </div>
+              </div>
             </div>
 
             {/* Trust Indicators */}
