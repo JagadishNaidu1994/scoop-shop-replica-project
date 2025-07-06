@@ -407,12 +407,7 @@ const ProductDetail = () => {
         {/* Product Information Tabs */}
         <section className="mb-20">
           <Tabs defaultValue="ingredients" className="w-full">
-            <TabsList className="grid w-full grid-cols-4 mb-8">
-              <TabsTrigger value="ingredients" className="text-sm font-medium">Ingredients</TabsTrigger>
-              <TabsTrigger value="benefits" className="text-sm font-medium">Benefits</TabsTrigger>
-              <TabsTrigger value="usage" className="text-sm font-medium">How to Use</TabsTrigger>
-              <TabsTrigger value="reviews" className="text-sm font-medium">Reviews</TabsTrigger>
-            </TabsList>
+            
             
             <TabsContent value="ingredients">
               <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-8">
