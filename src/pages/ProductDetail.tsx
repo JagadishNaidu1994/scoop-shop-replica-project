@@ -12,6 +12,7 @@ import { Badge } from '@/components/ui/badge';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+
 interface Product {
   id: number;
   name: string;
@@ -22,6 +23,7 @@ interface Product {
   category: string;
   benefits: string[];
 }
+
 const ProductDetail = () => {
   const {
     id
@@ -40,6 +42,7 @@ const ProductDetail = () => {
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [showImageModal, setShowImageModal] = useState(false);
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
+
   const ingredients = [{
     name: 'Vitamin B9',
     amount: '12% RI per serving',
@@ -132,15 +135,20 @@ const ProductDetail = () => {
         navigate('/shop');
         return;
       }
-      const {
-        data,
-        error
-      } = await supabase.from('products').select('*').eq('id', productId).eq('is_active', true).single();
+
+      const { data, error } = await supabase
+        .from('products')
+        .select('*')
+        .eq('id', productId)
+        .eq('is_active', true)
+        .single();
+
       if (error) {
         console.error('Error fetching product:', error);
         navigate('/shop');
         return;
       }
+
       setProduct(data);
     } catch (error) {
       console.error('Error fetching product:', error);
@@ -224,25 +232,52 @@ const ProductDetail = () => {
       </div>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
-        {/* Product Section */}
+        {/* Product Section with Sticky Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-20">
-          {/* Product Images */}
-          <div className="space-y-4">
-            {/* Main Image */}
+          {/* Sticky Product Images */}
+          <div className="lg:sticky lg:top-8 lg:h-fit space-y-4">
+            {/* Main Image with Controls */}
             <div className="relative group">
               <Badge className="absolute top-6 left-6 z-10 bg-gradient-to-r from-purple-600 to-pink-600 text-white text-sm font-semibold px-3 py-1 rounded-full">
                 BEST SELLER
               </Badge>
               <div className="aspect-square bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl overflow-hidden cursor-zoom-in" onClick={() => setShowImageModal(true)}>
-                <AdminImageUpload src={productImages[selectedImage]} alt={product.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" imagePath="product-detail-main" />
+                <AdminImageUpload 
+                  src={productImages[selectedImage]} 
+                  alt={product.name} 
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" 
+                  imagePath="product-detail-main" 
+                />
               </div>
+              
+              {/* Image Navigation Controls */}
+              <button 
+                onClick={() => setSelectedImage(prev => prev === 0 ? productImages.length - 1 : prev - 1)}
+                className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 backdrop-blur-md text-gray-600 hover:bg-white hover:shadow-lg transition-all duration-200 p-3 rounded-full"
+              >
+                <ChevronLeft className="w-5 h-5" />
+              </button>
+              <button 
+                onClick={() => setSelectedImage(prev => prev === productImages.length - 1 ? 0 : prev + 1)}
+                className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 backdrop-blur-md text-gray-600 hover:bg-white hover:shadow-lg transition-all duration-200 p-3 rounded-full"
+              >
+                <ChevronRight className="w-5 h-5" />
+              </button>
               
               {/* Floating Action Buttons */}
               <div className="absolute top-6 right-6 flex flex-col space-y-2">
-                <button onClick={handleWishlist} className={`p-3 rounded-full backdrop-blur-md transition-all duration-200 ${isWishlisted ? 'bg-red-500 text-white shadow-lg' : 'bg-white/80 text-gray-600 hover:bg-white hover:shadow-lg'}`}>
+                <button 
+                  onClick={handleWishlist}
+                  className={`p-3 rounded-full backdrop-blur-md transition-all duration-200 ${
+                    isWishlisted ? 'bg-red-500 text-white shadow-lg' : 'bg-white/80 text-gray-600 hover:bg-white hover:shadow-lg'
+                  }`}
+                >
                   <Heart className={`w-5 h-5 ${isWishlisted ? 'fill-current' : ''}`} />
                 </button>
-                <button onClick={handleShare} className="p-3 rounded-full bg-white/80 backdrop-blur-md text-gray-600 hover:bg-white hover:shadow-lg transition-all duration-200">
+                <button 
+                  onClick={handleShare}
+                  className="p-3 rounded-full bg-white/80 backdrop-blur-md text-gray-600 hover:bg-white hover:shadow-lg transition-all duration-200"
+                >
                   <Share2 className="w-5 h-5" />
                 </button>
               </div>
@@ -250,13 +285,28 @@ const ProductDetail = () => {
             
             {/* Thumbnail Grid */}
             <div className="grid grid-cols-4 gap-3">
-              {productImages.map((image, index) => <button key={index} onClick={() => setSelectedImage(index)} className={`aspect-square rounded-xl overflow-hidden border-2 transition-all duration-200 ${selectedImage === index ? 'border-black shadow-lg scale-105' : 'border-gray-200 hover:border-gray-300 hover:shadow-md'}`}>
-                  <AdminImageUpload src={image} alt={`${product.name} ${index + 1}`} className="w-full h-full object-cover" imagePath={`product-detail-thumbnail-${index + 1}`} />
-                </button>)}
+              {productImages.map((image, index) => (
+                <button
+                  key={index}
+                  onClick={() => setSelectedImage(index)}
+                  className={`aspect-square rounded-xl overflow-hidden border-2 transition-all duration-200 ${
+                    selectedImage === index 
+                      ? 'border-black shadow-lg scale-105' 
+                      : 'border-gray-200 hover:border-gray-300 hover:shadow-md'
+                  }`}
+                >
+                  <AdminImageUpload 
+                    src={image} 
+                    alt={`${product.name} ${index + 1}`} 
+                    className="w-full h-full object-cover" 
+                    imagePath={`product-detail-thumbnail-${index + 1}`} 
+                  />
+                </button>
+              ))}
             </div>
           </div>
 
-          {/* Product Info */}
+          {/* Scrollable Product Info */}
           <div className="space-y-8">
             {/* Rating and Reviews */}
             <div className="flex items-center space-x-4">
@@ -306,15 +356,80 @@ const ProductDetail = () => {
               <span className="text-sm">£{(product.price / 30).toFixed(2)} per serving</span>
             </div>
 
+            {/* Collapsible Sections */}
+            <div className="space-y-4">
+              <Collapsible>
+                <CollapsibleTrigger className="flex items-center justify-between w-full p-4 text-left border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                  <span className="font-semibold text-gray-900">Why choose DIRTEA</span>
+                  <ChevronDown className="w-5 h-5 text-gray-500 transition-transform data-[state=open]:rotate-180" />
+                </CollapsibleTrigger>
+                <CollapsibleContent className="px-4 pb-4 text-gray-700">
+                  <p>DIRTEA offers premium, ethically-sourced functional mushrooms and adaptogens that are scientifically backed for optimal wellness benefits. Our products are third-party tested for purity and potency.</p>
+                </CollapsibleContent>
+              </Collapsible>
+
+              <Collapsible>
+                <CollapsibleTrigger className="flex items-center justify-between w-full p-4 text-left border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                  <span className="font-semibold text-gray-900">Ingredients</span>
+                  <ChevronDown className="w-5 h-5 text-gray-500 transition-transform data-[state=open]:rotate-180" />
+                </CollapsibleTrigger>
+                <CollapsibleContent className="px-4 pb-4 text-gray-700">
+                  <ul className="space-y-2">
+                    <li>• Ceremonial Grade Matcha (2g per serving)</li>
+                    <li>• Lion's Mane Mushroom (500mg per serving)</li>
+                    <li>• Tremella Mushroom (300mg per serving)</li>
+                    <li>• Essential B Vitamins Complex</li>
+                    <li>• Natural flavoring</li>
+                  </ul>
+                </CollapsibleContent>
+              </Collapsible>
+
+              <Collapsible>
+                <CollapsibleTrigger className="flex items-center justify-between w-full p-4 text-left border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                  <span className="font-semibold text-gray-900">The Science</span>
+                  <ChevronDown className="w-5 h-5 text-gray-500 transition-transform data-[state=open]:rotate-180" />
+                </CollapsibleTrigger>
+                <CollapsibleContent className="px-4 pb-4 text-gray-700">
+                  <p>Our formulation is backed by clinical research showing that Lion's Mane supports cognitive function, Tremella provides natural hydration, and ceremonial grade matcha delivers sustained energy without jitters.</p>
+                </CollapsibleContent>
+              </Collapsible>
+
+              <Collapsible>
+                <CollapsibleTrigger className="flex items-center justify-between w-full p-4 text-left border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                  <span className="font-semibold text-gray-900">How to Use</span>
+                  <ChevronDown className="w-5 h-5 text-gray-500 transition-transform data-[state=open]:rotate-180" />
+                </CollapsibleTrigger>
+                <CollapsibleContent className="px-4 pb-4 text-gray-700">
+                  <div className="space-y-2">
+                    <p><strong>Step 1:</strong> Add 1-2 teaspoons to your favorite beverage</p>
+                    <p><strong>Step 2:</strong> Mix well with a whisk or frother</p>
+                    <p><strong>Step 3:</strong> Enjoy daily for best results</p>
+                  </div>
+                </CollapsibleContent>
+              </Collapsible>
+            </div>
+
             {/* Pricing Options */}
             <div className="bg-gray-50 rounded-2xl p-6 space-y-4">
               <h3 className="font-semibold text-lg text-gray-900 mb-4">Choose Your Option</h3>
               
               {/* One-time Purchase */}
-              <div className={`p-5 border-2 rounded-xl cursor-pointer transition-all duration-200 ${subscriptionType === 'one-time' ? 'border-black bg-white shadow-md' : 'border-gray-200 hover:border-gray-300 bg-white/50'}`} onClick={() => setSubscriptionType('one-time')}>
+              <div 
+                className={`p-5 border-2 rounded-xl cursor-pointer transition-all duration-200 ${
+                  subscriptionType === 'one-time' 
+                    ? 'border-black bg-white shadow-md' 
+                    : 'border-gray-200 hover:border-gray-300 bg-white/50'
+                }`}
+                onClick={() => setSubscriptionType('one-time')}
+              >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-4">
-                    <input type="radio" checked={subscriptionType === 'one-time'} readOnly className="w-5 h-5" />
+                    <input 
+                      type="radio" 
+                      checked={subscriptionType === 'one-time'} 
+                      readOnly 
+                      className="w-5 h-5" 
+                    />
                     <div>
                       <span className="font-semibold text-lg">One-time Purchase</span>
                       <p className="text-sm text-gray-500">No commitment, order when you want</p>
@@ -327,10 +442,22 @@ const ProductDetail = () => {
               </div>
 
               {/* Subscribe & Save */}
-              <div className={`p-5 border-2 rounded-xl cursor-pointer transition-all duration-200 ${subscriptionType === 'subscribe' ? 'border-black bg-white shadow-md' : 'border-gray-200 hover:border-gray-300 bg-white/50'}`} onClick={() => setSubscriptionType('subscribe')}>
+              <div 
+                className={`p-5 border-2 rounded-xl cursor-pointer transition-all duration-200 ${
+                  subscriptionType === 'subscribe' 
+                    ? 'border-black bg-white shadow-md' 
+                    : 'border-gray-200 hover:border-gray-300 bg-white/50'
+                }`}
+                onClick={() => setSubscriptionType('subscribe')}
+              >
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center space-x-4">
-                    <input type="radio" checked={subscriptionType === 'subscribe'} readOnly className="w-5 h-5" />
+                    <input 
+                      type="radio" 
+                      checked={subscriptionType === 'subscribe'} 
+                      readOnly 
+                      className="w-5 h-5" 
+                    />
                     <div>
                       <div className="flex items-center space-x-3">
                         <span className="font-semibold text-lg">Subscribe & Save</span>
@@ -350,11 +477,17 @@ const ProductDetail = () => {
                   </div>
                 </div>
                 
-                {subscriptionType === 'subscribe' && <select value={subscriptionFrequency} onChange={e => setSubscriptionFrequency(e.target.value)} className="w-full p-3 border border-gray-300 rounded-lg text-sm font-medium focus:outline-none focus:ring-2 focus:ring-black bg-white">
+                {subscriptionType === 'subscribe' && (
+                  <select 
+                    value={subscriptionFrequency} 
+                    onChange={(e) => setSubscriptionFrequency(e.target.value)}
+                    className="w-full p-3 border border-gray-300 rounded-lg text-sm font-medium focus:outline-none focus:ring-2 focus:ring-black bg-white"
+                  >
                     <option>Every 4 weeks (Bestseller)</option>
                     <option>Every 6 weeks</option>
                     <option>Every 8 weeks</option>
-                  </select>}
+                  </select>
+                )}
               </div>
             </div>
 
@@ -363,21 +496,37 @@ const ProductDetail = () => {
               <div className="flex items-center space-x-4">
                 <label className="font-semibold text-gray-900">Quantity:</label>
                 <div className="flex items-center border-2 border-gray-300 rounded-lg">
-                  <button onClick={decrementQuantity} className="p-3 hover:bg-gray-100 transition-colors rounded-l-lg" disabled={quantity <= 1}>
+                  <button 
+                    onClick={decrementQuantity}
+                    className="p-3 hover:bg-gray-100 transition-colors rounded-l-lg"
+                    disabled={quantity <= 1}
+                  >
                     <Minus className="w-4 h-4" />
                   </button>
-                  <span className="px-6 py-3 border-x-2 border-gray-300 font-semibold min-w-[60px] text-center">{quantity}</span>
-                  <button onClick={incrementQuantity} className="p-3 hover:bg-gray-100 transition-colors rounded-r-lg">
+                  <span className="px-6 py-3 border-x-2 border-gray-300 font-semibold min-w-[60px] text-center">
+                    {quantity}
+                  </span>
+                  <button 
+                    onClick={incrementQuantity}
+                    className="p-3 hover:bg-gray-100 transition-colors rounded-r-lg"
+                  >
                     <Plus className="w-4 h-4" />
                   </button>
                 </div>
               </div>
 
-              <Button onClick={handleAddToCart} className="w-full bg-black text-white hover:bg-gray-800 py-4 text-lg font-semibold rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl" size="lg">
+              <Button 
+                onClick={handleAddToCart}
+                className="w-full bg-black text-white hover:bg-gray-800 py-4 text-lg font-semibold rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl"
+                size="lg"
+              >
                 ADD TO CART - £{((subscriptionType === 'subscribe' ? subscriptionPrice : product.price) * quantity).toFixed(2)}
               </Button>
 
-              <Button className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white hover:from-purple-700 hover:to-pink-700 py-4 text-lg font-semibold rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl" size="lg">
+              <Button 
+                className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white hover:from-purple-700 hover:to-pink-700 py-4 text-lg font-semibold rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl"
+                size="lg"
+              >
                 Buy with ShopPay
               </Button>
             </div>
@@ -407,7 +556,12 @@ const ProductDetail = () => {
         {/* Product Information Tabs */}
         <section className="mb-20">
           <Tabs defaultValue="ingredients" className="w-full">
-            
+            <TabsList className="grid w-full grid-cols-4 mb-8">
+              <TabsTrigger value="ingredients" className="text-sm font-medium">Ingredients</TabsTrigger>
+              <TabsTrigger value="benefits" className="text-sm font-medium">Benefits</TabsTrigger>
+              <TabsTrigger value="usage" className="text-sm font-medium">How to Use</TabsTrigger>
+              <TabsTrigger value="reviews" className="text-sm font-medium">Reviews</TabsTrigger>
+            </TabsList>
             
             <TabsContent value="ingredients">
               <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-8">
@@ -428,9 +582,10 @@ const ProductDetail = () => {
                           {ingredients[currentIngredient].amount}
                         </p>
                         <div className="w-full bg-gray-200 rounded-full h-2 mb-4 max-w-xs mx-auto">
-                          <div className="bg-gradient-to-r from-green-400 to-blue-500 h-2 rounded-full transition-all duration-500" style={{
-                          width: `${ingredients[currentIngredient].percentage}%`
-                        }}></div>
+                          <div 
+                            className="bg-gradient-to-r from-green-400 to-blue-500 h-2 rounded-full transition-all duration-500" 
+                            style={{ width: `${ingredients[currentIngredient].percentage}%` }}
+                          ></div>
                         </div>
                         <p className="text-gray-500 max-w-sm mx-auto leading-relaxed">
                           {ingredients[currentIngredient].description}
@@ -439,13 +594,28 @@ const ProductDetail = () => {
                     </div>
 
                     <div className="flex justify-center space-x-2 mt-6">
-                      {ingredients.map((_, index) => <button key={index} onClick={() => setCurrentIngredient(index)} className={`w-2 h-2 rounded-full transition-all duration-300 ${index === currentIngredient ? 'bg-black w-6' : 'bg-gray-300 hover:bg-gray-400'}`} />)}
+                      {ingredients.map((_, index) => (
+                        <button
+                          key={index}
+                          onClick={() => setCurrentIngredient(index)}
+                          className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                            index === currentIngredient 
+                              ? 'bg-black w-6' 
+                              : 'bg-gray-300 hover:bg-gray-400'
+                          }`}
+                        />
+                      ))}
                     </div>
                   </div>
 
                   <div className="relative">
                     <div className="aspect-square rounded-2xl overflow-hidden shadow-xl">
-                      <AdminImageUpload src="/lovable-uploads/a61d3c6a-fc59-45fe-9266-350a3c40ae91.png" alt="Energy Focus Beauty lifestyle" className="w-full h-full object-cover" imagePath="product-detail-lifestyle" />
+                      <AdminImageUpload 
+                        src="/lovable-uploads/a61d3c6a-fc59-45fe-9266-350a3c40ae91.png" 
+                        alt="Energy Focus Beauty lifestyle" 
+                        className="w-full h-full object-cover" 
+                        imagePath="product-detail-lifestyle" 
+                      />
                     </div>
                   </div>
                 </div>
@@ -454,23 +624,29 @@ const ProductDetail = () => {
             
             <TabsContent value="benefits">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {[{
-                icon: '⚡',
-                title: 'Natural Energy',
-                desc: 'Sustained energy without the crash from ceremonial-grade matcha and B vitamins.'
-              }, {
-                icon: '🧠',
-                title: 'Mental Focus',
-                desc: 'Lion\'s Mane mushroom supports cognitive function and mental clarity.'
-              }, {
-                icon: '✨',
-                title: 'Beauty Support',
-                desc: 'Tremella mushroom provides natural hydration and skin health benefits.'
-              }].map((benefit, index) => <div key={index} className="bg-white p-6 rounded-xl border border-gray-200 hover:shadow-lg transition-shadow">
+                {[
+                  {
+                    icon: '⚡',
+                    title: 'Natural Energy',
+                    desc: 'Sustained energy without the crash from ceremonial-grade matcha and B vitamins.'
+                  },
+                  {
+                    icon: '🧠',
+                    title: 'Mental Focus',
+                    desc: 'Lion\'s Mane mushroom supports cognitive function and mental clarity.'
+                  },
+                  {
+                    icon: '✨',
+                    title: 'Beauty Support',
+                    desc: 'Tremella mushroom provides natural hydration and skin health benefits.'
+                  }
+                ].map((benefit, index) => (
+                  <div key={index} className="bg-white p-6 rounded-xl border border-gray-200 hover:shadow-lg transition-shadow">
                     <div className="text-4xl mb-4">{benefit.icon}</div>
                     <h4 className="text-xl font-semibold mb-3 text-gray-900">{benefit.title}</h4>
                     <p className="text-gray-600 leading-relaxed">{benefit.desc}</p>
-                  </div>)}
+                  </div>
+                ))}
               </div>
             </TabsContent>
             
@@ -505,22 +681,27 @@ const ProductDetail = () => {
             
             <TabsContent value="reviews">
               <div className="space-y-6">
-                {[{
-                name: "Sarah M.",
-                review: "Amazing quality! I've been using this for 3 months now and really notice the difference in my energy levels. Highly recommend!",
-                time: "2 weeks ago",
-                rating: 5
-              }, {
-                name: "James L.",
-                review: "The taste is incredible and I feel so much more focused throughout the day. Worth every penny!",
-                time: "1 month ago",
-                rating: 5
-              }, {
-                name: "Emma R.",
-                review: "Best matcha I've ever tried. The ceremonial grade quality really shows. Will definitely reorder!",
-                time: "3 weeks ago",
-                rating: 5
-              }].map((review, index) => <div key={index} className="bg-white p-6 rounded-xl border border-gray-200 hover:shadow-md transition-shadow">
+                {[
+                  {
+                    name: "Sarah M.",
+                    review: "Amazing quality! I've been using this for 3 months now and really notice the difference in my energy levels. Highly recommend!",
+                    time: "2 weeks ago",
+                    rating: 5
+                  },
+                  {
+                    name: "James L.",
+                    review: "The taste is incredible and I feel so much more focused throughout the day. Worth every penny!",
+                    time: "1 month ago",
+                    rating: 5
+                  },
+                  {
+                    name: "Emma R.",
+                    review: "Best matcha I've ever tried. The ceremonial grade quality really shows. Will definitely reorder!",
+                    time: "3 weeks ago",
+                    rating: 5
+                  }
+                ].map((review, index) => (
+                  <div key={index} className="bg-white p-6 rounded-xl border border-gray-200 hover:shadow-md transition-shadow">
                     <div className="flex items-start space-x-4">
                       <div className="w-12 h-12 bg-gradient-to-br from-gray-400 to-gray-600 rounded-full flex items-center justify-center text-white font-bold">
                         {review.name[0]}
@@ -530,7 +711,9 @@ const ProductDetail = () => {
                           <div>
                             <span className="font-semibold text-gray-900">{review.name}</span>
                             <div className="flex text-yellow-400 mt-1">
-                              {[...Array(review.rating)].map((_, i) => <Star key={i} className="w-4 h-4 fill-current" />)}
+                              {[...Array(review.rating)].map((_, i) => (
+                                <Star key={i} className="w-4 h-4 fill-current" />
+                              ))}
                             </div>
                           </div>
                           <span className="text-sm text-gray-500">{review.time}</span>
@@ -542,49 +725,62 @@ const ProductDetail = () => {
                         </p>
                       </div>
                     </div>
-                  </div>)}
+                  </div>
+                ))}
               </div>
             </TabsContent>
           </Tabs>
         </section>
 
-        {/* Scientific Research & Testing Section */}
-        <section className="mb-20">
-          
-
-          
-
-          {/* Research Metrics */}
-          
-        </section>
-
-        {/* Sustainability & Ethics Section */}
-        <section className="mb-20">
-          
-
-          
-
-          {/* Impact Metrics */}
-          
-        </section>
-
-        {/* Community & Lifestyle Section */}
-        <section className="mb-20">
-          
-
-          {/* Community Stats */}
-          
-
-          {/* Social Proof & UGC */}
-          
-
-          {/* Call to Action */}
-          
-        </section>
-
         {/* NEW SECTION 2: Pure ingredients, powerful benefits */}
         <section className="mb-20">
-          
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div className="space-y-8">
+              <div>
+                <p className="text-lg text-gray-600 mb-4">Functional mushrooms</p>
+                <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
+                  Pure ingredients, powerful benefits.
+                </h2>
+              </div>
+
+              <div className="space-y-6">
+                <div className="border-b border-gray-200 pb-4">
+                  <h3 className="font-semibold text-gray-900 mb-2">Lion's Mane</h3>
+                  <p className="text-gray-700">
+                    Known as the "smart mushroom," Lion's Mane supports cognitive function, memory, 
+                    and focus. Its unique compounds help promote nerve growth factor production.
+                  </p>
+                </div>
+
+                <div className="border-b border-gray-200 pb-4">
+                  <h3 className="font-semibold text-gray-900 mb-2">Tremella</h3>
+                  <p className="text-gray-700">
+                    Often called the "beauty mushroom," Tremella is rich in natural hyaluronic acid, 
+                    supporting skin hydration and promoting a healthy, glowing complexion.
+                  </p>
+                </div>
+
+                <div>
+                  <h3 className="font-semibold text-gray-900 mb-2">Ceremonial Grade Matcha</h3>
+                  <p className="text-gray-700">
+                    The highest quality matcha available, providing sustained energy, antioxidants, 
+                    and L-theanine for calm focus without the jitters.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="relative">
+              <div className="aspect-square rounded-3xl overflow-hidden">
+                <AdminImageUpload 
+                  src="/lovable-uploads/b4c48a6c-d28c-480e-b907-ec5d22258308.png" 
+                  alt="Pure ingredients powerful benefits" 
+                  className="w-full h-full object-cover" 
+                  imagePath="pure-ingredients" 
+                />
+              </div>
+            </div>
+          </div>
         </section>
 
         {/* NEW SECTION 3: For calm energy and better focus */}
@@ -626,7 +822,12 @@ const ProductDetail = () => {
 
             <div className="relative">
               <div className="aspect-square rounded-3xl overflow-hidden">
-                <AdminImageUpload src="/lovable-uploads/e3cb3dde-3127-4252-8b46-ab17c78f4ad8.png" alt="Matcha powder with ceremonial design" className="w-full h-full object-cover" imagePath="matcha-ceremonial" />
+                <AdminImageUpload 
+                  src="/lovable-uploads/e3cb3dde-3127-4252-8b46-ab17c78f4ad8.png" 
+                  alt="Matcha powder with ceremonial design" 
+                  className="w-full h-full object-cover" 
+                  imagePath="matcha-ceremonial" 
+                />
               </div>
             </div>
           </div>
@@ -647,13 +848,20 @@ const ProductDetail = () => {
 
               {/* Step thumbnails */}
               <div className="flex space-x-4">
-                {[...Array(4)].map((_, index) => {})}
+                {[1, 2, 3, 4].map((step) => (
+                  <div key={step} className="w-16 h-16 bg-gray-100 rounded-lg border-2 border-gray-200"></div>
+                ))}
               </div>
             </div>
 
             <div className="relative">
               <div className="aspect-[4/3] rounded-3xl overflow-hidden bg-gray-50">
-                <AdminImageUpload src="/lovable-uploads/b9b609e5-82c9-4039-98a5-3da3b835c962.png" alt="Adding matcha powder to cup" className="w-full h-full object-cover" imagePath="how-to-main" />
+                <AdminImageUpload 
+                  src="/lovable-uploads/b9b609e5-82c9-4039-98a5-3da3b835c962.png" 
+                  alt="Adding matcha powder to cup" 
+                  className="w-full h-full object-cover" 
+                  imagePath="how-to-main" 
+                />
               </div>
               <div className="absolute bottom-6 right-6 flex items-center space-x-2 text-white">
                 <span className="text-sm font-medium">1/4</span>
@@ -677,14 +885,22 @@ const ProductDetail = () => {
                 </div>
               </div>
 
-              <Button className="bg-gray-900 text-white hover:bg-black px-8 py-4 text-lg font-semibold rounded-full transition-all duration-200" onClick={() => navigate('/recipes')}>
+              <Button 
+                className="bg-gray-900 text-white hover:bg-black px-8 py-4 text-lg font-semibold rounded-full transition-all duration-200"
+                onClick={() => navigate('/recipes')}
+              >
                 SEE RECIPES
               </Button>
             </div>
 
             <div className="relative">
               <div className="aspect-[4/3] rounded-3xl overflow-hidden">
-                <AdminImageUpload src="/lovable-uploads/65581248-fb35-4b2f-8b55-04877e634119.png" alt="Person enjoying matcha drink" className="w-full h-full object-cover" imagePath="lifestyle-drink" />
+                <AdminImageUpload 
+                  src="/lovable-uploads/65581248-fb35-4b2f-8b55-04877e634119.png" 
+                  alt="Person enjoying matcha drink" 
+                  className="w-full h-full object-cover" 
+                  imagePath="lifestyle-drink" 
+                />
               </div>
             </div>
           </div>
@@ -695,7 +911,12 @@ const ProductDetail = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div className="relative">
               <div className="aspect-square rounded-3xl overflow-hidden bg-gradient-to-br from-amber-50 to-orange-50">
-                <AdminImageUpload src="/lovable-uploads/45a06faf-330b-4d76-a34b-4c50248900a2.png" alt="Hands holding matcha drink with mushroom art" className="w-full h-full object-cover" imagePath="mushroom-matcha" />
+                <AdminImageUpload 
+                  src="/lovable-uploads/45a06faf-330b-4d76-a34b-4c50248900a2.png" 
+                  alt="Hands holding matcha drink with mushroom art" 
+                  className="w-full h-full object-cover" 
+                  imagePath="mushroom-matcha" 
+                />
               </div>
             </div>
 
@@ -747,20 +968,29 @@ const ProductDetail = () => {
 
           <div className="relative">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {testimonials.map((testimonial, index) => <Card key={index} className="border border-gray-200 hover:shadow-lg transition-shadow">
+              {testimonials.map((testimonial, index) => (
+                <Card key={index} className="border border-gray-200 hover:shadow-lg transition-shadow">
                   <CardContent className="p-0">
                     <div className="aspect-square bg-gray-100 rounded-t-lg overflow-hidden">
-                      <AdminImageUpload src={testimonial.image} alt={`Customer ${testimonial.name}`} className="w-full h-full object-cover" imagePath={`testimonial-image-${index + 1}`} />
+                      <AdminImageUpload 
+                        src={testimonial.image} 
+                        alt={`Customer ${testimonial.name}`} 
+                        className="w-full h-full object-cover" 
+                        imagePath={`testimonial-image-${index + 1}`} 
+                      />
                     </div>
                     <div className="p-6">
                       <div className="flex text-yellow-400 mb-4">
-                        {[...Array(testimonial.rating)].map((_, i) => <Star key={i} className="w-4 h-4 fill-current" />)}
+                        {[...Array(testimonial.rating)].map((_, i) => (
+                          <Star key={i} className="w-4 h-4 fill-current" />
+                        ))}
                       </div>
                       <h4 className="font-semibold text-gray-900 mb-3">{testimonial.name}</h4>
                       <p className="text-gray-700 text-sm leading-relaxed">{testimonial.review}</p>
                     </div>
                   </CardContent>
-                </Card>)}
+                </Card>
+              ))}
             </div>
             
             <button className="absolute right-0 top-1/2 -translate-y-1/2 p-2 bg-white border border-gray-300 rounded-full shadow-sm hover:shadow-md transition-all">
@@ -782,10 +1012,16 @@ const ProductDetail = () => {
 
             <div className="relative">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                {relatedProducts.map((product, index) => <Card key={index} className="border border-gray-200 hover:shadow-lg transition-shadow cursor-pointer">
+                {relatedProducts.map((product, index) => (
+                  <Card key={index} className="border border-gray-200 hover:shadow-lg transition-shadow cursor-pointer">
                     <CardContent className="p-0">
                       <div className="aspect-square bg-gray-100 rounded-t-lg overflow-hidden">
-                        <AdminImageUpload src={product.image} alt={product.name} className="w-full h-full object-cover hover:scale-105 transition-transform duration-300" imagePath={`related-product-${index + 1}`} />
+                        <AdminImageUpload 
+                          src={product.image} 
+                          alt={product.name} 
+                          className="w-full h-full object-cover hover:scale-105 transition-transform duration-300" 
+                          imagePath={`related-product-${index + 1}`} 
+                        />
                       </div>
                       <div className="p-6">
                         <div className="flex items-center justify-between mb-2">
@@ -795,7 +1031,8 @@ const ProductDetail = () => {
                         <p className="text-gray-600 text-sm">{product.description}</p>
                       </div>
                     </CardContent>
-                  </Card>)}
+                  </Card>
+                ))}
               </div>
               
               <button className="absolute right-0 top-1/2 -translate-y-1/2 p-3 bg-white border border-gray-300 rounded-full shadow-md hover:shadow-lg transition-all">
@@ -807,14 +1044,23 @@ const ProductDetail = () => {
       </main>
 
       {/* Image Modal */}
-      {showImageModal && <div className="fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center p-4">
+      {showImageModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center p-4">
           <div className="relative max-w-4xl max-h-full">
-            <button onClick={() => setShowImageModal(false)} className="absolute top-4 right-4 text-white hover:text-gray-300 z-10">
+            <button 
+              onClick={() => setShowImageModal(false)}
+              className="absolute top-4 right-4 text-white hover:text-gray-300 z-10"
+            >
               <X className="w-8 h-8" />
             </button>
-            <img src={productImages[selectedImage]} alt={product.name} className="max-w-full max-h-full object-contain rounded-lg" />
+            <img 
+              src={productImages[selectedImage]} 
+              alt={product.name} 
+              className="max-w-full max-h-full object-contain rounded-lg" 
+            />
           </div>
-        </div>}
+        </div>
+      )}
 
       <Footer />
     </div>;
