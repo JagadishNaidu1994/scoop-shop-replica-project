@@ -417,7 +417,7 @@ const ProductDetail = () => {
             <TabsContent value="ingredients">
               <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-8">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                  <div className="p-8 rounded-2xl shadow-sm bg-white/0">
+                  <div className="p-8 rounded-2xl bg-white/0">
                     <h3 className="text-3xl font-bold text-gray-900 mb-8 text-center">
                       Pure ingredients,<br />
                       powerful benefits.
@@ -589,43 +589,7 @@ const ProductDetail = () => {
 
         {/* NEW SECTION 2: Pure ingredients, powerful benefits */}
         <section className="mb-20">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div className="space-y-8">
-              <div>
-                <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 leading-tight mb-6">
-                  Pure ingredients, powerful benefits.
-                </h2>
-              </div>
-              
-              <div className="space-y-8">
-                <div className="flex items-start space-x-4">
-                  <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0">
-                    <div className="w-8 h-8 bg-white rounded-full"></div>
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-bold text-gray-900 mb-2">MCT</h3>
-                    <p className="text-gray-600">&lt;1g per serving</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Dot indicators */}
-              <div className="flex space-x-2">
-                {[...Array(15)].map((_, i) => <div key={i} className={`w-2 h-2 rounded-full transition-colors ${i === 4 ? 'bg-gray-800' : 'bg-gray-300'}`} />)}
-              </div>
-            </div>
-
-            <div className="relative">
-              <div className="aspect-square rounded-3xl overflow-hidden bg-gradient-to-br from-amber-100 to-orange-100">
-                <AdminImageUpload src="/lovable-uploads/b4c48a6c-d28c-480e-b907-ec5d22258308.png" alt="Energy Focus Beauty" className="w-full h-full object-cover" imagePath="ingredients-hero" />
-              </div>
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="bg-white/90 backdrop-blur-sm rounded-full px-8 py-4">
-                  <span className="text-2xl font-semibold text-gray-800">Energy Focus Beauty</span>
-                </div>
-              </div>
-            </div>
-          </div>
+          
         </section>
 
         {/* NEW SECTION 3: For calm energy and better focus */}
