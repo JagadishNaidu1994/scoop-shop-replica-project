@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import HeaderNavBar from '@/components/HeaderNavBar';
@@ -7,7 +6,7 @@ import AdminImageUpload from '@/components/AdminImageUpload';
 import { supabase } from '@/integrations/supabase/client';
 import { useCart } from '@/contexts/CartContext';
 import { Button } from '@/components/ui/button';
-import { Star, Plus, Minus, ChevronDown, Heart, Share2, Truck, Shield, RefreshCw, Award, CheckCircle, X, Microscope, Leaf, Users, Globe, Zap, Brain, Sparkles, TrendingUp, Camera, Play } from 'lucide-react';
+import { Star, Plus, Minus, ChevronDown, Heart, Share2, Truck, Shield, RefreshCw, Award, CheckCircle, X, Microscope, Leaf, Users, Globe, Zap, Brain, Sparkles, TrendingUp, Camera, Play, ChevronLeft, ChevronRight } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 import { Badge } from '@/components/ui/badge';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
@@ -38,6 +37,7 @@ const ProductDetail = () => {
   const [currentIngredient, setCurrentIngredient] = useState(0);
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [showImageModal, setShowImageModal] = useState(false);
+  const [currentTestimonial, setCurrentTestimonial] = useState(0);
 
   const ingredients = [
     { name: 'Vitamin B9', amount: '12% RI per serving', icon: '🟡', description: 'Essential for DNA synthesis and repair', percentage: 12 },
@@ -52,6 +52,40 @@ const ProductDetail = () => {
     '/lovable-uploads/8edc40eb-3dfa-45fb-8cac-fc1a12ec6a3c.png',
     '/lovable-uploads/8edc40eb-3dfa-45fb-8cac-fc1a12ec6a3c.png',
     '/lovable-uploads/8edc40eb-3dfa-45fb-8cac-fc1a12ec6a3c.png',
+  ];
+
+  const testimonials = [
+    {
+      name: "Ellie F.",
+      image: "/lovable-uploads/8edc40eb-3dfa-45fb-8cac-fc1a12ec6a3c.png",
+      review: "I have been obsessed with the brand for over 2 years. Reishi changed my life for sleep and now I...",
+      rating: 5
+    },
+    {
+      name: "Atlanta R.",
+      image: "/lovable-uploads/8edc40eb-3dfa-45fb-8cac-fc1a12ec6a3c.png",
+      review: "Very yummy to have hot or cold!",
+      rating: 5
+    },
+    {
+      name: "Sharon S.",
+      image: "/lovable-uploads/8edc40eb-3dfa-45fb-8cac-fc1a12ec6a3c.png",
+      review: "My life, my skin and my energy level has changed since my very first cup of Dirtea matcha. I look...",
+      rating: 5
+    },
+    {
+      name: "Julia B.",
+      image: "/lovable-uploads/8edc40eb-3dfa-45fb-8cac-fc1a12ec6a3c.png",
+      review: "Just love it!",
+      rating: 5
+    }
+  ];
+
+  const relatedProducts = [
+    { name: "focus gummies", price: "£27", description: "Focus, memory, cognition", image: "/lovable-uploads/8edc40eb-3dfa-45fb-8cac-fc1a12ec6a3c.png" },
+    { name: "focus powder", price: "£30", description: "Focus, cognition, immunity", image: "/lovable-uploads/8edc40eb-3dfa-45fb-8cac-fc1a12ec6a3c.png" },
+    { name: "immunity powder", price: "£30", description: "Energy, defence, immunity", image: "/lovable-uploads/8edc40eb-3dfa-45fb-8cac-fc1a12ec6a3c.png" },
+    { name: "calm powder", price: "£30", description: "Calm, relax, immunity", image: "/lovable-uploads/8edc40eb-3dfa-45fb-8cac-fc1a12ec6a3c.png" }
   ];
 
   useEffect(() => {
@@ -450,7 +484,8 @@ const ProductDetail = () => {
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                   <div className="bg-white p-8 rounded-2xl shadow-sm">
                     <h3 className="text-3xl font-bold text-gray-900 mb-8 text-center">
-                      Pure ingredients,<br />powerful benefits.
+                      Pure ingredients,<br />
+                      powerful benefits.
                     </h3>
                     
                     <div className="text-center">
@@ -1040,6 +1075,332 @@ const ProductDetail = () => {
                   <span>Cancel anytime</span>
                 </div>
               </div>
+            </div>
+          </div>
+        </section>
+
+        {/* NEW SECTION 2: Pure ingredients, powerful benefits */}
+        <section className="mb-20">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div className="space-y-8">
+              <div>
+                <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 leading-tight mb-6">
+                  Pure ingredients, powerful benefits.
+                </h2>
+              </div>
+              
+              <div className="space-y-8">
+                <div className="flex items-start space-x-4">
+                  <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0">
+                    <div className="w-8 h-8 bg-white rounded-full"></div>
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold text-gray-900 mb-2">MCT</h3>
+                    <p className="text-gray-600">&lt;1g per serving</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Dot indicators */}
+              <div className="flex space-x-2">
+                {[...Array(15)].map((_, i) => (
+                  <div
+                    key={i}
+                    className={`w-2 h-2 rounded-full transition-colors ${
+                      i === 4 ? 'bg-gray-800' : 'bg-gray-300'
+                    }`}
+                  />
+                ))}
+              </div>
+            </div>
+
+            <div className="relative">
+              <div className="aspect-square rounded-3xl overflow-hidden bg-gradient-to-br from-amber-100 to-orange-100">
+                <AdminImageUpload
+                  src="/lovable-uploads/b4c48a6c-d28c-480e-b907-ec5d22258308.png"
+                  alt="Energy Focus Beauty"
+                  className="w-full h-full object-cover"
+                  imagePath="ingredients-hero"
+                />
+              </div>
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="bg-white/90 backdrop-blur-sm rounded-full px-8 py-4">
+                  <span className="text-2xl font-semibold text-gray-800">Energy Focus Beauty</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* NEW SECTION 3: For calm energy and better focus */}
+        <section className="mb-20">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div className="space-y-8">
+              <div>
+                <p className="text-lg text-gray-600 mb-4">Your everyday essential</p>
+                <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
+                  For calm energy and better focus
+                </h2>
+              </div>
+
+              <div className="space-y-6">
+                <div className="border-b border-gray-200 pb-4">
+                  <h3 className="font-semibold text-gray-900 mb-2">Good for:</h3>
+                  <p className="text-gray-700">
+                    DIRTEA Matcha mushroom powder fortified with Lion's Mane, Tremella and B vitamin 
+                    complex enhances energy, boosts focus and hydrates and nourishes the skin.
+                  </p>
+                </div>
+
+                <div className="border-b border-gray-200 pb-4">
+                  <h3 className="font-semibold text-gray-900 mb-2">Tastes like:</h3>
+                  <p className="text-gray-700">
+                    A deliciously smooth taste with soft grassy notes and a subtly sweet and creamy flavour.
+                  </p>
+                </div>
+
+                <div>
+                  <h3 className="font-semibold text-gray-900 mb-2">Did you know?</h3>
+                  <p className="text-gray-700">
+                    Samurai warriors drank matcha for its energising and calming effects, as it provided 
+                    sustained focus and mental clarity, useful in battle or meditation.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="relative">
+              <div className="aspect-square rounded-3xl overflow-hidden">
+                <AdminImageUpload
+                  src="/lovable-uploads/e3cb3dde-3127-4252-8b46-ab17c78f4ad8.png"
+                  alt="Matcha powder with ceremonial design"
+                  className="w-full h-full object-cover"
+                  imagePath="matcha-ceremonial"
+                />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* NEW SECTION 4: How to DIRTEA */}
+        <section className="mb-20">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div className="space-y-8">
+              <div>
+                <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 leading-tight mb-8">
+                  How to DIRTEA
+                </h2>
+                <h3 className="text-2xl lg:text-3xl font-bold text-gray-900">
+                  Add 6g of DIRTEA Matcha powder to a cup
+                </h3>
+              </div>
+
+              {/* Step thumbnails */}
+              <div className="flex space-x-4">
+                {[...Array(4)].map((_, index) => (
+                  <div
+                    key={index}
+                    className={`w-24 h-24 rounded-xl overflow-hidden border-2 transition-all ${
+                      index === 0 ? 'border-black' : 'border-gray-200'
+                    }`}
+                  >
+                    <AdminImageUpload
+                      src="/lovable-uploads/b9b609e5-82c9-4039-98a5-3da3b835c962.png"
+                      alt={`Step ${index + 1}`}
+                      className="w-full h-full object-cover"
+                      imagePath={`how-to-step-${index + 1}`}
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="relative">
+              <div className="aspect-[4/3] rounded-3xl overflow-hidden bg-gray-50">
+                <AdminImageUpload
+                  src="/lovable-uploads/b9b609e5-82c9-4039-98a5-3da3b835c962.png"
+                  alt="Adding matcha powder to cup"
+                  className="w-full h-full object-cover"
+                  imagePath="how-to-main"
+                />
+              </div>
+              <div className="absolute bottom-6 right-6 flex items-center space-x-2 text-white">
+                <span className="text-sm font-medium">1/4</span>
+                <ChevronLeft className="w-4 h-4" />
+                <ChevronRight className="w-4 h-4" />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* NEW SECTION 5: Drink for benefits */}
+        <section className="mb-20">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div className="space-y-8">
+              <div>
+                <p className="text-lg text-gray-600 mb-4">Drink for</p>
+                <div className="space-y-2">
+                  <h2 className="text-4xl lg:text-5xl font-bold text-gray-400">Steady energy</h2>
+                  <h2 className="text-4xl lg:text-5xl font-bold text-gray-400">Calm focus</h2>
+                  <h2 className="text-4xl lg:text-5xl font-bold text-gray-900">Hydrated skin</h2>
+                </div>
+              </div>
+
+              <Button 
+                className="bg-gray-900 text-white hover:bg-black px-8 py-4 text-lg font-semibold rounded-full transition-all duration-200"
+                onClick={() => navigate('/recipes')}
+              >
+                SEE RECIPES
+              </Button>
+            </div>
+
+            <div className="relative">
+              <div className="aspect-[4/3] rounded-3xl overflow-hidden">
+                <AdminImageUpload
+                  src="/lovable-uploads/65581248-fb35-4b2f-8b55-04877e634119.png"
+                  alt="Person enjoying matcha drink"
+                  className="w-full h-full object-cover"
+                  imagePath="lifestyle-drink"
+                />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* NEW SECTION 6: How it Compares */}
+        <section className="mb-20">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div className="relative">
+              <div className="aspect-square rounded-3xl overflow-hidden bg-gradient-to-br from-amber-50 to-orange-50">
+                <AdminImageUpload
+                  src="/lovable-uploads/45a06faf-330b-4d76-a34b-4c50248900a2.png"
+                  alt="Hands holding matcha drink with mushroom art"
+                  className="w-full h-full object-cover"
+                  imagePath="mushroom-matcha"
+                />
+              </div>
+            </div>
+
+            <div className="space-y-8">
+              <div>
+                <p className="text-lg text-gray-600 mb-4">Mushroom Matcha</p>
+                <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
+                  How it Compares
+                </h2>
+              </div>
+
+              <div className="space-y-6">
+                <div className="border-b border-gray-200 pb-6">
+                  <h3 className="font-semibold text-gray-900 mb-3">What is mushroom matcha?</h3>
+                  <p className="text-gray-700 leading-relaxed">
+                    DIRTEA Matcha blends premium Japanese ceremonial-grade matcha with Lion's Mane and Tremella for an 
+                    elevated experience. Unlike standard matcha, our matcha mushroom blend supports focus, cognition, and 
+                    skin hydration with added adaptogens.
+                  </p>
+                </div>
+
+                <div className="border-b border-gray-200 pb-6">
+                  <h3 className="font-semibold text-gray-900 mb-3">Matcha mushroom benefits</h3>
+                  <p className="text-gray-700 leading-relaxed">
+                    Perfect for sustained energy, mental clarity, and glowing skin. While standard matcha offers antioxidants 
+                    and caffeine, DIRTEA Matcha enhances cognitive function and hydration with powerful mushrooms.
+                  </p>
+                </div>
+
+                <div>
+                  <h3 className="font-semibold text-gray-900 mb-3">Where does it fit in your routine?</h3>
+                  <p className="text-gray-700 leading-relaxed">
+                    Enjoy it in the morning or early afternoon for a jitter-free energy boost. Instead of your standard matcha 
+                    powder, buy matcha mushroom powder for a more nourishing, nootropic-powered ritual.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* NEW SECTION 7: Customer Reviews */}
+        <section className="mb-20">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-8">
+              Here's what our customers say
+            </h2>
+          </div>
+
+          <div className="relative">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {testimonials.map((testimonial, index) => (
+                <Card key={index} className="border border-gray-200 hover:shadow-lg transition-shadow">
+                  <CardContent className="p-0">
+                    <div className="aspect-square bg-gray-100 rounded-t-lg overflow-hidden">
+                      <AdminImageUpload
+                        src={testimonial.image}
+                        alt={`Customer ${testimonial.name}`}
+                        className="w-full h-full object-cover"
+                        imagePath={`testimonial-image-${index + 1}`}
+                      />
+                    </div>
+                    <div className="p-6">
+                      <div className="flex text-yellow-400 mb-4">
+                        {[...Array(testimonial.rating)].map((_, i) => (
+                          <Star key={i} className="w-4 h-4 fill-current" />
+                        ))}
+                      </div>
+                      <h4 className="font-semibold text-gray-900 mb-3">{testimonial.name}</h4>
+                      <p className="text-gray-700 text-sm leading-relaxed">{testimonial.review}</p>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+            
+            <button className="absolute right-0 top-1/2 -translate-y-1/2 p-2 bg-white border border-gray-300 rounded-full shadow-sm hover:shadow-md transition-all">
+              <ChevronRight className="w-5 h-5 text-gray-600" />
+            </button>
+          </div>
+        </section>
+
+        {/* NEW SECTION 8: You may also like */}
+        <section className="mb-20">
+          <div>
+            <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-4">You may also like</h2>
+            <div className="flex items-center space-x-4 mb-8">
+              <div className="flex text-yellow-400">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-5 h-5 fill-current" />
+                ))}
+              </div>
+              <span className="text-gray-600">4.9/5 | 18,133 reviews</span>
+            </div>
+
+            <div className="relative">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {relatedProducts.map((product, index) => (
+                  <Card key={index} className="border border-gray-200 hover:shadow-lg transition-shadow cursor-pointer">
+                    <CardContent className="p-0">
+                      <div className="aspect-square bg-gray-100 rounded-t-lg overflow-hidden">
+                        <AdminImageUpload
+                          src={product.image}
+                          alt={product.name}
+                          className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                          imagePath={`related-product-${index + 1}`}
+                        />
+                      </div>
+                      <div className="p-6">
+                        <div className="flex items-center justify-between mb-2">
+                          <h3 className="font-bold text-gray-900">{product.name}</h3>
+                          <span className="font-bold text-gray-900">{product.price}</span>
+                        </div>
+                        <p className="text-gray-600 text-sm">{product.description}</p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+              
+              <button className="absolute right-0 top-1/2 -translate-y-1/2 p-3 bg-white border border-gray-300 rounded-full shadow-md hover:shadow-lg transition-all">
+                <ChevronRight className="w-6 h-6 text-gray-600" />
+              </button>
             </div>
           </div>
         </section>
