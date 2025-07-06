@@ -557,72 +557,94 @@ const ProductDetail = () => {
               </div>
             </div>
 
-            {/* Why choose DIRTEA Section */}
-            <div className="pt-8 border-t border-gray-200">
-              <h3 className="text-xl font-semibold text-gray-900 mb-4">Why choose DIRTEA</h3>
-              <div className="space-y-4">
-                <div className="flex items-start space-x-3">
-                  <div className="w-2 h-2 bg-black rounded-full mt-2 flex-shrink-0"></div>
-                  <p className="text-gray-700">DIRTEA's Matcha Super Latte isn't just delicious - it's a powerhouse for your mind and body. Crafted with 100% pure ceremonial-grade Japanese matcha, Lion's Mane, Tremella mushrooms and vitamins, our matcha powder enhances focus, beauty, energy, supports your nervous system, mental clarity, skin health, immunity, and wellbeing.</p>
-                </div>
-                <div className="flex items-start space-x-3">
-                  <div className="w-2 h-2 bg-black rounded-full mt-2 flex-shrink-0"></div>
-                  <p className="text-gray-700">Complete 100% plant glucans</p>
-                </div>
-                <div className="flex items-start space-x-3">
-                  <div className="w-2 h-2 bg-black rounded-full mt-2 flex-shrink-0"></div>
-                  <p className="text-gray-700">Zero sugars and sweeteners added</p>
-                </div>
-                <div className="flex items-start space-x-3">
-                  <div className="w-2 h-2 bg-black rounded-full mt-2 flex-shrink-0"></div>
-                  <p className="text-gray-700">Boost the skin and anti-ageing benefits</p>
-                </div>
-              </div>
+            {/* Collapsible Sections */}
+            <div className="pt-8 border-t border-gray-200 space-y-6">
+              {/* Why choose DIRTEA Section */}
+              <Collapsible>
+                <CollapsibleTrigger className="flex items-center justify-between w-full py-4 border-b border-gray-200 hover:bg-gray-50/50 transition-colors">
+                  <h3 className="text-xl font-semibold text-gray-900">Why choose DIRTEA</h3>
+                  <Plus className="w-5 h-5 text-gray-500 group-data-[state=open]:rotate-45 transition-transform" />
+                </CollapsibleTrigger>
+                <CollapsibleContent className="pt-4 pb-2">
+                  <div className="space-y-4">
+                    <div className="flex items-start space-x-3">
+                      <div className="w-2 h-2 bg-black rounded-full mt-2 flex-shrink-0"></div>
+                      <p className="text-gray-700">DIRTEA's Matcha Super Latte isn't just delicious - it's a powerhouse for your mind and body. Crafted with 100% pure ceremonial-grade Japanese matcha, Lion's Mane, Tremella mushrooms and vitamins, our matcha powder enhances focus, beauty, energy, supports your nervous system, mental clarity, skin health, immunity, and wellbeing.</p>
+                    </div>
+                    <div className="flex items-start space-x-3">
+                      <div className="w-2 h-2 bg-black rounded-full mt-2 flex-shrink-0"></div>
+                      <p className="text-gray-700">Complete 100% plant glucans</p>
+                    </div>
+                    <div className="flex items-start space-x-3">
+                      <div className="w-2 h-2 bg-black rounded-full mt-2 flex-shrink-0"></div>
+                      <p className="text-gray-700">Zero sugars and sweeteners added</p>
+                    </div>
+                    <div className="flex items-start space-x-3">
+                      <div className="w-2 h-2 bg-black rounded-full mt-2 flex-shrink-0"></div>
+                      <p className="text-gray-700">Boost the skin and anti-ageing benefits</p>
+                    </div>
+                  </div>
+                  <p className="text-sm text-gray-600 mt-4">
+                    Feel the difference with DIRTEA Matcha Mushroom Super Latte! Elevate your daily energize and mind and stay focused!
+                  </p>
+                </CollapsibleContent>
+              </Collapsible>
 
-              <p className="text-sm text-gray-600 mt-4">
-                Feel the difference with DIRTEA Matcha Mushroom Super Latte! Elevate your daily energize and mind and stay focused!
-              </p>
-            </div>
+              {/* Ingredients Section */}
+              <Collapsible>
+                <CollapsibleTrigger className="flex items-center justify-between w-full py-4 border-b border-gray-200 hover:bg-gray-50/50 transition-colors">
+                  <h3 className="text-xl font-semibold text-gray-900">Ingredients</h3>
+                  <Plus className="w-5 h-5 text-gray-500 group-data-[state=open]:rotate-45 transition-transform" />
+                </CollapsibleTrigger>
+                <CollapsibleContent className="pt-4 pb-2">
+                  <div className="space-y-2 text-sm text-gray-700">
+                    <p><strong>Organic Ceremonial-Grade Matcha Powder:</strong></p>
+                    <p><strong>Organic Lion's Mane Mushroom Extract:</strong></p>
+                    <p><strong>Organic Tremella Mushroom Extract:</strong></p>
+                    <p><strong>Organic Mesquite Leaf Powder:</strong></p>
+                    <p><strong>Organic Coconut Milk Powder:</strong></p>
+                    <p><strong>Vitamin B1 (Thiamine HCI):</strong></p>
+                    <p><strong>Vitamin B2 (Riboflavin):</strong></p>
+                    <p><strong>Vitamin B6 (Pyridoxine HCI):</strong></p>
+                    <p><strong>Vitamin B9 (Folic Acid):</strong></p>
+                    <p><strong>Organic Coconut Milk Powder:</strong></p>
+                    <p><strong>Organic Vanilla Extract</strong></p>
+                  </div>
+                </CollapsibleContent>
+              </Collapsible>
 
-            {/* Ingredients Section */}
-            <div className="pt-8 border-t border-gray-200">
-              <h3 className="text-xl font-semibold text-gray-900 mb-4">Ingredients</h3>
-              <div className="space-y-2 text-sm text-gray-700">
-                <p><strong>Organic Ceremonial-Grade Matcha Powder:</strong></p>
-                <p><strong>Organic Lion's Mane Mushroom Extract:</strong></p>
-                <p><strong>Organic Tremella Mushroom Extract:</strong></p>
-                <p><strong>Organic Mesquite Leaf Powder:</strong></p>
-                <p><strong>Organic Coconut Milk Powder:</strong></p>
-                <p><strong>Vitamin B1 (Thiamine HCI):</strong></p>
-                <p><strong>Vitamin B2 (Riboflavin):</strong></p>
-                <p><strong>Vitamin B6 (Pyridoxine HCI):</strong></p>
-                <p><strong>Vitamin B9 (Folic Acid):</strong></p>
-                <p><strong>Organic Coconut Milk Powder:</strong></p>
-                <p><strong>Organic Vanilla Extract</strong></p>
-              </div>
-            </div>
+              {/* The Science Section */}
+              <Collapsible>
+                <CollapsibleTrigger className="flex items-center justify-between w-full py-4 border-b border-gray-200 hover:bg-gray-50/50 transition-colors">
+                  <h3 className="text-xl font-semibold text-gray-900">The Science</h3>
+                  <Plus className="w-5 h-5 text-gray-500 group-data-[state=open]:rotate-45 transition-transform" />
+                </CollapsibleTrigger>
+                <CollapsibleContent className="pt-4 pb-2">
+                  <div className="space-y-4 text-sm text-gray-700">
+                    <p>Matcha comes from the Camellia sinensis plant, like green tea, but is made by finely grinding whole tea leaves into a powder. The traditional cultivation methods cultivate a relationship with nature, using nutrients like amino and antioxidants and promotes relaxation while enhancing focus. Thus, unlike coffee, matcha cultivates a relationship in humans, it delivers an action and also promotes relaxation and internal balance that was once sought by Buddhist monks for centuries, making matcha a ritual, simply source of mental energy.</p>
+                    
+                    <p><strong>Lion's Mane mushroom supports cognitive function and focus, which supports information and neural pathways responsible for critical brain function processes like cognition and memory.</strong> It contains two special compounds, hericenones and erinacines, that research is showing may stimulate the growth of brain cells. Several studies on animals suggest that Lion's Mane may support cognitive health, memory, and focus.</p>
+                    
+                    <p><strong>Tremella mushroom provides a collagen and biotin boost, which supports skin health and hydration.</strong> It's been used for centuries in traditional Chinese medicine as a beauty tonic. Nature's collagen, and a revered ancient beauty superfood to encourage energy levels, and support heart health.</p>
+                  </div>
+                </CollapsibleContent>
+              </Collapsible>
 
-            {/* The Science Section */}
-            <div className="pt-8 border-t border-gray-200">
-              <h3 className="text-xl font-semibold text-gray-900 mb-4">The Science</h3>
-              <div className="space-y-4 text-sm text-gray-700">
-                <p>Matcha comes from the Camellia sinensis plant, like green tea, but is made by finely grinding whole tea leaves into a powder. The traditional cultivation methods cultivate a relationship with nature, using nutrients like amino and antioxidants and promotes relaxation while enhancing focus. Thus, unlike coffee, matcha cultivates a relationship in humans, it delivers an action and also promotes relaxation and internal balance that was once sought by Buddhist monks for centuries, making matcha a ritual, simply source of mental energy.</p>
-                
-                <p><strong>Lion's Mane mushroom supports cognitive function and focus, which supports information and neural pathways responsible for critical brain function processes like cognition and memory.</strong> It contains two special compounds, hericenones and erinacines, that research is showing may stimulate the growth of brain cells. Several studies on animals suggest that Lion's Mane may support cognitive health, memory, and focus.</p>
-                
-                <p><strong>Tremella mushroom provides a collagen and biotin boost, which supports skin health and hydration.</strong> It's been used for centuries in traditional Chinese medicine as a beauty tonic. Nature's collagen, and a revered ancient beauty superfood to encourage energy levels, and support heart health.</p>
-              </div>
-            </div>
-
-            {/* How to Use Section */}
-            <div className="pt-8 border-t border-gray-200">
-              <h3 className="text-xl font-semibold text-gray-900 mb-4">How to Use</h3>
-              <div className="space-y-2 text-sm text-gray-700">
-                <p>1. Add 1-2 tsp of DIRTEA Matcha to a cup</p>
-                <p>2. Pour 60ml of hot water (80°C or cold water)</p>
-                <p>3. Stir or whisk until frothy and smooth</p>
-                <p>4. Add your choice of milk and enjoy!</p>
-              </div>
+              {/* How to Use Section */}
+              <Collapsible>
+                <CollapsibleTrigger className="flex items-center justify-between w-full py-4 border-b border-gray-200 hover:bg-gray-50/50 transition-colors">
+                  <h3 className="text-xl font-semibold text-gray-900">How to Use</h3>
+                  <Plus className="w-5 h-5 text-gray-500 group-data-[state=open]:rotate-45 transition-transform" />
+                </CollapsibleTrigger>
+                <CollapsibleContent className="pt-4 pb-2">
+                  <div className="space-y-2 text-sm text-gray-700">
+                    <p>1. Add 1-2 tsp of DIRTEA Matcha to a cup</p>
+                    <p>2. Pour 60ml of hot water (80°C or cold water)</p>
+                    <p>3. Stir or whisk until frothy and smooth</p>
+                    <p>4. Add your choice of milk and enjoy!</p>
+                  </div>
+                </CollapsibleContent>
+              </Collapsible>
             </div>
           </div>
         </div>
