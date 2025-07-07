@@ -8,7 +8,7 @@ const ProductShowcaseGrid = () => {
   const products = [
     {
       id: 0,
-      name: "DIRTEA Coffee",
+      name: "NASTEA Coffee",
       description: "Arabica Beans Coffee with 100% Pure Lion's Mane Extract for Energy, Focus & Clarity",
       thumbnail: "/lovable-uploads/50613e1a-332e-4401-ad6b-f7849805d249.png",
       mainImage: "/lovable-uploads/50613e1a-332e-4401-ad6b-f7849805d249.png"
