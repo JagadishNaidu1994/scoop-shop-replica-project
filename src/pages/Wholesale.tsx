@@ -1,11 +1,45 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import HeaderNavBar from '@/components/HeaderNavBar';
 import Footer from '@/components/Footer';
 import AdminImageUpload from '@/components/AdminImageUpload';
 import { Phone, Mail, MapPin, Coffee, Users, Award, Truck } from 'lucide-react';
+import { useWholesaleForm } from '@/hooks/useWholesaleForm';
 
 const Wholesale = () => {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    businessType: 'Café',
+    message: ''
+  });
+
+  const { submitForm, isSubmitting } = useWholesaleForm();
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    const result = await submitForm(formData);
+    
+    if (result.success) {
+      // Reset form on success
+      setFormData({
+        name: '',
+        email: '',
+        businessType: 'Café',
+        message: ''
+      });
+    }
+  };
+
   return (
     <div className="min-h-screen bg-white">
       <HeaderNavBar />
@@ -285,11 +319,15 @@ const Wholesale = () => {
             {/* Contact Form */}
             <div className="bg-gray-800 rounded-2xl p-8">
               <h3 className="text-xl font-bold mb-6">Get in Touch</h3>
-              <form className="space-y-6">
+              <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
                   <label className="block text-sm font-medium mb-2 text-gray-300">Name</label>
                   <input 
                     type="text" 
+                    name="name"
+                    value={formData.name}
+                    onChange={handleInputChange}
+                    required
                     className="w-full px-4 py-3 bg-gray-700 rounded-lg border border-gray-600 focus:border-amber-500 focus:outline-none text-white"
                     placeholder="Your name"
                   />
@@ -298,23 +336,36 @@ const Wholesale = () => {
                   <label className="block text-sm font-medium mb-2 text-gray-300">Email</label>
                   <input 
                     type="email" 
+                    name="email"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    required
                     className="w-full px-4 py-3 bg-gray-700 rounded-lg border border-gray-600 focus:border-amber-500 focus:outline-none text-white"
                     placeholder="your@email.com"
                   />
                 </div>
                 <div>
                   <label className="block text-sm font-medium mb-2 text-gray-300">Business Type</label>
-                  <select className="w-full px-4 py-3 bg-gray-700 rounded-lg border border-gray-600 focus:border-amber-500 focus:outline-none text-white">
-                    <option>Café</option>
-                    <option>Restaurant</option>
-                    <option>Office</option>
-                    <option>Hotel</option>
-                    <option>Other</option>
+                  <select 
+                    name="businessType"
+                    value={formData.businessType}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-3 bg-gray-700 rounded-lg border border-gray-600 focus:border-amber-500 focus:outline-none text-white"
+                  >
+                    <option value="Café">Café</option>
+                    <option value="Restaurant">Restaurant</option>
+                    <option value="Office">Office</option>
+                    <option value="Hotel">Hotel</option>
+                    <option value="Other">Other</option>
                   </select>
                 </div>
                 <div>
                   <label className="block text-sm font-medium mb-2 text-gray-300">Message</label>
                   <textarea 
+                    name="message"
+                    value={formData.message}
+                    onChange={handleInputChange}
+                    required
                     rows={4}
                     className="w-full px-4 py-3 bg-gray-700 rounded-lg border border-gray-600 focus:border-amber-500 focus:outline-none text-white"
                     placeholder="Tell us about your business and coffee needs..."
@@ -322,9 +373,10 @@ const Wholesale = () => {
                 </div>
                 <button 
                   type="submit"
-                  className="w-full bg-amber-600 text-white py-3 rounded-lg font-semibold hover:bg-amber-700 transition-colors"
+                  disabled={isSubmitting}
+                  className="w-full bg-amber-600 text-white py-3 rounded-lg font-semibold hover:bg-amber-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Send Message
+                  {isSubmitting ? 'Sending...' : 'Send Message'}
                 </button>
               </form>
             </div>
