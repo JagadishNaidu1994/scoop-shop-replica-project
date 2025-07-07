@@ -5,11 +5,24 @@ import ProductCard from './ProductCard';
 import MobileProductCard from './MobileProductCard';
 import { useToast } from '@/hooks/use-toast';
 
-interface Product {
+interface DatabaseProduct {
   id: number;
   name: string;
   description: string | null;
   price: number;
+  category: string | null;
+  in_stock: boolean | null;
+  is_active: boolean | null;
+  primary_image: string | null;
+  hover_image: string | null;
+  benefits: string[] | null;
+}
+
+interface ComponentProduct {
+  id: number;
+  name: string;
+  description: string | null;
+  price: string;
   category: string | null;
   in_stock: boolean | null;
   is_active: boolean | null;
@@ -21,7 +34,7 @@ interface Product {
 }
 
 const ProductGrid = () => {
-  const [products, setProducts] = useState<Product[]>([]);
+  const [products, setProducts] = useState<ComponentProduct[]>([]);
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
 
@@ -70,9 +83,10 @@ const ProductGrid = () => {
 
       console.log('Fetched products:', data);
       
-      // Map database fields to component expected fields
-      const mappedProducts = data?.map(product => ({
+      // Map database products to component products with proper type conversion
+      const mappedProducts: ComponentProduct[] = data?.map((product: DatabaseProduct) => ({
         ...product,
+        price: product.price.toString(), // Convert number to string
         primaryImage: product.primary_image,
         hoverImage: product.hover_image
       })) || [];

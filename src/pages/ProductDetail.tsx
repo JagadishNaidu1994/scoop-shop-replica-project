@@ -113,9 +113,9 @@ const ProductDetail = () => {
 
     addToCart({
       product_id: product.id,
-      name: product.name,
-      price: product.price,
-      image: product.primary_image || '',
+      product_name: product.name,
+      product_price: product.price,
+      product_image: product.primary_image || '',
       quantity: quantity
     });
 
