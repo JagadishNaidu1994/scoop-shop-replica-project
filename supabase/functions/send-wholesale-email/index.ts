@@ -1,4 +1,5 @@
 
+
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 
 const MAILERSEND_API_KEY = "mlsn.24ef5298b1a1bcd591830bbf73c693e320677accd5ef3c12d955e3022dfc02a6";
@@ -29,7 +30,7 @@ const handler = async (req: Request): Promise<Response> => {
     // Send notification email to you (the business owner)
     const notificationEmailData = {
       from: {
-        email: "noreply@yourdomain.com", // You'll need to replace this with your verified domain
+        email: "MS_bJhxXl@trial-o65qngknd7v4wa12.mlsender.net",
         name: "The Missing Bean Wholesale"
       },
       to: [
@@ -61,7 +62,9 @@ const handler = async (req: Request): Promise<Response> => {
     });
 
     if (!notificationResponse.ok) {
-      throw new Error(`MailerSend notification email failed: ${notificationResponse.statusText}`);
+      const errorText = await notificationResponse.text();
+      console.error("MailerSend notification error:", errorText);
+      throw new Error(`MailerSend notification email failed: ${notificationResponse.statusText} - ${errorText}`);
     }
 
     const notificationResult = await notificationResponse.json();
@@ -70,7 +73,7 @@ const handler = async (req: Request): Promise<Response> => {
     // Send confirmation email to the customer
     const confirmationEmailData = {
       from: {
-        email: "noreply@yourdomain.com", // You'll need to replace this with your verified domain
+        email: "MS_bJhxXl@trial-o65qngknd7v4wa12.mlsender.net",
         name: "The Missing Bean"
       },
       to: [
@@ -105,7 +108,9 @@ const handler = async (req: Request): Promise<Response> => {
     });
 
     if (!confirmationResponse.ok) {
-      throw new Error(`MailerSend confirmation email failed: ${confirmationResponse.statusText}`);
+      const errorText = await confirmationResponse.text();
+      console.error("MailerSend confirmation error:", errorText);
+      throw new Error(`MailerSend confirmation email failed: ${confirmationResponse.statusText} - ${errorText}`);
     }
 
     const confirmationResult = await confirmationResponse.json();
@@ -138,3 +143,4 @@ const handler = async (req: Request): Promise<Response> => {
 };
 
 serve(handler);
+
