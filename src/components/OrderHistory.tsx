@@ -8,7 +8,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { useCart } from '@/contexts/CartContext';
 import { useToast } from '@/hooks/use-toast';
-import { Package, Eye, RotateCcw, ShoppingCart } from 'lucide-react';
+import { Package, Eye, RotateCcw, ShoppingCart, CheckCircle } from 'lucide-react';
 
 interface Order {
   id: string;
@@ -16,6 +16,7 @@ interface Order {
   total_amount: number;
   status: string;
   created_at: string;
+  delivered_at?: string;
   order_items: OrderItem[];
 }
 
@@ -54,6 +55,7 @@ const OrderHistory = () => {
           total_amount,
           status,
           created_at,
+          delivered_at,
           order_items (
             id,
             product_id,
@@ -94,19 +96,23 @@ const OrderHistory = () => {
     return orderNumber.slice(-4).padStart(4, '0');
   };
 
-  const getStatusColor = (status: string) => {
-    switch (status?.toLowerCase()) {
-      case 'pending':
-        return 'bg-yellow-100 text-yellow-800 border-yellow-200';
-      case 'processing':
-        return 'bg-blue-100 text-blue-800 border-blue-200';
-      case 'shipped':
-        return 'bg-purple-100 text-purple-800 border-purple-200';
-      case 'delivered':
-        return 'bg-green-100 text-green-800 border-green-200';
-      default:
-        return 'bg-gray-100 text-gray-800 border-gray-200';
-    }
+  const getProductImage = (productId: number) => {
+    // Map product IDs to images or use a default
+    const imageMap: { [key: number]: string } = {
+      1: "https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=200&h=200&fit=crop",
+      2: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=200&h=200&fit=crop",
+    };
+    return imageMap[productId] || "https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=200&h=200&fit=crop";
+  };
+
+  const getProductDescription = (productName: string) => {
+    // Generate descriptions based on product names
+    const descriptions: { [key: string]: string } = {
+      "Micro Backpack": "Are you a minimalist looking for a compact carry option? The Micro Backpack is the perfect size for your essential everyday carry items. Wear it like a backpack or carry it like a satchel for all-day use.",
+      "Nomad Shopping Tote": "This durable shopping tote is perfect for the world traveler. Its yellow canvas construction is water, fray, tear resistant. The matching handle, backpack straps, and shoulder loops provide multiple carry options for a day out on your next adventure.",
+      "Double Stack Clothing Bag": "Save space and protect your favorite clothes in this double-layer garment bag. Each compartment easily holds multiple pairs of jeans or tops, while keeping your items neatly folded throughout your trip."
+    };
+    return descriptions[productName] || "Premium quality product designed for your everyday needs with excellent durability and style.";
   };
 
   const handleReorder = async (order: Order) => {
@@ -170,104 +176,132 @@ const OrderHistory = () => {
   }
 
   return (
-    <Card className="border-gray-200 bg-white">
-      <CardHeader className="border-b border-gray-100 p-4 sm:p-6">
-        <CardTitle className="flex items-center gap-2 text-black text-lg sm:text-xl">
-          <Package className="h-5 w-5" />
-          Order History
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="p-4 sm:p-6">
-        {orders.length === 0 ? (
-          <div className="text-center py-8">
-            <Package className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-            <p className="text-gray-500 mb-4">No orders found</p>
-            <Link to="/shop">
-              <Button className="bg-black text-white hover:bg-gray-800">
-                Start Shopping
-              </Button>
-            </Link>
-          </div>
-        ) : (
-          <div className="space-y-4">
-            {orders.map((order) => {
-              const itemCount = order.order_items?.length || 0;
-              console.log(`Order ${order.id} has ${itemCount} items:`, order.order_items);
-              
-              return (
-                <div key={order.id} className="border border-gray-200 rounded-lg p-4 bg-white">
-                  <div className="flex flex-col space-y-3 sm:flex-row sm:items-start sm:justify-between sm:space-y-0 mb-3">
-                    <div className="flex-1">
-                      <h3 className="font-semibold text-black text-sm sm:text-base">Order #{formatOrderNumber(order.order_number)}</h3>
-                      <p className="text-sm text-gray-600">
-                        {new Date(order.created_at).toLocaleDateString('en-IN', {
-                          year: 'numeric',
+    <div className="w-full max-w-4xl mx-auto">
+      {orders.length === 0 ? (
+        <Card className="border-gray-200 bg-white">
+          <CardContent className="p-8">
+            <div className="text-center py-8">
+              <Package className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+              <p className="text-gray-500 mb-4">No orders found</p>
+              <Link to="/shop">
+                <Button className="bg-black text-white hover:bg-gray-800">
+                  Start Shopping
+                </Button>
+              </Link>
+            </div>
+          </CardContent>
+        </Card>
+      ) : (
+        <div className="space-y-6">
+          {orders.map((order) => (
+            <Card key={order.id} className="border border-gray-200 bg-white shadow-sm">
+              {/* Order Header */}
+              <div className="border-b border-gray-200 p-6">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-8">
+                    <div>
+                      <p className="text-sm text-gray-600 mb-1">Order number</p>
+                      <p className="font-medium text-gray-900">WU{formatOrderNumber(order.order_number)}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-gray-600 mb-1">Date placed</p>
+                      <p className="font-medium text-gray-900">
+                        {new Date(order.created_at).toLocaleDateString('en-US', {
                           month: 'short',
-                          day: 'numeric'
+                          day: 'numeric',
+                          year: 'numeric'
                         })}
                       </p>
                     </div>
-                    <div className="flex-shrink-0">
-                      <Badge className={`${getStatusColor(order.status)} border text-xs`}>
-                        {order.status?.charAt(0).toUpperCase() + order.status?.slice(1)}
-                      </Badge>
+                    <div>
+                      <p className="text-sm text-gray-600 mb-1">Total amount</p>
+                      <p className="font-medium text-gray-900">₹{order.total_amount}</p>
                     </div>
                   </div>
-
-                  {/* Product Images Section */}
-                  {itemCount > 0 && (
-                    <div className="mb-3">
-                      <div className="flex gap-2 mb-2 overflow-x-auto">
-                        {order.order_items.slice(0, 3).map((item, index) => (
-                          <div key={`${item.id}-${index}`} className="w-12 h-12 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0 border border-gray-200">
-                            <img 
-                              src="https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=200&h=200&fit=crop"
-                              alt={item.product_name}
-                              className="w-full h-full object-cover"
-                            />
-                          </div>
-                        ))}
-                        {itemCount > 3 && (
-                          <div className="w-12 h-12 bg-gray-200 rounded-lg flex items-center justify-center text-xs text-gray-600 border border-gray-200 flex-shrink-0">
-                            +{itemCount - 3}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  )}
-
-                  <div className="mb-3">
-                    <p className="text-sm text-gray-600">
-                      {itemCount} item{itemCount !== 1 ? 's' : ''}
-                    </p>
-                    <p className="font-semibold text-black text-sm sm:text-base">₹{order.total_amount}</p>
-                  </div>
-
-                  <div className="flex flex-col sm:flex-row gap-2">
-                    <Link to={`/orders/${order.id}`} className="flex-1 sm:flex-none">
-                      <Button variant="outline" size="sm" className="w-full sm:w-auto border-black text-black hover:bg-gray-100 bg-white text-xs sm:text-sm">
-                        <Eye className="h-3 w-3 sm:h-4 sm:w-4 mr-1" />
-                        View Details
-                      </Button>
-                    </Link>
-                    <Button 
-                      variant="outline" 
-                      size="sm"
-                      onClick={() => handleReorder(order)}
-                      className="w-full sm:w-auto border-black text-black hover:bg-gray-100 bg-white text-xs sm:text-sm"
-                      disabled={itemCount === 0}
-                    >
-                      <RotateCcw className="h-3 w-3 sm:h-4 sm:w-4 mr-1" />
-                      Reorder
+                  <div className="flex gap-2">
+                    <Button variant="outline" size="sm" className="border-gray-300 text-gray-700 hover:bg-gray-50">
+                      View Order
+                    </Button>
+                    <Button variant="outline" size="sm" className="border-gray-300 text-gray-700 hover:bg-gray-50">
+                      View Invoice
                     </Button>
                   </div>
                 </div>
-              );
-            })}
-          </div>
-        )}
-      </CardContent>
-    </Card>
+              </div>
+
+              {/* Order Items */}
+              <div className="p-6">
+                <div className="space-y-6">
+                  {order.order_items.map((item, index) => (
+                    <div key={`${item.id}-${index}`} className="flex gap-4">
+                      {/* Product Image */}
+                      <div className="w-20 h-20 flex-shrink-0">
+                        <img 
+                          src={getProductImage(item.product_id)}
+                          alt={item.product_name}
+                          className="w-full h-full object-cover rounded-lg border border-gray-200"
+                        />
+                      </div>
+
+                      {/* Product Details */}
+                      <div className="flex-1 min-w-0">
+                        <div className="flex justify-between items-start mb-2">
+                          <h3 className="font-medium text-gray-900 text-lg">{item.product_name}</h3>
+                          <p className="font-semibold text-gray-900 text-lg">₹{item.product_price}</p>
+                        </div>
+                        <p className="text-sm text-gray-600 leading-relaxed mb-4">
+                          {getProductDescription(item.product_name)}
+                        </p>
+                        
+                        {/* Delivery Status */}
+                        {order.status === 'delivered' && (
+                          <div className="flex items-center gap-2 mb-4">
+                            <CheckCircle className="h-4 w-4 text-green-600" />
+                            <span className="text-sm text-green-600 font-medium">
+                              Delivered on {order.delivered_at ? 
+                                new Date(order.delivered_at).toLocaleDateString('en-US', {
+                                  month: 'long',
+                                  day: 'numeric',
+                                  year: 'numeric'
+                                }) : 
+                                new Date(order.created_at).toLocaleDateString('en-US', {
+                                  month: 'long',
+                                  day: 'numeric',
+                                  year: 'numeric'
+                                })
+                              }
+                            </span>
+                          </div>
+                        )}
+
+                        {/* Action Buttons */}
+                        <div className="flex gap-3">
+                          <Button 
+                            variant="outline" 
+                            size="sm" 
+                            className="border-blue-600 text-blue-600 hover:bg-blue-50"
+                          >
+                            View product
+                          </Button>
+                          <Button 
+                            variant="outline" 
+                            size="sm"
+                            onClick={() => handleReorder(order)}
+                            className="border-blue-600 text-blue-600 hover:bg-blue-50"
+                          >
+                            Buy again
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </Card>
+          ))}
+        </div>
+      )}
+    </div>
   );
 };
 
