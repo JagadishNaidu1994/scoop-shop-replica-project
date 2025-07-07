@@ -64,11 +64,11 @@ const Recipes = () => {
       
       <main className="w-full px-4 sm:px-6 lg:px-8">
         {/* Hero Section */}
-        <div className="py-16 text-center">
+        <div className="w-full py-16 text-center">
           <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
             Recipes & Rituals
           </h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <p className="text-xl text-gray-600 max-w-4xl mx-auto">
             Discover delicious ways to incorporate our functional mushrooms and matcha into your daily routine. 
             From energizing morning lattes to calming evening elixirs.
           </p>
@@ -76,7 +76,7 @@ const Recipes = () => {
 
         {/* Featured Recipe */}
         {allRecipes.length > 0 && (
-          <div className="mb-16">
+          <div className="w-full mb-16">
             <div className="relative overflow-hidden rounded-2xl bg-gray-900 text-white">
               <img
                 src={allRecipes[0].image}
@@ -103,7 +103,7 @@ const Recipes = () => {
         )}
 
         {/* Recipe Categories */}
-        <div className="mb-12">
+        <div className="w-full mb-12">
           <div className="flex flex-wrap justify-center gap-4">
             {['All', 'Drinks', 'Smoothies', 'Snacks', 'Breakfast'].map((category) => (
               <button
@@ -122,7 +122,7 @@ const Recipes = () => {
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-black"></div>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pb-16">
+          <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 pb-16">
             {allRecipes.slice(1).map((recipe) => (
               <Link
                 key={recipe.id}

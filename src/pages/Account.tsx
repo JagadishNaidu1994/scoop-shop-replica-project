@@ -218,15 +218,12 @@ const Account = () => {
 
   const handleSubscriptionAction = async (subscriptionId: number, action: 'manage' | 'unsubscribe') => {
     if (action === 'manage') {
-      // Navigate to subscription management page or show modal
-      navigate('/account'); // For now, just refresh the page
+      navigate('/account');
       toast({
         title: "Subscription Management",
         description: "Opening subscription management portal..."
       });
       
-      // Here you would typically integrate with a payment processor like Stripe
-      // For demo purposes, we'll show a success message
       setTimeout(() => {
         toast({
           title: "Subscription Updated",
@@ -304,7 +301,7 @@ const Account = () => {
     return (
       <div className="min-h-screen bg-white">
         <HeaderNavBar />
-        <div className="max-w-6xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+        <div className="w-full py-12 px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-center h-64">
             <div className="text-center">
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-black mx-auto mb-4"></div>
@@ -753,7 +750,7 @@ const Account = () => {
     <div className="min-h-screen bg-white">
       <HeaderNavBar />
       
-      <div className="max-w-6xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+      <div className="w-full py-8 px-4 sm:px-6 lg:px-8">
         {/* Breadcrumb */}
         <div className="flex items-center space-x-2 text-sm text-gray-600 mb-6">
           <span>Home</span>
@@ -785,6 +782,7 @@ const Account = () => {
                       }`}
                     >
                       <Icon className={`h-5 w-5 mr-3 ${isActive ? 'text-white' : 'text-gray-500'}`} />
+                      {/* hide text in mini mode */}
                       <span className="font-medium">{item.title}</span>
                     </button>
                   );

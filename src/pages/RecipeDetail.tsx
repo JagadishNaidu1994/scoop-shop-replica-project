@@ -90,7 +90,7 @@ const RecipeDetail = () => {
     return (
       <div className="min-h-screen bg-white">
         <HeaderNavBar />
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="w-full px-4 sm:px-6 lg:px-8 py-16">
           <div className="text-center">
             <h1 className="text-2xl font-bold text-gray-900 mb-4">Recipe Not Found</h1>
             <button
@@ -110,7 +110,7 @@ const RecipeDetail = () => {
     <div className="min-h-screen bg-white">
       <HeaderNavBar />
       
-      <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="w-full px-4 sm:px-6 lg:px-8 py-8">
         {/* Breadcrumb */}
         <nav className="flex text-sm text-gray-500 mb-8">
           <button onClick={() => navigate('/')} className="hover:text-gray-700">Home</button>
@@ -121,7 +121,7 @@ const RecipeDetail = () => {
         </nav>
 
         {/* Recipe Header */}
-        <div className="mb-12">
+        <div className="w-full mb-12">
           <div className="aspect-[16/9] overflow-hidden rounded-2xl mb-8">
             <img
               src={recipe.image || 'https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=800&h=600&fit=crop'}
@@ -132,7 +132,7 @@ const RecipeDetail = () => {
           
           <div className="text-center mb-8">
             <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">{recipe.title}</h1>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto mb-6">
+            <p className="text-xl text-gray-600 max-w-4xl mx-auto mb-6">
               {recipe.description}
             </p>
             
@@ -153,7 +153,7 @@ const RecipeDetail = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+        <div className="w-full grid grid-cols-1 lg:grid-cols-3 gap-12">
           {/* Ingredients */}
           <div className="lg:col-span-1">
             <div className="bg-gray-50 rounded-2xl p-8 sticky top-8">
@@ -211,7 +211,7 @@ const RecipeDetail = () => {
         </div>
 
         {/* Back to Recipes */}
-        <div className="text-center mt-16 pt-16 border-t border-gray-200">
+        <div className="w-full text-center mt-16 pt-16 border-t border-gray-200">
           <button
             onClick={() => navigate('/recipes')}
             className="bg-black text-white px-8 py-3 rounded-full hover:bg-gray-800 transition-colors"
