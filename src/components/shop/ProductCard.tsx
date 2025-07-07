@@ -40,22 +40,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           className="w-full h-full object-cover transition-all duration-500"
         />
         
-        /* {/* Product Name - Top Left */}
-        <div className="absolute top-4 left-4 z-10 max-w-[60%]">
-          <h3 className="text-lg font-semibold text-white drop-shadow-lg">
-            {product.name}
-            <br/>
-          </h3>
-        </div> */
-
-        {/* Benefits - Below name with proper spacing */}
-        /* {displayBenefits.length > 0 && (
-          <div className="absolute top-12 left-4 z-10 max-w-[60%]">
-            <p className="text-sm text-white drop-shadow-lg">
-              {displayBenefits.join(', ')}
-            </p>
-          </div>
-        )} */
+        
 
 
           {/* Product Name + Benefits - Top Left */}
