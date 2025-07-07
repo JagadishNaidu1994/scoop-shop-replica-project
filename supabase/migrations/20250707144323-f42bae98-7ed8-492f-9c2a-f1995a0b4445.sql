@@ -1,7 +1,7 @@
 
--- Create a table to store individual product page content
-CREATE TABLE IF NOT EXISTS public.product_page_content (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+-- Create a table for product page content
+CREATE TABLE public.product_page_content (
+  id UUID NOT NULL DEFAULT gen_random_uuid() PRIMARY KEY,
   product_id INTEGER REFERENCES public.products(id) ON DELETE CASCADE,
   hero_title TEXT,
   hero_subtitle TEXT,
@@ -17,27 +17,26 @@ CREATE TABLE IF NOT EXISTS public.product_page_content (
   how_to_use_title TEXT DEFAULT 'How to Use',
   how_to_use_steps JSONB DEFAULT '[]'::jsonb,
   testimonials JSONB DEFAULT '[]'::jsonb,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
-  updated_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
-  created_by UUID,
-  UNIQUE(product_id)
+  created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
+  updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
+  created_by UUID REFERENCES auth.users(id)
 );
 
--- Enable RLS
+-- Add Row Level Security
 ALTER TABLE public.product_page_content ENABLE ROW LEVEL SECURITY;
 
--- Create policies
-CREATE POLICY "Anyone can view product page content" 
-  ON public.product_page_content 
-  FOR SELECT 
-  USING (true);
-
+-- Create policies for product page content
 CREATE POLICY "Admins can manage product page content" 
   ON public.product_page_content 
   FOR ALL 
   USING (get_user_admin_status(auth.uid()));
 
--- Create trigger to update updated_at timestamp
+CREATE POLICY "Anyone can view product page content" 
+  ON public.product_page_content 
+  FOR SELECT 
+  USING (true);
+
+-- Create function to update product page content updated_at timestamp
 CREATE OR REPLACE FUNCTION public.update_product_page_content_updated_at()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -46,6 +45,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+-- Create trigger for product page content
 CREATE TRIGGER update_product_page_content_updated_at
   BEFORE UPDATE ON public.product_page_content
   FOR EACH ROW
