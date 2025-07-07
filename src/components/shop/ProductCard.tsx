@@ -40,28 +40,25 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           className="w-full h-full object-cover transition-all duration-500"
         />
         
-        {/* Product Name - Top Left Overlay */}
+        {/* Product Name - Top Left */}
         <div className="absolute top-4 left-4 z-10">
-          <h3 className="text-lg font-semibold text-white drop-shadow-lg">
+          <h3 className="text-lg font-semibold text-white drop-shadow-lg mb-2">
             {product.name}
           </h3>
+          {/* Benefits - Right below the name */}
+          {displayBenefits.length > 0 && (
+            <p className="text-sm text-white drop-shadow-lg">
+              {displayBenefits.join(', ')}
+            </p>
+          )}
         </div>
 
-        {/* Price - Top Right Overlay */}
+        {/* Price - Top Right */}
         <div className="absolute top-4 right-4 z-10">
           <span className="text-lg font-bold text-white drop-shadow-lg">
             {product.price}
           </span>
         </div>
-
-        {/* Benefits - Bottom Left Overlay */}
-        {displayBenefits.length > 0 && (
-          <div className="absolute bottom-4 left-4 z-10">
-            <p className="text-sm text-white drop-shadow-lg">
-              {displayBenefits.join(', ')}
-            </p>
-          </div>
-        )}
         
         {/* Buy Now Button - Slides up from bottom on hover */}
         <div className={`absolute bottom-0 left-0 right-0 transform transition-transform duration-500 ${
