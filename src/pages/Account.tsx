@@ -772,19 +772,32 @@ const Account = () => {
 
         {/* Mobile Header */}
         {isMobile && (
-          <div className="flex items-center justify-between mb-6">
-            <div>
-              <h1 className="text-xl font-bold text-black">My Account</h1>
-              <p className="text-sm text-gray-600">Welcome back, {formData.email?.split('@')[0]}!</p>
+          <div className="mb-6">
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <h1 className="text-xl font-bold text-black">My Account</h1>
+                <p className="text-sm text-gray-600">Welcome back, {formData.email?.split('@')[0]}!</p>
+              </div>
+              <div className="flex items-center gap-2">
+                <Button
+                  onClick={handleSignOut}
+                  variant="outline"
+                  size="sm"
+                  className="border-red-200 text-red-600 hover:bg-red-50"
+                >
+                  <LogOut className="h-4 w-4 mr-1" />
+                  Logout
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setSidebarOpen(!sidebarOpen)}
+                  className="lg:hidden"
+                >
+                  {sidebarOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+                </Button>
+              </div>
             </div>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="lg:hidden"
-            >
-              {sidebarOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
-            </Button>
           </div>
         )}
 
