@@ -53,9 +53,10 @@ const Shop = () => {
 
   const handleAddToCart = (product: Product) => {
     addToCart({
-      name: product.name,
-      price: product.price,
-      image: product.primary_image || '',
+      product_id: product.id,
+      product_name: product.name,
+      product_price: product.price,
+      product_image: product.primary_image || '',
       quantity: 1
     });
     

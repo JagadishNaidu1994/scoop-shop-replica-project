@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -82,15 +81,15 @@ const ProductPageEditor: React.FC<ProductPageEditorProps> = ({ productId, produc
           hero_description: data.hero_description || '',
           hero_image: data.hero_image || '',
           features_title: data.features_title || 'Key Features',
-          features_list: Array.isArray(data.features_list) ? data.features_list : [],
+          features_list: Array.isArray(data.features_list) ? (data.features_list as string[]) : [],
           benefits_title: data.benefits_title || 'Benefits',
           benefits_description: data.benefits_description || '',
           benefits_image: data.benefits_image || '',
           ingredients_title: data.ingredients_title || 'Ingredients',
-          ingredients_list: Array.isArray(data.ingredients_list) ? data.ingredients_list : [],
+          ingredients_list: Array.isArray(data.ingredients_list) ? (data.ingredients_list as string[]) : [],
           how_to_use_title: data.how_to_use_title || 'How to Use',
-          how_to_use_steps: Array.isArray(data.how_to_use_steps) ? data.how_to_use_steps : [],
-          testimonials: Array.isArray(data.testimonials) ? data.testimonials : []
+          how_to_use_steps: Array.isArray(data.how_to_use_steps) ? (data.how_to_use_steps as string[]) : [],
+          testimonials: Array.isArray(data.testimonials) ? (data.testimonials as Array<{name: string; content: string; rating: number}>) : []
         });
       }
     } catch (error) {

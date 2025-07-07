@@ -94,15 +94,15 @@ const ProductDetail = () => {
           hero_description: contentData.hero_description || '',
           hero_image: contentData.hero_image || '',
           features_title: contentData.features_title || 'Key Features',
-          features_list: Array.isArray(contentData.features_list) ? contentData.features_list : [],
+          features_list: Array.isArray(contentData.features_list) ? (contentData.features_list as string[]) : [],
           benefits_title: contentData.benefits_title || 'Benefits',
           benefits_description: contentData.benefits_description || '',
           benefits_image: contentData.benefits_image || '',
           ingredients_title: contentData.ingredients_title || 'Ingredients',
-          ingredients_list: Array.isArray(contentData.ingredients_list) ? contentData.ingredients_list : [],
+          ingredients_list: Array.isArray(contentData.ingredients_list) ? (contentData.ingredients_list as string[]) : [],
           how_to_use_title: contentData.how_to_use_title || 'How to Use',
-          how_to_use_steps: Array.isArray(contentData.how_to_use_steps) ? contentData.how_to_use_steps : [],
-          testimonials: Array.isArray(contentData.testimonials) ? contentData.testimonials : []
+          how_to_use_steps: Array.isArray(contentData.how_to_use_steps) ? (contentData.how_to_use_steps as string[]) : [],
+          testimonials: Array.isArray(contentData.testimonials) ? (contentData.testimonials as Array<{name: string; content: string; rating: number}>) : []
         });
       }
     } catch (error) {
@@ -117,9 +117,10 @@ const ProductDetail = () => {
     if (!product) return;
     
     addToCart({
-      name: product.name,
-      price: product.price,
-      image: product.primary_image || '',
+      product_id: product.id,
+      product_name: product.name,
+      product_price: product.price,
+      product_image: product.primary_image || '',
       quantity: quantity
     });
     
