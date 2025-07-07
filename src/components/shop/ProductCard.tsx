@@ -44,6 +44,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         <div className="absolute top-4 left-4 z-10 max-w-[60%]">
           <h3 className="text-lg font-semibold text-white drop-shadow-lg">
             {product.name}
+             <br />
           </h3>
         </div>
 
@@ -58,7 +59,9 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 
         {/* Price - Top Right */}
         <div className="absolute top-4 right-4 z-10">
-          <span className="text-lg font-bold text-white drop-shadow-lg">
+          # <span className="text-lg font-bold text-white drop-shadow-lg">
+          <span className="text-lg font-bold text-gray-800 bg-white px-3 py-1 rounded drop-shadow-lg">
+
             {product.price}
           </span>
         </div>
