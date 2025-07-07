@@ -16,6 +16,8 @@ interface Product {
   primary_image: string | null;
   hover_image: string | null;
   benefits: string[] | null;
+  primaryImage?: string | null;
+  hoverImage?: string | null;
 }
 
 const ProductGrid = () => {
@@ -67,7 +69,15 @@ const ProductGrid = () => {
       }
 
       console.log('Fetched products:', data);
-      setProducts(data || []);
+      
+      // Map database fields to component expected fields
+      const mappedProducts = data?.map(product => ({
+        ...product,
+        primaryImage: product.primary_image,
+        hoverImage: product.hover_image
+      })) || [];
+      
+      setProducts(mappedProducts);
     } catch (error) {
       console.error('Error fetching products:', error);
       toast({

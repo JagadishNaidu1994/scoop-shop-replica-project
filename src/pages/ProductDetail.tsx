@@ -30,15 +30,15 @@ interface ProductPageContent {
   hero_description: string | null;
   hero_image: string | null;
   features_title: string | null;
-  features_list: any[] | null;
+  features_list: string[] | null;
   benefits_title: string | null;
   benefits_description: string | null;
   benefits_image: string | null;
   ingredients_title: string | null;
-  ingredients_list: any[] | null;
+  ingredients_list: string[] | null;
   how_to_use_title: string | null;
-  how_to_use_steps: any[] | null;
-  testimonials: any[] | null;
+  how_to_use_steps: string[] | null;
+  testimonials: Array<{name: string, text: string}> | null;
 }
 
 const ProductDetail = () => {
@@ -93,7 +93,19 @@ const ProductDetail = () => {
         return;
       }
 
-      setPageContent(data);
+      if (data) {
+        const processedContent: ProductPageContent = {
+          ...data,
+          features_list: Array.isArray(data.features_list) ? data.features_list : [],
+          ingredients_list: Array.isArray(data.ingredients_list) ? data.ingredients_list : [],
+          how_to_use_steps: Array.isArray(data.how_to_use_steps) ? data.how_to_use_steps : [],
+          testimonials: Array.isArray(data.testimonials) ? data.testimonials.map((t: any) => ({
+            name: t.name || '',
+            text: t.text || ''
+          })) : []
+        };
+        setPageContent(processedContent);
+      }
     } catch (error) {
       console.error('Error fetching page content:', error);
     }
@@ -103,7 +115,7 @@ const ProductDetail = () => {
     if (!product) return;
 
     addToCart({
-      id: product.id,
+      productId: product.id,
       name: product.name,
       price: product.price,
       image: product.primary_image || '',
