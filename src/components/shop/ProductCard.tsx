@@ -59,7 +59,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 
 
           {/* Product Name + Benefits - Top Left */}
-<div className="absolute top-4 left-4 z-10 max-w-[70%] bg-black/60 backdrop-blur-sm p-3 rounded-md text-white drop-shadow-lg">
+<div className="absolute top-4 left-4 z-10 max-w-[70%] p-3 rounded-md text-black drop-shadow-lg">
   <h3 className="text-lg font-semibold mb-1 leading-tight">
     {product.name}
   </h3>
