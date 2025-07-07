@@ -1,12 +1,13 @@
 
 import React, { useState, useEffect } from 'react';
-import { Menu, X, ShoppingCart, User, Settings } from 'lucide-react';
+import { Menu, X, ShoppingCart, User, Home, FileText, Briefcase } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useCart } from '@/contexts/CartContext';
 import { supabase } from '@/integrations/supabase/client';
 import { useAdminCheck } from '@/hooks/useAdminCheck';
 import CartDropdown from './CartDropdown';
+import { TubelightNavBar } from './ui/tubelight-navbar';
 
 const HeaderNavBar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -50,6 +51,16 @@ const HeaderNavBar = () => {
     setIsCartOpen(!isCartOpen);
   };
 
+  // Navigation items for the tubelight navbar
+  const navItems = [
+    { name: 'Home', url: '/', icon: Home },
+    { name: 'Shop', url: '/shop', icon: ShoppingCart },
+    { name: 'Recipes', url: '/recipes', icon: FileText },
+    { name: 'Journal', url: '/journal', icon: FileText },
+    { name: 'Story', url: '/story', icon: Briefcase },
+    { name: 'Science', url: '/science', icon: FileText }
+  ];
+
   return (
     <>
       {/* Top promotional banner - horizontally scrolling */}
@@ -73,8 +84,11 @@ const HeaderNavBar = () => {
         </div>
       </div>
       
-      {/* Main header */}
-      <header className="bg-white shadow-sm sticky top-8 z-40 border-b border-gray-100">
+      {/* Tubelight Navigation Bar */}
+      <TubelightNavBar items={navItems} className="sm:top-12" />
+      
+      {/* Main header with logo and user actions */}
+      <header className="bg-white shadow-sm sticky top-8 z-40 border-b border-gray-100 mt-16 sm:mt-0">
         <div className="w-full px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             {/* Mobile menu button - Left */}
@@ -93,28 +107,6 @@ const HeaderNavBar = () => {
                 <h1 className="text-2xl font-bold text-black">NASTEA</h1>
               </Link>
             </div>
-
-            {/* Desktop Navigation - Center */}
-            <nav className="hidden md:flex space-x-8">
-              <Link to="/recipes" className="text-black hover:text-gray-600 transition-colors font-medium">
-                RECIPES
-              </Link>
-              <Link to="/journal" className="text-black hover:text-gray-600 transition-colors font-medium">
-                JOURNAL
-              </Link>
-              <Link to="/science" className="text-black hover:text-gray-600 transition-colors font-medium">
-                SCIENCE
-              </Link>
-              <Link to="/story" className="text-black hover:text-gray-600 transition-colors font-medium">
-                OUR STORY
-              </Link>
-              <Link to="/wholesale" className="text-black hover:text-gray-600 transition-colors font-medium">
-                WHOLESALE
-              </Link>
-              <Link to="/refer" className="text-black hover:text-gray-600 transition-colors font-medium">
-                REFER A FRIEND
-              </Link>
-            </nav>
 
             {/* Right side icons */}
             <div className="flex items-center space-x-4 md:order-last order-3">
