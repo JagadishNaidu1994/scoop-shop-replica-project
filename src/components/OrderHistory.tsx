@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -8,7 +7,8 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { useCart } from '@/contexts/CartContext';
 import { useToast } from '@/hooks/use-toast';
-import { Package, Eye, RotateCcw, ShoppingCart, CheckCircle } from 'lucide-react';
+import { Package, Eye, RotateCcw, ShoppingCart, CheckCircle, Download } from 'lucide-react';
+import { addSampleOrderItems } from '@/utils/sampleOrderData';
 
 interface Order {
   id: string;
@@ -39,8 +39,18 @@ const OrderHistory = () => {
   useEffect(() => {
     if (user) {
       fetchOrders();
+      // Add sample data if orders are empty
+      initializeSampleData();
     }
   }, [user]);
+
+  const initializeSampleData = async () => {
+    try {
+      await addSampleOrderItems(supabase);
+    } catch (error) {
+      console.error('Error initializing sample data:', error);
+    }
+  };
 
   const fetchOrders = async () => {
     if (!user) return;
@@ -97,22 +107,111 @@ const OrderHistory = () => {
   };
 
   const getProductImage = (productId: number) => {
-    // Map product IDs to images or use a default
     const imageMap: { [key: number]: string } = {
       1: "https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=200&h=200&fit=crop",
       2: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=200&h=200&fit=crop",
+      3: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=200&h=200&fit=crop",
     };
     return imageMap[productId] || "https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=200&h=200&fit=crop";
   };
 
   const getProductDescription = (productName: string) => {
-    // Generate descriptions based on product names
     const descriptions: { [key: string]: string } = {
       "Micro Backpack": "Are you a minimalist looking for a compact carry option? The Micro Backpack is the perfect size for your essential everyday carry items. Wear it like a backpack or carry it like a satchel for all-day use.",
       "Nomad Shopping Tote": "This durable shopping tote is perfect for the world traveler. Its yellow canvas construction is water, fray, tear resistant. The matching handle, backpack straps, and shoulder loops provide multiple carry options for a day out on your next adventure.",
       "Double Stack Clothing Bag": "Save space and protect your favorite clothes in this double-layer garment bag. Each compartment easily holds multiple pairs of jeans or tops, while keeping your items neatly folded throughout your trip."
     };
     return descriptions[productName] || "Premium quality product designed for your everyday needs with excellent durability and style.";
+  };
+
+  const handleViewOrder = (orderId: string) => {
+    navigate(`/orders/${orderId}`);
+  };
+
+  const handleViewInvoice = (order: Order) => {
+    const invoiceHTML = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>Invoice - Order #${formatOrderNumber(order.order_number)}</title>
+        <style>
+          body { font-family: Arial, sans-serif; margin: 40px; }
+          .header { text-align: center; margin-bottom: 40px; }
+          .company-name { font-size: 28px; font-weight: bold; color: #000; }
+          .invoice-title { font-size: 24px; margin: 20px 0; }
+          .order-info { display: flex; justify-content: space-between; margin: 30px 0; }
+          .section { margin: 30px 0; }
+          .section-title { font-size: 18px; font-weight: bold; margin-bottom: 10px; border-bottom: 1px solid #ccc; padding-bottom: 5px; }
+          table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+          th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
+          th { background-color: #f5f5f5; font-weight: bold; }
+          .total-row { font-weight: bold; font-size: 16px; }
+          .footer { margin-top: 50px; text-align: center; color: #666; }
+        </style>
+      </head>
+      <body>
+        <div class="header">
+          <div class="company-name">DIRTEA</div>
+          <div class="invoice-title">INVOICE</div>
+        </div>
+        
+        <div class="order-info">
+          <div>
+            <strong>Invoice #:</strong> ${formatOrderNumber(order.order_number)}<br>
+            <strong>Order Date:</strong> ${new Date(order.created_at).toLocaleDateString('en-IN')}<br>
+            <strong>Status:</strong> ${order.status?.charAt(0).toUpperCase() + order.status?.slice(1)}
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="section-title">Order Items</div>
+          <table>
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Unit Price</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${order.order_items?.map((item: any) => `
+                <tr>
+                  <td>${item.product_name}</td>
+                  <td>${item.quantity}</td>
+                  <td>₹${item.product_price}</td>
+                  <td>₹${(item.product_price * item.quantity).toFixed(2)}</td>
+                </tr>
+              `).join('') || ''}
+              <tr class="total-row">
+                <td colspan="3">Total Amount</td>
+                <td>₹${order.total_amount}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="footer">
+          <p>Thank you for your business!</p>
+        </div>
+      </body>
+      </html>
+    `;
+
+    const blob = new Blob([invoiceHTML], { type: 'text/html' });
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `invoice-${formatOrderNumber(order.order_number)}.html`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+
+    toast({
+      title: "Success",
+      description: "Invoice downloaded successfully"
+    });
   };
 
   const handleReorder = async (order: Order) => {
@@ -219,10 +318,22 @@ const OrderHistory = () => {
                     </div>
                   </div>
                   <div className="flex gap-2">
-                    <Button variant="outline" size="sm" className="border-gray-300 text-gray-700 hover:bg-gray-50">
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="border-gray-300 text-gray-700 hover:bg-gray-50"
+                      onClick={() => handleViewOrder(order.id)}
+                    >
+                      <Eye className="h-4 w-4 mr-1" />
                       View Order
                     </Button>
-                    <Button variant="outline" size="sm" className="border-gray-300 text-gray-700 hover:bg-gray-50">
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="border-gray-300 text-gray-700 hover:bg-gray-50"
+                      onClick={() => handleViewInvoice(order)}
+                    >
+                      <Download className="h-4 w-4 mr-1" />
                       View Invoice
                     </Button>
                   </div>
@@ -232,69 +343,76 @@ const OrderHistory = () => {
               {/* Order Items */}
               <div className="p-6">
                 <div className="space-y-6">
-                  {order.order_items.map((item, index) => (
-                    <div key={`${item.id}-${index}`} className="flex gap-4">
-                      {/* Product Image */}
-                      <div className="w-20 h-20 flex-shrink-0">
-                        <img 
-                          src={getProductImage(item.product_id)}
-                          alt={item.product_name}
-                          className="w-full h-full object-cover rounded-lg border border-gray-200"
-                        />
-                      </div>
-
-                      {/* Product Details */}
-                      <div className="flex-1 min-w-0">
-                        <div className="flex justify-between items-start mb-2">
-                          <h3 className="font-medium text-gray-900 text-lg">{item.product_name}</h3>
-                          <p className="font-semibold text-gray-900 text-lg">₹{item.product_price}</p>
+                  {order.order_items && order.order_items.length > 0 ? (
+                    order.order_items.map((item, index) => (
+                      <div key={`${item.id}-${index}`} className="flex gap-4">
+                        {/* Product Image */}
+                        <div className="w-20 h-20 flex-shrink-0">
+                          <img 
+                            src={getProductImage(item.product_id)}
+                            alt={item.product_name}
+                            className="w-full h-full object-cover rounded-lg border border-gray-200"
+                          />
                         </div>
-                        <p className="text-sm text-gray-600 leading-relaxed mb-4">
-                          {getProductDescription(item.product_name)}
-                        </p>
-                        
-                        {/* Delivery Status */}
-                        {order.status === 'delivered' && (
-                          <div className="flex items-center gap-2 mb-4">
-                            <CheckCircle className="h-4 w-4 text-green-600" />
-                            <span className="text-sm text-green-600 font-medium">
-                              Delivered on {order.delivered_at ? 
-                                new Date(order.delivered_at).toLocaleDateString('en-US', {
-                                  month: 'long',
-                                  day: 'numeric',
-                                  year: 'numeric'
-                                }) : 
-                                new Date(order.created_at).toLocaleDateString('en-US', {
-                                  month: 'long',
-                                  day: 'numeric',
-                                  year: 'numeric'
-                                })
-                              }
-                            </span>
+
+                        {/* Product Details */}
+                        <div className="flex-1 min-w-0">
+                          <div className="flex justify-between items-start mb-2">
+                            <h3 className="font-medium text-gray-900 text-lg">{item.product_name}</h3>
+                            <p className="font-semibold text-gray-900 text-lg">₹{item.product_price}</p>
                           </div>
-                        )}
+                          <p className="text-sm text-gray-600 leading-relaxed mb-4">
+                            {getProductDescription(item.product_name)}
+                          </p>
+                          
+                          {/* Delivery Status */}
+                          {order.status === 'delivered' && (
+                            <div className="flex items-center gap-2 mb-4">
+                              <CheckCircle className="h-4 w-4 text-green-600" />
+                              <span className="text-sm text-green-600 font-medium">
+                                Delivered on {order.delivered_at ? 
+                                  new Date(order.delivered_at).toLocaleDateString('en-US', {
+                                    month: 'long',
+                                    day: 'numeric',
+                                    year: 'numeric'
+                                  }) : 
+                                  new Date(order.created_at).toLocaleDateString('en-US', {
+                                    month: 'long',
+                                    day: 'numeric',
+                                    year: 'numeric'
+                                  })
+                                }
+                              </span>
+                            </div>
+                          )}
 
-                        {/* Action Buttons */}
-                        <div className="flex gap-3">
-                          <Button 
-                            variant="outline" 
-                            size="sm" 
-                            className="border-blue-600 text-blue-600 hover:bg-blue-50"
-                          >
-                            View product
-                          </Button>
-                          <Button 
-                            variant="outline" 
-                            size="sm"
-                            onClick={() => handleReorder(order)}
-                            className="border-blue-600 text-blue-600 hover:bg-blue-50"
-                          >
-                            Buy again
-                          </Button>
+                          {/* Action Buttons */}
+                          <div className="flex gap-3">
+                            <Button 
+                              variant="outline" 
+                              size="sm" 
+                              className="border-blue-600 text-blue-600 hover:bg-blue-50"
+                            >
+                              View product
+                            </Button>
+                            <Button 
+                              variant="outline" 
+                              size="sm"
+                              onClick={() => handleReorder(order)}
+                              className="border-blue-600 text-blue-600 hover:bg-blue-50"
+                            >
+                              Buy again
+                            </Button>
+                          </div>
                         </div>
                       </div>
+                    ))
+                  ) : (
+                    <div className="text-center py-8">
+                      <Package className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                      <p className="text-gray-500">No items found for this order</p>
                     </div>
-                  ))}
+                  )}
                 </div>
               </div>
             </Card>
