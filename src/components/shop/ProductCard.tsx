@@ -49,7 +49,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     {product.name}
   </h3>
   {displayBenefits.length > 0 && (
-    <p className="text-sm leading-snug">
+    <p className="text-xs leading-snug">
       {displayBenefits.join(', ')}
     </p>
   )}
