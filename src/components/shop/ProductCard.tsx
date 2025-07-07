@@ -33,12 +33,35 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <div className="relative aspect-square overflow-hidden mb-4">
+      <div className="relative aspect-square overflow-hidden">
         <img
           src={isHovered ? product.hoverImage : product.primaryImage}
           alt={product.name}
           className="w-full h-full object-cover transition-all duration-500"
         />
+        
+        {/* Product Name - Top Left Overlay */}
+        <div className="absolute top-4 left-4 z-10">
+          <h3 className="text-lg font-semibold text-white drop-shadow-lg">
+            {product.name}
+          </h3>
+        </div>
+
+        {/* Price - Top Right Overlay */}
+        <div className="absolute top-4 right-4 z-10">
+          <span className="text-lg font-bold text-white drop-shadow-lg">
+            {product.price}
+          </span>
+        </div>
+
+        {/* Benefits - Bottom Left Overlay */}
+        {displayBenefits.length > 0 && (
+          <div className="absolute bottom-4 left-4 z-10">
+            <p className="text-sm text-white drop-shadow-lg">
+              {displayBenefits.join(', ')}
+            </p>
+          </div>
+        )}
         
         {/* Buy Now Button - Slides up from bottom on hover */}
         <div className={`absolute bottom-0 left-0 right-0 transform transition-transform duration-500 ${
@@ -50,25 +73,6 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             </button>
           </div>
         </div>
-      </div>
-
-      {/* Product Info */}
-      <div className="px-2 pb-4">
-        <div className="flex justify-between items-start mb-3">
-          <h3 className="text-lg font-semibold text-black">
-            {product.name}
-          </h3>
-          <span className="text-lg font-bold text-black">
-            {product.price}
-          </span>
-        </div>
-        
-        {/* Benefits */}
-        {displayBenefits.length > 0 && (
-          <p className="text-sm text-gray-600">
-            {displayBenefits.join(', ')}
-          </p>
-        )}
       </div>
     </div>
   );
