@@ -7,7 +7,7 @@ interface Product {
   name: string;
   price: string;
   primaryImage: string;
-  description?: string;
+  benefits?: string[];
 }
 
 interface MobileProductCardProps {
@@ -23,13 +23,15 @@ const MobileProductCard: React.FC<MobileProductCardProps> = ({ product }) => {
 
   const handleBuyNow = (e: React.MouseEvent) => {
     e.stopPropagation();
-    // Add to cart or navigate to product detail
     navigate(`/products/${product.id}`);
   };
 
+  // Get first 2-3 benefits
+  const displayBenefits = product.benefits?.slice(0, 3) || [];
+
   return (
     <div 
-      className="bg-gray-100 rounded-lg p-4 cursor-pointer"
+      className="bg-white rounded-lg p-4 cursor-pointer shadow-sm"
       onClick={handleClick}
     >
       <div className="aspect-square mb-4 overflow-hidden rounded-lg">
@@ -41,17 +43,21 @@ const MobileProductCard: React.FC<MobileProductCardProps> = ({ product }) => {
       </div>
       
       <div className="text-center">
-        <h3 className="text-lg font-semibold text-black mb-1">
-          {product.name}
-        </h3>
-        {product.description && (
-          <p className="text-sm text-gray-600 mb-2">
-            {product.description}
+        <div className="flex justify-between items-start mb-3">
+          <h3 className="text-lg font-semibold text-black text-left">
+            {product.name}
+          </h3>
+          <span className="text-lg font-bold text-black">
+            {product.price}
+          </span>
+        </div>
+        
+        {/* Benefits */}
+        {displayBenefits.length > 0 && (
+          <p className="text-sm text-gray-600 mb-4 text-left">
+            {displayBenefits.join(', ')}
           </p>
         )}
-        <p className="text-lg font-bold text-black mb-3">
-          {product.price}
-        </p>
         
         <button
           onClick={handleBuyNow}

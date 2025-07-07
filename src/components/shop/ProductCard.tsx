@@ -8,7 +8,7 @@ interface Product {
   price: string;
   primaryImage: string;
   hoverImage: string;
-  description?: string;
+  benefits?: string[];
 }
 
 interface ProductCardProps {
@@ -23,39 +23,23 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     navigate(`/products/${product.id}`);
   };
 
+  // Get first 2-3 benefits
+  const displayBenefits = product.benefits?.slice(0, 3) || [];
+
   return (
     <div 
-      className="group cursor-pointer relative overflow-hidden rounded-lg"
+      className="group cursor-pointer relative overflow-hidden rounded-lg bg-white"
       onClick={handleClick}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <div className="relative aspect-square overflow-hidden">
+      <div className="relative aspect-square overflow-hidden mb-4">
         <img
           src={isHovered ? product.hoverImage : product.primaryImage}
           alt={product.name}
           className="w-full h-full object-cover transition-all duration-500"
         />
         
-        {/* Price - Top Right */}
-        <div className="absolute top-4 right-4 z-10">
-          <span className={`text-lg font-bold ${isHovered ? 'text-white' : 'text-black'} transition-colors duration-300`}>
-            {product.price}
-          </span>
-        </div>
-
-        {/* Product Info - Top Left */}
-        <div className="absolute top-4 left-4 z-10">
-          <h3 className={`text-lg font-semibold ${isHovered ? 'text-white' : 'text-black'} transition-colors duration-300 mb-1`}>
-            {product.name}
-          </h3>
-          {product.description && (
-            <p className={`text-sm ${isHovered ? 'text-white' : 'text-gray-600'} transition-colors duration-300`}>
-              {product.description}
-            </p>
-          )}
-        </div>
-
         {/* Buy Now Button - Slides up from bottom on hover */}
         <div className={`absolute bottom-0 left-0 right-0 transform transition-transform duration-500 ${
           isHovered ? 'translate-y-0' : 'translate-y-full'
@@ -66,6 +50,25 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             </button>
           </div>
         </div>
+      </div>
+
+      {/* Product Info */}
+      <div className="px-2 pb-4">
+        <div className="flex justify-between items-start mb-3">
+          <h3 className="text-lg font-semibold text-black">
+            {product.name}
+          </h3>
+          <span className="text-lg font-bold text-black">
+            {product.price}
+          </span>
+        </div>
+        
+        {/* Benefits */}
+        {displayBenefits.length > 0 && (
+          <p className="text-sm text-gray-600">
+            {displayBenefits.join(', ')}
+          </p>
+        )}
       </div>
     </div>
   );

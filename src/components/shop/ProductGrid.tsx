@@ -51,7 +51,7 @@ const ProductGrid: React.FC<ProductGridProps> = ({ products }) => {
           price: `£${(product.price / 100).toFixed(2)}`,
           primaryImage: product.primary_image || '/placeholder.svg',
           hoverImage: product.hover_image || '/placeholder.svg',
-          description: product.description || ''
+          benefits: product.benefits || []
         };
 
         return isMobile ? (
