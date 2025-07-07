@@ -1,7 +1,7 @@
 
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 
-const MAILERSEND_API_KEY = Deno.env.get("MAILERSEND_API_KEY");
+const MAILERSEND_API_KEY = "mlsn.24ef5298b1a1bcd591830bbf73c693e320677accd5ef3c12d955e3022dfc02a6";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -29,13 +29,13 @@ const handler = async (req: Request): Promise<Response> => {
     // Send notification email to you (the business owner)
     const notificationEmailData = {
       from: {
-        email: "noreply@yourdomain.com", // Replace with your verified domain
+        email: "noreply@yourdomain.com", // You'll need to replace this with your verified domain
         name: "The Missing Bean Wholesale"
       },
       to: [
         {
-          email: "your-email@example.com", // Replace with your actual email
-          name: "Business Owner"
+          email: "jagadish.bondada@gmail.com",
+          name: "Jagadish Bondada"
         }
       ],
       subject: `New Wholesale Inquiry from ${name}`,
@@ -70,7 +70,7 @@ const handler = async (req: Request): Promise<Response> => {
     // Send confirmation email to the customer
     const confirmationEmailData = {
       from: {
-        email: "noreply@yourdomain.com", // Replace with your verified domain
+        email: "noreply@yourdomain.com", // You'll need to replace this with your verified domain
         name: "The Missing Bean"
       },
       to: [
