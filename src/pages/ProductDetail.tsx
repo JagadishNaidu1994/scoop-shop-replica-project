@@ -251,7 +251,7 @@ const ProductDetail = () => {
     return (
       <div className="min-h-screen bg-white">
         <HeaderNavBar />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="w-full px-4 sm:px-6 lg:px-8 py-16">
           <div className="text-center">
             <h1 className="text-2xl font-bold text-gray-900 mb-4">Product Not Found</h1>
             <Button onClick={() => navigate('/shop')}>Back to Shop</Button>
@@ -269,7 +269,7 @@ const ProductDetail = () => {
       <HeaderNavBar />
       
       {/* Breadcrumb */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+      <div className="w-full px-4 sm:px-6 lg:px-8 py-3">
         <nav className="flex text-sm text-gray-500 font-medium">
           <span className="hover:text-gray-700 cursor-pointer" onClick={() => navigate('/')}>Home</span>
           <span className="mx-2">/</span>
@@ -279,7 +279,7 @@ const ProductDetail = () => {
         </nav>
       </div>
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
+      <main className="w-full px-4 sm:px-6 lg:px-8 pb-16">
         {/* Product Section with Sticky Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-20">
           {/* Left Side - Image Gallery (Sticky) */}
@@ -671,7 +671,7 @@ const ProductDetail = () => {
         </div>
 
         {/* Product Information Tabs */}
-        <section className="mb-20">
+        <section className="mb-20 w-full">
           <Tabs defaultValue="ingredients" className="w-full">
             <TabsList className="grid w-full grid-cols-4 mb-8">
               <TabsTrigger value="ingredients" className="text-lg font-semibold">Ingredients</TabsTrigger>
@@ -850,7 +850,7 @@ const ProductDetail = () => {
         </section>
 
         {/* NEW SECTION 2: Pure ingredients, powerful benefits */}
-        <section className="mb-20">
+        <section className="mb-20 w-full">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div className="relative">
               <div className="aspect-square rounded-3xl overflow-hidden">
@@ -907,7 +907,7 @@ const ProductDetail = () => {
         </section>
 
         {/* NEW SECTION 3: For calm energy and better focus */}
-        <section className="mb-20">
+        <section className="mb-20 w-full">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div className="space-y-8">
               <div>
@@ -957,7 +957,7 @@ const ProductDetail = () => {
         </section>
 
         {/* NEW SECTION 4: How to DIRTEA */}
-        <section className="mb-20">
+        <section className="mb-20 w-full">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div className="space-y-8">
               <div>
@@ -1003,7 +1003,7 @@ const ProductDetail = () => {
         </section>
 
         {/* NEW SECTION 5: Drink for benefits */}
-        <section className="mb-20">
+        <section className="mb-20 w-full">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div className="space-y-8">
               <div>
@@ -1037,7 +1037,7 @@ const ProductDetail = () => {
         </section>
 
         {/* NEW SECTION 6: How it Compares */}
-        <section className="mb-20">
+        <section className="mb-20 w-full">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div className="relative">
               <div className="aspect-square rounded-3xl overflow-hidden bg-gradient-to-br from-amber-50 to-orange-50">
@@ -1089,7 +1089,7 @@ const ProductDetail = () => {
         </section>
 
         {/* NEW SECTION 7: Customer Reviews */}
-        <section className="mb-20">
+        <section className="mb-20 w-full">
           <div className="text-center mb-12">
             <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-8">
               Here's what our customers say
@@ -1130,7 +1130,7 @@ const ProductDetail = () => {
         </section>
 
         {/* NEW SECTION 8: You may also like */}
-        <section className="mb-20">
+        <section className="mb-20 w-full">
           <div>
             <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-4">You may also like</h2>
             <div className="flex items-center space-x-4 mb-8">
