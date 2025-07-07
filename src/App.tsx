@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -6,7 +7,9 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { CartProvider } from "@/contexts/CartContext";
 import { AdminImageProvider } from "@/contexts/AdminImageContext";
+import { AdminEditProvider } from "@/contexts/AdminEditContext";
 import AdminFloatingControls from "@/components/AdminFloatingControls";
+import AdminEditToggle from "@/components/admin/AdminEditToggle";
 
 import Index from "./pages/Index";
 import Shop from "./pages/Shop";
@@ -42,45 +45,48 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <AuthProvider>
       <AdminImageProvider>
-        <CartProvider>
-          <TooltipProvider>
-            <Toaster />
-            <Sonner />
-            <BrowserRouter>
-              <AdminFloatingControls />
-              <Routes>
-                <Route path="/" element={<Index />} />
-                <Route path="/shop" element={<Shop />} />
-                <Route path="/products/:id" element={<ProductDetail />} />
-                <Route path="/recipes" element={<Recipes />} />
-                <Route path="/recipes/:id" element={<RecipeDetail />} />
-                <Route path="/journal" element={<Journal />} />
-                <Route path="/journal/:id" element={<JournalDetail />} />
-                <Route path="/blog" element={<Blog />} />
-                <Route path="/about" element={<About />} />
-                <Route path="/faq" element={<FAQ />} />
-                <Route path="/admin/recipes" element={<AdminRecipes />} />
-                <Route path="/admin/products" element={<AdminProducts />} />
-                <Route path="/admin/journals" element={<AdminJournals />} />
-                <Route path="/admin/dashboard" element={<AdminDashboard />} />
-                <Route path="/science" element={<Science />} />
-                <Route path="/story" element={<OurStory />} />
-                <Route path="/refer" element={<ReferFriend />} />
-                <Route path="/wholesale" element={<Wholesale />} />
-                <Route path="/auth" element={<Auth />} />
-                <Route path="/account" element={<Account />} />
-                <Route path="/orders/:id" element={<OrderDetail />} />
-                <Route path="/checkout" element={<Checkout />} />
-                <Route path="/contact" element={<Contact />} />
-                <Route path="/terms" element={<TermsOfService />} />
-                <Route path="/privacy" element={<PrivacyPolicy />} />
-                <Route path="/stores" element={<StoreLocator />} />
-                {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </BrowserRouter>
-          </TooltipProvider>
-        </CartProvider>
+        <AdminEditProvider>
+          <CartProvider>
+            <TooltipProvider>
+              <Toaster />
+              <Sonner />
+              <BrowserRouter>
+                <AdminFloatingControls />
+                <AdminEditToggle />
+                <Routes>
+                  <Route path="/" element={<Index />} />
+                  <Route path="/shop" element={<Shop />} />
+                  <Route path="/products/:id" element={<ProductDetail />} />
+                  <Route path="/recipes" element={<Recipes />} />
+                  <Route path="/recipes/:id" element={<RecipeDetail />} />
+                  <Route path="/journal" element={<Journal />} />
+                  <Route path="/journal/:id" element={<JournalDetail />} />
+                  <Route path="/blog" element={<Blog />} />
+                  <Route path="/about" element={<About />} />
+                  <Route path="/faq" element={<FAQ />} />
+                  <Route path="/admin/recipes" element={<AdminRecipes />} />
+                  <Route path="/admin/products" element={<AdminProducts />} />
+                  <Route path="/admin/journals" element={<AdminJournals />} />
+                  <Route path="/admin/dashboard" element={<AdminDashboard />} />
+                  <Route path="/science" element={<Science />} />
+                  <Route path="/story" element={<OurStory />} />
+                  <Route path="/refer" element={<ReferFriend />} />
+                  <Route path="/wholesale" element={<Wholesale />} />
+                  <Route path="/auth" element={<Auth />} />
+                  <Route path="/account" element={<Account />} />
+                  <Route path="/orders/:id" element={<OrderDetail />} />
+                  <Route path="/checkout" element={<Checkout />} />
+                  <Route path="/contact" element={<Contact />} />
+                  <Route path="/terms" element={<TermsOfService />} />
+                  <Route path="/privacy" element={<PrivacyPolicy />} />
+                  <Route path="/stores" element={<StoreLocator />} />
+                  {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </BrowserRouter>
+            </TooltipProvider>
+          </CartProvider>
+        </AdminEditProvider>
       </AdminImageProvider>
     </AuthProvider>
   </QueryClientProvider>
