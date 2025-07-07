@@ -56,28 +56,20 @@ export const AdminEditProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   const loadAllPageContent = async () => {
     setLoading(true);
     try {
-      // Use raw SQL query to avoid TypeScript issues with the new table
+      // Direct query to page_content table
       const { data, error } = await supabase
-        .rpc('exec', {
-          sql: 'SELECT * FROM page_content ORDER BY updated_at DESC'
-        });
+        .from('page_content')
+        .select('*')
+        .order('updated_at', { ascending: false });
 
       if (error) {
-        // Fallback to direct query if RPC doesn't work
-        const response = await supabase.from('page_content' as any).select('*');
-        if (response.error) throw response.error;
-        
+        console.error('Error loading page content:', error);
+        return;
+      }
+
+      if (data) {
         const contentMap: Record<string, Record<string, string>> = {};
-        response.data?.forEach((item: PageContent) => {
-          if (!contentMap[item.page_id]) {
-            contentMap[item.page_id] = {};
-          }
-          contentMap[item.page_id][item.content_key] = item.content_value;
-        });
-        setPageContent(contentMap);
-      } else {
-        const contentMap: Record<string, Record<string, string>> = {};
-        data?.forEach((item: PageContent) => {
+        data.forEach((item: PageContent) => {
           if (!contentMap[item.page_id]) {
             contentMap[item.page_id] = {};
           }
@@ -110,9 +102,9 @@ export const AdminEditProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     type: 'text' | 'html' | 'image' | 'json' = 'text'
   ) => {
     try {
-      // Use direct query with type assertion to bypass TypeScript issues
+      // Use upsert to insert or update the content
       const { data, error } = await supabase
-        .from('page_content' as any)
+        .from('page_content')
         .upsert({
           page_id: pageId,
           content_key: contentKey,
