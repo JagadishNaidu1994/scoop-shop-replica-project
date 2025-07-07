@@ -13,6 +13,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useCart } from '@/contexts/CartContext';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { useIsMobile } from '@/hooks/use-mobile';
 import { 
   User, 
   Package, 
@@ -23,7 +24,9 @@ import {
   Gift,
   Mail,
   Shield,
-  Bell
+  Bell,
+  Menu,
+  X
 } from 'lucide-react';
 
 interface ProfileData {
@@ -44,7 +47,9 @@ const Account = () => {
   const { addToCart } = useCart();
   const navigate = useNavigate();
   const { toast } = useToast();
+  const isMobile = useIsMobile();
   const [activeTab, setActiveTab] = useState('profile');
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [profile, setProfile] = useState<ProfileData | null>(null);
   const [updating, setUpdating] = useState(false);
   const [contactModalOpen, setContactModalOpen] = useState(false);
@@ -282,6 +287,13 @@ const Account = () => {
         description: "Failed to sign out",
         variant: "destructive"
       });
+    }
+  };
+
+  const handleTabChange = (tabId: string) => {
+    setActiveTab(tabId);
+    if (isMobile) {
+      setSidebarOpen(false);
     }
   };
 
@@ -750,21 +762,67 @@ const Account = () => {
     <div className="min-h-screen bg-white">
       <HeaderNavBar />
       
-      <div className="w-full py-8 px-4 sm:px-6 lg:px-8">
+      <div className="w-full py-4 sm:py-8 px-4 sm:px-6 lg:px-8">
         {/* Breadcrumb */}
-        <div className="flex items-center space-x-2 text-sm text-gray-600 mb-6">
+        <div className="flex items-center space-x-2 text-sm text-gray-600 mb-4 sm:mb-6">
           <span>Home</span>
           <span>/</span>
           <span className="text-black">Account</span>
         </div>
 
-        <div className="flex gap-8">
+        {/* Mobile Header */}
+        {isMobile && (
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <h1 className="text-xl font-bold text-black">My Account</h1>
+              <p className="text-sm text-gray-600">Welcome back, {formData.email?.split('@')[0]}!</p>
+            </div>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setSidebarOpen(!sidebarOpen)}
+              className="lg:hidden"
+            >
+              {sidebarOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+            </Button>
+          </div>
+        )}
+
+        <div className="flex flex-col lg:flex-row gap-6 lg:gap-8">
+          {/* Mobile Sidebar Overlay */}
+          {isMobile && sidebarOpen && (
+            <div 
+              className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
+              onClick={() => setSidebarOpen(false)}
+            />
+          )}
+
           {/* Sidebar */}
-          <div className="w-80 flex-shrink-0">
-            <div className="bg-white border border-gray-200 rounded-lg p-6">
-              <div className="mb-6">
-                <h1 className="text-2xl font-bold text-black mb-2">My Account</h1>
-              </div>
+          <div className={`
+            ${isMobile ? 'fixed top-0 left-0 h-full w-80 bg-white z-50 transform transition-transform duration-300 ease-in-out' : 'w-80 flex-shrink-0'}
+            ${isMobile && !sidebarOpen ? '-translate-x-full' : 'translate-x-0'}
+            ${isMobile ? 'shadow-lg' : ''}
+          `}>
+            <div className="bg-white border border-gray-200 rounded-lg p-4 sm:p-6 h-full">
+              {/* Mobile Close Button */}
+              {isMobile && (
+                <div className="flex items-center justify-between mb-4">
+                  <h2 className="text-lg font-semibold text-black">Menu</h2>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setSidebarOpen(false)}
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
+                </div>
+              )}
+
+              {!isMobile && (
+                <div className="mb-6">
+                  <h1 className="text-2xl font-bold text-black mb-2">My Account</h1>
+                </div>
+              )}
               
               <nav className="space-y-2">
                 {sidebarItems.map((item) => {
@@ -774,26 +832,25 @@ const Account = () => {
                   return (
                     <button
                       key={item.id}
-                      onClick={() => setActiveTab(item.id)}
-                      className={`w-full flex items-center px-4 py-3 rounded-lg text-left transition-all duration-200 ${
+                      onClick={() => handleTabChange(item.id)}
+                      className={`w-full flex items-center px-3 sm:px-4 py-2 sm:py-3 rounded-lg text-left transition-all duration-200 ${
                         isActive
                           ? 'bg-black text-white'
                           : 'text-gray-700 hover:bg-gray-100'
                       }`}
                     >
-                      <Icon className={`h-5 w-5 mr-3 ${isActive ? 'text-white' : 'text-gray-500'}`} />
-                      {/* hide text in mini mode */}
-                      <span className="font-medium">{item.title}</span>
+                      <Icon className={`h-4 w-4 sm:h-5 sm:w-5 mr-3 ${isActive ? 'text-white' : 'text-gray-500'}`} />
+                      <span className="font-medium text-sm sm:text-base">{item.title}</span>
                     </button>
                   );
                 })}
               </nav>
 
-              <div className="mt-8 pt-6 border-t border-gray-200">
+              <div className="mt-6 sm:mt-8 pt-4 sm:pt-6 border-t border-gray-200">
                 <Button
                   onClick={handleSignOut}
                   variant="outline"
-                  className="w-full border-red-200 text-red-600 hover:bg-red-50"
+                  className="w-full border-red-200 text-red-600 hover:bg-red-50 text-sm sm:text-base"
                 >
                   <LogOut className="h-4 w-4 mr-2" />
                   Log Out
@@ -803,18 +860,22 @@ const Account = () => {
           </div>
 
           {/* Main Content */}
-          <div className="flex-1">
+          <div className="flex-1 min-w-0">
             <div className="bg-white">
-              <div className="mb-6">
-                <h2 className="text-xl font-bold text-black mb-2">
-                  Welcome back, {formData.email}!
-                </h2>
-                <p className="text-gray-600">
-                  Manage your account settings, view your orders, and update your preferences.
-                </p>
-              </div>
+              {!isMobile && (
+                <div className="mb-6">
+                  <h2 className="text-xl font-bold text-black mb-2">
+                    Welcome back, {formData.email?.split('@')[0]}!
+                  </h2>
+                  <p className="text-gray-600">
+                    Manage your account settings, view your orders, and update your preferences.
+                  </p>
+                </div>
+              )}
 
-              {renderTabContent()}
+              <div className="overflow-hidden">
+                {renderTabContent()}
+              </div>
             </div>
           </div>
         </div>
