@@ -281,6 +281,39 @@ export type Database = {
           },
         ]
       }
+      page_content: {
+        Row: {
+          content_key: string
+          content_type: string
+          content_value: string
+          created_at: string
+          created_by: string | null
+          id: string
+          page_id: string
+          updated_at: string
+        }
+        Insert: {
+          content_key: string
+          content_type?: string
+          content_value: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          page_id: string
+          updated_at?: string
+        }
+        Update: {
+          content_key?: string
+          content_type?: string
+          content_value?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          page_id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       product_page_content: {
         Row: {
           benefits_description: string | null
