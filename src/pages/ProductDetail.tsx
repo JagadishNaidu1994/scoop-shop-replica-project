@@ -64,10 +64,12 @@ const ProductDetail = () => {
 
   const fetchProduct = async () => {
     try {
+      const productId = parseInt(id!);
+      
       const { data: productData, error: productError } = await supabase
         .from('products')
         .select('*')
-        .eq('id', id)
+        .eq('id', productId)
         .eq('is_active', true)
         .single();
 
@@ -80,13 +82,28 @@ const ProductDetail = () => {
       const { data: contentData, error: contentError } = await supabase
         .from('product_page_content')
         .select('*')
-        .eq('product_id', id)
+        .eq('product_id', productId)
         .single();
 
       if (contentError && contentError.code !== 'PGRST116') {
         console.error('Error fetching product page content:', contentError);
       } else if (contentData) {
-        setPageContent(contentData);
+        setPageContent({
+          hero_title: contentData.hero_title || '',
+          hero_subtitle: contentData.hero_subtitle || '',
+          hero_description: contentData.hero_description || '',
+          hero_image: contentData.hero_image || '',
+          features_title: contentData.features_title || 'Key Features',
+          features_list: Array.isArray(contentData.features_list) ? contentData.features_list : [],
+          benefits_title: contentData.benefits_title || 'Benefits',
+          benefits_description: contentData.benefits_description || '',
+          benefits_image: contentData.benefits_image || '',
+          ingredients_title: contentData.ingredients_title || 'Ingredients',
+          ingredients_list: Array.isArray(contentData.ingredients_list) ? contentData.ingredients_list : [],
+          how_to_use_title: contentData.how_to_use_title || 'How to Use',
+          how_to_use_steps: Array.isArray(contentData.how_to_use_steps) ? contentData.how_to_use_steps : [],
+          testimonials: Array.isArray(contentData.testimonials) ? contentData.testimonials : []
+        });
       }
     } catch (error) {
       console.error('Error fetching product:', error);
@@ -100,7 +117,6 @@ const ProductDetail = () => {
     if (!product) return;
     
     addToCart({
-      id: product.id.toString(),
       name: product.name,
       price: product.price,
       image: product.primary_image || '',

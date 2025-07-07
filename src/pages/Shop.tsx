@@ -53,7 +53,6 @@ const Shop = () => {
 
   const handleAddToCart = (product: Product) => {
     addToCart({
-      id: product.id.toString(),
       name: product.name,
       price: product.price,
       image: product.primary_image || '',
@@ -127,7 +126,7 @@ const Shop = () => {
               {filteredProducts.map((product) => (
                 <div key={product.id} className="group">
                   <div className="aspect-square overflow-hidden rounded-lg bg-gray-100 mb-4 relative">
-                    <Link to={`/product/${product.id}`}>
+                    <Link to={`/products/${product.id}`}>
                       <img
                         src={product.primary_image || '/placeholder.svg'}
                         alt={product.name}
@@ -163,7 +162,7 @@ const Shop = () => {
                       </span>
                     </div>
                     
-                    <Link to={`/product/${product.id}`}>
+                    <Link to={`/products/${product.id}`}>
                       <h3 className="text-lg font-semibold text-gray-900 hover:text-gray-600 transition-colors">
                         {product.name}
                       </h3>
