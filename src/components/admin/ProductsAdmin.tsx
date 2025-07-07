@@ -12,8 +12,7 @@ import { Switch } from '@/components/ui/switch';
 import { ImageUpload } from '@/components/ui/image-upload';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
-import { Plus, Edit, Trash2, Save, X, Settings } from 'lucide-react';
-import ProductPageEditor from './ProductPageEditor';
+import { Plus, Edit, Trash2, Save, X } from 'lucide-react';
 
 interface Product {
   id: number;
@@ -32,7 +31,6 @@ const ProductsAdmin = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
-  const [editingProductPage, setEditingProductPage] = useState<{ id: number; name: string } | null>(null);
   const [isCreating, setIsCreating] = useState(false);
   const { toast } = useToast();
 
@@ -173,23 +171,12 @@ const ProductsAdmin = () => {
     );
   }
 
-  // Show Product Page Editor if editing
-  if (editingProductPage) {
-    return (
-      <ProductPageEditor
-        productId={editingProductPage.id}
-        productName={editingProductPage.name}
-        onClose={() => setEditingProductPage(null)}
-      />
-    );
-  }
-
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
           <h2 className="text-2xl font-bold text-gray-900">Products Management</h2>
-          <p className="text-gray-600">Manage your product catalog and individual product pages</p>
+          <p className="text-gray-600">Manage your product catalog</p>
         </div>
         <Button onClick={() => setIsCreating(true)} className="bg-teal-600 hover:bg-teal-700">
           <Plus className="w-4 h-4 mr-2" />
@@ -327,7 +314,6 @@ const ProductsAdmin = () => {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Image</TableHead>
                 <TableHead>Name</TableHead>
                 <TableHead>Price</TableHead>
                 <TableHead>Category</TableHead>
@@ -339,15 +325,6 @@ const ProductsAdmin = () => {
             <TableBody>
               {products.map((product) => (
                 <TableRow key={product.id}>
-                  <TableCell>
-                    {product.primary_image && (
-                      <img
-                        src={product.primary_image}
-                        alt={product.name}
-                        className="w-12 h-12 object-cover rounded"
-                      />
-                    )}
-                  </TableCell>
                   <TableCell className="font-medium">{product.name}</TableCell>
                   <TableCell>£{product.price.toFixed(2)}</TableCell>
                   <TableCell>
@@ -369,23 +346,13 @@ const ProductsAdmin = () => {
                         variant="outline"
                         size="sm"
                         onClick={() => handleEdit(product)}
-                        title="Edit Product"
                       >
                         <Edit className="w-4 h-4" />
                       </Button>
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => setEditingProductPage({ id: product.id, name: product.name })}
-                        title="Edit Product Page"
-                      >
-                        <Settings className="w-4 h-4" />
-                      </Button>
-                      <Button
-                        variant="outline"
-                        size="sm"
                         onClick={() => handleDelete(product.id)}
-                        title="Delete Product"
                       >
                         <Trash2 className="w-4 h-4" />
                       </Button>
