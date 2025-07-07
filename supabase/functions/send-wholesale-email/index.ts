@@ -1,8 +1,7 @@
 
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
-import { Resend } from "npm:resend@2.0.0";
 
-const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
+const MAILERSEND_API_KEY = Deno.env.get("MAILERSEND_API_KEY");
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -28,9 +27,17 @@ const handler = async (req: Request): Promise<Response> => {
     console.log("Received wholesale inquiry:", { name, email, businessType });
 
     // Send notification email to you (the business owner)
-    const notificationEmail = await resend.emails.send({
-      from: "Wholesale Inquiry <onboarding@resend.dev>",
-      to: ["your-email@example.com"], // Replace with your actual email
+    const notificationEmailData = {
+      from: {
+        email: "noreply@yourdomain.com", // Replace with your verified domain
+        name: "The Missing Bean Wholesale"
+      },
+      to: [
+        {
+          email: "your-email@example.com", // Replace with your actual email
+          name: "Business Owner"
+        }
+      ],
       subject: `New Wholesale Inquiry from ${name}`,
       html: `
         <h2>New Wholesale Inquiry</h2>
@@ -42,14 +49,36 @@ const handler = async (req: Request): Promise<Response> => {
         <hr>
         <p>Please respond to this inquiry promptly.</p>
       `,
+    };
+
+    const notificationResponse = await fetch("https://api.mailersend.com/v1/email", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${MAILERSEND_API_KEY}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(notificationEmailData),
     });
 
-    console.log("Notification email sent:", notificationEmail);
+    if (!notificationResponse.ok) {
+      throw new Error(`MailerSend notification email failed: ${notificationResponse.statusText}`);
+    }
+
+    const notificationResult = await notificationResponse.json();
+    console.log("Notification email sent:", notificationResult);
 
     // Send confirmation email to the customer
-    const confirmationEmail = await resend.emails.send({
-      from: "The Missing Bean <onboarding@resend.dev>",
-      to: [email],
+    const confirmationEmailData = {
+      from: {
+        email: "noreply@yourdomain.com", // Replace with your verified domain
+        name: "The Missing Bean"
+      },
+      to: [
+        {
+          email: email,
+          name: name
+        }
+      ],
       subject: "Thank you for your wholesale inquiry!",
       html: `
         <h1>Thank you for your interest, ${name}!</h1>
@@ -64,15 +93,29 @@ const handler = async (req: Request): Promise<Response> => {
         <p>In the meantime, feel free to explore our wholesale services on our website.</p>
         <p>Best regards,<br>The Missing Bean Wholesale Team</p>
       `,
+    };
+
+    const confirmationResponse = await fetch("https://api.mailersend.com/v1/email", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${MAILERSEND_API_KEY}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(confirmationEmailData),
     });
 
-    console.log("Confirmation email sent:", confirmationEmail);
+    if (!confirmationResponse.ok) {
+      throw new Error(`MailerSend confirmation email failed: ${confirmationResponse.statusText}`);
+    }
+
+    const confirmationResult = await confirmationResponse.json();
+    console.log("Confirmation email sent:", confirmationResult);
 
     return new Response(
       JSON.stringify({ 
         success: true, 
-        notificationId: notificationEmail.data?.id,
-        confirmationId: confirmationEmail.data?.id 
+        notificationId: notificationResult.message_id || notificationResult.id,
+        confirmationId: confirmationResult.message_id || confirmationResult.id
       }), 
       {
         status: 200,
