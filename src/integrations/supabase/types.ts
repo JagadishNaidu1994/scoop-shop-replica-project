@@ -281,6 +281,80 @@ export type Database = {
           },
         ]
       }
+      product_page_content: {
+        Row: {
+          benefits_description: string | null
+          benefits_image: string | null
+          benefits_title: string | null
+          created_at: string
+          created_by: string | null
+          features_list: Json | null
+          features_title: string | null
+          hero_description: string | null
+          hero_image: string | null
+          hero_subtitle: string | null
+          hero_title: string | null
+          how_to_use_steps: Json | null
+          how_to_use_title: string | null
+          id: string
+          ingredients_list: Json | null
+          ingredients_title: string | null
+          product_id: number | null
+          testimonials: Json | null
+          updated_at: string
+        }
+        Insert: {
+          benefits_description?: string | null
+          benefits_image?: string | null
+          benefits_title?: string | null
+          created_at?: string
+          created_by?: string | null
+          features_list?: Json | null
+          features_title?: string | null
+          hero_description?: string | null
+          hero_image?: string | null
+          hero_subtitle?: string | null
+          hero_title?: string | null
+          how_to_use_steps?: Json | null
+          how_to_use_title?: string | null
+          id?: string
+          ingredients_list?: Json | null
+          ingredients_title?: string | null
+          product_id?: number | null
+          testimonials?: Json | null
+          updated_at?: string
+        }
+        Update: {
+          benefits_description?: string | null
+          benefits_image?: string | null
+          benefits_title?: string | null
+          created_at?: string
+          created_by?: string | null
+          features_list?: Json | null
+          features_title?: string | null
+          hero_description?: string | null
+          hero_image?: string | null
+          hero_subtitle?: string | null
+          hero_title?: string | null
+          how_to_use_steps?: Json | null
+          how_to_use_title?: string | null
+          id?: string
+          ingredients_list?: Json | null
+          ingredients_title?: string | null
+          product_id?: number | null
+          testimonials?: Json | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_page_content_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       products: {
         Row: {
           benefits: string[] | null
