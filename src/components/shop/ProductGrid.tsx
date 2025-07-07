@@ -29,8 +29,8 @@ interface ComponentProduct {
   primary_image: string | null;
   hover_image: string | null;
   benefits: string[] | null;
-  primaryImage?: string | null;
-  hoverImage?: string | null;
+  primaryImage: string;
+  hoverImage: string;
 }
 
 const ProductGrid = () => {
@@ -87,8 +87,8 @@ const ProductGrid = () => {
       const mappedProducts: ComponentProduct[] = data?.map((product: DatabaseProduct) => ({
         ...product,
         price: product.price.toString(), // Convert number to string
-        primaryImage: product.primary_image,
-        hoverImage: product.hover_image
+        primaryImage: product.primary_image || '/placeholder.svg',
+        hoverImage: product.hover_image || product.primary_image || '/placeholder.svg'
       })) || [];
       
       setProducts(mappedProducts);
