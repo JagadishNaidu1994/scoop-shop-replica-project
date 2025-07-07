@@ -11,7 +11,7 @@ const ChiefScienceOfficer = () => {
               Meet Our Chief Science Officer
             </h2>
             <p className="text-lg text-gray-700 leading-relaxed">
-              Dr. Sarah Chen leads our research team with over 15 years of experience in functional medicine and nutritional science. Her expertise ensures that every DIRTEA product is backed by rigorous scientific research.
+              Dr. Sarah Chen leads our research team with over 15 years of experience in functional medicine and nutritional science. Her expertise ensures that every NASTEA product is backed by rigorous scientific research.
             </p>
             <div className="space-y-4">
               <div className="flex items-center space-x-3">

@@ -1,8 +1,11 @@
+
 import React from 'react';
 import HeaderNavBar from '@/components/HeaderNavBar';
 import AdminImageUpload from '@/components/AdminImageUpload';
+
 const OurStory = () => {
-  return <div className="min-h-screen bg-white">
+  return (
+    <div className="min-h-screen bg-white">
       <HeaderNavBar />
       
       {/* Hero Banner Section */}
@@ -21,7 +24,7 @@ const OurStory = () => {
               OUR STORY
             </h1>
             <p className="text-xl md:text-2xl font-light max-w-3xl mx-auto leading-relaxed">
-              From ancient wisdom to modern wellness - discover how DIRTEA is revolutionizing 
+              From ancient wisdom to modern wellness - discover how NASTEA is revolutionizing 
               the way we think about functional mushrooms and daily rituals.
             </p>
           </div>
@@ -57,12 +60,12 @@ const OurStory = () => {
         </div>
       </section>
 
-      {/* The DIRTEA Story Section */}
+      {/* The NASTEA Story Section */}
       <section className="py-20 px-4 bg-gray-900 text-white">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-5xl lg:text-6xl font-light mb-6">
-              The DIRTEA story
+              The NASTEA story
             </h2>
             <p className="text-xl text-gray-300 max-w-4xl mx-auto leading-relaxed">
               In 2016, we discovered the power of functional mushrooms and 
@@ -117,7 +120,7 @@ const OurStory = () => {
           <blockquote className="text-3xl lg:text-4xl font-light leading-relaxed italic mb-8">
             "I discovered the adaptogenic power of functional mushrooms experientially. 
             However, you've got nothing like potential energy, whether that's focus, 
-            balance, or long-term resilience. DIRTEA delivers nature's most intelligent 
+            balance, or long-term resilience. NASTEA delivers nature's most intelligent 
             superfood in their easiest form."
           </blockquote>
           <div className="text-xl text-gray-300">
@@ -263,7 +266,7 @@ const OurStory = () => {
       {/* Footer CTA */}
       <section className="py-20 px-4 bg-white text-center">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-6xl lg:text-8xl font-light mb-8 text-black">DIRTEA</h2>
+          <h2 className="text-6xl lg:text-8xl font-light mb-8 text-black">NASTEA</h2>
           <div className="flex justify-center space-x-2 mb-12">
             {[...Array(6)].map((_, i) => <div key={i} className="w-3 h-3 bg-black rounded-full"></div>)}
           </div>
@@ -310,6 +313,8 @@ const OurStory = () => {
           </div>
         </div>
       </section>
-    </div>;
+    </div>
+  );
 };
+
 export default OurStory;

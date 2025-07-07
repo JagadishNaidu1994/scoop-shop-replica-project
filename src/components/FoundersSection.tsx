@@ -11,7 +11,7 @@ const FoundersSection = () => {
           <div className="relative">
             <img 
               src="https://images.unsplash.com/photo-1521791136064-7986c2920216?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
-              alt="Two founders with DIRTEA products"
+              alt="Two founders with NASTEA products"
               className="w-full h-auto rounded-lg"
             />
           </div>
@@ -22,7 +22,7 @@ const FoundersSection = () => {
             
             <p className="text-lg text-gray-600 leading-relaxed">
               After years of relying on coffee and energy drinks, we discovered the power of functional mushrooms. 
-              We started DIRTEA to share these incredible adaptogens with the world, creating blends that deliver 
+              We started NASTEA to share these incredible adaptogens with the world, creating blends that deliver 
               real results without the crash.
             </p>
             
