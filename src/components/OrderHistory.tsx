@@ -8,7 +8,6 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useCart } from '@/contexts/CartContext';
 import { useToast } from '@/hooks/use-toast';
 import { Package, Eye, RotateCcw, ShoppingCart, CheckCircle, Download } from 'lucide-react';
-import { addSampleOrderItems } from '@/utils/sampleOrderData';
 
 interface Order {
   id: string;
@@ -39,18 +38,8 @@ const OrderHistory = () => {
   useEffect(() => {
     if (user) {
       fetchOrders();
-      // Add sample data if orders are empty
-      initializeSampleData();
     }
   }, [user]);
-
-  const initializeSampleData = async () => {
-    try {
-      await addSampleOrderItems(supabase);
-    } catch (error) {
-      console.error('Error initializing sample data:', error);
-    }
-  };
 
   const fetchOrders = async () => {
     if (!user) return;
@@ -232,7 +221,7 @@ const OrderHistory = () => {
           product_id: item.product_id,
           product_name: item.product_name,
           product_price: item.product_price,
-          product_image: null,
+          product_image: getProductImage(item.product_id),
           quantity: item.quantity
         });
       }
@@ -364,6 +353,7 @@ const OrderHistory = () => {
                           <p className="text-sm text-gray-600 leading-relaxed mb-4">
                             {getProductDescription(item.product_name)}
                           </p>
+                          <p className="text-sm text-gray-600 mb-4">Qty: {item.quantity}</p>
                           
                           {/* Delivery Status */}
                           {order.status === 'delivered' && (

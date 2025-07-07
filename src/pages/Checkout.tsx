@@ -73,6 +73,15 @@ const Checkout = () => {
     return true;
   };
 
+  const getProductImage = (productId: number) => {
+    const imageMap: { [key: number]: string } = {
+      1: "https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=200&h=200&fit=crop",
+      2: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=200&h=200&fit=crop",
+      3: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=200&h=200&fit=crop",
+    };
+    return imageMap[productId] || "https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=200&h=200&fit=crop";
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -112,7 +121,7 @@ const Checkout = () => {
 
       console.log('Order created successfully:', order);
 
-      // Insert order items with proper error handling
+      // Insert order items with proper error handling and product images
       if (order && order.id) {
         const orderItems = items.map(item => ({
           order_id: order.id,
@@ -297,7 +306,7 @@ const Checkout = () => {
                     <div key={`${item.product_id}-checkout`} className="flex items-center space-x-3">
                       <div className="flex-shrink-0 w-12 h-12 bg-gray-100 rounded-md overflow-hidden">
                         <img 
-                          src={item.product_image || "https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=200&h=200&fit=crop"}
+                          src={item.product_image || getProductImage(item.product_id)}
                           alt={item.product_name}
                           className="w-full h-full object-cover"
                         />
