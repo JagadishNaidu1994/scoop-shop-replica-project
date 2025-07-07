@@ -104,13 +104,10 @@ const ProductPageContentAdmin = () => {
       if (data) {
         const processedContent: ProductPageContent = {
           ...data,
-          features_list: Array.isArray(data.features_list) ? data.features_list : [],
-          ingredients_list: Array.isArray(data.ingredients_list) ? data.ingredients_list : [],
-          how_to_use_steps: Array.isArray(data.how_to_use_steps) ? data.how_to_use_steps : [],
-          testimonials: Array.isArray(data.testimonials) ? data.testimonials.map((t: any) => ({
-            name: t.name || '',
-            text: t.text || ''
-          })) : []
+          features_list: Array.isArray(data.features_list) ? (data.features_list as string[]) : [],
+          ingredients_list: Array.isArray(data.ingredients_list) ? (data.ingredients_list as string[]) : [],
+          how_to_use_steps: Array.isArray(data.how_to_use_steps) ? (data.how_to_use_steps as string[]) : [],
+          testimonials: Array.isArray(data.testimonials) ? (data.testimonials as Array<{name: string, text: string}>) : []
         };
         
         setContent(processedContent);
@@ -120,15 +117,15 @@ const ProductPageContentAdmin = () => {
           hero_description: data.hero_description || '',
           hero_image: data.hero_image || '',
           features_title: data.features_title || 'Key Features',
-          features_list: Array.isArray(data.features_list) ? data.features_list.join('\n') : '',
+          features_list: Array.isArray(data.features_list) ? (data.features_list as string[]).join('\n') : '',
           benefits_title: data.benefits_title || 'Benefits',
           benefits_description: data.benefits_description || '',
           benefits_image: data.benefits_image || '',
           ingredients_title: data.ingredients_title || 'Ingredients',
-          ingredients_list: Array.isArray(data.ingredients_list) ? data.ingredients_list.join('\n') : '',
+          ingredients_list: Array.isArray(data.ingredients_list) ? (data.ingredients_list as string[]).join('\n') : '',
           how_to_use_title: data.how_to_use_title || 'How to Use',
-          how_to_use_steps: Array.isArray(data.how_to_use_steps) ? data.how_to_use_steps.join('\n') : '',
-          testimonials: Array.isArray(data.testimonials) ? data.testimonials.map((t: any) => `${t.name}: ${t.text}`).join('\n') : ''
+          how_to_use_steps: Array.isArray(data.how_to_use_steps) ? (data.how_to_use_steps as string[]).join('\n') : '',
+          testimonials: Array.isArray(data.testimonials) ? (data.testimonials as Array<{name: string, text: string}>).map((t: any) => `${t.name}: ${t.text}`).join('\n') : ''
         });
       } else {
         setContent(null);

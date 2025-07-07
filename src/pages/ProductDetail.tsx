@@ -96,13 +96,10 @@ const ProductDetail = () => {
       if (data) {
         const processedContent: ProductPageContent = {
           ...data,
-          features_list: Array.isArray(data.features_list) ? data.features_list : [],
-          ingredients_list: Array.isArray(data.ingredients_list) ? data.ingredients_list : [],
-          how_to_use_steps: Array.isArray(data.how_to_use_steps) ? data.how_to_use_steps : [],
-          testimonials: Array.isArray(data.testimonials) ? data.testimonials.map((t: any) => ({
-            name: t.name || '',
-            text: t.text || ''
-          })) : []
+          features_list: Array.isArray(data.features_list) ? (data.features_list as string[]) : [],
+          ingredients_list: Array.isArray(data.ingredients_list) ? (data.ingredients_list as string[]) : [],
+          how_to_use_steps: Array.isArray(data.how_to_use_steps) ? (data.how_to_use_steps as string[]) : [],
+          testimonials: Array.isArray(data.testimonials) ? (data.testimonials as Array<{name: string, text: string}>) : []
         };
         setPageContent(processedContent);
       }
@@ -115,7 +112,7 @@ const ProductDetail = () => {
     if (!product) return;
 
     addToCart({
-      productId: product.id,
+      product_id: product.id,
       name: product.name,
       price: product.price,
       image: product.primary_image || '',
