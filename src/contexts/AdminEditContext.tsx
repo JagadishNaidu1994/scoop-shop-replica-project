@@ -69,7 +69,8 @@ export const AdminEditProvider: React.FC<{ children: React.ReactNode }> = ({ chi
 
       if (data) {
         const contentMap: Record<string, Record<string, string>> = {};
-        data.forEach((item: PageContent) => {
+        // Type assertion to ensure compatibility with our PageContent interface
+        (data as PageContent[]).forEach((item: PageContent) => {
           if (!contentMap[item.page_id]) {
             contentMap[item.page_id] = {};
           }
