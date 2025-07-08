@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -180,7 +179,7 @@ const OrderHistory = () => {
   };
 
   const handleViewProduct = (productId: number) => {
-    navigate(`/shop/product/${productId}`);
+    navigate(`/products/${productId}`);
   };
 
   const handleViewInvoice = (order: Order) => {
@@ -349,8 +348,11 @@ const OrderHistory = () => {
         <div className="space-y-6">
           {orders.map((order) => (
             <Card key={order.id} className="border border-gray-200 bg-white shadow-sm">
-              {/* Order Header */}
-              <div className="border-b border-gray-200 p-6">
+              {/* Order Header - Clickable */}
+              <div 
+                className="border-b border-gray-200 p-6 cursor-pointer hover:bg-gray-50 transition-colors"
+                onClick={() => handleViewOrder(order.id)}
+              >
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                   <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-8">
                     <div>
@@ -372,7 +374,7 @@ const OrderHistory = () => {
                       <p className="font-medium text-gray-900">₹{order.total_amount}</p>
                     </div>
                   </div>
-                  <div className="flex gap-2">
+                  <div className="flex gap-2" onClick={(e) => e.stopPropagation()}>
                     <Button 
                       variant="outline" 
                       size="sm" 
@@ -395,8 +397,11 @@ const OrderHistory = () => {
                 </div>
               </div>
 
-              {/* Order Items */}
-              <div className="p-6">
+              {/* Order Items - Clickable */}
+              <div 
+                className="p-6 cursor-pointer hover:bg-gray-50 transition-colors"
+                onClick={() => handleViewOrder(order.id)}
+              >
                 <div className="space-y-6">
                   {order.order_items && order.order_items.length > 0 ? (
                     order.order_items.map((item, index) => (
@@ -443,7 +448,7 @@ const OrderHistory = () => {
                           )}
 
                           {/* Action Buttons */}
-                          <div className="flex gap-3">
+                          <div className="flex gap-3" onClick={(e) => e.stopPropagation()}>
                             <Button 
                               variant="outline" 
                               size="sm" 
