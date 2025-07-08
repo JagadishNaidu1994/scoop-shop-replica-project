@@ -336,7 +336,7 @@ const OrderDetail = () => {
                     <div key={item.id} className="flex items-center space-x-4 py-4 border-b border-gray-100 last:border-b-0">
                       <div className="flex-shrink-0 w-16 h-16 bg-gray-100 rounded-lg overflow-hidden">
                         <img 
-                          src="https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=200&h=200&fit=crop"
+                          src={getProductImage(item.product_id)}
                           alt={item.product_name}
                           className="w-full h-full object-cover"
                         />
