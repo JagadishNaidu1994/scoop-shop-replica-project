@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -27,8 +28,17 @@ interface OrderItem {
   quantity: number;
 }
 
+interface Product {
+  id: number;
+  name: string;
+  primary_image: string;
+  benefits: string[];
+  description: string;
+}
+
 const OrderHistory = () => {
   const [orders, setOrders] = useState<Order[]>([]);
+  const [products, setProducts] = useState<{ [key: number]: Product }>({});
   const [loading, setLoading] = useState(true);
   const { user } = useAuth();
   const { addToCart, clearCart } = useCart();
@@ -73,6 +83,15 @@ const OrderHistory = () => {
 
       console.log('Fetched orders with items:', data);
       setOrders(data || []);
+      
+      // Fetch product details for all unique product IDs
+      const productIds = [...new Set(data?.flatMap(order => 
+        order.order_items?.map(item => item.product_id) || []
+      ) || [])];
+      
+      if (productIds.length > 0) {
+        await fetchProductDetails(productIds);
+      }
     } catch (error) {
       console.error('Error fetching orders:', error);
       toast({
@@ -82,6 +101,29 @@ const OrderHistory = () => {
       });
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchProductDetails = async (productIds: number[]) => {
+    try {
+      const { data: productsData, error } = await supabase
+        .from('products')
+        .select('id, name, primary_image, benefits, description')
+        .in('id', productIds);
+
+      if (error) {
+        console.error('Error fetching product details:', error);
+        return;
+      }
+
+      const productsMap = productsData?.reduce((acc, product) => {
+        acc[product.id] = product;
+        return acc;
+      }, {} as { [key: number]: Product }) || {};
+
+      setProducts(productsMap);
+    } catch (error) {
+      console.error('Error fetching product details:', error);
     }
   };
 
@@ -96,6 +138,11 @@ const OrderHistory = () => {
   };
 
   const getProductImage = (productId: number) => {
+    const product = products[productId];
+    if (product && product.primary_image) {
+      return product.primary_image;
+    }
+    // Fallback images
     const imageMap: { [key: number]: string } = {
       1: "https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=200&h=200&fit=crop",
       2: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=200&h=200&fit=crop",
@@ -104,17 +151,36 @@ const OrderHistory = () => {
     return imageMap[productId] || "https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=200&h=200&fit=crop";
   };
 
-  const getProductDescription = (productName: string) => {
+  const getProductName = (item: OrderItem) => {
+    const product = products[item.product_id];
+    return product ? product.name : item.product_name;
+  };
+
+  const getProductDescription = (productId: number) => {
+    const product = products[productId];
+    if (product) {
+      // Use benefits if available, otherwise use description
+      if (product.benefits && product.benefits.length > 0) {
+        return product.benefits.join(', ');
+      }
+      return product.description || "Premium quality product designed for your everyday needs with excellent durability and style.";
+    }
+    
+    // Fallback descriptions
     const descriptions: { [key: string]: string } = {
       "Micro Backpack": "Are you a minimalist looking for a compact carry option? The Micro Backpack is the perfect size for your essential everyday carry items. Wear it like a backpack or carry it like a satchel for all-day use.",
       "Nomad Shopping Tote": "This durable shopping tote is perfect for the world traveler. Its yellow canvas construction is water, fray, tear resistant. The matching handle, backpack straps, and shoulder loops provide multiple carry options for a day out on your next adventure.",
       "Double Stack Clothing Bag": "Save space and protect your favorite clothes in this double-layer garment bag. Each compartment easily holds multiple pairs of jeans or tops, while keeping your items neatly folded throughout your trip."
     };
-    return descriptions[productName] || "Premium quality product designed for your everyday needs with excellent durability and style.";
+    return descriptions[productId] || "Premium quality product designed for your everyday needs with excellent durability and style.";
   };
 
   const handleViewOrder = (orderId: string) => {
     navigate(`/orders/${orderId}`);
+  };
+
+  const handleViewProduct = (productId: number) => {
+    navigate(`/shop/product/${productId}`);
   };
 
   const handleViewInvoice = (order: Order) => {
@@ -166,7 +232,7 @@ const OrderHistory = () => {
             <tbody>
               ${order.order_items?.map((item: any) => `
                 <tr>
-                  <td>${item.product_name}</td>
+                  <td>${getProductName(item)}</td>
                   <td>${item.quantity}</td>
                   <td>₹${item.product_price}</td>
                   <td>₹${(item.product_price * item.quantity).toFixed(2)}</td>
@@ -219,7 +285,7 @@ const OrderHistory = () => {
       for (const item of order.order_items) {
         await addToCart({
           product_id: item.product_id,
-          product_name: item.product_name,
+          product_name: getProductName(item),
           product_price: item.product_price,
           product_image: getProductImage(item.product_id),
           quantity: item.quantity
@@ -339,7 +405,7 @@ const OrderHistory = () => {
                         <div className="w-20 h-20 flex-shrink-0">
                           <img 
                             src={getProductImage(item.product_id)}
-                            alt={item.product_name}
+                            alt={getProductName(item)}
                             className="w-full h-full object-cover rounded-lg border border-gray-200"
                           />
                         </div>
@@ -347,11 +413,11 @@ const OrderHistory = () => {
                         {/* Product Details */}
                         <div className="flex-1 min-w-0">
                           <div className="flex justify-between items-start mb-2">
-                            <h3 className="font-medium text-gray-900 text-lg">{item.product_name}</h3>
+                            <h3 className="font-medium text-gray-900 text-lg">{getProductName(item)}</h3>
                             <p className="font-semibold text-gray-900 text-lg">₹{item.product_price}</p>
                           </div>
                           <p className="text-sm text-gray-600 leading-relaxed mb-4">
-                            {getProductDescription(item.product_name)}
+                            {getProductDescription(item.product_id)}
                           </p>
                           <p className="text-sm text-gray-600 mb-4">Qty: {item.quantity}</p>
                           
@@ -382,6 +448,7 @@ const OrderHistory = () => {
                               variant="outline" 
                               size="sm" 
                               className="border-blue-600 text-blue-600 hover:bg-blue-50"
+                              onClick={() => handleViewProduct(item.product_id)}
                             >
                               View product
                             </Button>
