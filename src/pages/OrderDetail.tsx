@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import HeaderNavBar from '@/components/HeaderNavBar';
@@ -19,6 +18,7 @@ const OrderDetail = () => {
   const { toast } = useToast();
   const [order, setOrder] = useState<any>(null);
   const [orderLoading, setOrderLoading] = useState(true);
+  const [products, setProducts] = useState<{ [key: number]: any }>({});
 
   useEffect(() => {
     if (!loading && !user) {
@@ -62,6 +62,12 @@ const OrderDetail = () => {
 
       console.log('Fetched order details:', data);
       setOrder(data);
+
+      // Fetch product details for all unique product IDs
+      if (data.order_items && data.order_items.length > 0) {
+        const productIds = [...new Set(data.order_items.map((item: any) => item.product_id))];
+        await fetchProductDetails(productIds);
+      }
     } catch (error) {
       console.error('Error fetching order details:', error);
       toast({
@@ -73,6 +79,43 @@ const OrderDetail = () => {
     } finally {
       setOrderLoading(false);
     }
+  };
+
+  const fetchProductDetails = async (productIds: number[]) => {
+    try {
+      const { data: productsData, error } = await supabase
+        .from('products')
+        .select('id, name, primary_image, benefits, description')
+        .in('id', productIds);
+
+      if (error) {
+        console.error('Error fetching product details:', error);
+        return;
+      }
+
+      const productsMap = productsData?.reduce((acc, product) => {
+        acc[product.id] = product;
+        return acc;
+      }, {} as { [key: number]: any }) || {};
+
+      setProducts(productsMap);
+    } catch (error) {
+      console.error('Error fetching product details:', error);
+    }
+  };
+
+  const getProductImage = (productId: number) => {
+    const product = products[productId];
+    if (product && product.primary_image) {
+      return product.primary_image;
+    }
+    // Fallback images
+    const imageMap: { [key: number]: string } = {
+      1: "https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=200&h=200&fit=crop",
+      2: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=200&h=200&fit=crop",
+      3: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=200&h=200&fit=crop",
+    };
+    return imageMap[productId] || "https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=200&h=200&fit=crop";
   };
 
   const getStatusIcon = (status: string) => {
