@@ -1,15 +1,18 @@
+
 import React, { useState, useEffect } from 'react';
-import { Menu, X, ShoppingCart, User, Settings } from 'lucide-react';
+import { Menu, X, ShoppingCart, User, Settings, Shield } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useCart } from '@/contexts/CartContext';
 import { supabase } from '@/integrations/supabase/client';
 import { useAdminCheck } from '@/hooks/useAdminCheck';
 import CartDropdown from './CartDropdown';
+import AuthModal from './AuthModal';
 
 const HeaderNavBar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [firstName, setFirstName] = useState('');
   const { user } = useAuth();
   const { getTotalItems } = useCart();
@@ -53,6 +56,16 @@ const HeaderNavBar = () => {
     setIsCartOpen(!isCartOpen);
   };
 
+  const handleAuthClick = () => {
+    if (user) {
+      // Navigate to account page
+      window.location.href = '/account';
+    } else {
+      // Open auth modal
+      setIsAuthModalOpen(true);
+    }
+  };
+
   return (
     <>
       {/* Top promotional banner - horizontally scrolling */}
@@ -84,7 +97,7 @@ const HeaderNavBar = () => {
             <div className="md:hidden">
               <button
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="text-black hover:text-gray-600"
+                className="text-black hover:text-gray-600 rounded-full p-2 hover:bg-gray-100 transition-colors"
               >
                 {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
               </button>
@@ -136,49 +149,47 @@ const HeaderNavBar = () => {
                   </span>
                 )}
                 
+                {/* Admin Icon */}
                 {isAdmin && (
-                  <Link to="/admin/dashboard" className="text-black hover:text-gray-600 transition-colors font-medium">
-                    ADMIN
+                  <Link 
+                    to="/admin/dashboard" 
+                    className="text-black hover:text-gray-600 transition-colors rounded-full p-2 hover:bg-gray-100"
+                    title="Admin Dashboard"
+                  >
+                    <Shield size={24} />
                   </Link>
                 )}
                 
-                {/* Show only icon on account page, text otherwise */}
-                {user ? (
-                  <Link to="/account" className="text-black hover:text-gray-600 transition-colors font-medium">
-                    {isAccountPage ? <User size={24} /> : 'ACCOUNT'}
-                  </Link>
-                ) : (
-                  <Link to="/auth" className="text-black hover:text-gray-600 transition-colors font-medium">
-                    {isAccountPage ? <User size={24} /> : 'ACCOUNT'}
-                  </Link>
-                )}
+                {/* Account Icon */}
+                <button 
+                  onClick={handleAuthClick}
+                  className="text-black hover:text-gray-600 transition-colors rounded-full p-2 hover:bg-gray-100"
+                  title={user ? "Account" : "Sign In"}
+                >
+                  <User size={24} />
+                </button>
               </div>
 
               {/* Mobile account icon */}
               <div className="md:hidden">
-                {user ? (
-                  <Link to="/account" className="text-black hover:text-gray-600 transition-colors">
-                    <User size={24} />
-                  </Link>
-                ) : (
-                  <Link to="/auth" className="text-black hover:text-gray-600 transition-colors">
-                    <User size={24} />
-                  </Link>
-                )}
+                <button 
+                  onClick={handleAuthClick}
+                  className="text-black hover:text-gray-600 transition-colors rounded-full p-2 hover:bg-gray-100"
+                >
+                  <User size={24} />
+                </button>
               </div>
               
-              {/* Cart with dropdown - show only icon on account page */}
+              {/* Cart with dropdown */}
               <div className="relative">
                 <button 
-                  className="text-black hover:text-gray-600 transition-colors font-medium flex items-center space-x-1"
+                  className="text-black hover:text-gray-600 transition-colors flex items-center space-x-1 rounded-full p-2 hover:bg-gray-100"
                   onClick={handleCartClick}
+                  title="Shopping Cart"
                 >
-                  <ShoppingCart size={24} className="md:hidden" />
-                  {/* Hide text on account page for desktop */}
-                  {!isAccountPage && <span className="hidden md:inline">CART</span>}
-                  {isAccountPage && <ShoppingCart size={24} className="hidden md:block" />}
+                  <ShoppingCart size={24} />
                   {getTotalItems() > 0 && (
-                    <span className="bg-black text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                    <span className="bg-black text-white text-xs rounded-full w-5 h-5 flex items-center justify-center absolute -top-1 -right-1">
                       {getTotalItems()}
                     </span>
                   )}
@@ -201,7 +212,7 @@ const HeaderNavBar = () => {
                 <div className="flex justify-end p-4">
                   <button
                     onClick={() => setIsMenuOpen(false)}
-                    className="text-black hover:text-gray-600"
+                    className="text-black hover:text-gray-600 rounded-full p-2 hover:bg-gray-100"
                   >
                     <X size={24} />
                   </button>
@@ -242,9 +253,12 @@ const HeaderNavBar = () => {
 
                     {/* Bottom section */}
                     <div className="mt-8 pt-8 border-t border-gray-200 space-y-4">
-                      <Link to="/auth" className="block text-base text-gray-600 hover:text-black">
+                      <button 
+                        onClick={() => setIsAuthModalOpen(true)}
+                        className="block text-base text-gray-600 hover:text-black"
+                      >
                         Log in
-                      </Link>
+                      </button>
                       
                       <Link to="/account" className="block text-base text-gray-600 hover:text-black">
                         Rewards
@@ -265,6 +279,12 @@ const HeaderNavBar = () => {
           )}
         </div>
       </header>
+
+      {/* Auth Modal */}
+      <AuthModal 
+        isOpen={isAuthModalOpen} 
+        onClose={() => setIsAuthModalOpen(false)} 
+      />
     </>
   );
 };
