@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
@@ -53,9 +52,15 @@ const OrdersTab = () => {
 
       if (error) throw error;
       
-      // Type assertion to handle the Supabase response
-      const ordersData = (data || []) as Order[];
-      setOrders(ordersData);
+      // Process the data to handle potential SelectQueryError in profiles
+      const processedOrders: Order[] = (data || []).map(order => ({
+        ...order,
+        profiles: order.profiles && typeof order.profiles === 'object' && !('error' in order.profiles) 
+          ? order.profiles 
+          : null
+      }));
+      
+      setOrders(processedOrders);
     } catch (error) {
       console.error('Error fetching orders:', error);
       toast({
