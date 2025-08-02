@@ -14,6 +14,51 @@ export type Database = {
   }
   public: {
     Tables: {
+      addresses: {
+        Row: {
+          address_line1: string
+          address_line2: string | null
+          city: string
+          created_at: string
+          full_name: string
+          id: string
+          is_default: boolean | null
+          phone: string
+          pincode: string
+          state: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          address_line1: string
+          address_line2?: string | null
+          city: string
+          created_at?: string
+          full_name: string
+          id?: string
+          is_default?: boolean | null
+          phone: string
+          pincode: string
+          state: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          address_line1?: string
+          address_line2?: string | null
+          city?: string
+          created_at?: string
+          full_name?: string
+          id?: string
+          is_default?: boolean | null
+          phone?: string
+          pincode?: string
+          state?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       admin_users: {
         Row: {
           created_at: string
@@ -311,6 +356,45 @@ export type Database = {
           id?: string
           page_id?: string
           updated_at?: string
+        }
+        Relationships: []
+      }
+      payment_methods: {
+        Row: {
+          cardholder_name: string
+          created_at: string
+          expiry_month: number
+          expiry_year: number
+          id: string
+          is_default: boolean | null
+          last_four: string
+          type: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          cardholder_name: string
+          created_at?: string
+          expiry_month: number
+          expiry_year: number
+          id?: string
+          is_default?: boolean | null
+          last_four: string
+          type?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          cardholder_name?: string
+          created_at?: string
+          expiry_month?: number
+          expiry_year?: number
+          id?: string
+          is_default?: boolean | null
+          last_four?: string
+          type?: string
+          updated_at?: string
+          user_id?: string
         }
         Relationships: []
       }

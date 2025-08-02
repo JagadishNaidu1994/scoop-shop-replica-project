@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -35,7 +36,11 @@ interface Product {
   description: string;
 }
 
-const OrderHistory = () => {
+interface OrderHistoryProps {
+  onViewOrder?: (order: Order) => void;
+}
+
+const OrderHistory: React.FC<OrderHistoryProps> = ({ onViewOrder }) => {
   const [orders, setOrders] = useState<Order[]>([]);
   const [products, setProducts] = useState<{ [key: number]: Product }>({});
   const [loading, setLoading] = useState(true);
@@ -174,8 +179,12 @@ const OrderHistory = () => {
     return descriptions[productId] || "Premium quality product designed for your everyday needs with excellent durability and style.";
   };
 
-  const handleViewOrder = (orderId: string) => {
-    navigate(`/orders/${orderId}`);
+  const handleViewOrder = (order: Order) => {
+    if (onViewOrder) {
+      onViewOrder(order);
+    } else {
+      navigate(`/orders/${order.id}`);
+    }
   };
 
   const handleViewProduct = (productId: number) => {
@@ -309,17 +318,17 @@ const OrderHistory = () => {
 
   if (loading) {
     return (
-      <Card className="border-gray-200 bg-white">
+      <Card className="border-gray-200 bg-white rounded-2xl shadow-sm">
         <CardContent className="p-4 sm:p-6">
           <div className="animate-pulse space-y-4">
             {[...Array(3)].map((_, i) => (
-              <div key={i} className="border rounded-lg p-4">
+              <div key={i} className="border rounded-xl p-4">
                 <div className="flex justify-between items-start mb-2">
-                  <div className="h-4 bg-gray-200 rounded w-32"></div>
-                  <div className="h-6 bg-gray-200 rounded w-20"></div>
+                  <div className="h-4 bg-gray-200 rounded-xl w-32"></div>
+                  <div className="h-6 bg-gray-200 rounded-xl w-20"></div>
                 </div>
-                <div className="h-3 bg-gray-200 rounded w-24 mb-2"></div>
-                <div className="h-4 bg-gray-200 rounded w-16"></div>
+                <div className="h-3 bg-gray-200 rounded-xl w-24 mb-2"></div>
+                <div className="h-4 bg-gray-200 rounded-xl w-16"></div>
               </div>
             ))}
           </div>
@@ -331,13 +340,13 @@ const OrderHistory = () => {
   return (
     <div className="w-full max-w-4xl mx-auto">
       {orders.length === 0 ? (
-        <Card className="border-gray-200 bg-white">
+        <Card className="border-gray-200 bg-white rounded-2xl shadow-sm">
           <CardContent className="p-8">
             <div className="text-center py-8">
               <Package className="h-12 w-12 text-gray-400 mx-auto mb-4" />
               <p className="text-gray-500 mb-4">No orders found</p>
               <Link to="/shop">
-                <Button className="bg-black text-white hover:bg-gray-800">
+                <Button className="bg-black text-white hover:bg-gray-800 rounded-full">
                   Start Shopping
                 </Button>
               </Link>
@@ -347,11 +356,11 @@ const OrderHistory = () => {
       ) : (
         <div className="space-y-6">
           {orders.map((order) => (
-            <Card key={order.id} className="border border-gray-200 bg-white shadow-sm">
+            <Card key={order.id} className="border border-gray-200 bg-white shadow-sm rounded-2xl">
               {/* Order Header - Clickable */}
               <div 
-                className="border-b border-gray-200 p-6 cursor-pointer hover:bg-gray-50 transition-colors"
-                onClick={() => handleViewOrder(order.id)}
+                className="border-b border-gray-200 p-6 cursor-pointer hover:bg-gray-50 transition-colors rounded-t-2xl"
+                onClick={() => handleViewOrder(order)}
               >
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                   <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-8">
@@ -378,8 +387,8 @@ const OrderHistory = () => {
                     <Button 
                       variant="outline" 
                       size="sm" 
-                      className="border-gray-300 text-gray-700 hover:bg-gray-50"
-                      onClick={() => handleViewOrder(order.id)}
+                      className="border-gray-300 text-gray-700 hover:bg-gray-50 rounded-full"
+                      onClick={() => handleViewOrder(order)}
                     >
                       <Eye className="h-4 w-4 mr-1" />
                       View Order
@@ -387,7 +396,7 @@ const OrderHistory = () => {
                     <Button 
                       variant="outline" 
                       size="sm" 
-                      className="border-gray-300 text-gray-700 hover:bg-gray-50"
+                      className="border-gray-300 text-gray-700 hover:bg-gray-50 rounded-full"
                       onClick={() => handleViewInvoice(order)}
                     >
                       <Download className="h-4 w-4 mr-1" />
@@ -399,8 +408,8 @@ const OrderHistory = () => {
 
               {/* Order Items - Clickable */}
               <div 
-                className="p-6 cursor-pointer hover:bg-gray-50 transition-colors"
-                onClick={() => handleViewOrder(order.id)}
+                className="p-6 cursor-pointer hover:bg-gray-50 transition-colors rounded-b-2xl"
+                onClick={() => handleViewOrder(order)}
               >
                 <div className="space-y-6">
                   {order.order_items && order.order_items.length > 0 ? (
@@ -411,7 +420,7 @@ const OrderHistory = () => {
                           <img 
                             src={getProductImage(item.product_id)}
                             alt={getProductName(item)}
-                            className="w-full h-full object-cover rounded-lg border border-gray-200"
+                            className="w-full h-full object-cover rounded-xl border border-gray-200"
                           />
                         </div>
 
@@ -452,7 +461,7 @@ const OrderHistory = () => {
                             <Button 
                               variant="outline" 
                               size="sm" 
-                              className="border-blue-600 text-blue-600 hover:bg-blue-50"
+                              className="border-blue-600 text-blue-600 hover:bg-blue-50 rounded-full"
                               onClick={() => handleViewProduct(item.product_id)}
                             >
                               View product
@@ -461,7 +470,7 @@ const OrderHistory = () => {
                               variant="outline" 
                               size="sm"
                               onClick={() => handleReorder(order)}
-                              className="border-blue-600 text-blue-600 hover:bg-blue-50"
+                              className="border-blue-600 text-blue-600 hover:bg-blue-50 rounded-full"
                             >
                               Buy again
                             </Button>
