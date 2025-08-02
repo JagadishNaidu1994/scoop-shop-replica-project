@@ -15,6 +15,7 @@ import { UserCouponsTab } from '@/components/admin/UserCouponsTab';
 import ContentTab from '@/components/admin/ContentTab';
 import CLVAnalyticsTab from '@/components/admin/CLVAnalyticsTab';
 import { supabase } from '@/integrations/supabase/client';
+import { Menu, X } from 'lucide-react';
 
 interface DashboardStats {
   totalRevenue: number;
@@ -37,8 +38,6 @@ interface Product {
   created_at: string | null;
   updated_at: string | null;
   created_by: string | null;
-  image_url: string;
-  stock_quantity: number;
 }
 
 interface Journal {
@@ -50,7 +49,7 @@ interface Journal {
   category: string | null;
   read_time: string | null;
   image_url: string | null;
-  published: boolean | null;
+  is_published: boolean | null;
   created_at: string;
   updated_at: string | null;
   created_by: string | null;
@@ -60,6 +59,7 @@ const AdminDashboard = () => {
   const { isAdmin, loading } = useAdminCheck();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('overview');
+  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
   const [stats, setStats] = useState<DashboardStats>({
     totalRevenue: 0,
     totalOrders: 0,
@@ -158,8 +158,8 @@ const AdminDashboard = () => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gray-50">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-purple-600"></div>
+      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50">
+        <div className="animate-spin rounded-full h-16 w-16 border-4 border-purple-400 border-t-purple-600 shadow-lg"></div>
       </div>
     );
   }
@@ -198,16 +198,52 @@ const AdminDashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-purple-50">
-      <div className="flex">
-        <AdminSidebar activeTab={activeTab} setActiveTab={setActiveTab} />
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50">
+      <div className="flex relative">
+        {/* Mobile Header */}
+        <div className="lg:hidden fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md border-b border-purple-100 px-4 py-3 shadow-sm">
+          <div className="flex items-center justify-between">
+            <h1 className="text-xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+              Admin Dashboard
+            </h1>
+            <button
+              onClick={() => setIsMobileSidebarOpen(!isMobileSidebarOpen)}
+              className="p-2 rounded-xl bg-purple-100 text-purple-600 hover:bg-purple-200 transition-all duration-200"
+            >
+              {isMobileSidebarOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
+          </div>
+        </div>
+
+        {/* Sidebar */}
+        <div className={`
+          fixed lg:sticky top-0 left-0 h-screen z-40 transition-transform duration-300 ease-in-out
+          ${isMobileSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
+        `}>
+          <AdminSidebar activeTab={activeTab} setActiveTab={setActiveTab} />
+        </div>
+
+        {/* Mobile Overlay */}
+        {isMobileSidebarOpen && (
+          <div 
+            className="fixed inset-0 bg-black/20 backdrop-blur-sm z-30 lg:hidden"
+            onClick={() => setIsMobileSidebarOpen(false)}
+          />
+        )}
+
+        {/* Main Content */}
         <main className="flex-1 lg:ml-0">
-          <div className="p-4 sm:p-6 lg:p-8">
-            <div className="mb-6 lg:mb-8">
-              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">Admin Dashboard</h1>
-              <p className="text-gray-600 text-sm sm:text-base">Manage your store and content</p>
+          <div className="pt-20 lg:pt-0 p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto">
+            {/* Desktop Header */}
+            <div className="hidden lg:block mb-8">
+              <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 bg-clip-text text-transparent mb-3">
+                Admin Dashboard
+              </h1>
+              <p className="text-gray-600 text-lg">Manage your store and content with ease</p>
             </div>
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-6 lg:p-8">
+
+            {/* Content Container */}
+            <div className="bg-white/70 backdrop-blur-md rounded-3xl shadow-xl border border-white/50 p-6 lg:p-8 transition-all duration-300 hover:shadow-2xl">
               {renderActiveTab()}
             </div>
           </div>
