@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAdminCheck } from '@/hooks/useAdminCheck';
@@ -11,7 +10,7 @@ import JournalsAdmin from '@/components/admin/JournalsAdmin';
 import ReviewsTab from '@/components/admin/ReviewsTab';
 import ShippingTab from '@/components/admin/ShippingTab';
 import ContactSubmissionsTab from '@/components/admin/ContactSubmissionsTab';
-import UserCouponsTab from '@/components/admin/UserCouponsTab';
+import { UserCouponsTab } from '@/components/admin/UserCouponsTab';
 import ContentTab from '@/components/admin/ContentTab';
 import CLVAnalyticsTab from '@/components/admin/CLVAnalyticsTab';
 import ExpensesTab from '@/components/admin/ExpensesTab';
@@ -170,7 +169,7 @@ const AdminDashboard = () => {
   const renderActiveTab = () => {
     switch (activeTab) {
       case 'overview':
-        return <DashboardOverview stats={stats} products={products} journals={journals} />;
+        return <DashboardOverview />;
       case 'analytics':
         return <AnalyticsTab />;
       case 'users':
@@ -194,7 +193,7 @@ const AdminDashboard = () => {
       case 'expenses':
         return <ExpensesTab />;
       default:
-        return <DashboardOverview stats={stats} products={products} journals={journals} />;
+        return <DashboardOverview />;
     }
   };
 
