@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import {
@@ -17,16 +18,27 @@ import { Separator } from "@/components/ui/separator";
 
 interface User {
   id: string;
-  email: string;
+  email: string | null;
   first_name: string | null;
   last_name: string | null;
   created_at: string;
-  date_of_birth: string | null;
   phone: string | null;
   gender: string | null;
   total_orders: number;
   total_spent: number;
   addresses_count: number;
+}
+
+interface Address {
+  id: string;
+  full_name: string;
+  address_line1: string;
+  address_line2: string | null;
+  city: string;
+  state: string;
+  pincode: string;
+  phone: string;
+  is_default: boolean | null;
 }
 
 const UsersTab = () => {
@@ -35,7 +47,7 @@ const UsersTab = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [userDetailOpen, setUserDetailOpen] = useState(false);
-  const [userAddresses, setUserAddresses] = useState<any[]>([]);
+  const [userAddresses, setUserAddresses] = useState<Address[]>([]);
 
   useEffect(() => {
     fetchUsers();
@@ -44,34 +56,40 @@ const UsersTab = () => {
   const fetchUsers = async () => {
     setLoading(true);
     try {
-      // Fetch users with comprehensive data using a more efficient approach
-      const { data: usersData, error } = await supabase
-        .from("users")
+      // Fetch users from profiles table
+      const { data: profilesData, error } = await supabase
+        .from("profiles")
         .select("*");
       
       if (error) throw error;
       
       // Fetch additional data for each user efficiently
       const enrichedUsers = await Promise.all(
-        (usersData || []).map(async (user) => {
+        (profilesData || []).map(async (profile) => {
           // Get orders count and total spent
           const { data: orders } = await supabase
             .from("orders")
             .select("total_amount")
-            .eq("user_id", user.id);
+            .eq("user_id", profile.id);
           
           // Get addresses count
           const { data: addresses } = await supabase
-            .from("user_addresses")
+            .from("addresses")
             .select("id")
-            .eq("user_id", user.id);
+            .eq("user_id", profile.id);
           
           const totalOrders = orders?.length || 0;
           const totalSpent = orders?.reduce((sum, order) => sum + Number(order.total_amount), 0) || 0;
           const addressesCount = addresses?.length || 0;
           
           return {
-            ...user,
+            id: profile.id,
+            email: profile.email,
+            first_name: profile.first_name,
+            last_name: profile.last_name,
+            created_at: profile.created_at || new Date().toISOString(),
+            phone: profile.phone,
+            gender: profile.gender,
             total_orders: totalOrders,
             total_spent: totalSpent,
             addresses_count: addressesCount,
@@ -90,7 +108,7 @@ const UsersTab = () => {
   const fetchUserDetails = async (userId: string) => {
     try {
       const { data: addresses, error } = await supabase
-        .from("user_addresses")
+        .from("addresses")
         .select("*")
         .eq("user_id", userId);
       
@@ -102,18 +120,6 @@ const UsersTab = () => {
     }
   };
 
-  const calculateAge = (dateOfBirth: string | null) => {
-    if (!dateOfBirth) return "N/A";
-    const today = new Date();
-    const birthDate = new Date(dateOfBirth);
-    let age = today.getFullYear() - birthDate.getFullYear();
-    const monthDiff = today.getMonth() - birthDate.getMonth();
-    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
-      age--;
-    }
-    return age.toString();
-  };
-
   const handleViewUser = async (user: User) => {
     setSelectedUser(user);
     await fetchUserDetails(user.id);
@@ -122,7 +128,7 @@ const UsersTab = () => {
 
   const filteredUsers = users.filter(
     (user) =>
-      user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      user.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       user.first_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       user.last_name?.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -134,7 +140,7 @@ const UsersTab = () => {
         user.id,
         user.first_name || "",
         user.last_name || "",
-        user.email,
+        user.email || "",
         new Date(user.created_at).toLocaleDateString(),
       ]),
     ]
@@ -195,7 +201,7 @@ const UsersTab = () => {
                       ? `${user.first_name} ${user.last_name}` 
                       : user.first_name || user.last_name || "N/A"}
                   </TableCell>
-                  <TableCell>{user.email}</TableCell>
+                  <TableCell>{user.email || "N/A"}</TableCell>
                   <TableCell>{user.phone || "N/A"}</TableCell>
                   <TableCell>
                     <Badge variant="outline">{user.total_orders}</Badge>
@@ -253,27 +259,15 @@ const UsersTab = () => {
                   </div>
                   <div>
                     <p className="text-sm text-gray-600">Email</p>
-                    <p className="font-medium">{selectedUser.email}</p>
+                    <p className="font-medium">{selectedUser.email || "N/A"}</p>
                   </div>
                   <div>
                     <p className="text-sm text-gray-600">Phone</p>
                     <p className="font-medium">{selectedUser.phone || "N/A"}</p>
                   </div>
                   <div>
-                    <p className="text-sm text-gray-600">Age</p>
-                    <p className="font-medium">{calculateAge(selectedUser.date_of_birth)}</p>
-                  </div>
-                  <div>
                     <p className="text-sm text-gray-600">Gender</p>
                     <p className="font-medium">{selectedUser.gender || "N/A"}</p>
-                  </div>
-                  <div>
-                    <p className="text-sm text-gray-600">Date of Birth</p>
-                    <p className="font-medium">
-                      {selectedUser.date_of_birth 
-                        ? new Date(selectedUser.date_of_birth).toLocaleDateString()
-                        : "N/A"}
-                    </p>
                   </div>
                 </div>
               </div>
@@ -308,17 +302,17 @@ const UsersTab = () => {
                 <h3 className="text-lg font-semibold mb-3">Addresses ({userAddresses.length})</h3>
                 {userAddresses.length > 0 ? (
                   <div className="space-y-3">
-                    {userAddresses.map((address, index) => (
+                    {userAddresses.map((address) => (
                       <div key={address.id} className="p-4 border rounded-lg">
                         <div className="flex justify-between items-start mb-2">
-                          <p className="font-medium">{address.name}</p>
+                          <p className="font-medium">{address.full_name}</p>
                           {address.is_default && (
                             <Badge variant="default" className="text-xs">Default</Badge>
                           )}
                         </div>
                         <p className="text-sm text-gray-600">
-                          {address.address_line_1}
-                          {address.address_line_2 && `, ${address.address_line_2}`}
+                          {address.address_line1}
+                          {address.address_line2 && `, ${address.address_line2}`}
                         </p>
                         <p className="text-sm text-gray-600">
                           {address.city}, {address.state} - {address.pincode}
