@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAdminCheck } from '@/hooks/useAdminCheck';
@@ -222,18 +221,17 @@ const AdminDashboard = () => {
         {/* Main Content */}
         <main className="flex-1 w-full">
           {/* Mobile Header with Dropdown */}
-          <div className="lg:hidden bg-white/90 backdrop-blur-md border-b border-gray-200 px-4 py-3 shadow-sm">
-            <div className="flex items-center justify-between">
+          <div className="lg:hidden bg-white/90 backdrop-blur-md border-b border-gray-200/50 px-4 py-3 shadow-sm">
+            <div className="flex items-center justify-between gap-3">
               <button
                 onClick={() => navigate('/')}
-                className="flex items-center gap-2 text-purple-600 hover:text-purple-700 transition-colors px-3 py-2 rounded-xl hover:bg-purple-50"
+                className="flex items-center justify-center text-purple-600 hover:text-purple-700 transition-colors p-2 rounded-xl hover:bg-purple-50"
               >
                 <Home className="w-5 h-5" />
-                <span className="font-medium text-sm">Back to Home</span>
               </button>
               
               <Select value={activeTab} onValueChange={setActiveTab}>
-                <SelectTrigger className="w-48 border-gray-200 rounded-xl bg-white/80 backdrop-blur-sm">
+                <SelectTrigger className="flex-1 border-gray-200/50 rounded-xl bg-white/80 backdrop-blur-sm shadow-sm">
                   <SelectValue>
                     <div className="flex items-center gap-2">
                       <span className="text-lg">{activeItem?.icon}</span>
@@ -241,7 +239,7 @@ const AdminDashboard = () => {
                     </div>
                   </SelectValue>
                 </SelectTrigger>
-                <SelectContent className="bg-white/95 backdrop-blur-md border-gray-200 rounded-xl shadow-xl z-50">
+                <SelectContent className="bg-white/95 backdrop-blur-md border-gray-200/50 rounded-xl shadow-xl z-50">
                   {sidebarItems.map((item) => (
                     <SelectItem 
                       key={item.id} 
