@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAdminCheck } from '@/hooks/useAdminCheck';
@@ -29,7 +28,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Search, Download, Plus, Edit, Trash2, Package, Users, ShoppingCart, DollarSign, TrendingUp, Calendar, Settings, Bell } from 'lucide-react';
 import Papa from 'papaparse';
 
-// Updated interfaces to match database schema
+// Updated interfaces to match database schema with all required properties
 interface Product {
   id: number;
   name: string;
@@ -45,7 +44,7 @@ interface Product {
   updated_at: string;
   created_by: string | null;
   image_url: string | null;
-  stock_quantity: number;
+  stock_quantity: number | null;
 }
 
 interface Order {
