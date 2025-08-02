@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import {
@@ -25,7 +26,7 @@ interface ShippingMethod {
   id: string;
   name: string;
   description?: string;
-  price: number;
+  base_rate: number; // Changed from price to base_rate to match database
   estimated_days: string;
   is_active: boolean;
 }
@@ -38,7 +39,7 @@ const ShippingTab = () => {
   const [form, setForm] = useState({
     name: "",
     description: "",
-    price: "",
+    base_rate: "", // Changed from price to base_rate
     estimated_days: "",
   });
   const { toast } = useToast();
@@ -67,7 +68,7 @@ const ShippingTab = () => {
     setForm({
       name: "",
       description: "",
-      price: "",
+      base_rate: "", // Changed from price to base_rate
       estimated_days: "",
     });
   };
@@ -80,7 +81,7 @@ const ShippingTab = () => {
       const shippingData = {
         name: form.name,
         description: form.description,
-        price: parseFloat(form.price),
+        base_rate: parseFloat(form.base_rate), // Changed from price to base_rate
         estimated_days: form.estimated_days,
       };
 
@@ -120,7 +121,7 @@ const ShippingTab = () => {
     setForm({
       name: method.name,
       description: method.description || "",
-      price: method.price.toString(),
+      base_rate: method.base_rate.toString(), // Changed from price to base_rate
       estimated_days: method.estimated_days,
     });
     setIsModalOpen(true);
@@ -165,12 +166,12 @@ const ShippingTab = () => {
                 />
               </div>
               <div>
-                <Label htmlFor="price">Price</Label>
+                <Label htmlFor="base_rate">Base Rate</Label>
                 <Input
-                  id="price"
+                  id="base_rate"
                   type="number"
-                  value={form.price}
-                  onChange={(e) => setForm({ ...form, price: e.target.value })}
+                  value={form.base_rate}
+                  onChange={(e) => setForm({ ...form, base_rate: e.target.value })}
                   required
                 />
               </div>
@@ -205,7 +206,7 @@ const ShippingTab = () => {
             <TableRow>
               <TableHead>Name</TableHead>
               <TableHead>Description</TableHead>
-              <TableHead>Price</TableHead>
+              <TableHead>Base Rate</TableHead>
               <TableHead>Estimated Days</TableHead>
               <TableHead>Actions</TableHead>
             </TableRow>
@@ -222,7 +223,7 @@ const ShippingTab = () => {
                 <TableRow key={method.id}>
                   <TableCell>{method.name}</TableCell>
                   <TableCell>{method.description}</TableCell>
-                  <TableCell>${method.price.toFixed(2)}</TableCell>
+                  <TableCell>${method.base_rate.toFixed(2)}</TableCell>
                   <TableCell>{method.estimated_days}</TableCell>
                   <TableCell>
                     <div className="flex space-x-2">
