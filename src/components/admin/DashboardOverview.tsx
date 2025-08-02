@@ -86,10 +86,11 @@ const DashboardOverview = () => {
 
   const fetchLowStockProducts = async () => {
     try {
+      // Since stock_quantity doesn't exist, we'll just show products that are not in stock
       const { data, error } = await supabase
         .from("products")
         .select("*")
-        .lte("stock_quantity", 10); // Assuming low stock is 10 or less
+        .eq("in_stock", false);
 
       if (error) throw error;
       setLowStockProducts(data || []);
@@ -130,22 +131,23 @@ const DashboardOverview = () => {
       {lowStockProducts.length > 0 && (
         <Card className="bg-yellow-50 border-yellow-300">
           <CardHeader>
-            <CardTitle className="text-yellow-800">Low Stock Alert</CardTitle>
+            <CardTitle className="text-yellow-800">Out of Stock Alert</CardTitle>
           </CardHeader>
           <CardContent>
             <p className="text-yellow-700">
-              The following products are running low on stock:
+              The following products are out of stock:
             </p>
             <ul className="list-disc list-inside mt-2">
               {lowStockProducts.map((product) => (
                 <li key={product.id} className="text-yellow-700">
-                  {product.name} ({product.stock_quantity} remaining)
+                  {product.name}
                 </li>
               ))}
             </ul>
           </CardContent>
         </Card>
       )}
+      
       {/* Top Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <Card className="bg-white">

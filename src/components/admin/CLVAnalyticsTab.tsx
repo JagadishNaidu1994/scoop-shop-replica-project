@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import {
@@ -45,22 +46,72 @@ const CLVAnalyticsTab = () => {
   const fetchCLVData = async () => {
     setLoading(true);
     try {
-      // Fetch CLV data from the view we created
-      const { data: clvData, error } = await supabase
-        .from('customer_lifetime_value')
-        .select('*')
-        .order('total_spent', { ascending: false });
+      // Since customer_lifetime_value view doesn't exist, let's calculate CLV from existing tables
+      const { data: orders, error: ordersError } = await supabase
+        .from('orders')
+        .select('user_id, total_amount, created_at');
 
-      if (error) throw error;
+      if (ordersError) throw ordersError;
 
-      const customerData = clvData || [];
-      setCustomers(customerData);
+      const { data: profiles, error: profilesError } = await supabase
+        .from('profiles')
+        .select('id, email, first_name, last_name');
+
+      if (profilesError) throw profilesError;
+
+      // Calculate CLV from orders
+      const customerData: { [key: string]: CustomerCLV } = {};
+
+      orders?.forEach(order => {
+        if (!order.user_id) return;
+
+        if (!customerData[order.user_id]) {
+          const profile = profiles?.find(p => p.id === order.user_id);
+          customerData[order.user_id] = {
+            user_id: order.user_id,
+            email: profile?.email || '',
+            first_name: profile?.first_name || null,
+            last_name: profile?.last_name || null,
+            total_spent: 0,
+            total_orders: 0,
+            avg_order_value: 0,
+            first_order_date: order.created_at,
+            last_order_date: order.created_at,
+            customer_lifetime_days: null
+          };
+        }
+
+        const customer = customerData[order.user_id];
+        customer.total_spent += Number(order.total_amount);
+        customer.total_orders += 1;
+
+        // Update date ranges
+        if (new Date(order.created_at) < new Date(customer.first_order_date!)) {
+          customer.first_order_date = order.created_at;
+        }
+        if (new Date(order.created_at) > new Date(customer.last_order_date!)) {
+          customer.last_order_date = order.created_at;
+        }
+
+        // Calculate lifetime days
+        if (customer.first_order_date && customer.last_order_date) {
+          const firstDate = new Date(customer.first_order_date);
+          const lastDate = new Date(customer.last_order_date);
+          customer.customer_lifetime_days = Math.ceil((lastDate.getTime() - firstDate.getTime()) / (1000 * 60 * 60 * 24));
+        }
+
+        // Calculate average order value
+        customer.avg_order_value = customer.total_spent / customer.total_orders;
+      });
+
+      const customerArray = Object.values(customerData).sort((a, b) => b.total_spent - a.total_spent);
+      setCustomers(customerArray);
 
       // Calculate statistics
-      const totalCustomers = customerData.length;
-      const totalRevenue = customerData.reduce((sum, customer) => sum + customer.total_spent, 0);
+      const totalCustomers = customerArray.length;
+      const totalRevenue = customerArray.reduce((sum, customer) => sum + customer.total_spent, 0);
       const avgCLV = totalCustomers > 0 ? totalRevenue / totalCustomers : 0;
-      const topCustomerValue = customerData.length > 0 ? customerData[0].total_spent : 0;
+      const topCustomerValue = customerArray.length > 0 ? customerArray[0].total_spent : 0;
 
       setStats({
         totalCustomers,

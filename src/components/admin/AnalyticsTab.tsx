@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -36,15 +37,15 @@ const AnalyticsTab = () => {
     try {
       const { data: orders, error: ordersError } = await supabase
         .from("orders")
-        .select("created_at, total_amount, order_items(product_id, quantity, price)");
+        .select("created_at, total_amount, order_items(product_id, quantity, product_price)");
 
       if (ordersError) throw ordersError;
 
-      const { data: users, error: usersError } = await supabase
-        .from("users")
+      const { data: profiles, error: profilesError } = await supabase
+        .from("profiles")
         .select("created_at");
 
-      if (usersError) throw usersError;
+      if (profilesError) throw profilesError;
 
       const { data: products, error: productsError } = await supabase
         .from("products")
@@ -98,19 +99,19 @@ const AnalyticsTab = () => {
           if (order.order_items) {
             (order.order_items as any[]).forEach((item) => {
               const productName = productMap[item.product_id] || "Unknown";
-              salesByProduct[productName] = (salesByProduct[productName] || 0) + item.quantity * item.price;
+              salesByProduct[productName] = (salesByProduct[productName] || 0) + item.quantity * item.product_price;
             });
           }
         });
       }
 
-      if (users) {
-        users.forEach((user) => {
-          const userDate = new Date(user.created_at);
-          const month = userDate.toLocaleString("default", {
+      if (profiles) {
+        profiles.forEach((profile) => {
+          const profileDate = new Date(profile.created_at);
+          const month = profileDate.toLocaleString("default", {
             month: "short",
           });
-          const year = userDate.getFullYear();
+          const year = profileDate.getFullYear();
 
           const monthIndex = monthlyData.findIndex(
             (m) =>

@@ -12,7 +12,6 @@ import {
   Truck,
   DollarSign,
   Star,
-  FileEdit,
   Settings,
   Home,
   BarChart2,
@@ -51,21 +50,14 @@ const AdminSidebar = ({ activeTab, setActiveTab }: AdminSidebarProps) => {
         .from("products")
         .select("*", { count: "exact", head: true });
 
-      // Fetch unread messages count
-      const { count: messagesCount } = await supabase
-        .from("contact_submissions")
-        .select("*", { count: "exact", head: true })
-        .eq("status", "unread");
+      // For now, set messages and coupons to 0 since tables don't exist
+      // You can add these when the tables are created
+      const messagesCount = 0;
+      const couponsCount = 0;
 
-      // Fetch active coupons count
-      const { count: couponsCount } = await supabase
-        .from("coupon_codes")
-        .select("*", { count: "exact", head: true })
-        .eq("is_active", true);
-
-      // Fetch users count
+      // Fetch profiles count as a proxy for users
       const { count: usersCount } = await supabase
-        .from("users")
+        .from("profiles")
         .select("*", { count: "exact", head: true });
 
       setCounts({
@@ -92,7 +84,6 @@ const AdminSidebar = ({ activeTab, setActiveTab }: AdminSidebarProps) => {
     { id: "shipping", label: "Shipping", icon: Truck },
     { id: "expenses", label: "Expenses", icon: DollarSign },
     { id: "reviews", label: "Reviews", icon: Star },
-    
     { id: "settings", label: "Settings", icon: Settings },
   ];
 
