@@ -15,7 +15,8 @@ import { UserCouponsTab } from '@/components/admin/UserCouponsTab';
 import ContentTab from '@/components/admin/ContentTab';
 import CLVAnalyticsTab from '@/components/admin/CLVAnalyticsTab';
 import { supabase } from '@/integrations/supabase/client';
-import { Menu, X } from 'lucide-react';
+import { Home, ChevronDown } from 'lucide-react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 interface DashboardStats {
   totalRevenue: number;
@@ -59,7 +60,6 @@ const AdminDashboard = () => {
   const { isAdmin, loading } = useAdminCheck();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('overview');
-  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
   const [stats, setStats] = useState<DashboardStats>({
     totalRevenue: 0,
     totalOrders: 0,
@@ -69,6 +69,20 @@ const AdminDashboard = () => {
 
   const [products, setProducts] = useState<Product[]>([]);
   const [journals, setJournals] = useState<Journal[]>([]);
+
+  const sidebarItems = [
+    { id: "overview", label: "Dashboard", icon: "📊" },
+    { id: "analytics", label: "Analytics", icon: "📈" },
+    { id: "orders", label: "Orders", icon: "📦" },
+    { id: "products", label: "Products", icon: "🛍️" },
+    { id: "users", label: "Users", icon: "👥" },
+    { id: "journals", label: "Journals", icon: "📝" },
+    { id: "messages", label: "Messages", icon: "💬" },
+    { id: "content", label: "Coupons", icon: "🎫" },
+    { id: "shipping", label: "Shipping", icon: "🚚" },
+    { id: "reviews", label: "Reviews", icon: "⭐" },
+    { id: "settings", label: "Settings", icon: "⚙️" },
+  ];
 
   useEffect(() => {
     if (!loading && !isAdmin) {
@@ -93,14 +107,12 @@ const AdminDashboard = () => {
 
       if (ordersError) throw ordersError;
 
-      // Fetch users count from profiles
       const { data: profiles, error: profilesError } = await supabase
         .from('profiles')
         .select('id', { count: 'exact' });
 
       if (profilesError) throw profilesError;
 
-      // Fetch products count
       const { data: productsData, error: productsError } = await supabase
         .from('products')
         .select('id', { count: 'exact' })
@@ -197,45 +209,60 @@ const AdminDashboard = () => {
     }
   };
 
+  const activeItem = sidebarItems.find(item => item.id === activeTab);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50">
-      <div className="flex relative">
-        {/* Mobile Header */}
-        <div className="lg:hidden fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md border-b border-purple-100 px-4 py-3 shadow-sm">
-          <div className="flex items-center justify-between">
-            <h1 className="text-xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-              Admin Dashboard
-            </h1>
-            <button
-              onClick={() => setIsMobileSidebarOpen(!isMobileSidebarOpen)}
-              className="p-2 rounded-xl bg-purple-100 text-purple-600 hover:bg-purple-200 transition-all duration-200"
-            >
-              {isMobileSidebarOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-            </button>
-          </div>
-        </div>
-
-        {/* Sidebar */}
-        <div className={`
-          fixed lg:sticky top-0 left-0 h-screen z-40 transition-transform duration-300 ease-in-out
-          ${isMobileSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
-        `}>
+      <div className="flex">
+        {/* Desktop Sidebar */}
+        <div className="hidden lg:block">
           <AdminSidebar activeTab={activeTab} setActiveTab={setActiveTab} />
         </div>
 
-        {/* Mobile Overlay */}
-        {isMobileSidebarOpen && (
-          <div 
-            className="fixed inset-0 bg-black/20 backdrop-blur-sm z-30 lg:hidden"
-            onClick={() => setIsMobileSidebarOpen(false)}
-          />
-        )}
-
         {/* Main Content */}
-        <main className="flex-1 lg:ml-0">
-          <div className="pt-20 lg:pt-0 p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto">
+        <main className="flex-1 w-full">
+          {/* Mobile Header with Dropdown */}
+          <div className="lg:hidden bg-white/90 backdrop-blur-md border-b border-gray-200 px-4 py-3 shadow-sm">
+            <div className="flex items-center justify-between">
+              <button
+                onClick={() => navigate('/')}
+                className="flex items-center gap-2 text-purple-600 hover:text-purple-700 transition-colors px-3 py-2 rounded-xl hover:bg-purple-50"
+              >
+                <Home className="w-5 h-5" />
+                <span className="font-medium text-sm">Back to Home</span>
+              </button>
+              
+              <Select value={activeTab} onValueChange={setActiveTab}>
+                <SelectTrigger className="w-48 border-gray-200 rounded-xl bg-white/80 backdrop-blur-sm">
+                  <SelectValue>
+                    <div className="flex items-center gap-2">
+                      <span className="text-lg">{activeItem?.icon}</span>
+                      <span className="font-medium">{activeItem?.label}</span>
+                    </div>
+                  </SelectValue>
+                </SelectTrigger>
+                <SelectContent className="bg-white/95 backdrop-blur-md border-gray-200 rounded-xl shadow-xl z-50">
+                  {sidebarItems.map((item) => (
+                    <SelectItem 
+                      key={item.id} 
+                      value={item.id}
+                      className="cursor-pointer hover:bg-purple-50 rounded-lg transition-colors"
+                    >
+                      <div className="flex items-center gap-2">
+                        <span className="text-lg">{item.icon}</span>
+                        <span>{item.label}</span>
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+
+          {/* Content Area */}
+          <div className="w-full min-h-screen">
             {/* Desktop Header */}
-            <div className="hidden lg:block mb-8">
+            <div className="hidden lg:block p-8 pb-0">
               <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 bg-clip-text text-transparent mb-3">
                 Admin Dashboard
               </h1>
@@ -243,8 +270,10 @@ const AdminDashboard = () => {
             </div>
 
             {/* Content Container */}
-            <div className="bg-white/70 backdrop-blur-md rounded-3xl shadow-xl border border-white/50 p-6 lg:p-8 transition-all duration-300 hover:shadow-2xl">
-              {renderActiveTab()}
+            <div className="p-4 lg:p-8">
+              <div className="bg-white/70 backdrop-blur-md rounded-3xl shadow-xl border border-gray-200/50 p-4 lg:p-8 transition-all duration-300 hover:shadow-2xl">
+                {renderActiveTab()}
+              </div>
             </div>
           </div>
         </main>

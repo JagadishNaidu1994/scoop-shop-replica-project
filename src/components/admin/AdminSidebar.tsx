@@ -14,13 +14,9 @@ import {
   Settings,
   Home,
   BarChart2,
-  Menu,
-  X,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Button } from "@/components/ui/button";
 
 interface AdminSidebarProps {
   activeTab: string;
@@ -35,7 +31,6 @@ const AdminSidebar = ({ activeTab, setActiveTab }: AdminSidebarProps) => {
     coupons: 0,
     users: 0,
   });
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     fetchCounts();
@@ -84,43 +79,28 @@ const AdminSidebar = ({ activeTab, setActiveTab }: AdminSidebarProps) => {
     { id: "settings", label: "Settings", icon: Settings },
   ];
 
-  const SidebarContent = ({ isMobile = false }) => (
-    <>
+  return (
+    <div className="w-72 bg-white/80 backdrop-blur-md h-screen border-r border-gray-200/50 flex-col shadow-lg">
       {/* Header */}
-      <div className="p-4 lg:p-6 border-b border-gray-100">
-        <div className="flex items-center justify-between">
-          <NavLink to="/" className="flex items-center space-x-2 text-purple-600 hover:text-purple-700 transition-colors">
-            <Home className="h-5 w-5" />
-            <span className="font-medium text-sm">Back to Home</span>
-          </NavLink>
-          {isMobile && (
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setMobileMenuOpen(false)}
-              className="lg:hidden rounded-full"
-            >
-              <X className="h-4 w-4" />
-            </Button>
-          )}
-        </div>
+      <div className="p-6 border-b border-gray-200/50">
+        <NavLink to="/" className="flex items-center space-x-2 text-purple-600 hover:text-purple-700 transition-colors">
+          <Home className="h-5 w-5" />
+          <span className="font-medium text-sm">Back to Home</span>
+        </NavLink>
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 p-3 lg:p-4">
-        <ul className="space-y-1">
+      <nav className="flex-1 p-4">
+        <ul className="space-y-2">
           {sidebarItems.map((item) => (
             <li key={item.id}>
               <button
-                onClick={() => {
-                  setActiveTab(item.id);
-                  if (isMobile) setMobileMenuOpen(false);
-                }}
+                onClick={() => setActiveTab(item.id)}
                 className={cn(
-                  "w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-left transition-all duration-200 text-sm",
+                  "w-full flex items-center justify-between px-4 py-3 rounded-2xl text-left transition-all duration-200 text-sm",
                   activeTab === item.id
-                    ? "bg-gradient-to-r from-purple-50 to-blue-50 text-purple-700 border border-purple-200 shadow-sm"
-                    : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                    ? "bg-gradient-to-r from-purple-50 to-blue-50 text-purple-700 border border-purple-200/50 shadow-sm"
+                    : "text-gray-600 hover:bg-gray-50/80 hover:text-gray-900"
                 )}
               >
                 <div className="flex items-center space-x-3">
@@ -129,7 +109,7 @@ const AdminSidebar = ({ activeTab, setActiveTab }: AdminSidebarProps) => {
                 </div>
                 {item.count !== undefined && item.count > 0 && (
                   <span className={cn(
-                    "px-2 py-0.5 rounded-full text-xs font-medium",
+                    "px-2 py-1 rounded-full text-xs font-medium",
                     activeTab === item.id
                       ? "bg-purple-100 text-purple-700"
                       : "bg-gray-100 text-gray-600"
@@ -142,44 +122,7 @@ const AdminSidebar = ({ activeTab, setActiveTab }: AdminSidebarProps) => {
           ))}
         </ul>
       </nav>
-    </>
-  );
-
-  return (
-    <>
-      {/* Mobile Menu Button */}
-      <div className="lg:hidden fixed top-4 left-4 z-50">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => setMobileMenuOpen(true)}
-          className="bg-white/90 backdrop-blur-sm border-gray-200 rounded-xl shadow-sm"
-        >
-          <Menu className="h-4 w-4" />
-        </Button>
-      </div>
-
-      {/* Mobile Overlay */}
-      {mobileMenuOpen && (
-        <div 
-          className="lg:hidden fixed inset-0 bg-black/50 z-40"
-          onClick={() => setMobileMenuOpen(false)}
-        />
-      )}
-
-      {/* Mobile Sidebar */}
-      <div className={cn(
-        "lg:hidden fixed inset-y-0 left-0 z-50 w-80 bg-white transform transition-transform duration-300 ease-in-out rounded-r-2xl shadow-2xl",
-        mobileMenuOpen ? "translate-x-0" : "-translate-x-full"
-      )}>
-        <SidebarContent isMobile={true} />
-      </div>
-
-      {/* Desktop Sidebar */}
-      <div className="hidden lg:flex w-72 bg-white h-screen border-r border-gray-100 flex-col shadow-sm">
-        <SidebarContent />
-      </div>
-    </>
+    </div>
   );
 };
 
