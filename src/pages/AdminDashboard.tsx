@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAdminCheck } from '@/hooks/useAdminCheck';
@@ -13,7 +14,6 @@ import ContactSubmissionsTab from '@/components/admin/ContactSubmissionsTab';
 import { UserCouponsTab } from '@/components/admin/UserCouponsTab';
 import ContentTab from '@/components/admin/ContentTab';
 import CLVAnalyticsTab from '@/components/admin/CLVAnalyticsTab';
-import ExpensesTab from '@/components/admin/ExpensesTab';
 import { supabase } from '@/integrations/supabase/client';
 
 interface DashboardStats {
@@ -37,6 +37,8 @@ interface Product {
   created_at: string | null;
   updated_at: string | null;
   created_by: string | null;
+  image_url: string;
+  stock_quantity: number;
 }
 
 interface Journal {
@@ -48,7 +50,7 @@ interface Journal {
   category: string | null;
   read_time: string | null;
   image_url: string | null;
-  is_published: boolean | null;
+  published: boolean | null;
   created_at: string;
   updated_at: string | null;
   created_by: string | null;
@@ -156,8 +158,8 @@ const AdminDashboard = () => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-teal-600"></div>
+      <div className="flex items-center justify-center min-h-screen bg-gray-50">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-purple-600"></div>
       </div>
     );
   }
@@ -190,23 +192,25 @@ const AdminDashboard = () => {
         return <ContentTab />;
       case 'clv':
         return <CLVAnalyticsTab />;
-      case 'expenses':
-        return <ExpensesTab />;
       default:
         return <DashboardOverview />;
     }
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-purple-50">
       <div className="flex">
         <AdminSidebar activeTab={activeTab} setActiveTab={setActiveTab} />
-        <main className="flex-1 p-8 ml-64">
-          <div className="mb-8">
-            <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
-            <p className="text-gray-600">Manage your store and content</p>
+        <main className="flex-1 lg:ml-0">
+          <div className="p-4 sm:p-6 lg:p-8">
+            <div className="mb-6 lg:mb-8">
+              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">Admin Dashboard</h1>
+              <p className="text-gray-600 text-sm sm:text-base">Manage your store and content</p>
+            </div>
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-6 lg:p-8">
+              {renderActiveTab()}
+            </div>
           </div>
-          {renderActiveTab()}
         </main>
       </div>
     </div>
