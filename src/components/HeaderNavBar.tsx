@@ -1,7 +1,6 @@
-
 import React, { useState, useEffect } from 'react';
 import { Menu, X, ShoppingCart, User, Settings } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useCart } from '@/contexts/CartContext';
 import { supabase } from '@/integrations/supabase/client';
@@ -15,6 +14,10 @@ const HeaderNavBar = () => {
   const { user } = useAuth();
   const { getTotalItems } = useCart();
   const { isAdmin } = useAdminCheck();
+  const location = useLocation();
+  
+  // Check if we're on the account page
+  const isAccountPage = location.pathname === '/account';
 
   useEffect(() => {
     if (user) {
@@ -126,7 +129,8 @@ const HeaderNavBar = () => {
                   </button>
                 </Link>
                 
-                {user && firstName && (
+                {/* Hide greeting on account page */}
+                {user && firstName && !isAccountPage && (
                   <span className="text-black font-medium">
                     Hi, {firstName}
                   </span>
@@ -138,13 +142,14 @@ const HeaderNavBar = () => {
                   </Link>
                 )}
                 
+                {/* Show only icon on account page, text otherwise */}
                 {user ? (
                   <Link to="/account" className="text-black hover:text-gray-600 transition-colors font-medium">
-                    ACCOUNT
+                    {isAccountPage ? <User size={24} /> : 'ACCOUNT'}
                   </Link>
                 ) : (
                   <Link to="/auth" className="text-black hover:text-gray-600 transition-colors font-medium">
-                    ACCOUNT
+                    {isAccountPage ? <User size={24} /> : 'ACCOUNT'}
                   </Link>
                 )}
               </div>
@@ -162,14 +167,16 @@ const HeaderNavBar = () => {
                 )}
               </div>
               
-              {/* Cart with dropdown */}
+              {/* Cart with dropdown - show only icon on account page */}
               <div className="relative">
                 <button 
                   className="text-black hover:text-gray-600 transition-colors font-medium flex items-center space-x-1"
                   onClick={handleCartClick}
                 >
                   <ShoppingCart size={24} className="md:hidden" />
-                  <span className="hidden md:inline">CART</span>
+                  {/* Hide text on account page for desktop */}
+                  {!isAccountPage && <span className="hidden md:inline">CART</span>}
+                  {isAccountPage && <ShoppingCart size={24} className="hidden md:block" />}
                   {getTotalItems() > 0 && (
                     <span className="bg-black text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
                       {getTotalItems()}
