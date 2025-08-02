@@ -43,8 +43,6 @@ interface Product {
   created_at: string;
   updated_at: string;
   created_by: string | null;
-  image_url: string | null;
-  stock_quantity: number | null;
 }
 
 interface Order {
@@ -172,22 +170,14 @@ const AdminDashboard = () => {
           benefits,
           created_at,
           updated_at,
-          created_by,
-          image_url,
-          stock_quantity
+          created_by
         `)
         .order('created_at', { ascending: false });
 
       if (error) throw error;
 
-      const productsWithDefaults = (data || []).map(product => ({
-        ...product,
-        image_url: product.image_url || product.primary_image,
-        stock_quantity: product.stock_quantity || 0
-      }));
-
-      setProducts(productsWithDefaults);
-      setStats(prev => ({ ...prev, totalProducts: productsWithDefaults.length }));
+      setProducts(data || []);
+      setStats(prev => ({ ...prev, totalProducts: data?.length || 0 }));
     } catch (error) {
       console.error('Error fetching products:', error);
     }
