@@ -318,7 +318,13 @@ const AccountPage = () => {
     if (!order.order_items) return;
     try {
       for (const item of order.order_items) {
-        await addToCart(item.product_id);
+        await addToCart({
+          product_id: item.product_id,
+          product_name: item.product_name,
+          product_price: item.product_price,
+          product_image: null, // Default image since we don't have it in order items
+          quantity: item.quantity
+        });
       }
       navigate("/checkout");
     } catch (error) {
@@ -454,7 +460,15 @@ const AccountPage = () => {
   };
 
   const handleBuyNow = async (productId: string) => {
-    await addToCart(parseInt(productId));
+    // For demo purposes, create a basic product object
+    // In a real app, you'd fetch the product details first
+    await addToCart({
+      product_id: parseInt(productId),
+      product_name: "Product", // Placeholder - would fetch from database
+      product_price: 25.99, // Placeholder - would fetch from database
+      product_image: null,
+      quantity: 1
+    });
     navigate('/checkout');
   };
 
