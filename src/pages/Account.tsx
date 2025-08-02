@@ -318,7 +318,7 @@ const AccountPage = () => {
     if (!order.order_items) return;
     try {
       for (const item of order.order_items) {
-        await addToCart(item.product_id, item.quantity);
+        await addToCart(item.product_id);
       }
       navigate("/checkout");
     } catch (error) {
@@ -454,7 +454,7 @@ const AccountPage = () => {
   };
 
   const handleBuyNow = async (productId: string) => {
-    await addToCart(parseInt(productId), 1);
+    await addToCart(parseInt(productId));
     navigate('/checkout');
   };
 
