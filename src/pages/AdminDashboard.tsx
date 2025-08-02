@@ -13,6 +13,7 @@ import ContactSubmissionsTab from '@/components/admin/ContactSubmissionsTab';
 import { UserCouponsTab } from '@/components/admin/UserCouponsTab';
 import ContentTab from '@/components/admin/ContentTab';
 import CLVAnalyticsTab from '@/components/admin/CLVAnalyticsTab';
+import OrdersTab from '@/components/admin/OrdersTab';
 import { supabase } from '@/integrations/supabase/client';
 import { Home, ChevronDown } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -185,6 +186,8 @@ const AdminDashboard = () => {
         return <DashboardOverview />;
       case 'analytics':
         return <AnalyticsTab />;
+      case 'orders':
+        return <OrdersTab />;
       case 'users':
         return <UsersTab />;
       case 'products':
