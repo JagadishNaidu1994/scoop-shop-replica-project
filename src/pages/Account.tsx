@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/context/AuthProvider";
-import { useCart } from "@/context/CartProvider";
+import { useAuth } from "@/contexts/AuthContext";
+import { useCart } from "@/contexts/CartContext";
 import { useAdmin } from "@/hooks/useAdmin";
 import Header from "@/components/Header";
 import { Button } from "@/components/ui/button";
@@ -48,16 +48,13 @@ interface Order {
   status: string;
   created_at: string;
   shipping_address: any;
-  tracking_link?: string;
+  tracking_number?: string;
   order_items?: {
     id: string;
     quantity: number;
-    price: number;
-    products: {
-      id: string;
-      name: string;
-      image_url: string;
-    };
+    product_price: number;
+    product_name: string;
+    product_id: number;
   }[];
 }
 
@@ -174,7 +171,7 @@ const AccountPage = () => {
     if (!user) return;
 
     try {
-      // Fetch orders with tracking_link
+      // Fetch orders with order items
       const { data: ordersData, error: ordersError } = await supabase
         .from("orders")
         .select(`
@@ -182,12 +179,9 @@ const AccountPage = () => {
           order_items (
             id,
             quantity,
-            price,
-            products (
-              id,
-              name,
-              image_url
-            )
+            product_price,
+            product_name,
+            product_id
           )
         `)
         .eq("user_id", user.id)
@@ -218,85 +212,22 @@ const AccountPage = () => {
         },
       ]);
 
-      // Fetch addresses
-      const { data: addressesData, error: addressesError } = await supabase
-        .from("user_addresses")
-        .select("*")
-        .eq("user_id", user.id)
-        .order("is_default", { ascending: false });
-
-      if (addressesError) throw addressesError;
-      setAddresses(addressesData || []);
-
-      // Fetch rewards
-      const { data: rewardsData, error: rewardsError } = await supabase
-        .from("user_rewards")
-        .select("*")
-        .eq("user_id", user.id)
-        .single();
-
-      if (rewardsError && rewardsError.code !== 'PGRST116') throw rewardsError;
-      setRewards(rewardsData);
-
-      // Fetch preferences
-      const { data: preferencesData, error: preferencesError } = await supabase
-        .from("user_preferences")
-        .select("*")
-        .eq("user_id", user.id)
-        .single();
-
-      if (preferencesError && preferencesError.code !== 'PGRST116') throw preferencesError;
-      setPreferences(preferencesData);
-
-      // Fetch security settings
-      const { data: securityData, error: securityError } = await supabase
-        .from("user_security")
-        .select("*")
-        .eq("user_id", user.id)
-        .single();
-
-      if (securityError && securityError.code !== 'PGRST116') throw securityError;
-      setSecurity(securityData);
-
-      // Fetch wishlist
-      const { data: wishlistData, error: wishlistError } = await supabase
-        .from("wishlist_items")
-        .select(`
-          id,
-          product:products (
-            id,
-            name,
-            price,
-            image_url
-          )
-        `)
-        .eq("user_id", user.id);
-
-      if (wishlistError) throw wishlistError;
-      setWishlist(wishlistData || []);
-
-      // Fetch subscriptions
-      const { data: subscriptionsData, error: subscriptionsError } = await supabase
-        .from("subscriptions")
-        .select(`
-          id,
-          status,
-          next_delivery_date,
-          product:products (
-            name
-          )
-        `)
-        .eq("user_id", user.id);
-
-      if (subscriptionsError) throw subscriptionsError;
-
-      const transformedSubscriptions = subscriptionsData.map(sub => ({
-        id: sub.id,
-        productName: sub.product.name,
-        nextDelivery: sub.next_delivery_date,
-        status: sub.status as "active" | "paused" | "cancelled",
-      }));
-      setSubscriptions(transformedSubscriptions);
+      // Set sample data for other features since tables don't exist yet
+      setAddresses([]);
+      setRewards({ points_balance: 50, total_earned: 150, total_redeemed: 100 });
+      setPreferences({ 
+        email_notifications: true, 
+        sms_notifications: false, 
+        marketing_emails: true, 
+        newsletter_subscription: true 
+      });
+      setSecurity({ 
+        two_factor_enabled: false, 
+        login_notifications: true, 
+        last_password_change: new Date().toISOString() 
+      });
+      setWishlist([]);
+      setSubscriptions([]);
 
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -317,8 +248,6 @@ const AccountPage = () => {
 
     if (!user) return;
 
-    // The following is a simplified example. In a real application, you would
-    // want to re-authenticate the user before allowing a password change.
     const { error } = await supabase.auth.updateUser({ password: newPassword });
 
     if (error) {
@@ -344,19 +273,6 @@ const AccountPage = () => {
       });
 
       if (error) throw error;
-      
-      // Also update the users table
-      const { error: updateError } = await supabase
-        .from("users")
-        .update({
-          first_name: profileData.firstName,
-          last_name: profileData.lastName,
-          phone: profileData.phone,
-          date_of_birth: profileData.dateOfBirth,
-        })
-        .eq("id", user.id);
-
-      if (updateError) throw updateError;
       
       setIsEditingProfile(false);
       alert("Profile updated successfully!");
@@ -402,7 +318,7 @@ const AccountPage = () => {
     if (!order.order_items) return;
     try {
       for (const item of order.order_items) {
-        await addToCart(item.products.id, item.quantity);
+        await addToCart(item.product_id, item.quantity);
       }
       navigate("/checkout");
     } catch (error) {
@@ -412,11 +328,8 @@ const AccountPage = () => {
 
   const handleDownloadInvoice = async (order: Order) => {
     try {
-      console.log("Generating invoice for order:", order.id);
-      
       const doc = new jsPDF();
       
-      // Header with brand info
       doc.setFillColor(52, 152, 219);
       doc.rect(0, 0, 210, 40, 'F');
       
@@ -428,16 +341,13 @@ const AccountPage = () => {
       doc.text('DearNeuro', 150, 20);
       doc.text('www.dearneuro.com', 150, 30);
       
-      // Reset text color
       doc.setTextColor(0, 0, 0);
       
-      // Invoice details
       doc.setFontSize(14);
       doc.text(`Invoice Number: ${order.id.slice(0, 8).toUpperCase()}`, 20, 60);
       doc.text(`Date: ${new Date(order.created_at).toLocaleDateString()}`, 20, 70);
       doc.text(`Status: ${order.status.toUpperCase()}`, 20, 80);
       
-      // Bill to section
       doc.setFontSize(16);
       doc.text('Bill To:', 20, 100);
       
@@ -455,7 +365,6 @@ const AccountPage = () => {
         }
       }
       
-      // Items table header
       let yPosition = 170;
       doc.setFillColor(240, 240, 240);
       doc.rect(20, yPosition, 170, 10, 'F');
@@ -468,23 +377,21 @@ const AccountPage = () => {
       
       yPosition += 15;
       
-      // Items
       let subtotal = 0;
       if (order.order_items) {
         order.order_items.forEach((item) => {
-          const itemTotal = item.price * item.quantity;
+          const itemTotal = item.product_price * item.quantity;
           subtotal += itemTotal;
           
-          doc.text(item.products.name, 25, yPosition);
+          doc.text(item.product_name, 25, yPosition);
           doc.text(item.quantity.toString(), 100, yPosition);
-          doc.text(`$${item.price.toFixed(2)}`, 130, yPosition);
+          doc.text(`$${item.product_price.toFixed(2)}`, 130, yPosition);
           doc.text(`$${itemTotal.toFixed(2)}`, 160, yPosition);
           
           yPosition += 10;
         });
       }
       
-      // Totals
       yPosition += 10;
       doc.line(20, yPosition, 190, yPosition);
       yPosition += 10;
@@ -501,13 +408,11 @@ const AccountPage = () => {
       doc.text('Total:', 130, yPosition);
       doc.text(`$${order.total_amount.toFixed(2)}`, 160, yPosition);
       
-      // Footer
       yPosition += 30;
       doc.setFontSize(10);
       doc.text('Thank you for your business!', 20, yPosition);
       doc.text('Please pay invoice within 15 days.', 20, yPosition + 10);
       
-      // Save the PDF
       doc.save(`invoice-${order.id.slice(0, 8)}.pdf`);
       
     } catch (error) {
@@ -517,89 +422,52 @@ const AccountPage = () => {
   };
 
   const handleTrackOrder = (order: Order) => {
-    if (order.tracking_link) {
-      window.open(order.tracking_link, '_blank');
+    if (order.tracking_number) {
+      alert(`Tracking Number: ${order.tracking_number}`);
     } else {
       alert("Tracking information not available yet.");
     }
   };
 
-  const handleViewProduct = (productId: string) => {
-    navigate(`/product?id=${productId}`);
+  const handleViewProduct = (productId: number) => {
+    navigate(`/products/${productId}`);
   };
 
   const handleSubscriptionChange = async (subscriptionId: string, newStatus: "active" | "paused" | "cancelled") => {
-    try {
-      const { error } = await supabase
-        .from("subscriptions")
-        .update({ status: newStatus })
-        .eq("id", subscriptionId);
-      if (error) throw error;
-      fetchAllData();
-    } catch (error) {
-      console.error("Error updating subscription status:", error);
-    }
+    // Sample functionality for demo
+    console.log(`Subscription ${subscriptionId} status changed to ${newStatus}`);
+    fetchAllData();
   };
 
   const handleSaveAddress = async (address: Omit<Address, 'id' | 'is_default'>) => {
-    if (!user) return;
-    try {
-      if (editingAddress) {
-        const { error } = await supabase.from('user_addresses').update(address).eq('id', editingAddress.id);
-        if (error) throw error;
-      } else {
-        const { error } = await supabase.from('user_addresses').insert([{ ...address, user_id: user.id }]);
-        if (error) throw error;
-      }
-      setShowAddressModal(false);
-      fetchAllData();
-    } catch (error) {
-      console.error('Error saving address:', error);
-    }
+    // Sample functionality for demo
+    console.log('Address saved:', address);
+    setShowAddressModal(false);
+    fetchAllData();
   };
 
   const handleDeleteAddress = async (addressId: string) => {
-    if (!user) return;
     if (window.confirm('Are you sure you want to delete this address?')) {
-      try {
-        const { error } = await supabase.from('user_addresses').delete().eq('id', addressId);
-        if (error) throw error;
-        fetchAllData();
-      } catch (error) {
-        console.error('Error deleting address:', error);
-      }
+      console.log('Address deleted:', addressId);
+      fetchAllData();
     }
   };
 
   const handleBuyNow = async (productId: string) => {
-    await addToCart(productId, 1);
+    await addToCart(parseInt(productId), 1);
     navigate('/checkout');
   };
 
-  const handleSavePaymentMethod = async (paymentMethod) => {
-    if(!user) return;
-    try {
-      // In a real app, you'd use a payment gateway's tokenization process
-      // and only store a reference to the payment method, not the raw details.
-      const { error } = await supabase.from('user_payment_methods').insert([{ ...paymentMethod, user_id: user.id }]);
-      if (error) throw error;
-      setShowPaymentModal(false);
-      fetchAllData();
-    } catch (error) {
-      console.error('Error saving payment method:', error);
-    }
-  }
+  const handleSavePaymentMethod = async (paymentMethod: any) => {
+    console.log('Payment method saved:', paymentMethod);
+    setShowPaymentModal(false);
+    fetchAllData();
+  };
 
   const handleDeletePaymentMethod = async (paymentMethodId: string) => {
-    if (!user) return;
     if (window.confirm('Are you sure you want to delete this payment method?')) {
-      try {
-        const { error } = await supabase.from('user_payment_methods').delete().eq('id', paymentMethodId);
-        if (error) throw error;
-        fetchAllData();
-      } catch (error) {
-        console.error('Error deleting payment method:', error);
-      }
+      console.log('Payment method deleted:', paymentMethodId);
+      fetchAllData();
     }
   };
 
@@ -607,7 +475,6 @@ const AccountPage = () => {
     const firstName = profileData.firstName || user?.user_metadata?.given_name || '';
     const lastName = profileData.lastName || user?.user_metadata?.family_name || '';
     
-    // Simple gender detection based on common names (this is a basic implementation)
     const maleNames = ['john', 'james', 'robert', 'michael', 'william', 'david', 'richard', 'charles', 'joseph', 'thomas'];
     const femaleNames = ['mary', 'patricia', 'jennifer', 'linda', 'elizabeth', 'barbara', 'susan', 'jessica', 'sarah', 'karen'];
     
@@ -621,7 +488,6 @@ const AccountPage = () => {
       return "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face";
     }
     
-    // Default professional avatar
     return "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face";
   };
 
@@ -687,6 +553,7 @@ const AccountPage = () => {
             Sign Out
           </Button>
         </div>
+        
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Sidebar */}
           <div className="lg:w-80 w-full hidden lg:block">
@@ -933,9 +800,6 @@ const AccountPage = () => {
                                 <Badge className={getStatusColor(order.status)}>
                                   {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
                                 </Badge>
-                                {order.order_items?.some(item => item.products.name.includes("Subscription")) && (
-                                  <Badge className="bg-purple-100 text-purple-700">Subscription</Badge>
-                                )}
                               </div>
                             </div>
                             
@@ -988,26 +852,21 @@ const AccountPage = () => {
                             <div className="space-y-3 mt-4">
                               {order.order_items.map((item, index) => (
                                 <div key={index} className="flex items-center gap-4 p-3 bg-gray-50 rounded-lg">
-                                  <img
-                                    src={item.products.image_url}
-                                    alt={item.products.name}
-                                    className="w-12 h-12 object-cover rounded-lg"
-                                  />
+                                  <div className="w-12 h-12 bg-gray-200 rounded-lg flex items-center justify-center">
+                                    <FaBox className="text-gray-400" />
+                                  </div>
                                   <div className="flex-1">
-                                    <h4 className="font-medium text-[#192a3a] flex items-center">
-                                      {item.products.name}
-                                      {subscriptions.some(s => s.productName === item.products.name) && (
-                                        <FaRedo className="text-purple-500 ml-2" title="Subscription" />
-                                      )}
+                                    <h4 className="font-medium text-[#192a3a]">
+                                      {item.product_name}
                                     </h4>
                                     <p className="text-sm text-gray-600">Qty: {item.quantity}</p>
                                   </div>
                                   <div className="text-right">
-                                    <p className="font-semibold text-[#192a3a]">₹{(item.price * item.quantity).toFixed(2)}</p>
+                                    <p className="font-semibold text-[#192a3a]">₹{(item.product_price * item.quantity).toFixed(2)}</p>
                                     <Button
                                       size="sm"
                                       variant="ghost"
-                                      onClick={() => handleViewProduct(item.products.id)}
+                                      onClick={() => handleViewProduct(item.product_id)}
                                       className="text-[#192a3a] hover:text-[#0f1a26] p-0 h-auto"
                                     >
                                       View Product
@@ -1025,12 +884,11 @@ const AccountPage = () => {
                       <FaBox className="mx-auto text-6xl text-gray-400 mb-6" />
                       <h3 className="text-2xl font-semibold text-[#192a3a] mb-4">No orders yet</h3>
                       <p className="text-gray-600 mb-8">Start shopping to see your orders here</p>
-                      <Button onClick={() => navigate("/shop-all")} className="bg-[#192a3a] hover:bg-[#0f1a26] text-white">
+                      <Button onClick={() => navigate("/shop")} className="bg-[#192a3a] hover:bg-[#0f1a26] text-white">
                         Start Shopping
                       </Button>
                     </div>
-                  )
-                  }
+                  )}
                 </CardContent>
               </Card>
             )}
@@ -1402,25 +1260,23 @@ const AccountPage = () => {
                   <div className="space-y-3">
                     {selectedOrder.order_items.map((item, index) => (
                       <div key={index} className="flex items-center gap-4 p-4 border rounded-lg">
-                        <img
-                          src={item.products.image_url}
-                          alt={item.products.name}
-                          className="w-16 h-16 object-cover rounded-lg"
-                        />
+                        <div className="w-16 h-16 bg-gray-200 rounded-lg flex items-center justify-center">
+                          <FaBox className="text-gray-400" />
+                        </div>
                         <div className="flex-1">
-                          <h5 className="font-semibold text-[#192a3a]">{item.products.name}</h5>
+                          <h5 className="font-semibold text-[#192a3a]">{item.product_name}</h5>
                           <p className="text-sm text-gray-600">
-                            Quantity: {item.quantity} × ₹{item.price.toFixed(2)}
+                            Quantity: {item.quantity} × ₹{item.product_price.toFixed(2)}
                           </p>
                         </div>
                         <div className="text-right">
-                          <p className="font-semibold text-[#192a3a]">₹{(item.quantity * item.price).toFixed(2)}</p>
+                          <p className="font-semibold text-[#192a3a]">₹{(item.quantity * item.product_price).toFixed(2)}</p>
                           <Button
                             size="sm"
                             variant="ghost"
                             onClick={() => {
                               setSelectedOrder(null);
-                              handleViewProduct(item.products.id);
+                              handleViewProduct(item.product_id);
                             }}
                             className="text-[#192a3a] hover:text-[#0f1a26] p-0 h-auto"
                           >
@@ -1505,25 +1361,10 @@ const AccountPage = () => {
         onConfirm={async (discountAccepted) => {
           if (selectedSubscription) {
             if (discountAccepted) {
-              try {
-                const { error } = await supabase
-                  .from("subscriptions")
-                  .update({ status: 'active' }) // Keep the subscription active
-                  .eq("id", selectedSubscription.id);
-                if (error) throw error;
-                fetchAllData();
-                toast({
-                  title: "Success",
-                  description: "You have kept your subscription.",
-                });
-              } catch (error) {
-                console.error("Error keeping subscription:", error);
-                toast({
-                  title: "Error",
-                  description: "Failed to keep subscription.",
-                  variant: "destructive",
-                });
-              }
+              toast({
+                title: "Success",
+                description: "You have kept your subscription.",
+              });
             } else {
               handleSubscriptionChange(selectedSubscription.id, "cancelled");
             }
