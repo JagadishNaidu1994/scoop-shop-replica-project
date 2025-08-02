@@ -1,949 +1,1407 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
-import HeaderNavBar from '@/components/HeaderNavBar';
-import Footer from '@/components/Footer';
-import AdminSidebar from '@/components/AdminSidebar';
-import ProductsAdmin from '@/components/admin/ProductsAdmin';
-import RecipesAdmin from '@/components/admin/RecipesAdmin';
-import JournalsAdmin from '@/components/admin/JournalsAdmin';
-import { useAuth } from '@/contexts/AuthContext';
-import { useAdminCheck } from '@/hooks/useAdminCheck';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
-import { Package, Users, FileText, Settings, Eye, Truck, Edit, Plus, UserPlus, BarChart3, TrendingUp, DollarSign, Clock } from 'lucide-react';
+import { useState, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { useAdmin } from "@/hooks/useAdmin";
+import AdminSidebar from "@/components/admin/AdminSidebar";
+import DashboardOverview from "@/components/admin/DashboardOverview";
+import AnalyticsTab from "@/components/admin/AnalyticsTab";
+import UsersTab from "@/components/admin/UsersTab";
+import ExpensesTab from "@/components/admin/ExpensesTab";
 
+import ReviewsTab from "@/components/admin/ReviewsTab";
+import ContentTab from "@/components/admin/ContentTab";
+import ContactSubmissionsTab from "@/components/admin/ContactSubmissionsTab";
+import OrderDetailsDialog from "@/components/admin/OrderDetailsDialog";
+import MessagesSection from "@/components/admin/MessagesSection";
+import NotificationDropdown from "@/components/admin/NotificationDropdown";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { FaPlus, FaEdit, FaTrash, FaEye } from "react-icons/fa";
+import { useToast } from "@/hooks/use-toast";
+import Papa from "papaparse";
+
+interface Product {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  image_url: string;
+  category: string;
+  stock_quantity: number;
+  is_active: boolean;
+}
+interface OrderWithUser {
+  id: string;
+  user_id: string;
+  total_amount: number;
+  status: string;
+  created_at: string;
+  shipping_address?: any;
+  users: {
+    email: string;
+    first_name: string | null;
+    last_name: string | null;
+  } | null;
+}
+interface Journal {
+  id: string;
+  title: string;
+  content: string;
+  excerpt?: string;
+  author?: string;
+  image_url?: string;
+  published: boolean;
+  created_at: string;
+}
+interface CouponCode {
+  id: string;
+  code: string;
+  discount_type: string;
+  discount_value: number;
+  minimum_order_amount: number;
+  max_uses?: number;
+  used_count: number;
+  expires_at?: string;
+  is_active: boolean;
+}
+interface ShippingMethod {
+  id: string;
+  name: string;
+  description?: string;
+  price: number;
+  estimated_days: string;
+  is_active: boolean;
+}
 const AdminDashboard = () => {
-  const { user, loading } = useAuth();
-  const { isAdmin, loading: adminLoading } = useAdminCheck();
-  const navigate = useNavigate();
-  const { toast } = useToast();
-  const [searchParams] = useSearchParams();
-  const activeTab = searchParams.get('tab') || 'dashboard';
-  
-  const [orders, setOrders] = useState<any[]>([]);
-  const [ordersLoading, setOrdersLoading] = useState(true);
-  const [selectedOrder, setSelectedOrder] = useState<any>(null);
-  const [showOrderModal, setShowOrderModal] = useState(false);
-  const [newUserEmail, setNewUserEmail] = useState('');
-  const [newUserRole, setNewUserRole] = useState('user');
+  const {
+    isAdmin,
+    loading: adminLoading
+  } = useAdmin();
+  const {
+    toast
+  } = useToast();
+  const [activeTab, setActiveTab] = useState("dashboard");
+  const [products, setProducts] = useState<Product[]>([]);
+  const [orders, setOrders] = useState<OrderWithUser[]>([]);
+  const [journals, setJournals] = useState<Journal[]>([]);
+  const [coupons, setCoupons] = useState<CouponCode[]>([]);
+  const [shippingMethods, setShippingMethods] = useState<ShippingMethod[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [orderSearchTerm, setOrderSearchTerm] = useState("");
+  const [orderStatusFilter, setOrderStatusFilter] = useState("all");
 
+  // Modal states
+  const [isProductModalOpen, setIsProductModalOpen] = useState(false);
+  const [isJournalModalOpen, setIsJournalModalOpen] = useState(false);
+  const [isCouponModalOpen, setIsCouponModalOpen] = useState(false);
+  const [isShippingModalOpen, setIsShippingModalOpen] = useState(false);
+  const [isOrderDialogOpen, setIsOrderDialogOpen] = useState(false);
+
+  // Editing states
+  const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+  const [editingJournal, setEditingJournal] = useState<Journal | null>(null);
+  const [editingCoupon, setEditingCoupon] = useState<CouponCode | null>(null);
+  const [editingShipping, setEditingShipping] = useState<ShippingMethod | null>(null);
+  const [selectedOrder, setSelectedOrder] = useState<OrderWithUser | null>(null);
+
+  // Form states
+  const [productForm, setProductForm] = useState({
+    name: "",
+    description: "",
+    price: "",
+    image_url: "",
+    category: "",
+    stock_quantity: ""
+  });
+  const [journalForm, setJournalForm] = useState({
+    title: "",
+    content: "",
+    excerpt: "",
+    author: "DearNeuro Team",
+    image_url: "",
+    published: false
+  });
+  const [couponForm, setCouponForm] = useState({
+    code: "",
+    discount_type: "percentage",
+    discount_value: "",
+    minimum_order_amount: "",
+    max_uses: "",
+    expires_at: ""
+  });
+  const [shippingForm, setShippingForm] = useState({
+    name: "",
+    description: "",
+    price: "",
+    estimated_days: ""
+  });
   useEffect(() => {
-    if (!loading && !adminLoading) {
-      if (!user || !isAdmin) {
-        navigate('/');
-        return;
-      }
-      if (activeTab === 'orders' || activeTab === 'dashboard') {
-        fetchOrders();
-      }
+    if (isAdmin) {
+      fetchAllData();
     }
-  }, [user, isAdmin, loading, adminLoading, navigate, activeTab]);
-
-  const fetchOrders = async () => {
-    setOrdersLoading(true);
+  }, [isAdmin]);
+  const fetchAllData = async () => {
+    await Promise.all([fetchProducts(), fetchOrders(), fetchJournals(), fetchCoupons(), fetchShippingMethods()]);
+  };
+  const fetchProducts = async () => {
     try {
-      const { data, error } = await supabase
-        .from('orders')
-        .select(`
-          *,
-          order_items (
-            *
-          )
-        `)
-        .order('created_at', { ascending: false });
-
-      if (error) {
-        console.error('Error fetching orders:', error);
-        toast({
-          title: "Error",
-          description: "Failed to fetch orders",
-          variant: "destructive"
-        });
-      } else {
-        console.log('Fetched orders with items:', data);
-        setOrders(data || []);
-      }
+      const {
+        data,
+        error
+      } = await supabase.from("products").select("*").order("created_at", {
+        ascending: false
+      });
+      if (error) throw error;
+      setProducts(data || []);
     } catch (error) {
-      console.error('Error:', error);
-    } finally {
-      setOrdersLoading(false);
+      console.error("Error fetching products:", error);
     }
   };
-
-  const formatOrderNumber = (orderNumber: string) => {
-    const match = orderNumber.match(/order_(\d+)/);
-    if (match) {
-      const timestamp = parseInt(match[1]);
-      const incrementalId = (timestamp % 10000) + 1;
-      return String(incrementalId).padStart(4, '0');
-    }
-    return orderNumber.slice(-4).padStart(4, '0');
-  };
-
-  const getStatusColor = (status: string) => {
-    switch (status?.toLowerCase()) {
-      case 'pending':
-        return 'bg-yellow-100 text-yellow-800 border-yellow-200';
-      case 'processed':
-        return 'bg-blue-100 text-blue-800 border-blue-200';
-      case 'shipped':
-        return 'bg-purple-100 text-purple-800 border-purple-200';  
-      case 'arriving':
-        return 'bg-indigo-100 text-indigo-800 border-indigo-200';
-      case 'out for delivery':
-        return 'bg-orange-100 text-orange-800 border-orange-200';
-      case 'delivered':
-        return 'bg-green-100 text-green-800 border-green-200';
-      default:
-        return 'bg-gray-100 text-gray-800 border-gray-200';
-    }
-  };
-
-  const handleOrderClick = (order: any) => {
-    setSelectedOrder(order);
-    setShowOrderModal(true);
-  };
-
-  const updateOrderStatus = async (orderId: string, newStatus: string) => {
+  const fetchOrders = async () => {
     try {
-      const { error } = await supabase
-        .from('orders')
-        .update({ status: newStatus, updated_at: new Date().toISOString() })
-        .eq('id', orderId);
+      // Fetch orders first
+      const {
+        data: ordersData,
+        error
+      } = await supabase.from("orders").select("*").order("created_at", {
+        ascending: false
+      });
+      if (error) throw error;
 
-      if (error) {
-        toast({
-          title: "Error",
-          description: "Failed to update order status",
-          variant: "destructive"
-        });
-      } else {
-        toast({
-          title: "Success",
-          description: "Order status updated successfully"
-        });
-        fetchOrders();
-        if (selectedOrder && selectedOrder.id === orderId) {
-          setSelectedOrder({ ...selectedOrder, status: newStatus });
+      // Fetch user details for each order
+      const ordersWithUsers: OrderWithUser[] = [];
+      if (ordersData) {
+        for (const order of ordersData) {
+          let userData = null;
+          if (order.user_id) {
+            const {
+              data: user
+            } = await supabase.from("users").select("email, first_name, last_name").eq("id", order.user_id).single();
+            userData = user;
+          }
+          ordersWithUsers.push({
+            ...order,
+            users: userData
+          });
         }
       }
+      setOrders(ordersWithUsers);
     } catch (error) {
-      console.error('Error updating order status:', error);
+      console.error("Error fetching orders:", error);
+    }
+  };
+  const fetchJournals = async () => {
+    try {
+      const {
+        data,
+        error
+      } = await supabase.from("journals").select("*").order("created_at", {
+        ascending: false
+      });
+      if (error) throw error;
+      setJournals(data || []);
+    } catch (error) {
+      console.error("Error fetching journals:", error);
+    }
+  };
+  const fetchCoupons = async () => {
+    try {
+      const {
+        data,
+        error
+      } = await supabase.from("coupon_codes").select("*").order("created_at", {
+        ascending: false
+      });
+      if (error) throw error;
+      setCoupons(data || []);
+    } catch (error) {
+      console.error("Error fetching coupons:", error);
+    }
+  };
+  const fetchShippingMethods = async () => {
+    try {
+      const {
+        data,
+        error
+      } = await supabase.from("shipping_methods").select("*").order("created_at", {
+        ascending: false
+      });
+      if (error) throw error;
+      setShippingMethods(data || []);
+    } catch (error) {
+      console.error("Error fetching shipping methods:", error);
     }
   };
 
-  const integrateWithShiprocket = (order: any) => {
-    const shiprocketData = {
-      order_id: order.order_number,
-      order_date: order.created_at,
-      pickup_location: "Primary",
-      billing_customer_name: order.billing_address?.firstName || '',
-      billing_last_name: order.billing_address?.lastName || '',
-      billing_address: order.billing_address?.address || '',
-      billing_city: order.billing_address?.city || '',
-      billing_pincode: order.billing_address?.postalCode || '',
-      billing_state: order.billing_address?.state || '',
-      billing_country: order.billing_address?.country || '',
-      billing_email: order.billing_address?.email || '',
-      billing_phone: order.billing_address?.phone || '',
-      shipping_is_billing: true,
-      order_items: order.order_items?.map((item: any) => ({
-        name: item.product_name,
-        sku: `product_${item.product_id}`,
-        units: item.quantity,
-        selling_price: item.product_price
-      })) || [],
-      payment_method: "Prepaid",
-      sub_total: order.total_amount,
-      length: 10,
-      breadth: 10,
-      height: 10,
-      weight: 0.5
-    };
-
-    console.log('Shiprocket Integration Data:', shiprocketData);
-    toast({
-      title: "Shiprocket Integration",
-      description: "Order data prepared for Shiprocket. Check console for details."
+  // Helper functions for form handling
+  const resetProductForm = () => {
+    setProductForm({
+      name: "",
+      description: "",
+      price: "",
+      image_url: "",
+      category: "",
+      stock_quantity: ""
+    });
+  };
+  const resetJournalForm = () => {
+    setJournalForm({
+      title: "",
+      content: "",
+      excerpt: "",
+      author: "DearNeuro Team",
+      image_url: "",
+      published: false
+    });
+  };
+  const resetCouponForm = () => {
+    setCouponForm({
+      code: "",
+      discount_type: "percentage",
+      discount_value: "",
+      minimum_order_amount: "",
+      max_uses: "",
+      expires_at: ""
+    });
+  };
+  const resetShippingForm = () => {
+    setShippingForm({
+      name: "",
+      description: "",
+      price: "",
+      estimated_days: ""
     });
   };
 
-  const integrateWithDelhivery = (order: any) => {
-    const delhiveryData = {
-      shipments: [{
-        name: `${order.shipping_address?.firstName || ''} ${order.shipping_address?.lastName || ''}`,
-        add: order.shipping_address?.address || '',
-        pin: order.shipping_address?.postalCode || '',
-        city: order.shipping_address?.city || '',
-        state: order.shipping_address?.state || '',
-        country: order.shipping_address?.country || '',
-        phone: order.shipping_address?.phone || '',
-        order: order.order_number,
-        payment_mode: order.payment_method === 'card' ? 'Prepaid' : 'COD',
-        return_pin: '',
-        return_city: '',
-        return_phone: '',
-        return_add: '',
-        return_state: '',
-        return_country: '',
-        products_desc: order.order_items?.map((item: any) => item.product_name).join(', ') || '',
-        hsn_code: '',
-        cod_amount: order.payment_method === 'cod' ? order.total_amount : 0,
-        order_date: order.created_at,
-        total_amount: order.total_amount,
-        seller_add: '',
-        seller_name: 'DIRTEA',
-        seller_inv: '',
-        quantity: order.order_items?.reduce((sum: number, item: any) => sum + item.quantity, 0) || 1,
-        waybill: '',
-        shipment_width: 10,
-        shipment_height: 10,
-        weight: 500,
-        seller_gst_tin: '',
-        shipping_mode: 'Surface',
-        address_type: 'home'
-      }]
-    };
-
-    console.log('Delhivery Integration Data:', delhiveryData);
-    toast({
-      title: "Delhivery Integration",
-      description: "Order data prepared for Delhivery. Check console for details."
-    });
+  // Generate consistent order number function
+  const generateOrderNumber = (orderId: string) => {
+    // Use the order creation timestamp or database position to generate consistent serial numbers
+    const orderIndex = orders.findIndex(o => o.id === orderId);
+    const serialNumber = orders.length - orderIndex;
+    return String(serialNumber).padStart(3, '0');
   };
 
-  const handleAddUser = async () => {
-    if (!newUserEmail) {
+  // CRUD operations
+  const handleProductSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const productData = {
+        name: productForm.name,
+        description: productForm.description,
+        price: parseFloat(productForm.price),
+        image_url: productForm.image_url,
+        category: productForm.category,
+        stock_quantity: parseInt(productForm.stock_quantity),
+        is_active: productForm.stock_quantity === "0" ? false : true // Auto-disable if no stock
+      };
+      if (editingProduct) {
+        const {
+          error
+        } = await supabase.from("products").update(productData).eq("id", editingProduct.id);
+        if (error) throw error;
+        toast({
+          title: "Success",
+          description: "Product updated successfully"
+        });
+      } else {
+        const {
+          error
+        } = await supabase.from("products").insert([productData]);
+        if (error) throw error;
+        toast({
+          title: "Success",
+          description: "Product created successfully"
+        });
+      }
+      setIsProductModalOpen(false);
+      setEditingProduct(null);
+      resetProductForm();
+      await fetchProducts();
+    } catch (error) {
+      console.error("Error saving product:", error);
       toast({
         title: "Error",
-        description: "Please enter a valid email address",
+        description: "Failed to save product",
         variant: "destructive"
       });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Toggle product stock status
+  const toggleProductStock = async (productId: string, currentStatus: boolean) => {
+    try {
+      const {
+        error
+      } = await supabase.from("products").update({
+        is_active: !currentStatus
+      }).eq("id", productId);
+      if (error) throw error;
+      toast({
+        title: "Success",
+        description: `Product ${!currentStatus ? 'activated' : 'deactivated'} successfully`
+      });
+      await fetchProducts();
+    } catch (error) {
+      console.error("Error toggling product status:", error);
+      toast({
+        title: "Error",
+        description: "Failed to update product status",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const handleDeleteProduct = async (productId: string) => {
+    if (!window.confirm("Are you sure you want to delete this product?")) return;
+    try {
+      const { error } = await supabase.from("products").delete().eq("id", productId);
+      if (error) throw error;
+      toast({
+        title: "Success",
+        description: "Product deleted successfully",
+      });
+      await fetchProducts();
+    } catch (error) {
+      console.error("Error deleting product:", error);
+      toast({
+        title: "Error",
+        description: "Failed to delete product",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleJournalSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const journalData = {
+        title: journalForm.title,
+        content: journalForm.content,
+        excerpt: journalForm.excerpt,
+        author: journalForm.author,
+        image_url: journalForm.image_url,
+        published: journalForm.published
+      };
+      if (editingJournal) {
+        const {
+          error
+        } = await supabase.from("journals").update({
+          ...journalData,
+          updated_at: new Date().toISOString()
+        }).eq("id", editingJournal.id);
+        if (error) throw error;
+        toast({
+          title: "Success",
+          description: "Journal updated successfully"
+        });
+      } else {
+        const {
+          error
+        } = await supabase.from("journals").insert([journalData]);
+        if (error) throw error;
+        toast({
+          title: "Success",
+          description: "Journal created successfully"
+        });
+      }
+      setIsJournalModalOpen(false);
+      setEditingJournal(null);
+      resetJournalForm();
+      await fetchJournals();
+    } catch (error) {
+      console.error("Error saving journal:", error);
+      toast({
+        title: "Error",
+        description: "Failed to save journal",
+        variant: "destructive"
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDeleteJournal = async (journalId: string) => {
+    if (!window.confirm("Are you sure you want to delete this journal?")) return;
+    try {
+      const { error } = await supabase.from("journals").delete().eq("id", journalId);
+      if (error) throw error;
+      toast({
+        title: "Success",
+        description: "Journal deleted successfully",
+      });
+      await fetchJournals();
+    } catch (error) {
+      console.error("Error deleting journal:", error);
+      toast({
+        title: "Error",
+        description: "Failed to delete journal",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleCouponSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const couponData = {
+        code: couponForm.code.toUpperCase(),
+        discount_type: couponForm.discount_type,
+        discount_value: parseFloat(couponForm.discount_value),
+        minimum_order_amount: parseFloat(couponForm.minimum_order_amount) || 0,
+        max_uses: couponForm.max_uses ? parseInt(couponForm.max_uses) : null,
+        expires_at: couponForm.expires_at ? new Date(couponForm.expires_at).toISOString() : null
+      };
+      if (editingCoupon) {
+        const {
+          error
+        } = await supabase.from("coupon_codes").update({
+          ...couponData,
+          updated_at: new Date().toISOString()
+        }).eq("id", editingCoupon.id);
+        if (error) throw error;
+        toast({
+          title: "Success",
+          description: "Coupon updated successfully"
+        });
+      } else {
+        const {
+          error
+        } = await supabase.from("coupon_codes").insert([couponData]);
+        if (error) throw error;
+        toast({
+          title: "Success",
+          description: "Coupon created successfully"
+        });
+      }
+      setIsCouponModalOpen(false);
+      setEditingCoupon(null);
+      resetCouponForm();
+      await fetchCoupons();
+    } catch (error) {
+      console.error("Error saving coupon:", error);
+      toast({
+        title: "Error",
+        description: "Failed to save coupon",
+        variant: "destructive"
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+  const handleDeleteCoupon = async (couponId: string) => {
+    if (!window.confirm("Are you sure you want to delete this coupon?")) return;
+    try {
+      const {
+        error
+      } = await supabase.from("coupon_codes").delete().eq("id", couponId);
+      if (error) throw error;
+      toast({
+        title: "Success",
+        description: "Coupon deleted successfully"
+      });
+      await fetchCoupons();
+    } catch (error) {
+      console.error("Error deleting coupon:", error);
+      toast({
+        title: "Error",
+        description: "Failed to delete coupon",
+        variant: "destructive"
+      });
+    }
+  };
+  const handleShippingSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const shippingData = {
+        name: shippingForm.name,
+        description: shippingForm.description,
+        price: parseFloat(shippingForm.price),
+        estimated_days: shippingForm.estimated_days,
+        is_active: true, // New shipping methods are active by default
+      };
+      if (editingShipping) {
+        const {
+          error
+        } = await supabase.from("shipping_methods").update(shippingData).eq("id", editingShipping.id);
+        if (error) throw error;
+        toast({
+          title: "Success",
+          description: "Shipping method updated successfully"
+        });
+      } else {
+        const {
+          error
+        } = await supabase.from("shipping_methods").insert([shippingData]);
+        if (error) throw error;
+        toast({
+          title: "Success",
+          description: "Shipping method created successfully"
+        });
+      }
+      setIsShippingModalOpen(false);
+      setEditingShipping(null);
+      resetShippingForm();
+      await fetchShippingMethods();
+    } catch (error) {
+      console.error("Error saving shipping method:", error);
+      toast({
+        title: "Error",
+        description: "Failed to save shipping method",
+        variant: "destructive"
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Toggle shipping method status
+  const toggleShippingStatus = async (shippingId: string, currentStatus: boolean) => {
+    try {
+      const { error } = await supabase.from("shipping_methods").update({
+        is_active: !currentStatus,
+      }).eq("id", shippingId);
+      if (error) throw error;
+      toast({
+        title: "Success",
+        description: `Shipping method ${!currentStatus ? 'activated' : 'deactivated'} successfully`,
+      });
+      await fetchShippingMethods();
+    } catch (error) {
+      console.error("Error toggling shipping method status:", error);
+      toast({
+        title: "Error",
+        description: "Failed to update shipping method status",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleDeleteShipping = async (shippingId: string) => {
+    if (!window.confirm("Are you sure you want to delete this shipping method?")) return;
+    try {
+      const { error } = await supabase.from("shipping_methods").delete().eq("id", shippingId);
+      if (error) throw error;
+      toast({
+        title: "Success",
+        description: "Shipping method deleted successfully",
+      });
+      await fetchShippingMethods();
+    } catch (error) {
+      console.error("Error deleting shipping method:", error);
+      toast({
+        title: "Error",
+        description: "Failed to delete shipping method",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const updateOrderStatus = async (orderId: string, status: string) => {
+    try {
+      const {
+        error
+      } = await supabase.from("orders").update({
+        status
+      }).eq("id", orderId);
+      if (error) throw error;
+      toast({
+        title: "Success",
+        description: "Order status updated successfully"
+      });
+      await fetchOrders();
+    } catch (error) {
+      console.error("Error updating order status:", error);
+      toast({
+        title: "Error",
+        description: "Failed to update order status",
+        variant: "destructive"
+      });
+    }
+  };
+
+  // Edit handlers
+  const handleEditProduct = (product: Product) => {
+    setEditingProduct(product);
+    setProductForm({
+      name: product.name,
+      description: product.description || "",
+      price: product.price.toString(),
+      image_url: product.image_url || "",
+      category: product.category || "",
+      stock_quantity: product.stock_quantity.toString()
+    });
+    setIsProductModalOpen(true);
+  };
+  const handleEditJournal = (journal: Journal) => {
+    setEditingJournal(journal);
+    setJournalForm({
+      title: journal.title,
+      content: journal.content,
+      excerpt: journal.excerpt || "",
+      author: journal.author || "DearNeuro Team",
+      image_url: journal.image_url || "",
+      published: journal.published
+    });
+    setIsJournalModalOpen(true);
+  };
+  const handleEditCoupon = (coupon: CouponCode) => {
+    setEditingCoupon(coupon);
+    setCouponForm({
+      code: coupon.code,
+      discount_type: coupon.discount_type,
+      discount_value: coupon.discount_value.toString(),
+      minimum_order_amount: coupon.minimum_order_amount.toString(),
+      max_uses: coupon.max_uses?.toString() || "",
+      expires_at: coupon.expires_at ? new Date(coupon.expires_at).toISOString().split('T')[0] : ""
+    });
+    setIsCouponModalOpen(true);
+  };
+  const handleEditShipping = (shipping: ShippingMethod) => {
+    setEditingShipping(shipping);
+    setShippingForm({
+      name: shipping.name,
+      description: shipping.description || "",
+      price: shipping.price.toString(),
+      estimated_days: shipping.estimated_days
+    });
+    setIsShippingModalOpen(true);
+  };
+  const handleViewOrder = (order: OrderWithUser) => {
+    setSelectedOrder(order);
+    setIsOrderDialogOpen(true);
+  };
+
+  const handleExportOrders = () => {
+    const csv = [
+      ["Order ID", "Customer Name", "Email", "Total Amount", "Status", "Date"],
+      ...orders.map((order) => [
+        order.id,
+        order.users ? `${order.users.first_name} ${order.users.last_name}` : "Guest",
+        order.users ? order.users.email : "N/A",
+        order.total_amount,
+        order.status,
+        new Date(order.created_at).toLocaleDateString(),
+      ]),
+    ]
+      .map((e) => e.join(","))
+      .join("\n");
+
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
+    if (link.href) {
+      URL.revokeObjectURL(link.href);
+    }
+    const url = URL.createObjectURL(blob);
+    link.href = url;
+    link.setAttribute("download", "orders.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const handleProductCsvUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) {
       return;
     }
 
-    toast({
-      title: "User Management",
-      description: `Would add user ${newUserEmail} with role ${newUserRole}. This feature will be implemented with proper user invitation system.`
+    Papa.parse(file, {
+      header: true,
+      complete: async (results) => {
+        const productsToInsert = results.data.map((row: any) => ({
+          name: row.name,
+          description: row.description,
+          price: parseFloat(row.price),
+          image_url: row.image_url,
+          category: row.category,
+          stock_quantity: parseInt(row.stock_quantity),
+          is_active: parseInt(row.stock_quantity) > 0,
+        }));
+
+        try {
+          const { error } = await supabase.from("products").insert(productsToInsert);
+          if (error) throw error;
+          toast({
+            title: "Success",
+            description: "Products imported successfully",
+          });
+          await fetchProducts();
+        } catch (error) {
+          console.error("Error importing products:", error);
+          toast({
+            title: "Error",
+            description: "Failed to import products",
+            variant: "destructive",
+          });
+        }
+      },
     });
-    setNewUserEmail('');
-    setNewUserRole('user');
   };
-
-  const renderDashboardOverview = () => (
-    <div className="space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Orders</CardTitle>
-            <Package className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{orders.length}</div>
-            <p className="text-xs text-muted-foreground">
-              +2 from last month
-            </p>
-          </CardContent>
-        </Card>
-        
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Revenue</CardTitle>
-            <DollarSign className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
-              £{orders.reduce((sum, order) => sum + (parseFloat(order.total_amount?.toString() || '0')), 0).toFixed(2)}
-            </div>
-            <p className="text-xs text-muted-foreground">
-              +15% from last month
-            </p>
-          </CardContent>
-        </Card>
-        
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Pending Orders</CardTitle>
-            <Clock className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
-              {orders.filter(order => order.status === 'pending').length}
-            </div>
-            <p className="text-xs text-muted-foreground">
-              Needs attention
-            </p>
-          </CardContent>
-        </Card>
-        
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Delivered</CardTitle>
-            <TrendingUp className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
-              {orders.filter(order => order.status === 'delivered').length}
-            </div>
-            <p className="text-xs text-muted-foreground">
-              +8% from last month
-            </p>
-          </CardContent>
-        </Card>
-      </div>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Recent Orders</CardTitle>
-          <CardDescription>Latest orders from your customers</CardDescription>
-        </CardHeader>
-        <CardContent>
-          {orders.slice(0, 5).length > 0 ? (
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Order #</TableHead>
-                  <TableHead>Customer</TableHead>
-                  <TableHead>Date</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Total</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {orders.slice(0, 5).map((order) => (
-                  <TableRow key={order.id}>
-                    <TableCell>#{formatOrderNumber(order.order_number)}</TableCell>
-                    <TableCell>
-                      {order.shipping_address?.firstName} {order.shipping_address?.lastName}
-                    </TableCell>
-                    <TableCell>{new Date(order.created_at).toLocaleDateString()}</TableCell>
-                    <TableCell>
-                      <Badge className={`${getStatusColor(order.status)} border`}>
-                        {order.status}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>£{order.total_amount}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          ) : (
-            <div className="text-center py-8">
-              <Package className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-              <p className="text-gray-500">No orders found</p>
-            </div>
-          )}
-        </CardContent>
-      </Card>
-    </div>
-  );
-
-  const renderOrderManagement = () => (
-    <Card>
-      <CardHeader>
-        <CardTitle>Order Management</CardTitle>
-        <CardDescription>
-          View and manage all customer orders and subscriptions
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        {ordersLoading ? (
-          <div className="text-center py-8">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-black mx-auto mb-4"></div>
-            <p className="text-gray-600">Loading orders...</p>
-          </div>
-        ) : orders.length === 0 ? (
-          <div className="text-center py-8">
-            <Package className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-            <p className="text-gray-500">No orders found</p>
-          </div>
-        ) : (
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Order #</TableHead>
-                <TableHead>Customer</TableHead>
-                <TableHead>Date</TableHead>
-                <TableHead>Items</TableHead>
-                <TableHead>Total</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {orders.map((order) => (
-                <TableRow 
-                  key={order.id} 
-                  className="cursor-pointer hover:bg-gray-50"
-                  onClick={() => handleOrderClick(order)}
-                >
-                  <TableCell className="font-mono">
-                    #{formatOrderNumber(order.order_number)}
-                  </TableCell>
-                  <TableCell>
-                    {order.shipping_address?.firstName} {order.shipping_address?.lastName}
-                  </TableCell>
-                  <TableCell>
-                    {new Date(order.created_at).toLocaleDateString()}
-                  </TableCell>
-                  <TableCell>
-                    {order.order_items?.length || 0} items
-                  </TableCell>
-                  <TableCell className="font-semibold">
-                    £{order.total_amount}
-                  </TableCell>
-                  <TableCell>
-                    <Badge className={`${getStatusColor(order.status)} border`}>
-                      {order.status}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleOrderClick(order);
-                      }}
-                    >
-                      <Eye className="h-4 w-4" />
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        )}
-      </CardContent>
-    </Card>
-  );
-
-  const renderUserManagement = () => (
-    <div className="space-y-6">
-      <Card>
-        <CardHeader>
-          <CardTitle>Add New User</CardTitle>
-          <CardDescription>
-            Add new users and assign permissions
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div>
-              <Label htmlFor="userEmail">Email Address</Label>
-              <Input
-                id="userEmail"
-                type="email"
-                placeholder="user@example.com"
-                value={newUserEmail}
-                onChange={(e) => setNewUserEmail(e.target.value)}
-              />
-            </div>
-            <div>
-              <Label htmlFor="userRole">Role</Label>
-              <Select value={newUserRole} onValueChange={setNewUserRole}>
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="user">User</SelectItem>
-                  <SelectItem value="admin">Admin</SelectItem>
-                  <SelectItem value="editor">Editor</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="flex items-end">
-              <Button onClick={handleAddUser} className="w-full">
-                <UserPlus className="h-4 w-4 mr-2" />
-                Add User
-              </Button>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>User Permissions</CardTitle>
-          <CardDescription>
-            Manage user access to different sections
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-              <div className="p-4 border rounded-lg">
-                <h4 className="font-semibold mb-2">Orders Management</h4>
-                <p className="text-sm text-gray-600 mb-3">View and manage customer orders</p>
-                <div className="space-y-2">
-                  <label className="flex items-center space-x-2">
-                    <input type="checkbox" defaultChecked />
-                    <span className="text-sm">View Orders</span>
-                  </label>
-                  <label className="flex items-center space-x-2">
-                    <input type="checkbox" defaultChecked />
-                    <span className="text-sm">Update Status</span>
-                  </label>
-                </div>
-              </div>
-              
-              <div className="p-4 border rounded-lg">
-                <h4 className="font-semibold mb-2">Products Management</h4>
-                <p className="text-sm text-gray-600 mb-3">Manage product catalog</p>
-                <div className="space-y-2">
-                  <label className="flex items-center space-x-2">
-                    <input type="checkbox" defaultChecked />
-                    <span className="text-sm">View Products</span>
-                  </label>
-                  <label className="flex items-center space-x-2">
-                    <input type="checkbox" />
-                    <span className="text-sm">Edit Products</span>
-                  </label>
-                </div>
-              </div>
-              
-              <div className="p-4 border rounded-lg">
-                <h4 className="font-semibold mb-2">Content Management</h4>
-                <p className="text-sm text-gray-600 mb-3">Manage recipes and journals</p>
-                <div className="space-y-2">
-                  <label className="flex items-center space-x-2">
-                    <input type="checkbox" />
-                    <span className="text-sm">Edit Recipes</span>
-                  </label>
-                  <label className="flex items-center space-x-2">
-                    <input type="checkbox" />
-                    <span className="text-sm">Edit Journals</span>
-                  </label>
-                </div>
-              </div>
-              
-              <div className="p-4 border rounded-lg">
-                <h4 className="font-semibold mb-2">System Settings</h4>
-                <p className="text-sm text-gray-600 mb-3">Access system configuration</p>
-                <div className="space-y-2">
-                  <label className="flex items-center space-x-2">
-                    <input type="checkbox" />
-                    <span className="text-sm">System Config</span>
-                  </label>
-                  <label className="flex items-center space-x-2">
-                    <input type="checkbox" />
-                    <span className="text-sm">User Management</span>
-                  </label>
-                </div>
-              </div>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-    </div>
-  );
-
-  const renderReports = () => (
-    <div className="space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <Card>
-          <CardHeader>
-            <CardTitle>Sales Report</CardTitle>
-            <CardDescription>Monthly sales performance</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-green-600">
-              £{orders.reduce((sum, order) => sum + (parseFloat(order.total_amount?.toString() || '0')), 0).toFixed(2)}
-            </div>
-            <p className="text-sm text-gray-600">Total revenue this month</p>
-          </CardContent>
-        </Card>
-        
-        <Card>
-          <CardHeader>
-            <CardTitle>Order Analytics</CardTitle>
-            <CardDescription>Order status breakdown</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-2">
-              <div className="flex justify-between">
-                <span>Pending</span>
-                <span>{orders.filter(o => o.status === 'pending').length}</span>
-              </div>
-              <div className="flex justify-between">
-                <span>Delivered</span>
-                <span>{orders.filter(o => o.status === 'delivered').length}</span>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        
-        <Card>
-          <CardHeader>
-            <CardTitle>Customer Insights</CardTitle>
-            <CardDescription>Customer behavior metrics</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-blue-600">
-              {new Set(orders.map(o => o.user_id)).size}
-            </div>
-            <p className="text-sm text-gray-600">Unique customers</p>
-          </CardContent>
-        </Card>
-      </div>
-      
-      <Card>
-        <CardHeader>
-          <CardTitle>Export Reports</CardTitle>
-          <CardDescription>Download detailed reports</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <Button variant="outline">
-              <FileText className="h-4 w-4 mr-2" />
-              Orders Report
-            </Button>
-            <Button variant="outline">
-              <BarChart3 className="h-4 w-4 mr-2" />  
-              Sales Analytics
-            </Button>
-            <Button variant="outline">
-              <Users className="h-4 w-4 mr-2" />
-              Customer Report
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
-    </div>
-  );
-
-  const renderSettings = () => (
-    <div className="space-y-6">
-      <Card>
-        <CardHeader>
-          <CardTitle>Store Settings</CardTitle>
-          <CardDescription>Configure your store preferences</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <Label htmlFor="storeName">Store Name</Label>
-              <Input id="storeName" defaultValue="DIRTEA" />
-            </div>
-            <div>
-              <Label htmlFor="storeEmail">Store Email</Label>
-              <Input id="storeEmail" type="email" placeholder="store@dirtea.com" />
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-      
-      <Card>
-        <CardHeader>
-          <CardTitle>Shipping Settings</CardTitle>
-          <CardDescription>Configure shipping options</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <h4 className="font-medium">Free Shipping Threshold</h4>
-                <p className="text-sm text-gray-600">Orders above this amount get free shipping</p>
-              </div>
-              <Input className="w-32" defaultValue="50" />
-            </div>
-            <div className="flex items-center justify-between">
-              <div>
-                <h4 className="font-medium">Standard Shipping Cost</h4>
-                <p className="text-sm text-gray-600">Default shipping cost</p>
-              </div>
-              <Input className="w-32" defaultValue="5.99" />
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-      
-      <Card>
-        <CardHeader>
-          <CardTitle>Notification Settings</CardTitle>
-          <CardDescription>Configure email notifications</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="space-y-4">
-            <label className="flex items-center space-x-2">
-              <input type="checkbox" defaultChecked />
-              <span>New order notifications</span>
-            </label>
-            <label className="flex items-center space-x-2">
-              <input type="checkbox" defaultChecked />
-              <span>Low stock alerts</span>
-            </label>
-            <label className="flex items-center space-x-2">
-              <input type="checkbox" />
-              <span>Customer review notifications</span>
-            </label>
-          </div>
-        </CardContent>
-      </Card>
-    </div>
-  );
-
-  if (loading || adminLoading) {
-    return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
+  if (adminLoading) {
+    return <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-xl">Loading...</div>
+      </div>;
+  }
+  if (!isAdmin) {
+    return <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-black mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading admin dashboard...</p>
+          <h1 className="text-2xl font-bold mb-4">Access Denied</h1>
+          <p>You don't have permission to access this page.</p>
         </div>
-      </div>
-    );
+      </div>;
   }
-
-  if (!user || !isAdmin) {
-    return null;
-  }
-
-  const renderContent = () => {
-    switch (activeTab) {
-      case 'orders':
-        return renderOrderManagement();
-      case 'products':
-        return <ProductsAdmin />;
-      case 'recipes':
-        return <RecipesAdmin />;
-      case 'journals':
-        return <JournalsAdmin />;
-      case 'users':
-        return renderUserManagement();
-      case 'reports':
-        return renderReports();
-      case 'settings':
-        return renderSettings();
-      default:
-        return renderDashboardOverview();
-    }
-  };
-
-  const getPageTitle = () => {
-    switch (activeTab) {
-      case 'orders':
-        return 'Order Management';
-      case 'products':
-        return 'Products Management';
-      case 'recipes':
-        return 'Recipes Management';
-      case 'journals':
-        return 'Journals Management';
-      case 'users':
-        return 'User Management';
-      case 'reports':
-        return 'Reports & Analytics';
-      case 'settings':
-        return 'Settings';
-      default:
-        return 'Admin Dashboard';
-    }
-  };
-
-  const getPageDescription = () => {
-    switch (activeTab) {
-      case 'orders':
-        return 'Manage customer orders and subscriptions';
-      case 'products':
-        return 'Manage your product catalog and inventory';
-      case 'recipes':
-        return 'Manage your recipe collection and content';
-      case 'journals':
-        return 'Manage your journal articles and blog posts';
-      case 'users':
-        return 'Manage users and permissions';
-      case 'reports':
-        return 'View detailed analytics and reports';
-      case 'settings':
-        return 'Configure store settings';
-      default:
-        return 'Overview of your store performance';
-    }
-  };
-
-  return (
-    <div className="min-h-screen bg-gray-50">
-      <HeaderNavBar />
+  return <div className="min-h-screen bg-gray-50 flex flex-col lg:flex-row">
+      <AdminSidebar activeTab={activeTab} setActiveTab={setActiveTab} />
       
-      <div className="flex">
-        <AdminSidebar />
-        
-        <div className="flex-1 p-8 transition-all duration-300 ease-in-out">
-          <div className="mb-8">
-            <h1 className="text-3xl font-bold text-black">
-              {getPageTitle()}
-            </h1>
-            <p className="text-gray-600 mt-2">
-              {getPageDescription()}
-            </p>
+      <div className="flex-1 overflow-auto">
+        <div className="p-4 lg:p-8">
+          {/* Header with Notifications */}
+          <div className="mb-8 flex items-center justify-between">
+            <div>
+              <h1 className="text-2xl lg:text-3xl font-bold text-gray-900">Admin Dashboard</h1>
+              <p className="text-gray-600 mt-2 hidden md:block">Manage your store and orders</p>
+            </div>
+            <NotificationDropdown />
           </div>
 
-          <div className="transition-all duration-300 ease-in-out transform">
-            {renderContent()}
-          </div>
+          {/* Dashboard Overview */}
+          {activeTab === "dashboard" && <DashboardOverview />}
+
+          {/* Analytics Tab */}
+          {activeTab === "analytics" && <AnalyticsTab />}
+
+          {/* Users Tab */}
+          {activeTab === "users" && <UsersTab />}
+
+          {/* Products Tab */}
+          {activeTab === "products" && <Card className="bg-white">
+              <CardHeader className="flex flex-col md:flex-row items-start md:items-center justify-between">
+                <CardTitle className="text-xl font-semibold text-gray-900 mb-4 md:mb-0">Products Management</CardTitle>
+                <Dialog open={isProductModalOpen} onOpenChange={setIsProductModalOpen}>
+                  <DialogTrigger asChild>
+                    <Button onClick={() => {
+                    setEditingProduct(null);
+                    resetProductForm();
+                  }}>
+                      <FaPlus className="mr-2" />
+                      Add Product
+                    </Button>
+                  </DialogTrigger>
+                  <Button onClick={() => document.getElementById('csv-upload').click()}>
+                    Import from CSV
+                  </Button>
+                  <input
+                    type="file"
+                    id="csv-upload"
+                    style={{ display: 'none' }}
+                    accept=".csv"
+                    onChange={handleProductCsvUpload}
+                  />
+                  <DialogContent className="max-w-2xl">
+                    <DialogHeader>
+                      <DialogTitle>
+                        {editingProduct ? "Edit Product" : "Add New Product"}
+                      </DialogTitle>
+                    </DialogHeader>
+                    <form onSubmit={handleProductSubmit} className="space-y-4">
+                      <div>
+                        <Label htmlFor="name">Product Name</Label>
+                        <Input id="name" value={productForm.name} onChange={e => setProductForm({
+                        ...productForm,
+                        name: e.target.value
+                      })} required />
+                      </div>
+                      <div>
+                        <Label htmlFor="description">Description</Label>
+                        <Textarea id="description" value={productForm.description} onChange={e => setProductForm({
+                        ...productForm,
+                        description: e.target.value
+                      })} />
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <Label htmlFor="price">Price ($)</Label>
+                          <Input id="price" type="number" step="0.01" value={productForm.price} onChange={e => setProductForm({
+                          ...productForm,
+                          price: e.target.value
+                        })} required />
+                        </div>
+                        <div>
+                          <Label htmlFor="stock">Stock Quantity</Label>
+                          <Input id="stock" type="number" value={productForm.stock_quantity} onChange={e => setProductForm({
+                          ...productForm,
+                          stock_quantity: e.target.value
+                        })} required />
+                        </div>
+                      </div>
+                      <div>
+                        <Label htmlFor="category">Category</Label>
+                        <Input id="category" value={productForm.category} onChange={e => setProductForm({
+                        ...productForm,
+                        category: e.target.value
+                      })} />
+                      </div>
+                      <div>
+                        <Label htmlFor="image_url">Image URL</Label>
+                        <Input id="image_url" value={productForm.image_url} onChange={e => setProductForm({
+                        ...productForm,
+                        image_url: e.target.value
+                      })} />
+                      </div>
+                      <div className="flex justify-end space-x-2">
+                        <Button type="button" variant="outline" onClick={() => setIsProductModalOpen(false)}>
+                          Cancel
+                        </Button>
+                        <Button type="submit" disabled={loading}>
+                          {loading ? "Saving..." : "Save Product"}
+                        </Button>
+                      </div>
+                    </form>
+                  </DialogContent>
+                </Dialog>
+              </CardHeader>
+              <CardContent className="overflow-x-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Image</TableHead>
+                      <TableHead>Name</TableHead>
+                      <TableHead>Price</TableHead>
+                      <TableHead>Stock</TableHead>
+                      <TableHead>Category</TableHead>
+                      <TableHead>Status</TableHead>
+                      <TableHead>Actions</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {products.map(product => <TableRow key={product.id}>
+                        <TableCell>
+                          <img src={product.image_url} alt={product.name} className="w-12 h-12 object-cover rounded" />
+                        </TableCell>
+                        <TableCell className="font-medium">{product.name}</TableCell>
+                        <TableCell>${product.price}</TableCell>
+                        <TableCell>{product.stock_quantity}</TableCell>
+                        <TableCell>{product.category}</TableCell>
+                        <TableCell>
+                          <div className="flex items-center space-x-2">
+                            <Badge variant={product.is_active ? "default" : "secondary"}>
+                              {product.is_active ? "Active" : "Out of Stock"}
+                            </Badge>
+                            <Button size="sm" variant="outline" onClick={() => toggleProductStock(product.id, product.is_active)}>
+                              <span className="hidden md:inline">{product.is_active ? "Disable" : "Enable"}</span>
+                              <FaEdit className="md:hidden" />
+                            </Button>
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex space-x-2">
+                            <Button size="sm" variant="outline" onClick={() => handleEditProduct(product)}>
+                              <FaEdit />
+                            </Button>
+                            <Button size="sm" variant="destructive" onClick={() => handleDeleteProduct(product.id)}>
+                              <FaTrash />
+                            </Button>
+                          </div>
+                        </TableCell>
+                      </TableRow>)}
+                  </TableBody>
+                </Table>
+              </CardContent>
+            </Card>}
+
+          {/* Orders Tab */}
+          {activeTab === "orders" && <Card className="bg-white">
+              <CardHeader>
+                <CardTitle className="text-xl font-semibold text-gray-900">Orders Management</CardTitle>
+                <div className="flex items-center space-x-4 mt-4">
+                  <Input placeholder="Search by customer or order ID" value={orderSearchTerm} onChange={e => setOrderSearchTerm(e.target.value)} className="max-w-sm" />
+                  <Select value={orderStatusFilter} onValueChange={setOrderStatusFilter}>
+                    <SelectTrigger className="w-[180px]">
+                      <SelectValue placeholder="Filter by status" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Statuses</SelectItem>
+                      <SelectItem value="pending">Pending</SelectItem>
+                      <SelectItem value="processing">Processing</SelectItem>
+                      <SelectItem value="shipped">Shipped</SelectItem>
+                      <SelectItem value="delivered">Delivered</SelectItem>
+                      <SelectItem value="cancelled">Cancelled</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <Button onClick={handleExportOrders}>Export to CSV</Button>
+                </div>
+              </CardHeader>
+              <CardContent className="overflow-x-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Order #</TableHead>
+                      <TableHead>Customer</TableHead>
+                      <TableHead>Total</TableHead>
+                      <TableHead>Status</TableHead>
+                      <TableHead>Date</TableHead>
+                      <TableHead>Actions</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {orders.filter(order => (order.users?.first_name?.toLowerCase().includes(orderSearchTerm.toLowerCase()) || order.users?.last_name?.toLowerCase().includes(orderSearchTerm.toLowerCase()) || order.users?.email?.toLowerCase().includes(orderSearchTerm.toLowerCase()) || order.id.includes(orderSearchTerm)) && (orderStatusFilter === "all" || order.status === orderStatusFilter)).map(order => <TableRow key={order.id}>
+                          <TableCell className="font-mono text-sm">
+                            #{generateOrderNumber(order.id)}
+                          </TableCell>
+                          <TableCell>
+                            <div>
+                              <div className="font-medium">
+                                {order.users?.first_name ? `${order.users.first_name} ${order.users.last_name || ""}`.trim() : order.users?.email || "Guest User"}
+                              </div>
+                              <div className="text-sm text-gray-500">
+                                {order.users?.email || "No email"}
+                              </div>
+                            </div>
+                          </TableCell>
+                          <TableCell>₹{order.total_amount}</TableCell>
+                          <TableCell>
+                            <select value={order.status} onChange={e => updateOrderStatus(order.id, e.target.value)} className="border rounded px-2 py-1 text-sm">
+                              <option value="pending">Pending</option>
+                              <option value="processing">Processing</option>
+                              <option value="shipped">Shipped</option>
+                              <option value="delivered">Delivered</option>
+                              <option value="cancelled">Cancelled</option>
+                            </select>
+                          </TableCell>
+                          <TableCell>
+                            {new Date(order.created_at).toLocaleDateString()}
+                          </TableCell>
+                          <TableCell>
+                            <Button size="sm" variant="outline" onClick={() => handleViewOrder(order)}>
+                              <FaEye />
+                            </Button>
+                          </TableCell>
+                        </TableRow>)}
+                  </TableBody>
+                </Table>
+              </CardContent>
+            </Card>}
+
+          {/* Messages Tab */}
+          {activeTab === "messages" && <MessagesSection />}
+
+          {/* Expenses Tab */}
+          {activeTab === "expenses" && <ExpensesTab />}
+
+          {/* Reviews Tab */}
+          {activeTab === "reviews" && <ReviewsTab />}
+
+
+          {/* Content Tab */}
+          {activeTab === "content" && <ContentTab />}
+
+          {/* Journals Tab */}
+          {activeTab === "journals" && <Card className="bg-white">
+              <CardHeader className="flex flex-col md:flex-row items-start md:items-center justify-between">
+                <CardTitle className="text-xl font-semibold text-gray-900 mb-4 md:mb-0">Journals Management</CardTitle>
+                <Dialog open={isJournalModalOpen} onOpenChange={setIsJournalModalOpen}>
+                  <DialogTrigger asChild>
+                    <Button onClick={() => {
+                    setEditingJournal(null);
+                    resetJournalForm();
+                  }}>
+                      <FaPlus className="mr-2" />
+                      Add Journal
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+                    <DialogHeader>
+                      <DialogTitle>
+                        {editingJournal ? "Edit Journal" : "Add New Journal"}
+                      </DialogTitle>
+                    </DialogHeader>
+                    <form onSubmit={handleJournalSubmit} className="space-y-4">
+                      <div>
+                        <Label htmlFor="title">Title</Label>
+                        <Input id="title" value={journalForm.title} onChange={e => setJournalForm({
+                        ...journalForm,
+                        title: e.target.value
+                      })} required />
+                      </div>
+                      <div>
+                        <Label htmlFor="excerpt">Excerpt</Label>
+                        <Textarea id="excerpt" value={journalForm.excerpt} onChange={e => setJournalForm({
+                        ...journalForm,
+                        excerpt: e.target.value
+                      })} rows={2} />
+                      </div>
+                      <div>
+                        <Label htmlFor="content">Content</Label>
+                        <Textarea id="content" value={journalForm.content} onChange={e => setJournalForm({
+                        ...journalForm,
+                        content: e.target.value
+                      })} rows={10} required />
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <Label htmlFor="author">Author</Label>
+                          <Input id="author" value={journalForm.author} onChange={e => setJournalForm({
+                          ...journalForm,
+                          author: e.target.value
+                        })} />
+                        </div>
+                        <div>
+                          <Label htmlFor="journal_image_url">Image URL</Label>
+                          <Input id="journal_image_url" value={journalForm.image_url} onChange={e => setJournalForm({
+                          ...journalForm,
+                          image_url: e.target.value
+                        })} />
+                        </div>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <input type="checkbox" id="published" checked={journalForm.published} onChange={e => setJournalForm({
+                        ...journalForm,
+                        published: e.target.checked
+                      })} />
+                        <Label htmlFor="published">Published</Label>
+                      </div>
+                      <div className="flex justify-end space-x-2">
+                        <Button type="button" variant="outline" onClick={() => setIsJournalModalOpen(false)}>
+                          Cancel
+                        </Button>
+                        <Button type="submit" disabled={loading}>
+                          {loading ? "Saving..." : "Save Journal"}
+                        </Button>
+                      </div>
+                    </form>
+                  </DialogContent>
+                </Dialog>
+              </CardHeader>
+              <CardContent className="overflow-x-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Title</TableHead>
+                      <TableHead>Author</TableHead>
+                      <TableHead>Status</TableHead>
+                      <TableHead>Created</TableHead>
+                      <TableHead>Actions</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {journals.map(journal => <TableRow key={journal.id}>
+                        <TableCell className="font-medium">{journal.title}</TableCell>
+                        <TableCell>{journal.author}</TableCell>
+                        <TableCell>
+                          <Badge variant={journal.published ? "default" : "secondary"}>
+                            {journal.published ? "Published" : "Draft"}
+                          </Badge>
+                        </TableCell>
+                        <TableCell>
+                          {new Date(journal.created_at).toLocaleDateString()}
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex space-x-2">
+                            <Button size="sm" variant="outline" onClick={() => handleEditJournal(journal)}>
+                              <FaEdit />
+                            </Button>
+                            <Button size="sm" variant="destructive" onClick={() => handleDeleteJournal(journal.id)}>
+                              <FaTrash />
+                            </Button>
+                          </div>
+                        </TableCell>
+                      </TableRow>)}
+                  </TableBody>
+                </Table>
+              </CardContent>
+            </Card>}
+
+          {/* Coupons Tab */}
+          {activeTab === "coupons" && <Card className="bg-white">
+              <CardHeader className="flex flex-col md:flex-row items-start md:items-center justify-between">
+                <CardTitle className="text-xl font-semibold text-gray-900 mb-4 md:mb-0">Coupon Codes Management</CardTitle>
+                <Dialog open={isCouponModalOpen} onOpenChange={setIsCouponModalOpen}>
+                  <DialogTrigger asChild>
+                    <Button onClick={() => {
+                    setEditingCoupon(null);
+                    resetCouponForm();
+                  }}>
+                      <FaPlus className="mr-2" />
+                      Add Coupon
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="max-w-2xl">
+                    <DialogHeader>
+                      <DialogTitle>
+                        {editingCoupon ? "Edit Coupon" : "Add New Coupon"}
+                      </DialogTitle>
+                    </DialogHeader>
+                    <form onSubmit={handleCouponSubmit} className="space-y-4">
+                      <div>
+                        <Label htmlFor="code">Coupon Code</Label>
+                        <Input id="code" value={couponForm.code} onChange={e => setCouponForm({
+                        ...couponForm,
+                        code: e.target.value.toUpperCase()
+                      })} required />
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <Label htmlFor="discount_type">Discount Type</Label>
+                          <select id="discount_type" value={couponForm.discount_type} onChange={e => setCouponForm({
+                          ...couponForm,
+                          discount_type: e.target.value
+                        })} className="w-full border rounded px-3 py-2">
+                            <option value="percentage">Percentage</option>
+                            <option value="fixed">Fixed Amount</option>
+                          </select>
+                        </div>
+                        <div>
+                          <Label htmlFor="discount_value">
+                            Discount Value {couponForm.discount_type === "percentage" ? "(%)" : "($)"}
+                          </Label>
+                          <Input id="discount_value" type="number" step="0.01" value={couponForm.discount_value} onChange={e => setCouponForm({
+                          ...couponForm,
+                          discount_value: e.target.value
+                        })} required />
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <Label htmlFor="minimum_order_amount">Minimum Order Amount ($)</Label>
+                          <Input id="minimum_order_amount" type="number" step="0.01" value={couponForm.minimum_order_amount} onChange={e => setCouponForm({
+                          ...couponForm,
+                          minimum_order_amount: e.target.value
+                        })} />
+                        </div>
+                        <div>
+                          <Label htmlFor="max_uses">Max Uses (optional)</Label>
+                          <Input id="max_uses" type="number" value={couponForm.max_uses} onChange={e => setCouponForm({
+                          ...couponForm,
+                          max_uses: e.target.value
+                        })} />
+                        </div>
+                      </div>
+                      <div>
+                        <Label htmlFor="expires_at">Expiry Date (optional)</Label>
+                        <Input id="expires_at" type="date" value={couponForm.expires_at} onChange={e => setCouponForm({
+                        ...couponForm,
+                        expires_at: e.target.value
+                      })} />
+                      </div>
+                      <div className="flex justify-end space-x-2">
+                        <Button type="button" variant="outline" onClick={() => setIsCouponModalOpen(false)}>
+                          Cancel
+                        </Button>
+                        <Button type="submit" disabled={loading}>
+                          {loading ? "Saving..." : "Save Coupon"}
+                        </Button>
+                      </div>
+                    </form>
+                  </DialogContent>
+                </Dialog>
+              </CardHeader>
+              <CardContent className="overflow-x-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Code</TableHead>
+                      <TableHead>Type</TableHead>
+                      <TableHead>Value</TableHead>
+                      <TableHead>Min Order</TableHead>
+                      <TableHead>Used/Max</TableHead>
+                      <TableHead>Expires</TableHead>
+                      <TableHead>Status</TableHead>
+                      <TableHead>Actions</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {coupons.map(coupon => <TableRow key={coupon.id}>
+                        <TableCell className="font-mono font-medium">{coupon.code}</TableCell>
+                        <TableCell>{coupon.discount_type}</TableCell>
+                        <TableCell>
+                          {coupon.discount_type === "percentage" ? `${coupon.discount_value}%` : `$${coupon.discount_value}`}
+                        </TableCell>
+                        <TableCell>${coupon.minimum_order_amount}</TableCell>
+                        <TableCell>
+                          {coupon.used_count}/{coupon.max_uses || "∞"}
+                        </TableCell>
+                        <TableCell>
+                          {coupon.expires_at ? new Date(coupon.expires_at).toLocaleDateString() : "Never"}
+                        </TableCell>
+                        <TableCell>
+                          <Badge variant={coupon.is_active ? "default" : "secondary"}>
+                            {coupon.is_active ? "Active" : "Inactive"}
+                          </Badge>
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex space-x-2">
+                            <Button size="sm" variant="outline" onClick={() => handleEditCoupon(coupon)}>
+                              <FaEdit />
+                            </Button>
+                            <Button size="sm" variant="destructive" onClick={() => handleDeleteCoupon(coupon.id)}>
+                              <FaTrash />
+                            </Button>
+                          </div>
+                        </TableCell>
+                      </TableRow>)}
+                  </TableBody>
+                </Table>
+              </CardContent>
+            </Card>}
+
+          {/* Shipping Methods Tab (Previously Shipping Tab) */}
+          {activeTab === "shipping" && (
+            <Card className="bg-white">
+              <CardHeader className="flex flex-col md:flex-row items-start md:items-center justify-between">
+                <CardTitle className="text-xl font-semibold text-gray-900 mb-4 md:mb-0">Shipping Methods Management</CardTitle>
+                <Dialog open={isShippingModalOpen} onOpenChange={setIsShippingModalOpen}>
+                  <DialogTrigger asChild>
+                    <Button onClick={() => {
+                      setEditingShipping(null);
+                      resetShippingForm();
+                    }}>
+                      <FaPlus className="mr-2" />
+                      Add Shipping Method
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="max-w-2xl">
+                    <DialogHeader>
+                      <DialogTitle>
+                        {editingShipping ? "Edit Shipping Method" : "Add New Shipping Method"}
+                      </DialogTitle>
+                    </DialogHeader>
+                    <form onSubmit={handleShippingSubmit} className="space-y-4">
+                      <div>
+                        <Label htmlFor="shipping_name">Name</Label>
+                        <Input
+                          id="shipping_name"
+                          value={shippingForm.name}
+                          onChange={(e) =>
+                            setShippingForm({ ...shippingForm, name: e.target.value })
+                          }
+                          required
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="shipping_description">Description</Label>
+                        <Textarea
+                          id="shipping_description"
+                          value={shippingForm.description}
+                          onChange={(e) =>
+                            setShippingForm({ ...shippingForm, description: e.target.value })
+                          }
+                        />
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <Label htmlFor="shipping_price">Price ($)</Label>
+                          <Input
+                            id="shipping_price"
+                            type="number"
+                            step="0.01"
+                            value={shippingForm.price}
+                            onChange={(e) =>
+                              setShippingForm({ ...shippingForm, price: e.target.value })
+                            }
+                            required
+                          />
+                        </div>
+                        <div>
+                          <Label htmlFor="estimated_days">Estimated Days</Label>
+                          <Input
+                            id="estimated_days"
+                            value={shippingForm.estimated_days}
+                            onChange={(e) =>
+                              setShippingForm({ ...shippingForm, estimated_days: e.target.value })
+                            }
+                            placeholder="e.g., 3-5 days"
+                            required
+                          />
+                        </div>
+                      </div>
+                      <div className="flex justify-end space-x-2">
+                        <Button
+                          type="button"
+                          variant="outline"
+                          onClick={() => setIsShippingModalOpen(false)}
+                        >
+                          Cancel
+                        </Button>
+                        <Button type="submit" disabled={loading}>
+                          {loading ? "Saving..." : "Save Shipping Method"}
+                        </Button>
+                      </div>
+                    </form>
+                  </DialogContent>
+                </Dialog>
+              </CardHeader>
+              <CardContent className="overflow-x-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Name</TableHead>
+                      <TableHead>Description</TableHead>
+                      <TableHead>Price</TableHead>
+                      <TableHead>Estimated Days</TableHead>
+                      <TableHead>Status</TableHead>
+                      <TableHead>Actions</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {shippingMethods.map((shipping) => (
+                      <TableRow key={shipping.id}>
+                        <TableCell className="font-medium">{shipping.name}</TableCell>
+                        <TableCell>{shipping.description || "N/A"}</TableCell>
+                        <TableCell>${shipping.price}</TableCell>
+                        <TableCell>{shipping.estimated_days}</TableCell>
+                        <TableCell>
+                          <div className="flex items-center space-x-2">
+                            <Badge variant={shipping.is_active ? "default" : "secondary"}>
+                              {shipping.is_active ? "Active" : "Inactive"}
+                            </Badge>
+                            <Button size="sm" variant="outline" onClick={() => toggleShippingStatus(shipping.id, shipping.is_active)}>
+                              <span className="hidden md:inline">{shipping.is_active ? "Disable" : "Enable"}</span>
+                              <FaEdit className="md:hidden" />
+                            </Button>
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex space-x-2">
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => handleEditShipping(shipping)}
+                            >
+                              <FaEdit />
+                            </Button>
+                            <Button
+                              variant="destructive"
+                              size="sm"
+                              onClick={() => handleDeleteShipping(shipping.id)}
+                            >
+                              <FaTrash />
+                            </Button>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </CardContent>
+            </Card>
+          )}
         </div>
       </div>
 
-      {/* Order Detail Modal */}
-      {showOrderModal && selectedOrder && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-            <div className="p-6 border-b">
-              <div className="flex justify-between items-center">
-                <h2 className="text-2xl font-bold">Order #{formatOrderNumber(selectedOrder.order_number)}</h2>
-                <Button
-                  variant="ghost"
-                  onClick={() => setShowOrderModal(false)}
-                  className="text-gray-500 hover:text-gray-700"
-                >
-                  ×
-                </Button>
-              </div>
-            </div>
-            
-            <div className="p-6 space-y-6">
-              {/* Order Status Update */}
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <h3 className="font-semibold mb-3">Update Order Status</h3>
-                <div className="flex flex-wrap gap-2">
-                  {['pending', 'processed', 'shipped', 'arriving', 'out for delivery', 'delivered'].map((status) => (
-                    <Button
-                      key={status}
-                      variant={selectedOrder.status === status ? "default" : "outline"}
-                      size="sm"
-                      onClick={() => updateOrderStatus(selectedOrder.id, status)}
-                      className="capitalize"
-                    >
-                      {status}
-                    </Button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Shipping Integration */}
-              <div className="bg-blue-50 p-4 rounded-lg">
-                <h3 className="font-semibold mb-3 flex items-center gap-2">
-                  <Truck className="h-5 w-5" />
-                  Shipping Partner Integration
-                </h3>
-                <div className="flex gap-3">
-                  <Button
-                    onClick={() => integrateWithShiprocket(selectedOrder)}
-                    className="bg-orange-600 hover:bg-orange-700 text-white"
-                  >
-                    Send to Shiprocket
-                  </Button>
-                  <Button
-                    onClick={() => integrateWithDelhivery(selectedOrder)}
-                    className="bg-red-600 hover:bg-red-700 text-white"
-                  >
-                    Send to Delhivery
-                  </Button>
-                </div>
-              </div>
-
-              {/* Order Details */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <h3 className="font-semibold mb-3">Order Information</h3>
-                  <div className="space-y-2 text-sm">
-                    <p><strong>Order Date:</strong> {new Date(selectedOrder.created_at).toLocaleDateString()}</p>
-                    <p><strong>Payment Method:</strong> {selectedOrder.payment_method}</p>
-                    <p><strong>Total Amount:</strong> £{selectedOrder.total_amount}</p>
-                    <p><strong>Status:</strong> 
-                      <Badge className={`ml-2 ${getStatusColor(selectedOrder.status)} border`}>
-                        {selectedOrder.status}
-                      </Badge>
-                    </p>
-                  </div>
-                </div>
-
-                <div>
-                  <h3 className="font-semibold mb-3">Customer Information</h3>
-                  <div className="space-y-2 text-sm">
-                    <p><strong>Name:</strong> {selectedOrder.shipping_address?.firstName} {selectedOrder.shipping_address?.lastName}</p>
-                    <p><strong>Phone:</strong> {selectedOrder.shipping_address?.phone}</p>
-                    <p><strong>Email:</strong> {selectedOrder.billing_address?.email}</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Order Items */}
-              <div>
-                <h3 className="font-semibold mb-3">Order Items</h3>
-                <div className="border rounded-lg overflow-hidden">
-                  {selectedOrder.order_items && selectedOrder.order_items.length > 0 ? (
-                    <div className="space-y-4 p-4">
-                      {selectedOrder.order_items.map((item: any) => (
-                        <div key={item.id} className="flex items-center space-x-4 py-4 border-b border-gray-100 last:border-b-0">
-                          <div className="flex-shrink-0 w-16 h-16 bg-gray-100 rounded-lg overflow-hidden">
-                            <img 
-                              src="https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=200&h=200&fit=crop"
-                              alt={item.product_name}
-                              className="w-full h-full object-cover"
-                            />
-                          </div>
-                          <div className="flex-1">
-                            <h4 className="font-medium text-black">{item.product_name}</h4>
-                            <div className="flex items-center space-x-4 mt-1 text-sm text-gray-600">
-                              <span>Qty: {item.quantity}</span>
-                              <span>Unit Price: £{parseFloat(item.product_price?.toString() || '0').toFixed(2)}</span>
-                            </div>
-                          </div>
-                          <div className="text-right">
-                            <p className="font-semibold text-black">£{(parseFloat(item.product_price?.toString() || '0') * item.quantity).toFixed(2)}</p>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="p-8 text-center">
-                      <Package className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                      <p className="text-gray-500">No items found for this order</p>
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              {/* Addresses */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <h3 className="font-semibold mb-3">Shipping Address</h3>
-                  <div className="text-sm text-gray-700 space-y-1">
-                    <p>{selectedOrder.shipping_address?.firstName} {selectedOrder.shipping_address?.lastName}</p>
-                    <p>{selectedOrder.shipping_address?.phone}</p>
-                    <p>{selectedOrder.shipping_address?.address}</p>
-                    <p>{selectedOrder.shipping_address?.city}, {selectedOrder.shipping_address?.postalCode}</p>
-                    <p>{selectedOrder.shipping_address?.country}</p>
-                  </div>
-                </div>
-
-                <div>
-                  <h3 className="font-semibold mb-3">Billing Address</h3>
-                  <div className="text-sm text-gray-700 space-y-1">
-                    <p>{selectedOrder.billing_address?.firstName} {selectedOrder.billing_address?.lastName}</p>
-                    <p>{selectedOrder.billing_address?.phone}</p>
-                    <p>{selectedOrder.billing_address?.address}</p>
-                    <p>{selectedOrder.billing_address?.city}, {selectedOrder.billing_address?.postalCode}</p>
-                    <p>{selectedOrder.billing_address?.country}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      <Footer />
-    </div>
-  );
+      {/* Order View Dialog */}
+      <OrderDetailsDialog order={selectedOrder} isOpen={isOrderDialogOpen} onClose={() => setIsOrderDialogOpen(false)} />
+    </div>;
 };
-
 export default AdminDashboard;
