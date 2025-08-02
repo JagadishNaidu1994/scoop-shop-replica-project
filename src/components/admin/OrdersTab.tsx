@@ -21,9 +21,9 @@ interface Order {
   shipping_address: any;
   billing_address: any;
   profiles?: {
-    full_name: string;
-    email: string;
-  };
+    full_name: string | null;
+    email: string | null;
+  } | null;
 }
 
 const OrdersTab = () => {
@@ -52,7 +52,10 @@ const OrdersTab = () => {
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      setOrders(data || []);
+      
+      // Type assertion to handle the Supabase response
+      const ordersData = (data || []) as Order[];
+      setOrders(ordersData);
     } catch (error) {
       console.error('Error fetching orders:', error);
       toast({
@@ -138,13 +141,13 @@ const OrdersTab = () => {
   const getStatusBadgeVariant = (status: string) => {
     switch (status?.toLowerCase()) {
       case 'delivered':
-        return 'default';
+        return 'default' as const;
       case 'shipped':
-        return 'secondary';
+        return 'secondary' as const;
       case 'pending':
-        return 'outline';
+        return 'outline' as const;
       default:
-        return 'outline';
+        return 'outline' as const;
     }
   };
 
