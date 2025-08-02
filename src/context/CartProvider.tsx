@@ -1,2 +1,2 @@
 
-export { useCart } from '@/contexts/CartContext';
+export { useCart, CartProvider } from '@/contexts/CartContext';
