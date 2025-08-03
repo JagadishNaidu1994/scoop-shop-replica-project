@@ -158,10 +158,14 @@ const OrdersTab = () => {
   };
 
   const filteredOrders = orders.filter(order => {
+    const customerName = order.profiles?.full_name?.toLowerCase() || '';
+    const customerEmail = order.profiles?.email?.toLowerCase() || '';
+    const orderNumber = formatOrderNumber(order.order_number);
+    
     const matchesSearch = !searchTerm || 
-      (order.profiles?.full_name?.toLowerCase().includes(searchTerm.toLowerCase())) ||
-      (order.profiles?.email?.toLowerCase().includes(searchTerm.toLowerCase())) ||
-      formatOrderNumber(order.order_number).includes(searchTerm);
+      customerName.includes(searchTerm.toLowerCase()) ||
+      customerEmail.includes(searchTerm.toLowerCase()) ||
+      orderNumber.includes(searchTerm);
     
     const matchesStatus = statusFilter === 'all' || order.status === statusFilter;
     
