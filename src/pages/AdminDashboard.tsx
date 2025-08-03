@@ -16,6 +16,9 @@ import ExpensesTab from "@/components/admin/ExpensesTab";
 import { CouponsTab } from "@/components/admin/CouponsTab";
 import { UserCouponsTab } from "@/components/admin/UserCouponsTab";
 import ContentTab from "@/components/admin/ContentTab";
+import ProductsAdmin from "@/components/admin/ProductsAdmin";
+import RecipesAdmin from "@/components/admin/RecipesAdmin";
+import JournalsAdmin from "@/components/admin/JournalsAdmin";
 
 const AdminDashboard = () => {
   const { user } = useAuth();
@@ -42,6 +45,12 @@ const AdminDashboard = () => {
         return <OrdersTab />;
       case "users":
         return <UsersTab />;
+      case "products":
+        return <ProductsAdmin />;
+      case "recipes":
+        return <RecipesAdmin />;
+      case "journals":
+        return <JournalsAdmin />;
       case "coupons":
         return <CouponsTab />;
       case "user-coupons":
