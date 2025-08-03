@@ -159,8 +159,8 @@ const OrdersTab = () => {
 
   const filteredOrders = orders.filter(order => {
     const matchesSearch = !searchTerm || 
-      (order.profiles?.full_name && order.profiles.full_name.toLowerCase().includes(searchTerm.toLowerCase())) ||
-      (order.profiles?.email && order.profiles.email.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      (order.profiles?.full_name?.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      (order.profiles?.email?.toLowerCase().includes(searchTerm.toLowerCase())) ||
       formatOrderNumber(order.order_number).includes(searchTerm);
     
     const matchesStatus = statusFilter === 'all' || order.status === statusFilter;
