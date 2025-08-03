@@ -12,10 +12,7 @@ import ContactSubmissionsTab from "@/components/admin/ContactSubmissionsTab";
 import ShippingTab from "@/components/admin/ShippingTab";
 import AnalyticsTab from "@/components/admin/AnalyticsTab";
 import CLVAnalyticsTab from "@/components/admin/CLVAnalyticsTab";
-import ExpensesTab from "@/components/admin/ExpensesTab";
 import { CouponsTab } from "@/components/admin/CouponsTab";
-import { UserCouponsTab } from "@/components/admin/UserCouponsTab";
-import ContentTab from "@/components/admin/ContentTab";
 import ProductsAdmin from "@/components/admin/ProductsAdmin";
 import RecipesAdmin from "@/components/admin/RecipesAdmin";
 import JournalsAdmin from "@/components/admin/JournalsAdmin";
@@ -53,8 +50,6 @@ const AdminDashboard = () => {
         return <JournalsAdmin />;
       case "coupons":
         return <CouponsTab />;
-      case "user-coupons":
-        return <UserCouponsTab />;
       case "reviews":
         return <ReviewsTab />;
       case "contact":
@@ -65,10 +60,6 @@ const AdminDashboard = () => {
         return <AnalyticsTab />;
       case "clv":
         return <CLVAnalyticsTab />;
-      case "expenses":
-        return <ExpensesTab />;
-      case "content":
-        return <ContentTab />;
       default:
         return <DashboardOverview />;
     }

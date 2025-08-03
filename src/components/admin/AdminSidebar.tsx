@@ -10,10 +10,9 @@ import {
   Truck,
   BarChart3,
   TrendingUp,
-  Receipt,
   Tag,
-  Gift,
-  FileText
+  BookOpen,
+  ChefHat
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -27,15 +26,15 @@ export const AdminSidebar = ({ activeTab, onTabChange }: AdminSidebarProps) => {
     { id: "dashboard", label: "Dashboard", icon: Home },
     { id: "orders", label: "Orders", icon: ShoppingCart },
     { id: "users", label: "Users", icon: Users },
+    { id: "products", label: "Products", icon: Package },
+    { id: "recipes", label: "Recipes", icon: ChefHat },
+    { id: "journals", label: "Journals", icon: BookOpen },
     { id: "coupons", label: "Coupons", icon: Tag },
-    { id: "user-coupons", label: "User Coupons", icon: Gift },
     { id: "reviews", label: "Reviews", icon: Star },
     { id: "contact", label: "Contact", icon: MessageSquare },
     { id: "shipping", label: "Shipping", icon: Truck },
     { id: "analytics", label: "Analytics", icon: BarChart3 },
     { id: "clv", label: "CLV Analytics", icon: TrendingUp },
-    { id: "expenses", label: "Expenses", icon: Receipt },
-    { id: "content", label: "Content", icon: FileText },
   ];
 
   return (

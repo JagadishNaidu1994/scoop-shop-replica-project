@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -200,7 +199,7 @@ export const CouponsTab = () => {
               Create Coupon
             </Button>
           </DialogTrigger>
-          <DialogContent className="max-w-2xl bg-background">
+          <DialogContent className="max-w-2xl bg-white">
             <DialogHeader>
               <DialogTitle>
                 {editingCoupon ? "Edit Coupon" : "Create New Coupon"}
