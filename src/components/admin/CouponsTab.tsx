@@ -55,7 +55,7 @@ export const CouponsTab = () => {
     setLoading(true);
     try {
       const { data, error } = await supabase
-        .from("coupon_codes" as any)
+        .from("coupon_codes")
         .select("*")
         .order("created_at", { ascending: false });
       
@@ -63,6 +63,11 @@ export const CouponsTab = () => {
       setCoupons(data || []);
     } catch (error) {
       console.error("Error fetching coupons:", error);
+      toast({
+        title: "Error",
+        description: "Failed to fetch coupons",
+        variant: "destructive",
+      });
     } finally {
       setLoading(false);
     }
@@ -101,7 +106,7 @@ export const CouponsTab = () => {
 
       if (editingCoupon) {
         const { error } = await supabase
-          .from("coupon_codes" as any)
+          .from("coupon_codes")
           .update(couponData)
           .eq("id", editingCoupon.id);
         
@@ -109,7 +114,7 @@ export const CouponsTab = () => {
         toast({ title: "Success", description: "Coupon updated successfully." });
       } else {
         const { error } = await supabase
-          .from("coupon_codes" as any)
+          .from("coupon_codes")
           .insert([couponData]);
         
         if (error) throw error;
@@ -155,7 +160,7 @@ export const CouponsTab = () => {
 
     try {
       const { error } = await supabase
-        .from("coupon_codes" as any)
+        .from("coupon_codes")
         .delete()
         .eq("id", couponId);
       

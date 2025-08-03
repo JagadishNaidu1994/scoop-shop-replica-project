@@ -64,7 +64,7 @@ export const CouponPopup: React.FC<CouponPopupProps> = ({
     try {
       // Fetch general active coupons (not expired and not assigned to specific users)
       const { data: generalData, error: generalError } = await supabase
-        .from("coupon_codes" as any)
+        .from("coupon_codes")
         .select("*")
         .eq("is_active", true)
         .is("assigned_users", null)
@@ -78,7 +78,7 @@ export const CouponPopup: React.FC<CouponPopupProps> = ({
         for (const coupon of generalData) {
           if (coupon.max_uses) {
             const { data: usage } = await supabase
-              .from('coupon_usage' as any)
+              .from('coupon_usage')
               .select('used_count')
               .eq('user_id', user.id)
               .eq('coupon_id', coupon.id)
@@ -94,7 +94,7 @@ export const CouponPopup: React.FC<CouponPopupProps> = ({
 
       // Fetch user-specific coupons (active, not expired, assigned to this user)
       const { data: userSpecificData, error: userSpecificError } = await supabase
-        .from("coupon_codes" as any)
+        .from("coupon_codes")
         .select("*")
         .eq("is_active", true)
         .not("assigned_users", "is", null)
@@ -113,7 +113,7 @@ export const CouponPopup: React.FC<CouponPopupProps> = ({
             // Check if user has reached usage limit
             if (coupon.max_uses) {
               const { data: usage } = await supabase
-                .from('coupon_usage' as any)
+                .from('coupon_usage')
                 .select('used_count')
                 .eq('user_id', user.id)
                 .eq('coupon_id', coupon.id)

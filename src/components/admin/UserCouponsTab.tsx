@@ -71,77 +71,89 @@ export const UserCouponsTab = () => {
   };
 
   const fetchUserCoupons = async () => {
-    const { data, error } = await supabase
-      .from("user_coupons" as any)
-      .select(`
-        id,
-        user_id,
-        coupon_id,
-        assigned_at,
-        is_used,
-        used_at
-      `)
-      .order("assigned_at", { ascending: false });
+    try {
+      const { data, error } = await supabase
+        .from("user_coupons")
+        .select(`
+          id,
+          user_id,
+          coupon_id,
+          assigned_at,
+          is_used,
+          used_at
+        `)
+        .order("assigned_at", { ascending: false });
 
-    if (error) {
+      if (error) {
+        console.error("Error fetching user coupons:", error);
+        return;
+      }
+
+      // Fetch user details and coupon details separately and merge
+      const userCouponsWithDetails = await Promise.all(
+        (data || []).map(async (uc) => {
+          const [userResult, couponResult] = await Promise.all([
+            supabase
+              .from("profiles")
+              .select("id, email, first_name, last_name")
+              .eq("id", uc.user_id)
+              .single(),
+            supabase
+              .from("coupon_codes")
+              .select("id, code, discount_type, discount_value, minimum_order_amount, expires_at, is_active")
+              .eq("id", uc.coupon_id)
+              .single()
+          ]);
+          
+          return {
+            ...uc,
+            user: userResult.data || { id: uc.user_id, email: "Unknown", first_name: "", last_name: "" },
+            coupon: couponResult.data || { id: uc.coupon_id, code: "Unknown", discount_type: "percentage", discount_value: 0, minimum_order_amount: 0, expires_at: null, is_active: false }
+          };
+        })
+      );
+
+      setUserCoupons(userCouponsWithDetails);
+    } catch (error) {
       console.error("Error fetching user coupons:", error);
-      return;
     }
-
-    // Fetch user details and coupon details separately and merge
-    const userCouponsWithDetails = await Promise.all(
-      (data || []).map(async (uc) => {
-        const [userResult, couponResult] = await Promise.all([
-          supabase
-            .from("profiles")
-            .select("id, email, first_name, last_name")
-            .eq("id", uc.user_id)
-            .single(),
-          supabase
-            .from("coupon_codes" as any)
-            .select("id, code, discount_type, discount_value, minimum_order_amount, expires_at, is_active")
-            .eq("id", uc.coupon_id)
-            .single()
-        ]);
-        
-        return {
-          ...uc,
-          user: userResult.data || { id: uc.user_id, email: "Unknown", first_name: "", last_name: "" },
-          coupon: couponResult.data || { id: uc.coupon_id, code: "Unknown", discount_type: "percentage", discount_value: 0, minimum_order_amount: 0, expires_at: null, is_active: false }
-        };
-      })
-    );
-
-    setUserCoupons(userCouponsWithDetails);
   };
 
   const fetchUsers = async () => {
-    const { data, error } = await supabase
-      .from("profiles")
-      .select("id, email, first_name, last_name")
-      .order("email");
+    try {
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("id, email, first_name, last_name")
+        .order("email");
 
-    if (error) {
+      if (error) {
+        console.error("Error fetching users:", error);
+        return;
+      }
+
+      setUsers(data || []);
+    } catch (error) {
       console.error("Error fetching users:", error);
-      return;
     }
-
-    setUsers(data || []);
   };
 
   const fetchCoupons = async () => {
-    const { data, error } = await supabase
-      .from("coupon_codes" as any)
-      .select("id, code, discount_type, discount_value, minimum_order_amount, expires_at, is_active")
-      .eq("is_active", true)
-      .order("code");
+    try {
+      const { data, error } = await supabase
+        .from("coupon_codes")
+        .select("id, code, discount_type, discount_value, minimum_order_amount, expires_at, is_active")
+        .eq("is_active", true)
+        .order("code");
 
-    if (error) {
+      if (error) {
+        console.error("Error fetching coupons:", error);
+        return;
+      }
+
+      setCoupons(data || []);
+    } catch (error) {
       console.error("Error fetching coupons:", error);
-      return;
     }
-
-    setCoupons(data || []);
   };
 
   const assignCoupon = async () => {
@@ -156,7 +168,7 @@ export const UserCouponsTab = () => {
 
     try {
       const { error } = await supabase
-        .from("user_coupons" as any)
+        .from("user_coupons")
         .insert({
           user_id: selectedUserId,
           coupon_id: selectedCouponId,
@@ -197,7 +209,7 @@ export const UserCouponsTab = () => {
   const removeCoupon = async (userCouponId: string) => {
     try {
       const { error } = await supabase
-        .from("user_coupons" as any)
+        .from("user_coupons")
         .delete()
         .eq("id", userCouponId);
 
