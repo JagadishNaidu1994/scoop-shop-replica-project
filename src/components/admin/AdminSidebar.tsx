@@ -1,129 +1,68 @@
 
-import { useState, useEffect } from "react";
-import { NavLink } from "react-router-dom";
-import {
-  LayoutDashboard,
-  Package,
-  ShoppingCart,
-  Users,
-  FileText,
-  MessageSquare,
-  Tag,
+import React from "react";
+import { 
+  Home, 
+  Package, 
+  Users, 
+  ShoppingCart, 
+  MessageSquare, 
+  Star, 
   Truck,
-  Star,
-  Settings,
-  Home,
-  BarChart2,
+  BarChart3,
+  TrendingUp,
+  Receipt,
+  Tag,
+  Gift,
+  FileText
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { supabase } from "@/integrations/supabase/client";
 
 interface AdminSidebarProps {
   activeTab: string;
-  setActiveTab: (tab: string) => void;
+  onTabChange: (tab: string) => void;
 }
 
-const AdminSidebar = ({ activeTab, setActiveTab }: AdminSidebarProps) => {
-  const [counts, setCounts] = useState({
-    orders: 0,
-    products: 0,
-    messages: 0,
-    coupons: 0,
-    users: 0,
-  });
-
-  useEffect(() => {
-    fetchCounts();
-  }, []);
-
-  const fetchCounts = async () => {
-    try {
-      const { count: ordersCount } = await supabase
-        .from("orders")
-        .select("*", { count: "exact", head: true });
-
-      const { count: productsCount } = await supabase
-        .from("products")
-        .select("*", { count: "exact", head: true });
-
-      const messagesCount = 0;
-      const couponsCount = 0;
-
-      const { count: usersCount } = await supabase
-        .from("profiles")
-        .select("*", { count: "exact", head: true });
-
-      setCounts({
-        orders: ordersCount || 0,
-        products: productsCount || 0,
-        messages: messagesCount || 0,
-        coupons: couponsCount || 0,
-        users: usersCount || 0,
-      });
-    } catch (error) {
-      console.error("Error fetching counts:", error);
-    }
-  };
-
-  const sidebarItems = [
-    { id: "overview", label: "Dashboard", icon: LayoutDashboard },
-    { id: "analytics", label: "Analytics", icon: BarChart2 },
-    { id: "orders", label: "Orders", icon: ShoppingCart, count: counts.orders },
-    { id: "products", label: "Products", icon: Package, count: counts.products },
-    { id: "users", label: "Users", icon: Users, count: counts.users },
-    { id: "journals", label: "Journals", icon: FileText },
-    { id: "messages", label: "Messages", icon: MessageSquare, count: counts.messages },
-    { id: "content", label: "Coupons", icon: Tag, count: counts.coupons },
-    { id: "shipping", label: "Shipping", icon: Truck },
+export const AdminSidebar = ({ activeTab, onTabChange }: AdminSidebarProps) => {
+  const menuItems = [
+    { id: "dashboard", label: "Dashboard", icon: Home },
+    { id: "orders", label: "Orders", icon: ShoppingCart },
+    { id: "users", label: "Users", icon: Users },
+    { id: "coupons", label: "Coupons", icon: Tag },
+    { id: "user-coupons", label: "User Coupons", icon: Gift },
     { id: "reviews", label: "Reviews", icon: Star },
-    { id: "settings", label: "Settings", icon: Settings },
+    { id: "contact", label: "Contact", icon: MessageSquare },
+    { id: "shipping", label: "Shipping", icon: Truck },
+    { id: "analytics", label: "Analytics", icon: BarChart3 },
+    { id: "clv", label: "CLV Analytics", icon: TrendingUp },
+    { id: "expenses", label: "Expenses", icon: Receipt },
+    { id: "content", label: "Content", icon: FileText },
   ];
 
   return (
-    <div className="w-72 bg-white/80 backdrop-blur-md h-screen border-r border-gray-200/50 flex-col shadow-lg">
-      {/* Header */}
-      <div className="p-6 border-b border-gray-200/50">
-        <NavLink to="/" className="flex items-center space-x-2 text-purple-600 hover:text-purple-700 transition-colors">
-          <Home className="h-5 w-5" />
-          <span className="font-medium text-sm">Back to Home</span>
-        </NavLink>
+    <div className="w-64 bg-white shadow-lg">
+      <div className="p-6 border-b">
+        <h1 className="text-2xl font-bold text-gray-800">Admin Panel</h1>
       </div>
-
-      {/* Navigation */}
-      <nav className="flex-1 p-4">
-        <ul className="space-y-2">
-          {sidebarItems.map((item) => (
-            <li key={item.id}>
-              <button
-                onClick={() => setActiveTab(item.id)}
-                className={cn(
-                  "w-full flex items-center justify-between px-4 py-3 rounded-2xl text-left transition-all duration-200 text-sm",
-                  activeTab === item.id
-                    ? "bg-gradient-to-r from-purple-50 to-blue-50 text-purple-700 border border-purple-200/50 shadow-sm"
-                    : "text-gray-600 hover:bg-gray-50/80 hover:text-gray-900"
-                )}
-              >
-                <div className="flex items-center space-x-3">
-                  <item.icon className={cn("h-4 w-4", activeTab === item.id ? "text-purple-600" : "")} />
-                  <span className="font-medium">{item.label}</span>
-                </div>
-                {item.count !== undefined && item.count > 0 && (
-                  <span className={cn(
-                    "px-2 py-1 rounded-full text-xs font-medium",
-                    activeTab === item.id
-                      ? "bg-purple-100 text-purple-700"
-                      : "bg-gray-100 text-gray-600"
-                  )}>
-                    {item.count}
-                  </span>
-                )}
-              </button>
-            </li>
-          ))}
-        </ul>
+      <nav className="mt-6">
+        {menuItems.map((item) => {
+          const Icon = item.icon;
+          return (
+            <button
+              key={item.id}
+              onClick={() => onTabChange(item.id)}
+              className={cn(
+                "w-full flex items-center px-6 py-3 text-left hover:bg-gray-50 transition-colors",
+                activeTab === item.id
+                  ? "bg-blue-50 border-r-2 border-blue-500 text-blue-600"
+                  : "text-gray-600"
+              )}
+            >
+              <Icon className="h-5 w-5 mr-3" />
+              {item.label}
+            </button>
+          );
+        })}
       </nav>
     </div>
   );
 };
-
-export default AdminSidebar;

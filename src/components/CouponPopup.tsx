@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/context/AuthProvider";
@@ -70,29 +69,14 @@ export const CouponPopup: React.FC<CouponPopupProps> = ({
         .is("assigned_users", null)
         .or(`expires_at.is.null,expires_at.gt.${new Date().toISOString()}`);
 
-      if (generalError) throw generalError;
-
-      // Filter out coupons that have reached usage limit for this user
-      const filteredGeneralCoupons = [];
-      if (generalData) {
-        for (const coupon of generalData) {
-          if (coupon.max_uses) {
-            const { data: usage } = await supabase
-              .from('coupon_usage')
-              .select('used_count')
-              .eq('user_id', user.id)
-              .eq('coupon_id', coupon.id)
-              .single();
-            
-            if (usage && usage.used_count >= coupon.max_uses) {
-              continue; // Skip this coupon
-            }
-          }
-          filteredGeneralCoupons.push(coupon);
-        }
+      if (generalError) {
+        console.error("Error fetching general coupons:", generalError);
+        setGeneralCoupons([]);
+      } else {
+        setGeneralCoupons(generalData || []);
       }
 
-      // Fetch user-specific coupons (active, not expired, assigned to this user)
+      // Fetch user-specific coupons
       const { data: userSpecificData, error: userSpecificError } = await supabase
         .from("coupon_codes")
         .select("*")
@@ -100,44 +84,29 @@ export const CouponPopup: React.FC<CouponPopupProps> = ({
         .not("assigned_users", "is", null)
         .or(`expires_at.is.null,expires_at.gt.${new Date().toISOString()}`);
 
-      if (userSpecificError) throw userSpecificError;
-
-      // Filter user-specific coupons for this user
-      const filteredUserSpecificCoupons = [];
-      if (userSpecificData && user?.email) {
-        for (const coupon of userSpecificData) {
-          // Check if user's email is in assigned_users
-          if (coupon.assigned_users && 
-              coupon.assigned_users.split(',').map((email: string) => email.trim().toLowerCase()).includes(user.email.toLowerCase())) {
-            
-            // Check if user has reached usage limit
-            if (coupon.max_uses) {
-              const { data: usage } = await supabase
-                .from('coupon_usage')
-                .select('used_count')
-                .eq('user_id', user.id)
-                .eq('coupon_id', coupon.id)
-                .single();
-              
-              if (usage && usage.used_count >= coupon.max_uses) {
-                continue; // Skip this coupon
-              }
+      if (userSpecificError) {
+        console.error("Error fetching user-specific coupons:", userSpecificError);
+        setUserCoupons([]);
+      } else {
+        const filteredUserSpecificCoupons = [];
+        if (userSpecificData && user?.email) {
+          for (const coupon of userSpecificData) {
+            if (coupon.assigned_users && 
+                coupon.assigned_users.split(',').map((email: string) => email.trim().toLowerCase()).includes(user.email.toLowerCase())) {
+              filteredUserSpecificCoupons.push(coupon);
             }
-            filteredUserSpecificCoupons.push(coupon);
           }
         }
-      }
 
-      setGeneralCoupons(filteredGeneralCoupons);
-      // Convert user-specific coupons to UserCoupon format for compatibility
-      const userCouponsFormatted = filteredUserSpecificCoupons.map(coupon => ({
-        id: `user-${coupon.id}`,
-        coupon_id: coupon.id,
-        is_used: false,
-        assigned_at: new Date().toISOString(),
-        coupon: coupon
-      }));
-      setUserCoupons(userCouponsFormatted);
+        const userCouponsFormatted = filteredUserSpecificCoupons.map(coupon => ({
+          id: `user-${coupon.id}`,
+          coupon_id: coupon.id,
+          is_used: false,
+          assigned_at: new Date().toISOString(),
+          coupon: coupon
+        }));
+        setUserCoupons(userCouponsFormatted);
+      }
     } catch (error) {
       console.error("Error fetching coupons:", error);
       toast({
@@ -145,6 +114,8 @@ export const CouponPopup: React.FC<CouponPopupProps> = ({
         description: "Failed to load coupons",
         variant: "destructive",
       });
+      setGeneralCoupons([]);
+      setUserCoupons([]);
     } finally {
       setLoading(false);
     }
@@ -258,7 +229,7 @@ export const CouponPopup: React.FC<CouponPopupProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto bg-background">
+      <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto bg-white dark:bg-gray-900">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold">Available Coupons</DialogTitle>
         </DialogHeader>
