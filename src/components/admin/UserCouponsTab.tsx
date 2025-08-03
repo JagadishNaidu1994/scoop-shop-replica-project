@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -71,15 +72,14 @@ export const UserCouponsTab = () => {
 
   const fetchUserCoupons = async () => {
     const { data, error } = await supabase
-      .from("user_coupons")
+      .from("user_coupons" as any)
       .select(`
         id,
         user_id,
         coupon_id,
         assigned_at,
         is_used,
-        used_at,
-        coupon:coupon_codes(id, code, discount_type, discount_value, minimum_order_amount, expires_at, is_active)
+        used_at
       `)
       .order("assigned_at", { ascending: false });
 
@@ -88,28 +88,36 @@ export const UserCouponsTab = () => {
       return;
     }
 
-    // Fetch user details separately and merge
-    const userCouponsWithUsers = await Promise.all(
+    // Fetch user details and coupon details separately and merge
+    const userCouponsWithDetails = await Promise.all(
       (data || []).map(async (uc) => {
-        const { data: userData } = await supabase
-          .from("users")
-          .select("id, email, first_name, last_name")
-          .eq("id", uc.user_id)
-          .single();
+        const [userResult, couponResult] = await Promise.all([
+          supabase
+            .from("profiles")
+            .select("id, email, first_name, last_name")
+            .eq("id", uc.user_id)
+            .single(),
+          supabase
+            .from("coupon_codes" as any)
+            .select("id, code, discount_type, discount_value, minimum_order_amount, expires_at, is_active")
+            .eq("id", uc.coupon_id)
+            .single()
+        ]);
         
         return {
           ...uc,
-          user: userData || { id: uc.user_id, email: "Unknown", first_name: "", last_name: "" }
+          user: userResult.data || { id: uc.user_id, email: "Unknown", first_name: "", last_name: "" },
+          coupon: couponResult.data || { id: uc.coupon_id, code: "Unknown", discount_type: "percentage", discount_value: 0, minimum_order_amount: 0, expires_at: null, is_active: false }
         };
       })
     );
 
-    setUserCoupons(userCouponsWithUsers);
+    setUserCoupons(userCouponsWithDetails);
   };
 
   const fetchUsers = async () => {
     const { data, error } = await supabase
-      .from("users")
+      .from("profiles")
       .select("id, email, first_name, last_name")
       .order("email");
 
@@ -123,7 +131,7 @@ export const UserCouponsTab = () => {
 
   const fetchCoupons = async () => {
     const { data, error } = await supabase
-      .from("coupon_codes")
+      .from("coupon_codes" as any)
       .select("id, code, discount_type, discount_value, minimum_order_amount, expires_at, is_active")
       .eq("is_active", true)
       .order("code");
@@ -148,7 +156,7 @@ export const UserCouponsTab = () => {
 
     try {
       const { error } = await supabase
-        .from("user_coupons")
+        .from("user_coupons" as any)
         .insert({
           user_id: selectedUserId,
           coupon_id: selectedCouponId,
@@ -189,7 +197,7 @@ export const UserCouponsTab = () => {
   const removeCoupon = async (userCouponId: string) => {
     try {
       const { error } = await supabase
-        .from("user_coupons")
+        .from("user_coupons" as any)
         .delete()
         .eq("id", userCouponId);
 
@@ -241,7 +249,7 @@ export const UserCouponsTab = () => {
               Assign Coupon
             </Button>
           </DialogTrigger>
-          <DialogContent>
+          <DialogContent className="bg-background">
             <DialogHeader>
               <DialogTitle>Assign Coupon to User</DialogTitle>
             </DialogHeader>

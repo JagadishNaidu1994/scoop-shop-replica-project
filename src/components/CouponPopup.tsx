@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/context/AuthProvider";
@@ -19,6 +20,7 @@ interface Coupon {
   used_count: number;
   is_active: boolean;
   description?: string;
+  assigned_users?: string;
 }
 
 interface UserCoupon {
@@ -62,7 +64,7 @@ export const CouponPopup: React.FC<CouponPopupProps> = ({
     try {
       // Fetch general active coupons (not expired and not assigned to specific users)
       const { data: generalData, error: generalError } = await supabase
-        .from("coupon_codes")
+        .from("coupon_codes" as any)
         .select("*")
         .eq("is_active", true)
         .is("assigned_users", null)
@@ -76,7 +78,7 @@ export const CouponPopup: React.FC<CouponPopupProps> = ({
         for (const coupon of generalData) {
           if (coupon.max_uses) {
             const { data: usage } = await supabase
-              .from('coupon_usage')
+              .from('coupon_usage' as any)
               .select('used_count')
               .eq('user_id', user.id)
               .eq('coupon_id', coupon.id)
@@ -92,7 +94,7 @@ export const CouponPopup: React.FC<CouponPopupProps> = ({
 
       // Fetch user-specific coupons (active, not expired, assigned to this user)
       const { data: userSpecificData, error: userSpecificError } = await supabase
-        .from("coupon_codes")
+        .from("coupon_codes" as any)
         .select("*")
         .eq("is_active", true)
         .not("assigned_users", "is", null)
@@ -106,12 +108,12 @@ export const CouponPopup: React.FC<CouponPopupProps> = ({
         for (const coupon of userSpecificData) {
           // Check if user's email is in assigned_users
           if (coupon.assigned_users && 
-              coupon.assigned_users.split(',').map(email => email.trim().toLowerCase()).includes(user.email.toLowerCase())) {
+              coupon.assigned_users.split(',').map((email: string) => email.trim().toLowerCase()).includes(user.email.toLowerCase())) {
             
             // Check if user has reached usage limit
             if (coupon.max_uses) {
               const { data: usage } = await supabase
-                .from('coupon_usage')
+                .from('coupon_usage' as any)
                 .select('used_count')
                 .eq('user_id', user.id)
                 .eq('coupon_id', coupon.id)
@@ -256,7 +258,7 @@ export const CouponPopup: React.FC<CouponPopupProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+      <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto bg-background">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold">Available Coupons</DialogTitle>
         </DialogHeader>

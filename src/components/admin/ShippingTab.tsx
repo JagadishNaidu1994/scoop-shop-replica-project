@@ -26,7 +26,7 @@ interface ShippingMethod {
   id: string;
   name: string;
   description?: string;
-  base_rate: number; // Changed from price to base_rate to match database
+  base_rate: number;
   estimated_days: string;
   is_active: boolean;
 }
@@ -39,7 +39,7 @@ const ShippingTab = () => {
   const [form, setForm] = useState({
     name: "",
     description: "",
-    base_rate: "", // Changed from price to base_rate
+    base_rate: "",
     estimated_days: "",
   });
   const { toast } = useToast();
@@ -68,7 +68,7 @@ const ShippingTab = () => {
     setForm({
       name: "",
       description: "",
-      base_rate: "", // Changed from price to base_rate
+      base_rate: "",
       estimated_days: "",
     });
   };
@@ -81,7 +81,7 @@ const ShippingTab = () => {
       const shippingData = {
         name: form.name,
         description: form.description,
-        base_rate: parseFloat(form.base_rate), // Changed from price to base_rate
+        base_rate: parseFloat(form.base_rate),
         estimated_days: form.estimated_days,
       };
 
@@ -121,10 +121,39 @@ const ShippingTab = () => {
     setForm({
       name: method.name,
       description: method.description || "",
-      base_rate: method.base_rate.toString(), // Changed from price to base_rate
+      base_rate: method.base_rate.toString(),
       estimated_days: method.estimated_days,
     });
     setIsModalOpen(true);
+  };
+
+  const handleDelete = async (methodId: string) => {
+    if (!confirm("Are you sure you want to delete this shipping method?")) {
+      return;
+    }
+
+    try {
+      const { error } = await supabase
+        .from("shipping_methods")
+        .delete()
+        .eq("id", methodId);
+      
+      if (error) throw error;
+      
+      toast({
+        title: "Success",
+        description: "Shipping method deleted successfully.",
+      });
+      
+      await fetchShippingMethods();
+    } catch (error) {
+      console.error("Error deleting shipping method:", error);
+      toast({
+        title: "Error",
+        description: "Failed to delete shipping method.",
+        variant: "destructive",
+      });
+    }
   };
 
   return (
@@ -141,7 +170,7 @@ const ShippingTab = () => {
               Add Method
             </Button>
           </DialogTrigger>
-          <DialogContent>
+          <DialogContent className="bg-background">
             <DialogHeader>
               <DialogTitle>
                 {editingMethod ? "Edit Shipping Method" : "Add Shipping Method"}
@@ -166,10 +195,11 @@ const ShippingTab = () => {
                 />
               </div>
               <div>
-                <Label htmlFor="base_rate">Base Rate</Label>
+                <Label htmlFor="base_rate">Base Rate (₹)</Label>
                 <Input
                   id="base_rate"
                   type="number"
+                  step="0.01"
                   value={form.base_rate}
                   onChange={(e) => setForm({ ...form, base_rate: e.target.value })}
                   required
@@ -208,13 +238,14 @@ const ShippingTab = () => {
               <TableHead>Description</TableHead>
               <TableHead>Base Rate</TableHead>
               <TableHead>Estimated Days</TableHead>
+              <TableHead>Status</TableHead>
               <TableHead>Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {loading ? (
               <TableRow>
-                <TableCell colSpan={5} className="text-center">
+                <TableCell colSpan={6} className="text-center">
                   Loading...
                 </TableCell>
               </TableRow>
@@ -223,8 +254,17 @@ const ShippingTab = () => {
                 <TableRow key={method.id}>
                   <TableCell>{method.name}</TableCell>
                   <TableCell>{method.description}</TableCell>
-                  <TableCell>${method.base_rate.toFixed(2)}</TableCell>
+                  <TableCell>₹{method.base_rate.toFixed(2)}</TableCell>
                   <TableCell>{method.estimated_days}</TableCell>
+                  <TableCell>
+                    <span className={`px-2 py-1 rounded text-xs ${
+                      method.is_active 
+                        ? 'bg-green-100 text-green-800' 
+                        : 'bg-red-100 text-red-800'
+                    }`}>
+                      {method.is_active ? 'Active' : 'Inactive'}
+                    </span>
+                  </TableCell>
                   <TableCell>
                     <div className="flex space-x-2">
                       <Button
@@ -234,7 +274,11 @@ const ShippingTab = () => {
                       >
                         <FaEdit />
                       </Button>
-                      <Button size="sm" variant="destructive">
+                      <Button 
+                        size="sm" 
+                        variant="destructive"
+                        onClick={() => handleDelete(method.id)}
+                      >
                         <FaTrash />
                       </Button>
                     </div>
