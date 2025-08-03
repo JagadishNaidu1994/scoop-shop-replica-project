@@ -12,13 +12,14 @@ import { supabase } from "@/integrations/supabase/client";
 
 interface OrderItem {
   id: string;
-  product_id: string;
+  product_id: number;
   quantity: number;
-  price: number;
-  products: {
+  product_price: number;
+  product_name: string;
+  products?: {
     name: string;
     image_url?: string;
-  };
+  } | null;
 }
 
 interface Order {
@@ -58,26 +59,43 @@ const OrderDetailsDialog = ({ order, isOpen, onClose }: OrderDetailsDialogProps)
       const { data: items, error: itemsError } = await supabase
         .from("order_items")
         .select(`
-          *,
-          products (
-            name,
-            image_url
-          )
+          id,
+          product_id,
+          quantity,
+          product_price,
+          product_name,
+          created_at,
+          order_id
         `)
         .eq("order_id", order.id);
 
       if (itemsError) throw itemsError;
-      setOrderItems(items || []);
 
-      // Fetch user email
+      // Transform the data to match OrderItem interface
+      const transformedItems: OrderItem[] = (items || []).map(item => ({
+        id: item.id,
+        product_id: item.product_id,
+        quantity: item.quantity,
+        product_price: item.product_price,
+        product_name: item.product_name,
+        products: null // We'll fetch this separately if needed
+      }));
+
+      setOrderItems(transformedItems);
+
+      // Fetch user email from profiles table
       const { data: userData, error: userError } = await supabase
-        .from("users")
+        .from("profiles")
         .select("email")
         .eq("id", order.user_id)
         .single();
 
-      if (userError) throw userError;
-      setUserEmail(userData?.email || "");
+      if (userError) {
+        console.error("Error fetching user profile:", userError);
+        setUserEmail("N/A");
+      } else {
+        setUserEmail(userData?.email || "N/A");
+      }
 
     } catch (error) {
       console.error("Error fetching order details:", error);
@@ -106,7 +124,7 @@ const OrderDetailsDialog = ({ order, isOpen, onClose }: OrderDetailsDialogProps)
     }
   };
 
-  const subtotal = orderItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+  const subtotal = orderItems.reduce((sum, item) => sum + (item.product_price * item.quantity), 0);
   const discount = 5.00;
   const deliveryFee = 0.00;
 
@@ -155,7 +173,7 @@ const OrderDetailsDialog = ({ order, isOpen, onClose }: OrderDetailsDialogProps)
                   </div>
                   <div>
                     <label className="text-sm text-gray-600">Email</label>
-                    <p className="font-medium text-blue-600">{userEmail || 'N/A'}</p>
+                    <p className="font-medium text-blue-600">{userEmail}</p>
                   </div>
                 </div>
                 <div>
@@ -210,16 +228,16 @@ const OrderDetailsDialog = ({ order, isOpen, onClose }: OrderDetailsDialogProps)
                   orderItems.map((item) => (
                     <div key={item.id} className="grid grid-cols-12 gap-4 p-4 border-b last:border-b-0 items-center">
                       <div className="col-span-1 text-center font-medium">x{item.quantity}</div>
-                      <div className="col-span-1 font-medium">${item.price}</div>
-                      <div className="col-span-2 font-bold">${(item.price * item.quantity).toFixed(2)}</div>
+                      <div className="col-span-1 font-medium">${item.product_price}</div>
+                      <div className="col-span-2 font-bold">${(item.product_price * item.quantity).toFixed(2)}</div>
                       <div className="col-span-8 flex items-center gap-4">
                         <img 
                           src={item.products?.image_url || '/placeholder.svg'} 
-                          alt={item.products?.name || 'Product'}
+                          alt={item.product_name}
                           className="w-12 h-12 object-cover rounded bg-gray-100"
                         />
                         <div>
-                          <p className="font-medium text-sm">{item.products?.name || 'Unknown Product'}</p>
+                          <p className="font-medium text-sm">{item.product_name}</p>
                         </div>
                       </div>
                     </div>
