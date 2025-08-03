@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import {
@@ -170,7 +169,7 @@ const ShippingTab = () => {
               Add Method
             </Button>
           </DialogTrigger>
-          <DialogContent className="bg-background">
+          <DialogContent className="bg-white dark:bg-gray-900">
             <DialogHeader>
               <DialogTitle>
                 {editingMethod ? "Edit Shipping Method" : "Add Shipping Method"}
