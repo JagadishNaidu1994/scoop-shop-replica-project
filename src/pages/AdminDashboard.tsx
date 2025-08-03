@@ -13,8 +13,8 @@ import ShippingTab from "@/components/admin/ShippingTab";
 import AnalyticsTab from "@/components/admin/AnalyticsTab";
 import CLVAnalyticsTab from "@/components/admin/CLVAnalyticsTab";
 import ExpensesTab from "@/components/admin/ExpensesTab";
-import CouponsTab from "@/components/admin/CouponsTab";
-import UserCouponsTab from "@/components/admin/UserCouponsTab";
+import { CouponsTab } from "@/components/admin/CouponsTab";
+import { UserCouponsTab } from "@/components/admin/UserCouponsTab";
 import ContentTab from "@/components/admin/ContentTab";
 
 const AdminDashboard = () => {
