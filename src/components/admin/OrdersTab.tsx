@@ -22,10 +22,8 @@ interface Order {
   status: string;
   created_at: string;
   shipping_address: any;
-  profiles?: {
-    email?: string;
-    full_name?: string;
-  } | null;
+  user_email?: string;
+  user_full_name?: string;
 }
 
 const OrdersTab = () => {
@@ -40,27 +38,50 @@ const OrdersTab = () => {
 
   const fetchOrders = async () => {
     try {
-      const { data, error } = await supabase
+      // First, fetch orders
+      const { data: ordersData, error: ordersError } = await supabase
         .from("orders")
-        .select(`
-          id,
-          order_number,
-          user_id,
-          total_amount,
-          status,
-          created_at,
-          shipping_address,
-          profiles (
-            email,
-            full_name
-          )
-        `)
+        .select("*")
         .order("created_at", { ascending: false });
 
-      if (error) throw error;
-      setOrders(data || []);
+      if (ordersError) throw ordersError;
+
+      if (ordersData && ordersData.length > 0) {
+        // Get unique user IDs
+        const userIds = [...new Set(ordersData.map(order => order.user_id))];
+        
+        // Fetch profiles for these users
+        const { data: profilesData, error: profilesError } = await supabase
+          .from("profiles")
+          .select("id, email, full_name")
+          .in("id", userIds);
+
+        if (profilesError) {
+          console.error("Error fetching profiles:", profilesError);
+        }
+
+        // Create a map of user profiles
+        const profilesMap = new Map();
+        if (profilesData) {
+          profilesData.forEach(profile => {
+            profilesMap.set(profile.id, profile);
+          });
+        }
+
+        // Combine orders with profile data
+        const ordersWithProfiles = ordersData.map(order => ({
+          ...order,
+          user_email: profilesMap.get(order.user_id)?.email || 'N/A',
+          user_full_name: profilesMap.get(order.user_id)?.full_name || 'N/A'
+        }));
+
+        setOrders(ordersWithProfiles);
+      } else {
+        setOrders([]);
+      }
     } catch (error) {
       console.error("Error fetching orders:", error);
+      setOrders([]);
     } finally {
       setLoading(false);
     }
@@ -85,8 +106,8 @@ const OrdersTab = () => {
       ['Order ID', 'Customer', 'Email', 'Total', 'Status', 'Date'].join(','),
       ...orders.map(order => [
         order.order_number,
-        order.profiles?.full_name || 'N/A',
-        order.profiles?.email || 'N/A',
+        order.user_full_name || 'N/A',
+        order.user_email || 'N/A',
         order.total_amount,
         order.status,
         new Date(order.created_at).toLocaleDateString()
@@ -133,8 +154,8 @@ const OrdersTab = () => {
             {orders.map((order) => (
               <TableRow key={order.id}>
                 <TableCell className="font-medium">{order.order_number}</TableCell>
-                <TableCell>{order.profiles?.full_name || 'N/A'}</TableCell>
-                <TableCell>{order.profiles?.email || 'N/A'}</TableCell>
+                <TableCell>{order.user_full_name}</TableCell>
+                <TableCell>{order.user_email}</TableCell>
                 <TableCell>${order.total_amount}</TableCell>
                 <TableCell>
                   <Badge className={getStatusColor(order.status)}>
