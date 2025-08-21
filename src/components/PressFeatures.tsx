@@ -1,4 +1,3 @@
-
 import React from 'react';
 
 const PressFeatures = () => {
@@ -21,10 +20,10 @@ const PressFeatures = () => {
         
         <div className="relative overflow-hidden">
           {/* Left fade gradient */}
-          <div className="absolute left-0 top-0 w-24 h-full bg-gradient-to-r from-white to-transparent z-10 pointer-events-none"></div>
+          <div className="absolute left-0 top-0 w-8 h-full bg-gradient-to-r from-white to-transparent z-10 pointer-events-none"></div>
           
           {/* Right fade gradient */}
-          <div className="absolute right-0 top-0 w-24 h-full bg-gradient-to-l from-white to-transparent z-10 pointer-events-none"></div>
+          <div className="absolute right-0 top-0 w-8 h-full bg-gradient-to-l from-white to-transparent z-10 pointer-events-none"></div>
           
           <div className="flex animate-scroll-seamless space-x-12">
             {/* First set of logos */}
