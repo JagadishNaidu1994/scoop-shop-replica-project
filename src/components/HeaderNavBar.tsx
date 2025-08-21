@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Menu, X, ShoppingCart, User, Settings, Shield } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
@@ -169,8 +170,20 @@ const HeaderNavBar = () => {
                 </button>
               </div>
 
-              {/* Mobile account icon */}
-              <div className="md:hidden">
+              {/* Mobile account and admin icons */}
+              <div className="md:hidden flex items-center space-x-2">
+                {/* Admin Icon for mobile */}
+                {isAdmin && (
+                  <Link 
+                    to="/admin/dashboard" 
+                    className="text-black hover:text-gray-600 transition-colors rounded-full p-2 hover:bg-gray-100"
+                    title="Admin Dashboard"
+                  >
+                    <Shield size={24} />
+                  </Link>
+                )}
+                
+                {/* Account Icon for mobile */}
                 <button 
                   onClick={handleAuthClick}
                   className="text-black hover:text-gray-600 transition-colors rounded-full p-2 hover:bg-gray-100"
@@ -252,6 +265,18 @@ const HeaderNavBar = () => {
 
                     {/* Bottom section */}
                     <div className="mt-8 pt-8 border-t border-gray-200 space-y-4">
+                      {/* Admin Dashboard link for mobile */}
+                      {isAdmin && (
+                        <Link 
+                          to="/admin/dashboard" 
+                          className="flex items-center gap-2 text-base text-gray-600 hover:text-black"
+                          onClick={() => setIsMenuOpen(false)}
+                        >
+                          <Shield size={20} />
+                          Admin Dashboard
+                        </Link>
+                      )}
+                      
                       {!user && (
                         <button 
                           onClick={() => setIsAuthModalOpen(true)}
