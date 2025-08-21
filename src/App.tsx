@@ -15,6 +15,7 @@ import Recipes from "./pages/Recipes";
 import Contact from "./pages/Contact";
 import Checkout from "./pages/Checkout";
 import Account from "./pages/Account";
+import OrderDetail from "./pages/OrderDetail";
 
 const queryClient = new QueryClient();
 
@@ -36,6 +37,7 @@ const App = () => (
                   <Route path="/contact" element={<Contact />} />
                   <Route path="/checkout" element={<Checkout />} />
                   <Route path="/account" element={<Account />} />
+                  <Route path="/orders/:id" element={<OrderDetail />} />
                 </Routes>
               </BrowserRouter>
             </TooltipProvider>
