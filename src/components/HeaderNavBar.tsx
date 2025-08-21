@@ -68,9 +68,9 @@ const HeaderNavBar = () => {
 
   return (
     <>
-      {/* Top promotional banner - horizontally scrolling with faster mobile speed */}
+      {/* Top promotional banner - fast scrolling on all devices */}
       <div className="bg-gray-100 text-center py-2 text-sm font-medium text-black sticky top-0 z-50 overflow-hidden">
-        <div className="whitespace-nowrap animate-[scroll-seamless_8s_linear_infinite] sm:animate-[scroll-seamless_10s_linear_infinite] lg:animate-[scroll-seamless_8s_linear_infinite]">
+        <div className="whitespace-nowrap animate-[scroll-seamless_6s_linear_infinite] sm:animate-[scroll-seamless_8s_linear_infinite] lg:animate-[scroll-seamless_8s_linear_infinite]">
           <span className="inline-block mx-8">15% OFF EVERY SUBSCRIPTION</span>
           <span className="inline-block mx-2">•</span>
           <span className="inline-block mx-8">10% OFF FIRST ORDER</span>
