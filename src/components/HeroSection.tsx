@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -12,7 +11,7 @@ const HeroSection = () => {
   };
 
   return (
-    <section className="bg-gray-50 min-h-screen flex items-center w-full -mt-2">
+    <section className="bg-gray-50 min-h-screen flex items-center w-full">
       <div className="w-full px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center max-w-7xl mx-auto">
         {/* Left Content */}
         <div className="space-y-6 lg:space-y-8 animate-fade-in">
