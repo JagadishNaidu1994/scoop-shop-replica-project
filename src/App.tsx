@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -11,83 +10,65 @@ import { AdminImageProvider } from "@/contexts/AdminImageContext";
 import Index from "./pages/Index";
 import Shop from "./pages/Shop";
 import ProductDetail from "./pages/ProductDetail";
-import About from "./pages/About";
-import Contact from "./pages/Contact";
-import Auth from "./pages/Auth";
+import Admin from "./pages/Admin";
+import AdminProducts from "./pages/AdminProducts";
+import AdminOrders from "./pages/AdminOrders";
+import AdminCustomers from "./pages/AdminCustomers";
+import AdminSettings from "./pages/AdminSettings";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import Account from "./pages/Account";
 import Checkout from "./pages/Checkout";
-import OrderDetail from "./pages/OrderDetail";
+import OrderConfirmation from "./pages/OrderConfirmation";
 import Recipes from "./pages/Recipes";
-import RecipeDetail from "./pages/RecipeDetail";
-import AdminDashboard from "./pages/AdminDashboard";
-import AdminProducts from "./pages/AdminProducts";
-import AdminRecipes from "./pages/AdminRecipes";
-import AdminJournals from "./pages/AdminJournals";
-import Journal from "./pages/Journal";
-import JournalDetail from "./pages/JournalDetail";
-import Science from "./pages/Science";
-import OurStory from "./pages/OurStory";
-import Wholesale from "./pages/Wholesale";
-import ReferFriend from "./pages/ReferFriend";
-import FAQ from "./pages/FAQ";
-import PrivacyPolicy from "./pages/PrivacyPolicy";
-import TermsOfService from "./pages/TermsOfService";
-import StoreLocator from "./pages/StoreLocator";
-import Blog from "./pages/Blog";
-import NotFound from "./pages/NotFound";
+import Contact from "./pages/Contact";
+import Terms from "./pages/Terms";
+import Privacy from "./pages/Privacy";
+import Returns from "./pages/Returns";
 
 const queryClient = new QueryClient();
 
-function App() {
-  return (
-    <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
-        <AuthProvider>
-          <CartProvider>
-            <AdminEditProvider>
-              <AdminImageProvider>
-                <TooltipProvider>
-                  <Toaster />
-                  <Sonner />
-                  <Routes>
-                    <Route path="/" element={<Index />} />
-                    <Route path="/shop" element={<Shop />} />
-                    <Route path="/product/:id" element={<ProductDetail />} />
-                    <Route path="/about" element={<About />} />
-                    <Route path="/contact" element={<Contact />} />
-                    <Route path="/auth" element={<Auth />} />
-                    <Route path="/reset-password" element={<ResetPassword />} />
-                    <Route path="/account" element={<Account />} />
-                    <Route path="/checkout" element={<Checkout />} />
-                    <Route path="/order/:id" element={<OrderDetail />} />
-                    <Route path="/recipes" element={<Recipes />} />
-                    <Route path="/recipe/:id" element={<RecipeDetail />} />
-                    <Route path="/admin/dashboard" element={<AdminDashboard />} />
-                    <Route path="/admin/products" element={<AdminProducts />} />
-                    <Route path="/admin/recipes" element={<AdminRecipes />} />
-                    <Route path="/admin/journals" element={<AdminJournals />} />
-                    <Route path="/journal" element={<Journal />} />
-                    <Route path="/journal/:id" element={<JournalDetail />} />
-                    <Route path="/science" element={<Science />} />
-                    <Route path="/story" element={<OurStory />} />
-                    <Route path="/wholesale" element={<Wholesale />} />
-                    <Route path="/refer" element={<ReferFriend />} />
-                    <Route path="/faq" element={<FAQ />} />
-                    <Route path="/privacy" element={<PrivacyPolicy />} />
-                    <Route path="/terms" element={<TermsOfService />} />
-                    <Route path="/store-locator" element={<StoreLocator />} />
-                    <Route path="/blog" element={<Blog />} />
-                    <Route path="*" element={<NotFound />} />
-                  </Routes>
-                </TooltipProvider>
-              </AdminImageProvider>
-            </AdminEditProvider>
-          </CartProvider>
-        </AuthProvider>
-      </BrowserRouter>
-    </QueryClientProvider>
-  );
-}
+const App = () => (
+  <QueryClientProvider client={queryClient}>
+    <AuthProvider>
+      <CartProvider>
+        <AdminEditProvider>
+          <AdminImageProvider>
+            <TooltipProvider>
+              <Toaster />
+              <Sonner />
+              <BrowserRouter>
+                <Routes>
+                  <Route path="/" element={<Index />} />
+                  <Route path="/shop" element={<Shop />} />
+                  <Route path="/products/:id" element={<ProductDetail />} />
+                  <Route path="/admin" element={<Admin />} />
+                  <Route path="/admin/products" element={<AdminProducts />} />
+                  <Route path="/admin/orders" element={<AdminOrders />} />
+                  <Route path="/admin/customers" element={<AdminCustomers />} />
+                  <Route path="/admin/settings" element={<AdminSettings />} />
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/register" element={<Register />} />
+                  <Route path="/forgot-password" element={<ForgotPassword />} />
+                  <Route path="/reset-password" element={<ResetPassword />} />
+                  <Route path="/account" element={<Account />} />
+                  <Route path="/checkout" element={<Checkout />} />
+                  <Route path="/order-confirmation" element={<OrderConfirmation />} />
+                  <Route path="/recipes" element={<Recipes />} />
+                  <Route path="/contact" element={<Contact />} />
+                  <Route path="/terms" element={<Terms />} />
+                  <Route path="/privacy" element={<Privacy />} />
+                  <Route path="/returns" element={<Returns />} />
+                </Routes>
+              </BrowserRouter>
+            </TooltipProvider>
+          </AdminImageProvider>
+        </AdminEditProvider>
+      </CartProvider>
+    </AuthProvider>
+  </QueryClientProvider>
+);
 
 export default App;
