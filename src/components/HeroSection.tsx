@@ -1,10 +1,16 @@
 
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import AdminImageUpload from '@/components/AdminImageUpload';
-import shop from '@/pages/shop';
 
 const HeroSection = () => {
+  const navigate = useNavigate();
+
+  const handleShopClick = () => {
+    navigate('/shop');
+  };
+
   return (
     <section className="bg-gray-50 min-h-screen flex items-center w-full">
       <div className="w-full px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
@@ -20,10 +26,12 @@ const HeroSection = () => {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4">
-            <Button src="/shop" className="bg-black text-white px-8 py-3 rounded-full hover:bg-gray-800 transition-colors">
+            <Button 
+              onClick={handleShopClick}
+              className="bg-black text-white px-8 py-3 rounded-full hover:bg-gray-800 transition-colors"
+            >
               Shop Starter Bundles
             </Button>
-            
           </div>
         </div>
 
