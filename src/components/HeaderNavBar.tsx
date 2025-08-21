@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Menu, X, ShoppingCart, User, Settings, Shield } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
@@ -253,12 +252,14 @@ const HeaderNavBar = () => {
 
                     {/* Bottom section */}
                     <div className="mt-8 pt-8 border-t border-gray-200 space-y-4">
-                      <button 
-                        onClick={() => setIsAuthModalOpen(true)}
-                        className="block text-base text-gray-600 hover:text-black"
-                      >
-                        Log in
-                      </button>
+                      {!user && (
+                        <button 
+                          onClick={() => setIsAuthModalOpen(true)}
+                          className="block text-base text-gray-600 hover:text-black"
+                        >
+                          Log in
+                        </button>
+                      )}
                       
                       <Link to="/account" className="block text-base text-gray-600 hover:text-black">
                         Rewards
