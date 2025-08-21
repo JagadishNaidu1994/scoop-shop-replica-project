@@ -214,7 +214,7 @@ const OrderHistory: React.FC<OrderHistoryProps> = ({ onViewOrder }) => {
       </head>
       <body>
         <div class="header">
-          <div class="company-name">DIRTEA</div>
+          <div class="company-nameNASTEA RITUALS</div>
           <div class="invoice-title">INVOICE</div>
         </div>
         
