@@ -1,4 +1,3 @@
-
 import React, { useState, useRef } from 'react';
 import { Upload, Check, X } from 'lucide-react';
 import { useAdminImage } from '@/contexts/AdminImageContext';
@@ -158,12 +157,12 @@ const AdminImageUpload: React.FC<AdminImageUploadProps> = ({
 
   // If not in admin mode or not editing images, render the original content
   if (!isAdminMode || !isEditingImages) {
-    return children || <img src={currentImageUrl} alt={alt} className={className} style={style} />;
+    return children || <img src="/lovable-uploads/e2d20fcd-212d-4e2d-98df-b03c61552e17.png" alt={alt} className={className} style={style} />;
   }
 
   return (
     <div className="relative group inline-block">
-      {children || <img src={preview || currentImageUrl} alt={alt} className={className} style={style} />}
+      {children || <img src={preview || "/lovable-uploads/e2d20fcd-212d-4e2d-98df-b03c61552e17.png"} alt={alt} className={className} style={style} />}
       
       {/* Upload overlay - always visible in admin edit mode */}
       <div className="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center z-10">
