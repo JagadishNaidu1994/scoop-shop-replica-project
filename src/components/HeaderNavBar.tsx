@@ -70,7 +70,7 @@ const HeaderNavBar = () => {
     <>
       {/* Top promotional banner - horizontally scrolling */}
       <div className="bg-gray-100 text-center py-2 text-sm font-medium text-black sticky top-0 z-50 overflow-hidden">
-        <div className="whitespace-nowrap animate-scroll">
+        <div className="whitespace-nowrap animate-[scroll_15s_linear_infinite]">
           <span className="inline-block mx-8">15% OFF EVERY SUBSCRIPTION</span>
           <span className="inline-block mx-2">•</span>
           <span className="inline-block mx-8">10% OFF FIRST ORDER</span>
