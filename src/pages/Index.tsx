@@ -28,14 +28,14 @@ const Index = () => {
           <AdminEditableText
             pageId="homepage"
             contentKey="welcome-title"
-            defaultValue="Welcome to NASTEARITUALS"
+            defaultValue="Welcome to NASTEA"
             element="h2"
             className="text-3xl font-bold text-black mb-4"
           />
           <AdminEditableText
             pageId="homepage"
             contentKey="welcome-description"
-            defaultValue="Sample Text"
+            defaultValue="Discover the power of functional mushrooms and adaptogens"
             element="p"
             className="text-lg text-gray-600 max-w-2xl mx-auto"
             multiline
