@@ -12,20 +12,20 @@ const HeroSection = () => {
   };
 
   return (
-    <section className="bg-gray-50 min-h-screen flex items-center w-full">
-      <div className="w-full px-4 sm:px-6 grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 lg:gap-12 items-center lg:px-[32px] py-0">
+    <section className="bg-gray-50 min-h-screen flex items-center w-full -mt-2">
+      <div className="w-full px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center max-w-7xl mx-auto">
         {/* Left Content */}
-        <div className="space-y-3 sm:space-y-4 lg:space-y-8 animate-fade-in">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-black leading-tight">
+        <div className="space-y-6 lg:space-y-8 animate-fade-in">
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-black leading-tight">
             Your Daily Ritual for Focus,<br />
             <span className="text-gray-700">Energy & Calm</span>
           </h1>
           
-          <p className="text-base sm:text-lg text-gray-600 max-w-md">
+          <p className="text-lg text-gray-600 max-w-md">
             Premium functional mushroom and adaptogen blends crafted for modern wellness
           </p>
           
-          <div className="flex flex-col sm:flex-row gap-4 pt-1 sm:pt-2">
+          <div className="pt-4">
             <Button onClick={handleShopClick} className="bg-black text-white px-8 py-3 rounded-full hover:bg-gray-800 transition-colors">
               Shop Starter Bundles
             </Button>
@@ -33,7 +33,7 @@ const HeroSection = () => {
         </div>
 
         {/* Right Image */}
-        <div className="relative animate-fade-in-delay order-first lg:order-last mt-4 lg:mt-0">
+        <div className="relative animate-fade-in-delay order-first lg:order-last">
           <AdminImageUpload 
             src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
             alt="NASTEA products on kitchen table setup" 

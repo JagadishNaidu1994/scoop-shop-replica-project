@@ -12,8 +12,6 @@ import JournalSection from '@/components/JournalSection';
 import FoundersSection from '@/components/FoundersSection';
 import Footer from '@/components/Footer';
 import EmailSignupPopup from '@/components/EmailSignupPopup';
-import AdminEditableText from '@/components/admin/AdminEditableText';
-import AdminEditableImage from '@/components/admin/AdminEditableImage';
 import { useEmailPopup } from '@/hooks/useEmailPopup';
 
 const Index = () => {
@@ -23,25 +21,6 @@ const Index = () => {
     <div className="min-h-screen w-full">
       <HeaderNavBar />
       <main className="w-full">
-        {/* Example of editable content - you can add these to any section */}
-        <div className="bg-gray-50 py-0 text-center">
-          <AdminEditableText
-            pageId="homepage"
-            contentKey="welcome-title"
-            defaultValue="Welcome to NASTEA"
-            element="h2"
-            className="text-3xl font-bold text-black mb-4"
-          />
-          <AdminEditableText
-            pageId="homepage"
-            contentKey="welcome-description"
-            defaultValue="Discover the power of functional mushrooms and adaptogens"
-            element="p"
-            className="text-lg text-gray-600 max-w-2xl mx-auto"
-            multiline
-          />
-        </div>
-        
         <HeroSection />
         <SubHeroBanner />
         <ProductShowcaseGrid />
