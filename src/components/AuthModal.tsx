@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { X, Eye, EyeOff, Mail, Lock, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -42,16 +41,18 @@ const AuthModal = ({ isOpen, onClose }: AuthModalProps) => {
       });
 
       if (error) {
+        console.error('Google sign-in error:', error);
         toast({
           title: "Google Sign In Error",
-          description: error.message,
+          description: error.message || "Failed to sign in with Google. Please check your internet connection and try again.",
           variant: "destructive"
         });
       }
     } catch (error) {
+      console.error('Unexpected Google sign-in error:', error);
       toast({
         title: "Error",
-        description: "An unexpected error occurred with Google sign in.",
+        description: "An unexpected error occurred with Google sign in. Please try again.",
         variant: "destructive"
       });
     } finally {
