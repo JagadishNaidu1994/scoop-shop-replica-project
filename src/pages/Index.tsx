@@ -24,7 +24,7 @@ const Index = () => {
       <HeaderNavBar />
       <main className="w-full">
         {/* Example of editable content - you can add these to any section */}
-        <div className="bg-gray-50 py-0 text-center">
+        <div className="bg-gray-50 text-center">
           <AdminEditableText
             pageId="homepage"
             contentKey="welcome-title"
