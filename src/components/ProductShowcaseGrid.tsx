@@ -77,17 +77,17 @@ const ProductShowcaseGrid = () => {
                 <h3 className={`text-2xl font-bold mb-2 transition-colors duration-300 ${
                   selectedImage === 0 ? 'text-black' : 'text-gray-600'
                 }`}>
-                  DIRTEA Coffee
+                  NASTEA Coffee
                 </h3>
                 <h4 className={`text-xl font-semibold mb-2 transition-colors duration-300 ${
                   selectedImage === 1 ? 'text-black' : 'text-gray-600'
                 }`}>
-                  DIRTEA Matcha
+                  NASTEA Matcha
                 </h4>
                 <h4 className={`text-xl font-semibold transition-colors duration-300 ${
                   selectedImage === 2 ? 'text-black' : 'text-gray-600'
                 }`}>
-                  DIRTEA Cacao
+                  NASTEA Cacao
                 </h4>
               </div>
             </div>
