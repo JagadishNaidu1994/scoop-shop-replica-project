@@ -2,6 +2,7 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import AdminImageUpload from '@/components/AdminImageUpload';
+import shop from '@/pages/shop';
 
 const HeroSection = () => {
   return (
@@ -19,12 +20,10 @@ const HeroSection = () => {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4">
-            <Button className="bg-black text-white px-8 py-3 rounded-full hover:bg-gray-800 transition-colors">
+            <Button src="/shop" className="bg-black text-white px-8 py-3 rounded-full hover:bg-gray-800 transition-colors">
               Shop Starter Bundles
             </Button>
-            <Button variant="outline" className="border-black text-black px-8 py-3 rounded-full hover:bg-black hover:text-white transition-colors">
-              Take Our Quiz
-            </Button>
+            
           </div>
         </div>
 
