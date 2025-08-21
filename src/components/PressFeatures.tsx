@@ -19,11 +19,24 @@ const PressFeatures = () => {
           </div>
         </div>
         
-        <div className="overflow-hidden">
-          <div className="flex animate-scroll-left space-x-12">
-            {[...logos, ...logos].map((logo, index) => (
-              <div key={index} className="flex-shrink-0">
-                <span className="text-2xl font-bold text-gray-400">{logo}</span>
+        <div className="relative overflow-hidden">
+          {/* Left fade gradient */}
+          <div className="absolute left-0 top-0 w-24 h-full bg-gradient-to-r from-white to-transparent z-10 pointer-events-none"></div>
+          
+          {/* Right fade gradient */}
+          <div className="absolute right-0 top-0 w-24 h-full bg-gradient-to-l from-white to-transparent z-10 pointer-events-none"></div>
+          
+          <div className="flex animate-scroll-seamless space-x-12">
+            {/* First set of logos */}
+            {logos.map((logo, index) => (
+              <div key={`first-${index}`} className="flex-shrink-0">
+                <span className="text-2xl font-bold text-gray-400 whitespace-nowrap">{logo}</span>
+              </div>
+            ))}
+            {/* Second set for seamless loop */}
+            {logos.map((logo, index) => (
+              <div key={`second-${index}`} className="flex-shrink-0">
+                <span className="text-2xl font-bold text-gray-400 whitespace-nowrap">{logo}</span>
               </div>
             ))}
           </div>
