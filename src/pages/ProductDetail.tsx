@@ -12,6 +12,7 @@ import { Badge } from '@/components/ui/badge';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+
 interface Product {
   id: number;
   name: string;
@@ -22,6 +23,7 @@ interface Product {
   category: string;
   benefits: string[];
 }
+
 const ProductDetail = () => {
   const {
     id
@@ -40,6 +42,7 @@ const ProductDetail = () => {
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [showImageModal, setShowImageModal] = useState(false);
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
+
   const ingredients = [{
     name: 'Vitamin B9',
     amount: '12% RI per serving',
@@ -71,7 +74,9 @@ const ProductDetail = () => {
     description: 'Premium quality for sustained energy',
     percentage: 100
   }];
+
   const productImages = ['/lovable-uploads/8edc40eb-3dfa-45fb-8cac-fc1a12ec6a3c.png', '/lovable-uploads/8edc40eb-3dfa-45fb-8cac-fc1a12ec6a3c.png', '/lovable-uploads/8edc40eb-3dfa-45fb-8cac-fc1a12ec6a3c.png', '/lovable-uploads/8edc40eb-3dfa-45fb-8cac-fc1a12ec6a3c.png', '/lovable-uploads/8edc40eb-3dfa-45fb-8cac-fc1a12ec6a3c.png', '/lovable-uploads/8edc40eb-3dfa-45fb-8cac-fc1a12ec6a3c.png'];
+
   const testimonials = [{
     name: "Ellie F.",
     image: "/lovable-uploads/8edc40eb-3dfa-45fb-8cac-fc1a12ec6a3c.png",
@@ -85,7 +90,7 @@ const ProductDetail = () => {
   }, {
     name: "Sharon S.",
     image: "/lovable-uploads/8edc40eb-3dfa-45fb-8cac-fc1a12ec6a3c.png",
-    review: "My life, my skin and my energy level has changed since my very first cup of Dirtea matcha. I look...",
+    review: "My life, my skin and my energy level has changed since my very first cup of Nastea matcha. I look...",
     rating: 5
   }, {
     name: "Julia B.",
@@ -93,6 +98,7 @@ const ProductDetail = () => {
     review: "Just love it!",
     rating: 5
   }];
+
   const relatedProducts = [{
     name: "focus gummies",
     price: "£27",
@@ -114,17 +120,20 @@ const ProductDetail = () => {
     description: "Calm, relax, immunity",
     image: "/lovable-uploads/8edc40eb-3dfa-45fb-8cac-fc1a12ec6a3c.png"
   }];
+
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIngredient(prev => (prev + 1) % ingredients.length);
     }, 4000);
     return () => clearInterval(interval);
   }, []);
+
   useEffect(() => {
     if (id) {
       fetchProduct();
     }
   }, [id]);
+
   const fetchProduct = async () => {
     try {
       const productId = parseInt(id as string);
@@ -132,15 +141,20 @@ const ProductDetail = () => {
         navigate('/shop');
         return;
       }
-      const {
-        data,
-        error
-      } = await supabase.from('products').select('*').eq('id', productId).eq('is_active', true).single();
+
+      const { data, error } = await supabase
+        .from('products')
+        .select('*')
+        .eq('id', productId)
+        .eq('is_active', true)
+        .single();
+
       if (error) {
         console.error('Error fetching product:', error);
         navigate('/shop');
         return;
       }
+
       setProduct(data);
     } catch (error) {
       console.error('Error fetching product:', error);
@@ -149,8 +163,10 @@ const ProductDetail = () => {
       setLoading(false);
     }
   };
+
   const handleAddToCart = () => {
     if (!product) return;
+
     addToCart({
       product_id: product.id,
       product_name: product.name,
@@ -158,11 +174,13 @@ const ProductDetail = () => {
       quantity: quantity,
       product_image: product.primary_image
     });
+
     toast({
       title: "Added to cart!",
       description: `${quantity}x ${product.name} added to your cart.`
     });
   };
+
   const handleWishlist = () => {
     setIsWishlisted(!isWishlisted);
     toast({
@@ -170,6 +188,7 @@ const ProductDetail = () => {
       description: isWishlisted ? "Item removed from your wishlist" : "Item saved to your wishlist"
     });
   };
+
   const handleShare = () => {
     if (navigator.share) {
       navigator.share({
@@ -185,14 +204,18 @@ const ProductDetail = () => {
       });
     }
   };
+
   const incrementQuantity = () => setQuantity(prev => prev + 1);
   const decrementQuantity = () => setQuantity(prev => Math.max(1, prev - 1));
+
   const nextImage = () => {
     setSelectedImage(prev => (prev + 1) % productImages.length);
   };
+
   const prevImage = () => {
     setSelectedImage(prev => (prev - 1 + productImages.length) % productImages.length);
   };
+
   if (loading) {
     return <div className="min-h-screen bg-white">
         <HeaderNavBar />
@@ -202,6 +225,7 @@ const ProductDetail = () => {
         <Footer />
       </div>;
   }
+
   if (!product) {
     return <div className="min-h-screen bg-white">
         <HeaderNavBar />
@@ -214,6 +238,7 @@ const ProductDetail = () => {
         <Footer />
       </div>;
   }
+
   const subscriptionPrice = product.price * 0.8;
   return <div className="min-h-screen bg-white">
       <HeaderNavBar />
@@ -241,30 +266,51 @@ const ProductDetail = () => {
               </Badge>
               
               <div className="aspect-square bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl overflow-hidden cursor-zoom-in relative" onClick={() => setShowImageModal(true)}>
-                <AdminImageUpload src={productImages[selectedImage]} alt={product.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" imagePath="product-detail-main" />
+                <AdminImageUpload
+                  src={productImages[selectedImage]}
+                  alt={product.name}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                  imagePath="product-detail-main"
+                />
                 
                 {/* Navigation Arrows */}
-                <button onClick={e => {
-                e.stopPropagation();
-                prevImage();
-              }} className="absolute left-3 top-1/2 -translate-y-1/2 p-2 rounded-full bg-white/80 backdrop-blur-md text-gray-800 hover:bg-white hover:shadow-lg transition-all duration-200 opacity-0 group-hover:opacity-100">
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    prevImage();
+                  }}
+                  className="absolute left-3 top-1/2 -translate-y-1/2 p-2 rounded-full bg-white/80 backdrop-blur-md text-gray-800 hover:bg-white hover:shadow-lg transition-all duration-200 opacity-0 group-hover:opacity-100"
+                >
                   <ChevronLeft className="w-4 h-4" />
                 </button>
                 
-                <button onClick={e => {
-                e.stopPropagation();
-                nextImage();
-              }} className="absolute right-3 top-1/2 -translate-y-1/2 p-2 rounded-full bg-white/80 backdrop-blur-md text-gray-800 hover:bg-white hover:shadow-lg transition-all duration-200 opacity-0 group-hover:opacity-100">
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    nextImage();
+                  }}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 p-2 rounded-full bg-white/80 backdrop-blur-md text-gray-800 hover:bg-white hover:shadow-lg transition-all duration-200 opacity-0 group-hover:opacity-100"
+                >
                   <ChevronRight className="w-4 h-4" />
                 </button>
               </div>
               
               {/* Floating Action Buttons */}
               <div className="absolute top-4 right-4 flex flex-col space-y-2">
-                <button onClick={handleWishlist} className={`p-2 rounded-full backdrop-blur-md transition-all duration-200 ${isWishlisted ? 'bg-red-500 text-white shadow-lg' : 'bg-white/80 text-gray-600 hover:bg-white hover:shadow-lg'}`}>
+                <button
+                  onClick={handleWishlist}
+                  className={`p-2 rounded-full backdrop-blur-md transition-all duration-200 ${
+                    isWishlisted
+                      ? 'bg-red-500 text-white shadow-lg'
+                      : 'bg-white/80 text-gray-600 hover:bg-white hover:shadow-lg'
+                  }`}
+                >
                   <Heart className={`w-4 h-4 ${isWishlisted ? 'fill-current' : ''}`} />
                 </button>
-                <button onClick={handleShare} className="p-2 rounded-full bg-white/80 backdrop-blur-md text-gray-600 hover:bg-white hover:shadow-lg transition-all duration-200">
+                <button
+                  onClick={handleShare}
+                  className="p-2 rounded-full bg-white/80 backdrop-blur-md text-gray-600 hover:bg-white hover:shadow-lg transition-all duration-200"
+                >
                   <Share2 className="w-4 h-4" />
                 </button>
               </div>
@@ -272,9 +318,24 @@ const ProductDetail = () => {
             
             {/* Thumbnail Grid */}
             <div className="grid grid-cols-6 gap-2">
-              {productImages.map((image, index) => <button key={index} onClick={() => setSelectedImage(index)} className={`aspect-square rounded-lg overflow-hidden border-2 transition-all duration-200 ${selectedImage === index ? 'border-black shadow-lg scale-105' : 'border-gray-200 hover:border-gray-300 hover:shadow-md'}`}>
-                  <AdminImageUpload src={image} alt={`${product.name} ${index + 1}`} className="w-full h-full object-cover" imagePath={`product-detail-thumbnail-${index + 1}`} />
-                </button>)}
+              {productImages.map((image, index) => (
+                <button
+                  key={index}
+                  onClick={() => setSelectedImage(index)}
+                  className={`aspect-square rounded-lg overflow-hidden border-2 transition-all duration-200 ${
+                    selectedImage === index
+                      ? 'border-black shadow-lg scale-105'
+                      : 'border-gray-200 hover:border-gray-300 hover:shadow-md'
+                  }`}
+                >
+                  <AdminImageUpload
+                    src={image}
+                    alt={`${product.name} ${index + 1}`}
+                    className="w-full h-full object-cover"
+                    imagePath={`product-detail-thumbnail-${index + 1}`}
+                  />
+                </button>
+              ))}
             </div>
 
             {/* Image Counter */}
@@ -289,7 +350,9 @@ const ProductDetail = () => {
             <div className="flex items-center space-x-3">
               <div className="flex items-center space-x-1">
                 <div className="flex text-yellow-400">
-                  {[...Array(5)].map((_, i) => <Star key={i} className="w-4 h-4 fill-current" />)}
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="w-4 h-4 fill-current" />
+                  ))}
                 </div>
                 <span className="text-sm text-gray-600 font-medium ml-1">4.9</span>
               </div>
@@ -302,7 +365,7 @@ const ProductDetail = () => {
             {/* Product Title and Description */}
             <div className="space-y-2">
               <h1 className="text-2xl font-bold text-gray-900 leading-tight">
-                DIRTEA {product.name}
+                NASTEA {product.name}
               </h1>
               <p className="text-lg text-gray-600 font-medium">
                 Energy, focus, beauty
@@ -336,11 +399,23 @@ const ProductDetail = () => {
             {/* Pricing Options - Updated to match reference image */}
             <div className="bg-gray-50 rounded-2xl p-6 border border-gray-200">
               {/* One-time Purchase */}
-              <div className={`p-4 border-2 rounded-xl cursor-pointer transition-all duration-200 mb-4 ${subscriptionType === 'one-time' ? 'border-gray-300 bg-white' : 'border-gray-200 bg-white hover:border-gray-300'}`} onClick={() => setSubscriptionType('one-time')}>
+              <div
+                className={`p-4 border-2 rounded-xl cursor-pointer transition-all duration-200 mb-4 ${
+                  subscriptionType === 'one-time'
+                    ? 'border-gray-300 bg-white'
+                    : 'border-gray-200 bg-white hover:border-gray-300'
+                }`}
+                onClick={() => setSubscriptionType('one-time')}
+              >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">
                     <div className="relative">
-                      <input type="radio" checked={subscriptionType === 'one-time'} readOnly className="w-5 h-5 text-blue-600 border-2 border-gray-300 focus:ring-blue-500" />
+                      <input
+                        type="radio"
+                        checked={subscriptionType === 'one-time'}
+                        readOnly
+                        className="w-5 h-5 text-blue-600 border-2 border-gray-300 focus:ring-blue-500"
+                      />
                     </div>
                     <div>
                       <span className="font-medium text-gray-900">One-time Purchase</span>
@@ -353,11 +428,23 @@ const ProductDetail = () => {
               </div>
 
               {/* Subscribe & Save */}
-              <div className={`p-4 border-2 rounded-xl cursor-pointer transition-all duration-200 ${subscriptionType === 'subscribe' ? 'border-blue-500 bg-blue-50' : 'border-gray-200 bg-white hover:border-gray-300'}`} onClick={() => setSubscriptionType('subscribe')}>
+              <div
+                className={`p-4 border-2 rounded-xl cursor-pointer transition-all duration-200 ${
+                  subscriptionType === 'subscribe'
+                    ? 'border-blue-500 bg-blue-50'
+                    : 'border-gray-200 bg-white hover:border-gray-300'
+                }`}
+                onClick={() => setSubscriptionType('subscribe')}
+              >
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center space-x-3">
                     <div className="relative">
-                      <input type="radio" checked={subscriptionType === 'subscribe'} readOnly className="w-5 h-5 text-blue-600 border-2 border-gray-300 focus:ring-blue-500" />
+                      <input
+                        type="radio"
+                        checked={subscriptionType === 'subscribe'}
+                        readOnly
+                        className="w-5 h-5 text-blue-600 border-2 border-gray-300 focus:ring-blue-500"
+                      />
                     </div>
                     <div>
                       <div className="flex items-center space-x-2">
@@ -375,33 +462,49 @@ const ProductDetail = () => {
                   </div>
                 </div>
                 
-                {subscriptionType === 'subscribe' && <div className="relative">
-                    <select value={subscriptionFrequency} onChange={e => setSubscriptionFrequency(e.target.value)} className="w-full p-3 border border-gray-300 rounded-lg text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white appearance-none pr-10">
+                {subscriptionType === 'subscribe' && (
+                  <div className="relative">
+                    <select
+                      value={subscriptionFrequency}
+                      onChange={(e) => setSubscriptionFrequency(e.target.value)}
+                      className="w-full p-3 border border-gray-300 rounded-lg text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white appearance-none pr-10"
+                    >
                       <option>Every 4 weeks (Bestseller)</option>
                       <option>Every 6 weeks</option>
                       <option>Every 8 weeks</option>
                     </select>
                     <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-500 pointer-events-none" />
-                  </div>}
+                  </div>
+                )}
               </div>
 
               {/* Quantity Selector */}
               <div className="flex items-center justify-between mt-6 mb-4">
                 <div className="flex items-center border border-gray-300 rounded-full">
-                  <button onClick={decrementQuantity} className="p-2 hover:bg-gray-100 transition-colors rounded-l-full" disabled={quantity <= 1}>
+                  <button
+                    onClick={decrementQuantity}
+                    className="p-2 hover:bg-gray-100 transition-colors rounded-l-full"
+                    disabled={quantity <= 1}
+                  >
                     <Minus className="w-4 h-4" />
                   </button>
                   <span className="px-4 py-2 font-medium min-w-[50px] text-center">
                     {quantity}
                   </span>
-                  <button onClick={incrementQuantity} className="p-2 hover:bg-gray-100 transition-colors rounded-r-full">
+                  <button
+                    onClick={incrementQuantity}
+                    className="p-2 hover:bg-gray-100 transition-colors rounded-r-full"
+                  >
                     <Plus className="w-4 h-4" />
                   </button>
                 </div>
               </div>
 
               {/* Add to Cart Button */}
-              <Button onClick={handleAddToCart} className="w-full bg-gray-900 text-white hover:bg-black py-4 text-base font-semibold rounded-xl transition-all duration-200 mb-3">
+              <Button
+                onClick={handleAddToCart}
+                className="w-full bg-gray-900 text-white hover:bg-black py-4 text-base font-semibold rounded-xl transition-all duration-200 mb-3"
+              >
                 ADD TO CART - £{((subscriptionType === 'subscribe' ? subscriptionPrice : product.price) * quantity).toFixed(0)}
               </Button>
 
@@ -454,17 +557,17 @@ const ProductDetail = () => {
 
             {/* Collapsible Sections */}
             <div className="pt-4 border-t border-gray-200 space-y-2">
-              {/* Why choose DIRTEA Section */}
+              {/* Why choose NASTEA Section */}
               <Collapsible>
                 <CollapsibleTrigger className="flex items-center justify-between w-full py-2 border-b border-gray-200 hover:bg-gray-50/50 transition-colors">
-                  <h3 className="text-sm font-semibold text-gray-900">Why choose DIRTEA</h3>
+                  <h3 className="text-sm font-semibold text-gray-900">Why choose NASTEA</h3>
                   <Plus className="w-4 h-4 text-gray-500 group-data-[state=open]:rotate-45 transition-transform" />
                 </CollapsibleTrigger>
                 <CollapsibleContent className="pt-2 pb-1">
                   <div className="space-y-2">
                     <div className="flex items-start space-x-2">
                       <div className="w-1 h-1 bg-black rounded-full mt-1 flex-shrink-0"></div>
-                      <p className="text-xs text-gray-700">DIRTEA's Matcha Super Latte isn't just delicious - it's a powerhouse for your mind and body. Crafted with 100% pure ceremonial-grade Japanese matcha, Lion's Mane, Tremella mushrooms and vitamins, our matcha powder enhances focus, beauty, energy, supports your nervous system, mental clarity, skin health, immunity, and wellbeing.</p>
+                      <p className="text-xs text-gray-700">NASTEA's Matcha Super Latte isn't just delicious - it's a powerhouse for your mind and body. Crafted with 100% pure ceremonial-grade Japanese matcha, Lion's Mane, Tremella mushrooms and vitamins, our matcha powder enhances focus, beauty, energy, supports your nervous system, mental clarity, skin health, immunity, and wellbeing.</p>
                     </div>
                     <div className="flex items-start space-x-2">
                       <div className="w-1 h-1 bg-black rounded-full mt-1 flex-shrink-0"></div>
@@ -480,7 +583,7 @@ const ProductDetail = () => {
                     </div>
                   </div>
                   <p className="text-xs text-gray-600 mt-2">
-                    Feel the difference with DIRTEA Matcha Mushroom Super Latte! Elevate your daily energize and mind and stay focused!
+                    Feel the difference with NASTEA Matcha Mushroom Super Latte! Elevate your daily energize and mind and stay focused!
                   </p>
                 </CollapsibleContent>
               </Collapsible>
@@ -533,7 +636,7 @@ const ProductDetail = () => {
                 </CollapsibleTrigger>
                 <CollapsibleContent className="pt-2 pb-1">
                   <div className="space-y-1 text-xs text-gray-700">
-                    <p>1. Add 1-2 tsp of DIRTEA Matcha to a cup</p>
+                    <p>1. Add 1-2 tsp of NASTEA Matcha to a cup</p>
                     <p>2. Pour 60ml of hot water (80°C or cold water)</p>
                     <p>3. Stir or whisk until frothy and smooth</p>
                     <p>4. Add your choice of milk and enjoy!</p>
@@ -573,9 +676,10 @@ const ProductDetail = () => {
                           {ingredients[currentIngredient].amount}
                         </p>
                         <div className="w-full bg-gray-200 rounded-full h-2 mb-4 max-w-xs mx-auto">
-                          <div className="bg-gradient-to-r from-green-400 to-blue-500 h-2 rounded-full transition-all duration-500" style={{
-                          width: `${ingredients[currentIngredient].percentage}%`
-                        }}></div>
+                          <div
+                            className="bg-gradient-to-r from-green-400 to-blue-500 h-2 rounded-full transition-all duration-500"
+                            style={{ width: `${ingredients[currentIngredient].percentage}%` }}
+                          ></div>
                         </div>
                         <p className="text-gray-500 max-w-sm mx-auto leading-relaxed">
                           {ingredients[currentIngredient].description}
@@ -584,13 +688,28 @@ const ProductDetail = () => {
                     </div>
 
                     <div className="flex justify-center space-x-2 mt-6">
-                      {ingredients.map((_, index) => <button key={index} onClick={() => setCurrentIngredient(index)} className={`w-2 h-2 rounded-full transition-all duration-300 ${index === currentIngredient ? 'bg-black w-6' : 'bg-gray-300 hover:bg-gray-400'}`} />)}
+                      {ingredients.map((_, index) => (
+                        <button
+                          key={index}
+                          onClick={() => setCurrentIngredient(index)}
+                          className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                            index === currentIngredient
+                              ? 'bg-black w-6'
+                              : 'bg-gray-300 hover:bg-gray-400'
+                          }`}
+                        />
+                      ))}
                     </div>
                   </div>
 
                   <div className="relative">
                     <div className="aspect-square rounded-2xl overflow-hidden shadow-xl">
-                      <AdminImageUpload src="/lovable-uploads/a61d3c6a-fc59-45fe-9266-350a3c40ae91.png" alt="Energy Focus Beauty lifestyle" className="w-full h-full object-cover" imagePath="product-detail-lifestyle" />
+                      <AdminImageUpload
+                        src="/lovable-uploads/a61d3c6a-fc59-45fe-9266-350a3c40ae91.png"
+                        alt="Energy Focus Beauty lifestyle"
+                        className="w-full h-full object-cover"
+                        imagePath="product-detail-lifestyle"
+                      />
                     </div>
                   </div>
                 </div>
@@ -599,23 +718,29 @@ const ProductDetail = () => {
             
             <TabsContent value="benefits">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {[{
-                icon: '⚡',
-                title: 'Natural Energy',
-                desc: 'Sustained energy without the crash from ceremonial-grade matcha and B vitamins.'
-              }, {
-                icon: '🧠',
-                title: 'Mental Focus',
-                desc: 'Lion\'s Mane mushroom supports cognitive function and mental clarity.'
-              }, {
-                icon: '✨',
-                title: 'Beauty Support',
-                desc: 'Tremella mushroom provides natural hydration and skin health benefits.'
-              }].map((benefit, index) => <div key={index} className="bg-white p-6 rounded-xl border border-gray-200 hover:shadow-lg transition-shadow">
+                {[
+                  {
+                    icon: '⚡',
+                    title: 'Natural Energy',
+                    desc: 'Sustained energy without the crash from ceremonial-grade matcha and B vitamins.'
+                  },
+                  {
+                    icon: '🧠',
+                    title: 'Mental Focus',
+                    desc: 'Lion\'s Mane mushroom supports cognitive function and mental clarity.'
+                  },
+                  {
+                    icon: '✨',
+                    title: 'Beauty Support',
+                    desc: 'Tremella mushroom provides natural hydration and skin health benefits.'
+                  }
+                ].map((benefit, index) => (
+                  <div key={index} className="bg-white p-6 rounded-xl border border-gray-200 hover:shadow-lg transition-shadow">
                     <div className="text-4xl mb-4">{benefit.icon}</div>
                     <h4 className="text-xl font-semibold mb-3 text-gray-900">{benefit.title}</h4>
                     <p className="text-gray-600 leading-relaxed">{benefit.desc}</p>
-                  </div>)}
+                  </div>
+                ))}
               </div>
             </TabsContent>
             
@@ -650,22 +775,27 @@ const ProductDetail = () => {
             
             <TabsContent value="reviews">
               <div className="space-y-6">
-                {[{
-                name: "Sarah M.",
-                review: "Amazing quality! I've been using this for 3 months now and really notice the difference in my energy levels. Highly recommend!",
-                time: "2 weeks ago",
-                rating: 5
-              }, {
-                name: "James L.",
-                review: "The taste is incredible and I feel so much more focused throughout the day. Worth every penny!",
-                time: "1 month ago",
-                rating: 5
-              }, {
-                name: "Emma R.",
-                review: "Best matcha I've ever tried. The ceremonial grade quality really shows. Will definitely reorder!",
-                time: "3 weeks ago",
-                rating: 5
-              }].map((review, index) => <div key={index} className="bg-white p-6 rounded-xl border border-gray-200 hover:shadow-md transition-shadow">
+                {[
+                  {
+                    name: "Sarah M.",
+                    review: "Amazing quality! I've been using this for 3 months now and really notice the difference in my energy levels. Highly recommend!",
+                    time: "2 weeks ago",
+                    rating: 5
+                  },
+                  {
+                    name: "James L.",
+                    review: "The taste is incredible and I feel so much more focused throughout the day. Worth every penny!",
+                    time: "1 month ago",
+                    rating: 5
+                  },
+                  {
+                    name: "Emma R.",
+                    review: "Best matcha I've ever tried. The ceremonial grade quality really shows. Will definitely reorder!",
+                    time: "3 weeks ago",
+                    rating: 5
+                  }
+                ].map((review, index) => (
+                  <div key={index} className="bg-white p-6 rounded-xl border border-gray-200 hover:shadow-md transition-shadow">
                     <div className="flex items-start space-x-4">
                       <div className="w-12 h-12 bg-gradient-to-br from-gray-400 to-gray-600 rounded-full flex items-center justify-center text-white font-bold">
                         {review.name[0]}
@@ -675,7 +805,9 @@ const ProductDetail = () => {
                           <div>
                             <span className="font-semibold text-gray-900">{review.name}</span>
                             <div className="flex text-yellow-400 mt-1">
-                              {[...Array(review.rating)].map((_, i) => <Star key={i} className="w-4 h-4 fill-current" />)}
+                              {[...Array(review.rating)].map((_, i) => (
+                                <Star key={i} className="w-4 h-4 fill-current" />
+                              ))}
                             </div>
                           </div>
                           <span className="text-sm text-gray-500">{review.time}</span>
@@ -687,7 +819,8 @@ const ProductDetail = () => {
                         </p>
                       </div>
                     </div>
-                  </div>)}
+                  </div>
+                ))}
               </div>
             </TabsContent>
           </Tabs>
@@ -698,7 +831,12 @@ const ProductDetail = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div className="relative">
               <div className="aspect-square rounded-3xl overflow-hidden">
-                <AdminImageUpload src="/lovable-uploads/b4c48a6c-d28c-480e-b907-ec5d22258308.png" alt="Pure ingredients powerful benefits" className="w-full h-full object-cover" imagePath="pure-ingredients" />
+                <AdminImageUpload
+                  src="/lovable-uploads/b4c48a6c-d28c-480e-b907-ec5d22258308.png"
+                  alt="Pure ingredients powerful benefits"
+                  className="w-full h-full object-cover"
+                  imagePath="pure-ingredients"
+                />
               </div>
             </div>
 
@@ -760,7 +898,7 @@ const ProductDetail = () => {
                 <div className="border-b border-gray-200 pb-4">
                   <h3 className="font-semibold text-gray-900 mb-2">Good for:</h3>
                   <p className="text-gray-700">
-                    DIRTEA Matcha mushroom powder fortified with Lion's Mane, Tremella and B vitamin 
+                    NASTEA Matcha mushroom powder fortified with Lion's Mane, Tremella and B vitamin 
                     complex enhances energy, boosts focus and hydrates and nourishes the skin.
                   </p>
                 </div>
@@ -784,36 +922,58 @@ const ProductDetail = () => {
 
             <div className="relative">
               <div className="aspect-square rounded-3xl overflow-hidden">
-                <AdminImageUpload src="/lovable-uploads/e3cb3dde-3127-4252-8b46-ab17c78f4ad8.png" alt="Matcha powder with ceremonial design" className="w-full h-full object-cover" imagePath="matcha-ceremonial" />
+                <AdminImageUpload
+                  src="/lovable-uploads/e3cb3dde-3127-4252-8b46-ab17c78f4ad8.png"
+                  alt="Matcha powder with ceremonial design"
+                  className="w-full h-full object-cover"
+                  imagePath="matcha-ceremonial"
+                />
               </div>
             </div>
           </div>
         </section>
 
-        {/* NEW SECTION 4: How to DIRTEA */}
+        {/* NEW SECTION 4: How to NASTEA */}
         <section className="mb-20 w-full">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div className="space-y-8">
               <div>
                 <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 leading-tight mb-8">
-                  How to DIRTEA
+                  How to NASTEA
                 </h2>
                 <h3 className="text-2xl lg:text-3xl font-bold text-gray-900">
-                  Add 6g of DIRTEA Matcha powder to a cup
+                  Add 6g of NASTEA Matcha powder to a cup
                 </h3>
               </div>
 
               {/* Step thumbnails */}
               <div className="flex space-x-4">
-                {[...Array(4)].map((_, index) => <div key={index} className={`w-24 h-24 rounded-xl overflow-hidden border-2 transition-all ${index === 0 ? 'border-black' : 'border-gray-200'}`}>
-                    <AdminImageUpload src="/lovable-uploads/b9b609e5-82c9-4039-98a5-3da3b835c962.png" alt={`Step ${index + 1}`} className="w-full h-full object-cover" imagePath={`how-to-step-${index + 1}`} />
-                  </div>)}
+                {[...Array(4)].map((_, index) => (
+                  <div
+                    key={index}
+                    className={`w-24 h-24 rounded-xl overflow-hidden border-2 transition-all ${
+                      index === 0 ? 'border-black' : 'border-gray-200'
+                    }`}
+                  >
+                    <AdminImageUpload
+                      src="/lovable-uploads/b9b609e5-82c9-4039-98a5-3da3b835c962.png"
+                      alt={`Step ${index + 1}`}
+                      className="w-full h-full object-cover"
+                      imagePath={`how-to-step-${index + 1}`}
+                    />
+                  </div>
+                ))}
               </div>
             </div>
 
             <div className="relative">
               <div className="aspect-[4/3] rounded-3xl overflow-hidden bg-gray-50">
-                <AdminImageUpload src="/lovable-uploads/b9b609e5-82c9-4039-98a5-3da3b835c962.png" alt="Adding matcha powder to cup" className="w-full h-full object-cover" imagePath="how-to-main" />
+                <AdminImageUpload
+                  src="/lovable-uploads/b9b609e5-82c9-4039-98a5-3da3b835c962.png"
+                  alt="Adding matcha powder to cup"
+                  className="w-full h-full object-cover"
+                  imagePath="how-to-main"
+                />
               </div>
               <div className="absolute bottom-6 right-6 flex items-center space-x-2 text-white">
                 <span className="text-sm font-medium">1/4</span>
@@ -837,14 +997,22 @@ const ProductDetail = () => {
                 </div>
               </div>
 
-              <Button className="bg-gray-900 text-white hover:bg-black px-8 py-4 text-lg font-semibold rounded-full transition-all duration-200" onClick={() => navigate('/recipes')}>
+              <Button
+                className="bg-gray-900 text-white hover:bg-black px-8 py-4 text-lg font-semibold rounded-full transition-all duration-200"
+                onClick={() => navigate('/recipes')}
+              >
                 SEE RECIPES
               </Button>
             </div>
 
             <div className="relative">
               <div className="aspect-[4/3] rounded-3xl overflow-hidden">
-                <AdminImageUpload src="/lovable-uploads/65581248-fb35-4b2f-8b55-04877e634119.png" alt="Person enjoying matcha drink" className="w-full h-full object-cover" imagePath="lifestyle-drink" />
+                <AdminImageUpload
+                  src="/lovable-uploads/65581248-fb35-4b2f-8b55-04877e634119.png"
+                  alt="Person enjoying matcha drink"
+                  className="w-full h-full object-cover"
+                  imagePath="lifestyle-drink"
+                />
               </div>
             </div>
           </div>
@@ -855,7 +1023,12 @@ const ProductDetail = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div className="relative">
               <div className="aspect-square rounded-3xl overflow-hidden bg-gradient-to-br from-amber-50 to-orange-50">
-                <AdminImageUpload src="/lovable-uploads/45a06faf-330b-4d76-a34b-4c50248900a2.png" alt="Hands holding matcha drink with mushroom art" className="w-full h-full object-cover" imagePath="mushroom-matcha" />
+                <AdminImageUpload
+                  src="/lovable-uploads/45a06faf-330b-4d76-a34b-4c50248900a2.png"
+                  alt="Hands holding matcha drink with mushroom art"
+                  className="w-full h-full object-cover"
+                  imagePath="mushroom-matcha"
+                />
               </div>
             </div>
 
@@ -871,7 +1044,7 @@ const ProductDetail = () => {
                 <div className="border-b border-gray-200 pb-6">
                   <h3 className="font-semibold text-gray-900 mb-3">What is mushroom matcha?</h3>
                   <p className="text-gray-700 leading-relaxed">
-                    DIRTEA Matcha blends premium Japanese ceremonial-grade matcha with Lion's Mane and Tremella for an 
+                    NASTEA Matcha blends premium Japanese ceremonial-grade matcha with Lion's Mane and Tremella for an 
                     elevated experience. Unlike standard matcha, our matcha mushroom blend supports focus, cognition, and 
                     skin hydration with added adaptogens.
                   </p>
@@ -881,7 +1054,7 @@ const ProductDetail = () => {
                   <h3 className="font-semibold text-gray-900 mb-3">Matcha mushroom benefits</h3>
                   <p className="text-gray-700 leading-relaxed">
                     Perfect for sustained energy, mental clarity, and glowing skin. While standard matcha offers antioxidants 
-                    and caffeine, DIRTEA Matcha enhances cognitive function and hydration with powerful mushrooms.
+                    and caffeine, NASTEA Matcha enhances cognitive function and hydration with powerful mushrooms.
                   </p>
                 </div>
 
@@ -907,20 +1080,29 @@ const ProductDetail = () => {
 
           <div className="relative">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {testimonials.map((testimonial, index) => <Card key={index} className="border border-gray-200 hover:shadow-lg transition-shadow">
+              {testimonials.map((testimonial, index) => (
+                <Card key={index} className="border border-gray-200 hover:shadow-lg transition-shadow">
                   <CardContent className="p-0">
                     <div className="aspect-square bg-gray-100 rounded-t-lg overflow-hidden">
-                      <AdminImageUpload src={testimonial.image} alt={`Customer ${testimonial.name}`} className="w-full h-full object-cover" imagePath={`testimonial-image-${index + 1}`} />
+                      <AdminImageUpload
+                        src={testimonial.image}
+                        alt={`Customer ${testimonial.name}`}
+                        className="w-full h-full object-cover"
+                        imagePath={`testimonial-image-${index + 1}`}
+                      />
                     </div>
                     <div className="p-6">
                       <div className="flex text-yellow-400 mb-4">
-                        {[...Array(testimonial.rating)].map((_, i) => <Star key={i} className="w-4 h-4 fill-current" />)}
+                        {[...Array(testimonial.rating)].map((_, i) => (
+                          <Star key={i} className="w-4 h-4 fill-current" />
+                        ))}
                       </div>
                       <h4 className="font-semibold text-gray-900 mb-3">{testimonial.name}</h4>
                       <p className="text-gray-700 text-sm leading-relaxed">{testimonial.review}</p>
                     </div>
                   </CardContent>
-                </Card>)}
+                </Card>
+              ))}
             </div>
             
             <button className="absolute right-0 top-1/2 -translate-y-1/2 p-2 bg-white border border-gray-300 rounded-full shadow-sm hover:shadow-md transition-all">
@@ -935,17 +1117,25 @@ const ProductDetail = () => {
             <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-4">You may also like</h2>
             <div className="flex items-center space-x-4 mb-8">
               <div className="flex text-yellow-400">
-                {[...Array(5)].map((_, i) => <Star key={i} className="w-5 h-5 fill-current" />)}
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-5 h-5 fill-current" />
+                ))}
               </div>
               <span className="text-gray-600">4.9/5 | 18,133 reviews</span>
             </div>
 
             <div className="relative">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                {relatedProducts.map((product, index) => <Card key={index} className="border border-gray-200 hover:shadow-lg transition-shadow cursor-pointer">
+                {relatedProducts.map((product, index) => (
+                  <Card key={index} className="border border-gray-200 hover:shadow-lg transition-shadow cursor-pointer">
                     <CardContent className="p-0">
                       <div className="aspect-square bg-gray-100 rounded-t-lg overflow-hidden">
-                        <AdminImageUpload src={product.image} alt={product.name} className="w-full h-full object-cover hover:scale-105 transition-transform duration-300" imagePath={`related-product-${index + 1}`} />
+                        <AdminImageUpload
+                          src={product.image}
+                          alt={product.name}
+                          className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                          imagePath={`related-product-${index + 1}`}
+                        />
                       </div>
                       <div className="p-6">
                         <div className="flex items-center justify-between mb-2">
@@ -955,7 +1145,8 @@ const ProductDetail = () => {
                         <p className="text-gray-600 text-sm">{product.description}</p>
                       </div>
                     </CardContent>
-                  </Card>)}
+                  </Card>
+                ))}
               </div>
               
               <button className="absolute right-0 top-1/2 -translate-y-1/2 p-3 bg-white border border-gray-300 rounded-full shadow-md hover:shadow-lg transition-all">
@@ -967,14 +1158,23 @@ const ProductDetail = () => {
       </main>
 
       {/* Image Modal */}
-      {showImageModal && <div className="fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center p-4">
+      {showImageModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center p-4">
           <div className="relative max-w-4xl max-h-full">
-            <button onClick={() => setShowImageModal(false)} className="absolute top-4 right-4 text-white hover:text-gray-300 z-10">
+            <button
+              onClick={() => setShowImageModal(false)}
+              className="absolute top-4 right-4 text-white hover:text-gray-300 z-10"
+            >
               <X className="w-8 h-8" />
             </button>
-            <img src={productImages[selectedImage]} alt={product.name} className="max-w-full max-h-full object-contain rounded-lg" />
+            <img
+              src={productImages[selectedImage]}
+              alt={product.name}
+              className="max-w-full max-h-full object-contain rounded-lg"
+            />
           </div>
-        </div>}
+        </div>
+      )}
 
       <Footer />
     </div>;

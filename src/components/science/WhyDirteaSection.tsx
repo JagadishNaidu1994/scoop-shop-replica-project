@@ -25,7 +25,7 @@ const WhyDirteaSection = () => {
     <section className="py-20 bg-blue-900 w-full">
       <div className="w-full px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-white mb-4">What makes DIRTEA the best?</h2>
+          <h2 className="text-4xl font-bold text-white mb-4">What makes NASTEA the best?</h2>
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">

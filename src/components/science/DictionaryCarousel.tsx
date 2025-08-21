@@ -33,7 +33,7 @@ const DictionaryCarousel = () => {
     <section className="py-20 bg-gray-50 w-full">
       <div className="w-full px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between mb-12">
-          <h2 className="text-4xl font-bold text-black">DIRTEA Dictionary</h2>
+          <h2 className="text-4xl font-bold text-black">NASTEA Dictionary</h2>
           <button className="bg-black text-white px-6 py-3 rounded-full font-medium hover:bg-gray-800 transition-colors">
             See the full dictionary
           </button>
