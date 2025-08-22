@@ -23,6 +23,10 @@ import JournalDetail from "./pages/JournalDetail";
 import Blog from "./pages/Blog";
 import FAQ from "./pages/FAQ";
 import NotFound from "./pages/NotFound";
+import Science from "./pages/Science";
+import OurStory from "./pages/OurStory";
+import Wholesale from "./pages/Wholesale";
+import ReferFriend from "./pages/ReferFriend";
 
 const queryClient = new QueryClient();
 
@@ -52,6 +56,10 @@ const App = () => (
                   <Route path="/journal/:id" element={<JournalDetail />} />
                   <Route path="/blog" element={<Blog />} />
                   <Route path="/faq" element={<FAQ />} />
+                  <Route path="/science" element={<Science />} />
+                  <Route path="/our-story" element={<OurStory />} />
+                  <Route path="/wholesale" element={<Wholesale />} />
+                  <Route path="/refer-friend" element={<ReferFriend />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
               </BrowserRouter>
