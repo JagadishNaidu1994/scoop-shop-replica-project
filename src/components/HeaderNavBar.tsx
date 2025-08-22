@@ -121,7 +121,7 @@ const HeaderNavBar = () => {
               <Link to="/science" className="text-black hover:text-gray-600 transition-colors font-medium">
                 SCIENCE
               </Link>
-              <Link to="/story" className="text-black hover:text-gray-600 transition-colors font-medium">
+              <Link to="/our-story" className="text-black hover:text-gray-600 transition-colors font-medium">
                 OUR STORY
               </Link>
               <Link to="/wholesale" className="text-black hover:text-gray-600 transition-colors font-medium">
@@ -250,7 +250,7 @@ const HeaderNavBar = () => {
                         SCIENCE
                       </Link>
                       
-                      <Link to="/story" className="block text-lg font-medium text-black hover:text-gray-600 border-b border-gray-200 pb-2">
+                      <Link to="/our-story" className="block text-lg font-medium text-black hover:text-gray-600 border-b border-gray-200 pb-2">
                         OUR STORY
                       </Link>
                       
