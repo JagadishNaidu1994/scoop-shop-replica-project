@@ -27,7 +27,7 @@ const AdminDashboard = () => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gray-100">
+      <div className="flex items-center justify-center min-h-screen">
         <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
       </div>
     );
@@ -75,13 +75,11 @@ const AdminDashboard = () => {
         {/* Header with Back to Site button */}
         <header className="bg-white shadow-sm border-b px-6 py-4">
           <div className="flex items-center justify-between">
-            <h1 className="text-2xl font-semibold text-gray-900">
-              Admin Dashboard - {activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}
-            </h1>
+            <h1 className="text-2xl font-semibold text-gray-900">Admin Dashboard</h1>
             <Button
               variant="outline"
               onClick={() => navigate('/')}
-              className="flex items-center gap-2 hover:bg-gray-50"
+              className="flex items-center gap-2"
             >
               <ArrowLeft className="h-4 w-4" />
               Back to Site
@@ -89,10 +87,8 @@ const AdminDashboard = () => {
           </div>
         </header>
         
-        <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-50 p-6">
-          <div className="max-w-full mx-auto">
-            {renderContent()}
-          </div>
+        <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-6">
+          {renderContent()}
         </main>
       </div>
     </div>
