@@ -16,6 +16,13 @@ import Contact from "./pages/Contact";
 import Checkout from "./pages/Checkout";
 import Account from "./pages/Account";
 import OrderDetail from "./pages/OrderDetail";
+import AdminDashboard from "./pages/AdminDashboard";
+import Auth from "./pages/Auth";
+import Journal from "./pages/Journal";
+import JournalDetail from "./pages/JournalDetail";
+import Blog from "./pages/Blog";
+import FAQ from "./pages/FAQ";
+import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
@@ -38,6 +45,14 @@ const App = () => (
                   <Route path="/checkout" element={<Checkout />} />
                   <Route path="/account" element={<Account />} />
                   <Route path="/orders/:id" element={<OrderDetail />} />
+                  <Route path="/admin" element={<AdminDashboard />} />
+                  <Route path="/admindashboard" element={<AdminDashboard />} />
+                  <Route path="/auth" element={<Auth />} />
+                  <Route path="/journal" element={<Journal />} />
+                  <Route path="/journal/:id" element={<JournalDetail />} />
+                  <Route path="/blog" element={<Blog />} />
+                  <Route path="/faq" element={<FAQ />} />
+                  <Route path="*" element={<NotFound />} />
                 </Routes>
               </BrowserRouter>
             </TooltipProvider>
