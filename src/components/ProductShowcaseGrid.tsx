@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
@@ -11,7 +10,7 @@ const ProductShowcaseGrid = () => {
       name: "NASTEA Coffee",
       description: "Arabica Beans Coffee with 100% Pure Lion's Mane Extract for Energy, Focus & Clarity",
       thumbnail: "/lovable-uploads/50613e1a-332e-4401-ad6b-f7849805d249.png",
-      mainImage: "/lovable-uploads/50613e1a-332e-4401-ad6b-f7849805d249.png"
+      mainImage: "/lovable-uploads/be44778f-fd8a-49f3-aef5-7422ebd30ed1.png"
     },
     {
       id: 1,
