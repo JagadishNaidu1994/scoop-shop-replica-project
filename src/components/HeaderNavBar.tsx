@@ -127,7 +127,7 @@ const HeaderNavBar = () => {
               <Link to="/wholesale" className="text-black hover:text-gray-600 transition-colors font-medium">
                 WHOLESALE
               </Link>
-              <Link to="/refer" className="text-black hover:text-gray-600 transition-colors font-medium">
+              <Link to="/refer-friend" className="text-black hover:text-gray-600 transition-colors font-medium">
                 REFER A FRIEND
               </Link>
             </nav>
@@ -258,7 +258,7 @@ const HeaderNavBar = () => {
                         WHOLESALE
                       </Link>
                       
-                      <Link to="/refer" className="block text-lg font-medium text-black hover:text-gray-600 border-b border-gray-200 pb-2">
+                      <Link to="/refer-friend" className="block text-lg font-medium text-black hover:text-gray-600 border-b border-gray-200 pb-2">
                         REFER A FRIEND
                       </Link>
                     </div>
