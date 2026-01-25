@@ -77,8 +77,7 @@ const TestimonialsCarousel = () => {
           {/* Left side - Title and Rating */}
           <div className="space-y-4 md:space-y-6 text-center lg:text-left">
             <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-black leading-tight">
-              Loved by one million<br />
-              people worldwide
+              Loved by thousands across India
             </h2>
             <div className="flex items-center justify-center lg:justify-start space-x-2">
               <div className="flex">
