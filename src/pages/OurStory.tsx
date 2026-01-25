@@ -40,12 +40,13 @@ const OurStory = () => {
                 Our mission
               </h2>
               <p className="text-lg text-gray-700 leading-relaxed">
-                We believe that tea is not just about eating, but the power of nature's most 
-                intelligent superfood. Functional mushrooms have been used for healing and 
-                wellness for centuries, worldwide. Our mission is to make these powerful 
-                adaptogens accessible to everyone, no matter where you are or how modern life 
-                affects you, creating effective daily rituals that help you think clearer, 
-                feel stronger, and live better, every day.
+                To deliver premium, organic matcha that energises, empowers, and elevates the everyday lives of a new generation. Through bold flavors, cheeky vibes, we're here to make a ritual that's as fun as it is healthy.
+                <br />
+                <br />
+                We're not here to "fix" you. We're here to upgrade your ritual. Matcha has been a daily staple for generations — steady energy, intentional pace, proper craft. We take that heritage, source it properly from Japan, and bring it into your world: busy mornings, big ambitions, and aesthetic iced lattes. Less crash. More control. Still a vibe.
+                <br />
+                <br />
+                We discovered the power of matcha and experienced a transformation in our energy, focus, and resilience.
               </p>
             </div>
             <div className="relative">
@@ -79,7 +80,7 @@ const OurStory = () => {
               <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Two brothers" className="w-full h-96 object-cover rounded-lg" />
               <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6 rounded-b-lg">
                 <p className="text-white text-sm leading-relaxed">
-                  Two brothers, with one goal: To redefine daily rituals with functional mushrooms.
+                  Three friends, one plan: upgrade your caffeine ritual without the crashy chaos.
                 </p>
               </div>
             </div>
@@ -88,7 +89,8 @@ const OurStory = () => {
               <img src="https://images.unsplash.com/photo-1544787219-7f47181a629a?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Ancient tea ceremony" className="w-full h-96 object-cover rounded-lg" />
               <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6 rounded-b-lg">
                 <p className="text-white text-sm leading-relaxed">
-                  Drawing inspiration from ancient ingredients all over the world.
+                  Inspired by Japan’s matcha heritage - delivered with NR personality.
+
                 </p>
               </div>
             </div>
@@ -97,8 +99,7 @@ const OurStory = () => {
               <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Mountain landscape" className="w-full h-96 object-cover rounded-lg" />
               <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6 rounded-b-lg">
                 <p className="text-white text-sm leading-relaxed">
-                  They visited mushroom growers and extractors all over the world.
-                </p>
+We went to the source (Kagoshima) to understand what separates real matcha from green imposters.                </p>
               </div>
             </div>
             
@@ -106,7 +107,8 @@ const OurStory = () => {
               <img src="https://images.unsplash.com/photo-1571115764595-644a1f56a55c?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Mushroom blend preparation" className="w-full h-96 object-cover rounded-lg" />
               <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6 rounded-b-lg">
                 <p className="text-white text-sm leading-relaxed">
-                  Their goal was to create the purest most potent functional mushroom blends ever.
+                  We chose single-origin, shade-grown, stone-milled matcha because quality is… kind of the point.
+
                 </p>
               </div>
             </div>
@@ -118,13 +120,11 @@ const OurStory = () => {
       <section className="py-20 px-4 bg-black text-white">
         <div className="max-w-5xl mx-auto text-center">
           <blockquote className="text-3xl lg:text-4xl font-light leading-relaxed italic mb-8">
-            "I discovered the adaptogenic power of functional mushrooms experientially. 
-            However, you've got nothing like potential energy, whether that's focus, 
-            balance, or long-term resilience. NASTEA delivers nature's most intelligent 
-            superfood in their easiest form."
+            “We started Nastea Rituals because we were tired of matcha that looked premium but drank mid. So we went back to the source in Japan, obsessed over quality, and built a matcha ritual that’s smooth, vibrant, and consistent enough for real daily life. NR is wellness with a personality - clean caffeine, zero boring, and a little main-character energy in every cup. Welcome to your new green flag.”
           </blockquote>
           <div className="text-xl text-gray-300">
-            - Simon, Founder
+            - Founders, Nastea Rituals
+
           </div>
         </div>
       </section>

@@ -19,18 +19,15 @@ const ImageTextSplitSection = () => {
           <div className="bg-white flex items-center">
             <div className="px-8 lg:px-16 py-12 space-y-6">
               <h2 className="text-4xl font-bold text-black leading-tight">
-                It takes science to be DIRTEA. Pure. Potent. Proven.
+                It takes obsession to be Nastea: Pure, Premium, No Boring.
               </h2>
               <p className="text-lg text-gray-600 leading-relaxed">
-                We're on a mission to make the world's most potent functional mushroom supplements. 
-                Every step of our process is backed by rigorous scientific research and testing. 
-                From sourcing the finest organic mushrooms to our proprietary extraction methods, 
-                we ensure maximum bioavailability and efficacy in every product.
+                From origin selection to milling and grading, we dial in matcha that looks iconic and tastes clean -no swampy bitterness, no dull colour, no surprises. Because your daily ritual shouldn’t depend on luck. It should hit the same every time.
+
+
               </p>
               <p className="text-lg text-gray-600 leading-relaxed">
-                Our commitment to transparency means every batch is third-party tested, 
-                fully traceable, and clinically studied. Because when it comes to your health, 
-                nothing less than the best will do.
+                Japan-grown matcha, crafted with traditional methods and chosen for modern rituals - smooth, balanced, and umami rich. Every scoop is made to perform whether you whisk it straight, pour it over ice, or put it on a café menu.
               </p>
             </div>
           </div>

@@ -2,7 +2,7 @@
 import React from 'react';
 import { Beaker, TestTube, Microscope } from 'lucide-react';
 
-const WhyDirteaSection = () => {
+const WhyNasteaSection = () => {
   const features = [
     {
       icon: <Beaker className="w-12 h-12 text-white" />,
@@ -50,4 +50,4 @@ const WhyDirteaSection = () => {
   );
 };
 
-export default WhyDirteaSection;
+export default WhyNasteaSection;

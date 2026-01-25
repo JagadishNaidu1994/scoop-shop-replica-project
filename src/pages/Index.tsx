@@ -4,8 +4,8 @@ import HeroSection from '@/components/HeroSection';
 import SubHeroBanner from '@/components/SubHeroBanner';
 import ProductShowcaseGrid from '@/components/ProductShowcaseGrid';
 import ResultsStats from '@/components/ResultsStats';
-import DirteaStandard from '@/components/DirteaStandard';
-import PressFeatures from '@/components/PressFeatures';
+import NasteaStandard from '@/components/NasteaStandard';
+// import PressFeatures from '@/components/PressFeatures';
 import TestimonialsCarousel from '@/components/TestimonialsCarousel';
 import JournalSection from '@/components/JournalSection';
 import FoundersSection from '@/components/FoundersSection';
@@ -32,8 +32,8 @@ const Index = () => {
         <SubHeroBanner />
         <ProductShowcaseGrid />
         <ResultsStats />
-        <DirteaStandard />
-        <PressFeatures />
+        <NasteaStandard />
+        {/* <PressFeatures /> */}
         <TestimonialsCarousel />
         <JournalSection />
         <FoundersSection />

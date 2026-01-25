@@ -12,9 +12,9 @@ const ResultsStats = () => {
     <section className="py-20 bg-white w-full">
       <div className="w-full px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-black mb-4">Rigorously developed for real results</h2>
+          <h2 className="text-4xl font-bold text-black mb-4">Research-backed energy. Personality-led vibes.</h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Clinical studies and customer feedback prove the effectiveness of our functional mushroom blends
+            Informed by science. Formulated by craft.
           </p>
         </div>
         

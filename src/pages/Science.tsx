@@ -4,7 +4,7 @@ import HeaderNavBar from '@/components/HeaderNavBar';
 import Footer from '@/components/Footer';
 import ScienceHeroBanner from '@/components/science/ScienceHeroBanner';
 import ImageTextSplitSection from '@/components/science/ImageTextSplitSection';
-import WhyDirteaSection from '@/components/science/WhyDirteaSection';
+import WhyNasteaSection from '@/components/science/WhyNasteaSection';
 import ScienceOfficerSection from '@/components/science/ScienceOfficerSection';
 import IngredientsPreviewSection from '@/components/science/IngredientsPreviewSection';
 import DictionaryCarousel from '@/components/science/DictionaryCarousel';
@@ -17,7 +17,7 @@ const Science = () => {
       <HeaderNavBar />
       <ScienceHeroBanner />
       <ImageTextSplitSection />
-      <WhyDirteaSection />
+      <WhyNasteaSection />
       <ScienceOfficerSection />
       <IngredientsPreviewSection />
       <DictionaryCarousel />

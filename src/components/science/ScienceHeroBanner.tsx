@@ -19,8 +19,7 @@ const ScienceHeroBanner = () => {
           <div className="text-center space-y-6">
             <h1 className="text-5xl font-bold text-black">Our science</h1>
             <p className="text-lg text-gray-600 max-w-md mx-auto">
-              Every batch tested, fully traceable, clinically studied mushrooms. 
-              Backed by science.
+              At Nastea Rituals, we’re not here to be another wellness brand. We’re here to set the matcha standard - clean, consistent, and barista-proof.
             </p>
           </div>
 
