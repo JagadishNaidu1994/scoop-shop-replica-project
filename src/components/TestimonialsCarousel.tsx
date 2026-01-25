@@ -1,0 +1,151 @@
+
+import React, { useState } from 'react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+
+const TestimonialsCarousel = () => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  
+  const testimonials = [
+    {
+      text: "Okay this is the first matcha I've had that doesn't taste like grass.",
+      author: "Verified Customer",
+      rating: 5
+    },
+    {
+      text: "Genuinely smooth - I didn't even need sugar.",
+      author: "Verified Customer",
+      rating: 5
+    },
+    {
+      text: "The colour is insane. Like… camera-ready green.",
+      author: "Verified Customer",
+      rating: 5
+    },
+    {
+      text: "Switched from coffee for weekday mornings and I'm not mad about it.",
+      author: "Verified Customer",
+      rating: 5
+    },
+    {
+      text: "Whisks fast, no weird clumps. Love that for me.",
+      author: "Verified Customer",
+      rating: 5
+    },
+    {
+      text: "Tastes premium without being 'too much'.",
+      author: "Verified Customer",
+      rating: 5
+    },
+    {
+      text: "My iced matcha actually tastes like the café one now.",
+      author: "Verified Customer",
+      rating: 5
+    },
+    {
+      text: "It's giving calm energy, not jitters.",
+      author: "Verified Customer",
+      rating: 5
+    },
+    {
+      text: "I bought it for the aesthetic, stayed for the taste.",
+      author: "Verified Customer",
+      rating: 5
+    },
+    {
+      text: "Not bitter, not sweet - just clean.",
+      author: "Verified Customer",
+      rating: 5
+    }
+  ];
+
+  const nextTestimonial = () => {
+    setCurrentIndex((prev) => (prev + 1) % testimonials.length);
+  };
+
+  const prevTestimonial = () => {
+    setCurrentIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length);
+  };
+
+  const goToSlide = (index: number) => {
+    setCurrentIndex(index);
+  };
+
+  return (
+    <section className="py-12 md:py-20 bg-gray-100 w-full">
+      <div className="w-full px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+          {/* Left side - Title and Rating */}
+          <div className="space-y-4 md:space-y-6 text-center lg:text-left">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-black leading-tight">
+              Loved by thousands across India
+            </h2>
+            <div className="flex items-center justify-center lg:justify-start space-x-2">
+              <div className="flex">
+                {[...Array(5)].map((_, i) => (
+                  <span key={i} className="text-black text-lg md:text-xl">★</span>
+                ))}
+              </div>
+              <span className="text-base md:text-lg font-medium text-black">4.8/5</span>
+            </div>
+          </div>
+
+          {/* Right side - Testimonials Carousel */}
+          <div className="relative w-full max-w-lg mx-auto">
+            <div className="overflow-hidden rounded-lg">
+              <div 
+                className="flex transition-transform duration-500 ease-in-out"
+                style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+              >
+                {testimonials.map((testimonial, index) => (
+                  <div key={index} className="w-full flex-shrink-0">
+                    <div className="p-4 md:p-8 space-y-4 md:space-y-6 bg-white rounded-lg shadow-sm mx-2">
+                      <blockquote className="text-sm md:text-lg text-gray-800 leading-relaxed">
+                        "{testimonial.text}"
+                      </blockquote>
+                      <div className="flex justify-center mb-2 md:mb-3">
+                        {[...Array(testimonial.rating)].map((_, i) => (
+                          <span key={i} className="text-black text-base md:text-lg">★</span>
+                        ))}
+                      </div>
+                      <p className="font-semibold text-gray-600 text-center text-sm md:text-base">{testimonial.author}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            
+            {/* Navigation buttons */}
+            <button
+              onClick={prevTestimonial}
+              className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 md:-translate-x-4 bg-white border border-gray-300 rounded-full p-2 hover:bg-gray-50 shadow-lg z-10"
+            >
+              <ChevronLeft className="w-4 h-4 md:w-5 md:h-5 text-gray-600" />
+            </button>
+            
+            <button
+              onClick={nextTestimonial}
+              className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 md:translate-x-4 bg-white border border-gray-300 rounded-full p-2 hover:bg-gray-50 shadow-lg z-10"
+            >
+              <ChevronRight className="w-4 h-4 md:w-5 md:h-5 text-gray-600" />
+            </button>
+            
+            {/* Pagination dots */}
+            <div className="flex justify-center space-x-2 mt-4 md:mt-6">
+              {testimonials.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => goToSlide(i)}
+                  className={`w-2 h-2 rounded-full transition-colors ${
+                    i === currentIndex ? 'bg-black' : 'bg-gray-300'
+                  }`}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default TestimonialsCarousel;
