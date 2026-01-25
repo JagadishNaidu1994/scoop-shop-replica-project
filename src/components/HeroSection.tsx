@@ -22,7 +22,7 @@ const HeroSection = () => {
           </h1>
           
           <p className="text-xl lg:text-2xl text-gray-600 max-w-xl leading-relaxed">
-            Premium functional mushroom and adaptogen blends crafted for modern wellness
+            Premium Japanese matcha crafted for modern wellness.
           </p>
           
           <div className="pt-6">
