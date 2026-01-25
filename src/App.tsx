@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -27,6 +26,12 @@ import Science from "./pages/Science";
 import OurStory from "./pages/OurStory";
 import Wholesale from "./pages/Wholesale";
 import ReferFriend from "./pages/ReferFriend";
+import TermsOfService from "./pages/TermsOfService";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import ReturnPolicy from "./pages/ReturnPolicy";
+import ResetPassword from "./pages/ResetPassword";
+import Install from "./pages/Install";
+import RecipeDetail from "./pages/RecipeDetail";
 
 const queryClient = new QueryClient();
 
@@ -45,6 +50,7 @@ const App = () => (
                   <Route path="/shop" element={<Shop />} />
                   <Route path="/products/:id" element={<ProductDetail />} />
                   <Route path="/recipes" element={<Recipes />} />
+                  <Route path="/recipes/:id" element={<RecipeDetail />} />
                   <Route path="/contact" element={<Contact />} />
                   <Route path="/checkout" element={<Checkout />} />
                   <Route path="/account" element={<Account />} />
@@ -61,6 +67,11 @@ const App = () => (
                   <Route path="/our-story" element={<OurStory />} />
                   <Route path="/wholesale" element={<Wholesale />} />
                   <Route path="/refer-friend" element={<ReferFriend />} />
+                  <Route path="/terms-of-service" element={<TermsOfService />} />
+                  <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                  <Route path="/return-policy" element={<ReturnPolicy />} />
+                  <Route path="/reset-password" element={<ResetPassword />} />
+                  <Route path="/install" element={<Install />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
               </BrowserRouter>
