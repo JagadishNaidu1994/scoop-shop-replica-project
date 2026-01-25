@@ -143,6 +143,36 @@ const Checkout = () => {
         }
 
         console.log('Order items created successfully');
+
+        // Send order confirmation email
+        try {
+          console.log('Sending order confirmation email...');
+          const emailResponse = await supabase.functions.invoke('send-order-confirmation', {
+            body: {
+              orderId: order.id,
+              customerEmail: user.email,
+              customerName: `${shippingAddress.firstName} ${shippingAddress.lastName}`,
+              orderNumber: order.order_number,
+              totalAmount: totalAmount,
+              shippingAddress: shippingAddress,
+              items: items.map(item => ({
+                product_name: item.product_name,
+                quantity: item.quantity,
+                product_price: item.product_price
+              }))
+            }
+          });
+
+          if (emailResponse.error) {
+            console.warn('Email sending warning:', emailResponse.error);
+            // Don't fail the order if email fails
+          } else {
+            console.log('Order confirmation email sent successfully');
+          }
+        } catch (emailError) {
+          console.warn('Failed to send confirmation email (non-critical):', emailError);
+          // Continue with order completion even if email fails
+        }
       }
 
       // Clear cart
@@ -150,7 +180,7 @@ const Checkout = () => {
 
       toast({
         title: "Order Placed Successfully!",
-        description: `Your order #${order.order_number.slice(-4).padStart(4, '0')} has been placed.`
+        description: `Your order #${order.order_number.slice(-4).padStart(4, '0')} has been placed. Check your email for confirmation.`
       });
 
       navigate(`/orders/${order.id}`);

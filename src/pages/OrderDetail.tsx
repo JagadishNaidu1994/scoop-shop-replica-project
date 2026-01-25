@@ -10,7 +10,8 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
-import { CheckCircle, Package, MapPin, CreditCard, ArrowLeft } from 'lucide-react';
+import { CheckCircle, Package, MapPin, CreditCard, ArrowLeft, FileText } from 'lucide-react';
+import { generateInvoice } from '@/utils/invoiceGenerator';
 
 interface OrderItem {
   id: string;
@@ -96,6 +97,33 @@ const OrderDetail = () => {
     }
   };
 
+  const handleDownloadInvoice = () => {
+    if (!order || !user) return;
+
+    const subtotal = order.total_amount - order.shipping_cost;
+
+    generateInvoice({
+      orderNumber: order.order_number,
+      orderDate: order.created_at,
+      customerName: `${order.shipping_address.firstName} ${order.shipping_address.lastName}`,
+      customerEmail: user.email || '',
+      shippingAddress: order.shipping_address,
+      items: order.order_items.map(item => ({
+        product_name: item.product_name,
+        quantity: item.quantity,
+        product_price: item.product_price
+      })),
+      subtotal: subtotal,
+      shippingCost: order.shipping_cost,
+      totalAmount: order.total_amount
+    });
+
+    toast({
+      title: "Invoice Downloaded",
+      description: "Your invoice has been downloaded successfully."
+    });
+  };
+
   if (loading) {
     return (
       <>
@@ -152,9 +180,19 @@ const OrderDetail = () => {
                 Order #{order.order_number.slice(-4).padStart(4, '0')} • Placed on {new Date(order.created_at).toLocaleDateString()}
               </p>
             </div>
-            <Badge className={getStatusColor(order.status)}>
-              {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
-            </Badge>
+            <div className="flex flex-col sm:flex-row gap-3 mt-4 sm:mt-0">
+              <Button
+                variant="outline"
+                onClick={handleDownloadInvoice}
+                className="flex items-center gap-2"
+              >
+                <FileText className="h-4 w-4" />
+                Download Invoice
+              </Button>
+              <Badge className={getStatusColor(order.status)}>
+                {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
+              </Badge>
+            </div>
           </div>
         </div>
 
