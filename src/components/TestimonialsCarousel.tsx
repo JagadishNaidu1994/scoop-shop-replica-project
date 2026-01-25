@@ -7,23 +7,53 @@ const TestimonialsCarousel = () => {
   
   const testimonials = [
     {
-      text: "I love this product so much I've gifted a starter kit to two of my friends! I'm going to order...",
-      author: "Tracey S.",
+      text: "Okay this is the first matcha I've had that doesn't taste like grass.",
+      author: "Verified Customer",
       rating: 5
     },
     {
-      text: "DIRTEA has completely transformed my morning routine. I feel focused and energized without the jitters.",
-      author: "Sarah M.",
+      text: "Genuinely smooth - I didn't even need sugar.",
+      author: "Verified Customer",
       rating: 5
     },
     {
-      text: "The Lion's Mane blend has improved my mental clarity significantly. I can't start my day without it!",
-      author: "Michael R.",
+      text: "The colour is insane. Like… camera-ready green.",
+      author: "Verified Customer",
       rating: 5
     },
     {
-      text: "Amazing quality and taste. The Reishi blend helps me unwind perfectly after stressful days.",
-      author: "Emma L.",
+      text: "Switched from coffee for weekday mornings and I'm not mad about it.",
+      author: "Verified Customer",
+      rating: 5
+    },
+    {
+      text: "Whisks fast, no weird clumps. Love that for me.",
+      author: "Verified Customer",
+      rating: 5
+    },
+    {
+      text: "Tastes premium without being 'too much'.",
+      author: "Verified Customer",
+      rating: 5
+    },
+    {
+      text: "My iced matcha actually tastes like the café one now.",
+      author: "Verified Customer",
+      rating: 5
+    },
+    {
+      text: "It's giving calm energy, not jitters.",
+      author: "Verified Customer",
+      rating: 5
+    },
+    {
+      text: "I bought it for the aesthetic, stayed for the taste.",
+      author: "Verified Customer",
+      rating: 5
+    },
+    {
+      text: "Not bitter, not sweet - just clean.",
+      author: "Verified Customer",
       rating: 5
     }
   ];
