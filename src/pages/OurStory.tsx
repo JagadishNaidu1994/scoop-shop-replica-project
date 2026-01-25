@@ -135,17 +135,13 @@ We went to the source (Kagoshima) to understand what separates real matcha from 
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <div className="space-y-6">
               <h2 className="text-4xl lg:text-5xl font-light text-black">
-                Health, Rooted in Nature
+Wellness, Rooted in Ritual
               </h2>
               <p className="text-lg text-gray-700 leading-relaxed">
-                Our functional mushroom blends are carefully crafted using the finest organic 
-                ingredients. Each blend is designed to support specific wellness goals, from 
-                cognitive function to immune support and stress management.
+                The best habits aren’t forced - they’re repeated. Matcha has been a daily ritual for centuries, and when it’s done right, it’s the simplest upgrade: clean energy, calm focus, zero drama.
+
               </p>
-              <p className="text-lg text-gray-700 leading-relaxed">
-                We source our mushrooms from trusted growers who share our commitment to quality 
-                and sustainability, ensuring every cup delivers maximum potency and purity.
-              </p>
+              
             </div>
             <div className="relative">
               <AdminImageUpload
@@ -168,17 +164,13 @@ We went to the source (Kagoshima) to understand what separates real matcha from 
             </div>
             <div className="space-y-6 order-1 lg:order-2">
               <h2 className="text-4xl lg:text-5xl font-light text-black">
-                Centuries of Wisdom, Designed for Today
+Japanese Craft, Made for Today
               </h2>
               <p className="text-lg text-gray-700 leading-relaxed">
-                Traditional Chinese Medicine and Ayurvedic practices have utilized functional 
-                mushrooms for thousands of years. We honor this ancient wisdom while applying 
-                modern science to create products that fit seamlessly into contemporary lifestyles.
+                Matcha comes from a deep tradition of patience and precision - shade-grown leaves, careful harvests, and slow stone-milling. We keep the craft intact, then bring it into modern life with premium standards and a little personality.
+
               </p>
-              <p className="text-lg text-gray-700 leading-relaxed">
-                Our research-backed formulations ensure optimal bioavailability and efficacy, 
-                making these time-tested remedies accessible for modern wellness routines.
-              </p>
+              
             </div>
           </div>
         </div>
@@ -188,7 +180,7 @@ We went to the source (Kagoshima) to understand what separates real matcha from 
       <section className="py-20 px-4 bg-white">
         <div className="max-w-7xl mx-auto">
           <h2 className="text-4xl lg:text-5xl font-light text-black text-center mb-16">
-            Fuel Your Mind & Body
+Pure Leaf, Loud Standards
           </h2>
           <div className="grid md:grid-cols-3 gap-8">
             <div className="text-center group">
@@ -219,9 +211,8 @@ We went to the source (Kagoshima) to understand what separates real matcha from 
                 Commitment to Quality & Manufacturing
               </h2>
               <p className="text-lg text-gray-700 leading-relaxed">
-                Quality isn't just a promise - it's our foundation. Every batch is third-party 
-                tested for purity, potency, and safety. We work exclusively with certified 
-                organic suppliers and maintain the highest manufacturing standards.
+                We don’t do fillers, flavour tricks, or “green powder” cosplay. Just Japan-grown matcha selected for the things that matter in a cup: smooth taste, vivid colour, and consistency you can trust.
+
               </p>
               <ul className="space-y-3 text-lg text-gray-700">
                 <li className="flex items-center">

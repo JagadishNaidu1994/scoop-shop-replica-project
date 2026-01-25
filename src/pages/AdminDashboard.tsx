@@ -9,6 +9,7 @@ import OrdersTab from "@/components/admin/OrdersTab";
 import UsersTab from "@/components/admin/UsersTab";
 import ReviewsTab from "@/components/admin/ReviewsTab";
 import ContactSubmissionsTab from "@/components/admin/ContactSubmissionsTab";
+import EnquiriesTab from "@/components/admin/EnquiriesTab";
 import ShippingTab from "@/components/admin/ShippingTab";
 import AnalyticsTab from "@/components/admin/AnalyticsTab";
 import CLVAnalyticsTab from "@/components/admin/CLVAnalyticsTab";
@@ -57,6 +58,8 @@ const AdminDashboard = () => {
         return <ReviewsTab />;
       case "contact":
         return <ContactSubmissionsTab />;
+      case "enquiries":
+        return <EnquiriesTab />;
       case "shipping":
         return <ShippingTab />;
       case "analytics":

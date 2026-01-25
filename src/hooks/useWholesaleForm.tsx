@@ -6,6 +6,7 @@ import { useToast } from '@/hooks/use-toast';
 interface WholesaleFormData {
   name: string;
   email: string;
+  phone: string;
   businessType: string;
   message: string;
 }

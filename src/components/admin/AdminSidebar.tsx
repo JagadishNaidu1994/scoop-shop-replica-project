@@ -1,18 +1,19 @@
 
 import React from "react";
-import { 
-  Home, 
-  Package, 
-  Users, 
-  ShoppingCart, 
-  MessageSquare, 
-  Star, 
+import {
+  Home,
+  Package,
+  Users,
+  ShoppingCart,
+  MessageSquare,
+  Star,
   Truck,
   BarChart3,
   TrendingUp,
   Tag,
   BookOpen,
-  ChefHat
+  ChefHat,
+  Mail
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -32,6 +33,7 @@ export const AdminSidebar = ({ activeTab, onTabChange }: AdminSidebarProps) => {
     { id: "coupons", label: "Coupons", icon: Tag },
     { id: "reviews", label: "Reviews", icon: Star },
     { id: "contact", label: "Contact", icon: MessageSquare },
+    { id: "enquiries", label: "Enquiries", icon: Mail },
     { id: "shipping", label: "Shipping", icon: Truck },
     { id: "analytics", label: "Analytics", icon: BarChart3 },
     { id: "clv", label: "CLV Analytics", icon: TrendingUp },
