@@ -24,7 +24,7 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({
     { id: 'wishlist', label: 'Wishlist', icon: Heart },
     { id: 'addresses', label: 'Addresses', icon: MapPin },
     { id: 'payments', label: 'Payments', icon: CreditCard },
-    { id: 'rewards', label: 'Rewards', icon: Gift },
+    // { id: 'rewards', label: 'Rewards', icon: Gift }, // Hidden for now
     { id: 'preferences', label: 'Preferences', icon: Settings },
   ];
 

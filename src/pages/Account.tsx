@@ -791,27 +791,28 @@ const Account = () => {
                   <button
                     onClick={() => setActiveTab('payments')}
                     className={`w-full flex items-center gap-3 px-3 py-2 rounded-xl text-left transition-colors ${
-                      activeTab === 'payments' 
-                        ? 'bg-gray-100 text-gray-900 font-medium' 
+                      activeTab === 'payments'
+                        ? 'bg-gray-100 text-gray-900 font-medium'
                         : 'text-gray-600 hover:bg-gray-50'
                     }`}
                   >
                     <CreditCard className="h-5 w-5" />
                     Payments
                   </button>
-                  
-                  <button
+
+                  {/* Rewards section - hidden for now */}
+                  {/* <button
                     onClick={() => setActiveTab('rewards')}
                     className={`w-full flex items-center gap-3 px-3 py-2 rounded-xl text-left transition-colors ${
-                      activeTab === 'rewards' 
-                        ? 'bg-gray-100 text-gray-900 font-medium' 
+                      activeTab === 'rewards'
+                        ? 'bg-gray-100 text-gray-900 font-medium'
                         : 'text-gray-600 hover:bg-gray-50'
                     }`}
                   >
                     <Gift className="h-5 w-5" />
                     Rewards
-                  </button>
-                  
+                  </button> */}
+
                   <button
                     onClick={() => setActiveTab('preferences')}
                     className={`w-full flex items-center gap-3 px-3 py-2 rounded-xl text-left transition-colors ${
@@ -1301,8 +1302,8 @@ const Account = () => {
               </Card>
             )}
 
-            {/* Rewards Section */}
-            {activeTab === 'rewards' && (
+            {/* Rewards Section - Hidden for now */}
+            {/* {activeTab === 'rewards' && (
               <Card className="border border-gray-200 bg-white rounded-2xl shadow-sm">
                 <CardHeader>
                   <CardTitle className="text-xl text-gray-900 flex items-center gap-2">
@@ -1311,7 +1312,6 @@ const Account = () => {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-6">
-                  {/* Rewards Balance */}
                   <div className="bg-gradient-to-r from-yellow-50 to-orange-50 rounded-2xl p-6">
                     <div className="flex items-center justify-between">
                       <div>
@@ -1325,7 +1325,6 @@ const Account = () => {
                     </div>
                   </div>
 
-                  {/* Earning Ways */}
                   <div>
                     <h4 className="font-semibold text-gray-900 mb-4">Earn More Points</h4>
                     <div className="grid gap-4">
@@ -1339,7 +1338,7 @@ const Account = () => {
                         </div>
                         <div className="text-green-600 font-semibold">+1 pt/₹10</div>
                       </div>
-                      
+
                       <div className="flex items-center gap-4 p-4 border border-gray-200 rounded-xl">
                         <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
                           <Heart className="h-6 w-6 text-blue-600" />
@@ -1350,7 +1349,7 @@ const Account = () => {
                         </div>
                         <div className="text-blue-600 font-semibold">+50 pts</div>
                       </div>
-                      
+
                       <div className="flex items-center gap-4 p-4 border border-gray-200 rounded-xl">
                         <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
                           <Gift className="h-6 w-6 text-purple-600" />
@@ -1364,7 +1363,6 @@ const Account = () => {
                     </div>
                   </div>
 
-                  {/* Recent Activity */}
                   <div>
                     <h4 className="font-semibold text-gray-900 mb-4">Recent Activity</h4>
                     <div className="space-y-3">
@@ -1393,7 +1391,7 @@ const Account = () => {
                   </div>
                 </CardContent>
               </Card>
-            )}
+            )} */}
 
             {/* Other tabs with placeholder content */}
             {activeTab === 'subscriptions' && (
