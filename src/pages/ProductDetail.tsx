@@ -151,16 +151,29 @@ const ProductDetail = () => {
   };
   const handleAddToCart = () => {
     if (!product) return;
+
+    // Map subscription frequency text to database format
+    const frequencyMap: { [key: string]: string } = {
+      'Every 4 weeks (Bestseller)': 'monthly',
+      'Every 4 weeks': 'monthly',
+      'Every 6 weeks': 'biweekly',
+      'Every 8 weeks': 'quarterly'
+    };
+
     addToCart({
       product_id: product.id,
       product_name: product.name,
       product_price: subscriptionType === 'subscribe' ? product.price * 0.8 : product.price,
       quantity: quantity,
-      product_image: product.primary_image
+      product_image: product.primary_image,
+      is_subscription: subscriptionType === 'subscribe',
+      subscription_frequency: subscriptionType === 'subscribe' ? frequencyMap[subscriptionFrequency] || 'monthly' : undefined
     });
     toast({
-      title: "Added to cart!",
-      description: `${quantity}x ${product.name} added to your cart.`
+      title: subscriptionType === 'subscribe' ? "Subscription added to cart!" : "Added to cart!",
+      description: subscriptionType === 'subscribe'
+        ? `${quantity}x ${product.name} subscription (${subscriptionFrequency}) added to your cart with 20% discount.`
+        : `${quantity}x ${product.name} added to your cart.`
     });
   };
   const handleWishlist = () => {

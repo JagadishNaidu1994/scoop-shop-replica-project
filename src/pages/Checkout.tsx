@@ -14,7 +14,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { CreditCard, MapPin, User, Phone, Mail, Plus } from 'lucide-react';
+import { CreditCard, MapPin, User, Phone, Mail, Plus, RefreshCw } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
 import { indianStatesAndCities } from '@/data/indianStatesAndCities';
 
 interface ShippingAddress {
@@ -202,7 +203,8 @@ const Checkout = () => {
       const subscriptionItem = items.find(item => item.is_subscription);
 
       // Create order - using proper type casting for JSON fields
-      const orderData = {
+      // Note: is_subscription and subscription_frequency fields will be added after migration
+      const orderData: any = {
         user_id: user.id,
         order_number: orderNumber,
         total_amount: totalAmount,
@@ -210,10 +212,14 @@ const Checkout = () => {
         status: 'pending',
         payment_method: 'card',
         shipping_address: shippingAddress as any,
-        billing_address: shippingAddress as any,
-        is_subscription: hasSubscription,
-        subscription_frequency: subscriptionItem?.subscription_frequency || null
+        billing_address: shippingAddress as any
       };
+
+      // Only add subscription fields if they exist (after migration is applied)
+      if (hasSubscription) {
+        orderData.is_subscription = true;
+        orderData.subscription_frequency = subscriptionItem?.subscription_frequency || 'monthly';
+      }
 
       const { data: order, error: orderError } = await supabase
         .from('orders')
@@ -561,8 +567,22 @@ const Checkout = () => {
                         />
                       </div>
                       <div className="flex-1">
-                        <h4 className="font-medium text-sm">{item.product_name}</h4>
-                        <p className="text-sm text-gray-600">Qty: {item.quantity}</p>
+                        <div className="flex items-center gap-2">
+                          <h4 className="font-medium text-sm">{item.product_name}</h4>
+                          {item.is_subscription && (
+                            <Badge className="bg-purple-100 text-purple-800 rounded-full text-xs px-1.5 py-0 flex items-center gap-0.5">
+                              <RefreshCw className="h-2.5 w-2.5" />
+                              <span className="text-[10px]">Sub</span>
+                            </Badge>
+                          )}
+                        </div>
+                        <p className="text-sm text-gray-600">
+                          Qty: {item.quantity}
+                          {item.is_subscription && <span className="text-green-600 ml-1">(20% off)</span>}
+                        </p>
+                        {item.is_subscription && item.subscription_frequency && (
+                          <p className="text-xs text-purple-600 capitalize">{item.subscription_frequency}</p>
+                        )}
                       </div>
                       <div className="text-right">
                         <p className="font-medium">₹{(item.product_price * item.quantity).toFixed(2)}</p>

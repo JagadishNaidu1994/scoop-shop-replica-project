@@ -1,8 +1,9 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ShoppingCart, Plus, Minus, X } from 'lucide-react';
+import { ShoppingCart, Plus, Minus, X, RefreshCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import { useCart } from '@/contexts/CartContext';
 
 const CartDropdown = () => {
@@ -39,8 +40,22 @@ const CartDropdown = () => {
               className="w-12 h-12 sm:w-16 sm:h-16 object-cover rounded flex-shrink-0"
             />
             <div className="flex-1 min-w-0">
-              <h4 className="font-medium text-xs sm:text-sm truncate">{item.product_name}</h4>
-              <p className="text-gray-600 text-xs sm:text-sm">₹{item.product_price}</p>
+              <div className="flex items-center gap-2 mb-1">
+                <h4 className="font-medium text-xs sm:text-sm truncate">{item.product_name}</h4>
+                {item.is_subscription && (
+                  <Badge className="bg-purple-100 text-purple-800 rounded-full text-xs px-1.5 py-0 flex items-center gap-0.5 flex-shrink-0">
+                    <RefreshCw className="h-2.5 w-2.5" />
+                    <span className="text-[10px]">Sub</span>
+                  </Badge>
+                )}
+              </div>
+              <p className="text-gray-600 text-xs sm:text-sm">
+                ₹{item.product_price}
+                {item.is_subscription && <span className="text-green-600 ml-1">(20% off)</span>}
+              </p>
+              {item.is_subscription && item.subscription_frequency && (
+                <p className="text-xs text-purple-600 capitalize">{item.subscription_frequency}</p>
+              )}
               <div className="flex items-center space-x-2 mt-2">
                 <button
                   onClick={() => updateQuantity(item.id, item.quantity - 1)}
