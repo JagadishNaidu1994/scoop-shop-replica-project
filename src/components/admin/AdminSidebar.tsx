@@ -42,30 +42,77 @@ export const AdminSidebar = ({ activeTab, onTabChange }: AdminSidebarProps) => {
   ];
 
   return (
-    <div className="w-64 bg-white shadow-lg">
-      <div className="p-6 border-b">
-        <h1 className="text-2xl font-bold text-gray-800">Admin Panel</h1>
+    <div className="w-72 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 shadow-2xl">
+      {/* Logo Section */}
+      <div className="p-8 border-b border-slate-700/50">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center shadow-lg">
+            <span className="text-white font-bold text-lg">N</span>
+          </div>
+          <div>
+            <h1 className="text-xl font-bold text-white">NASTEA</h1>
+            <p className="text-xs text-slate-400">Admin Dashboard</p>
+          </div>
+        </div>
       </div>
-      <nav className="mt-6">
+
+      {/* Navigation */}
+      <nav className="mt-6 px-4 space-y-2">
         {menuItems.map((item) => {
           const Icon = item.icon;
+          const isActive = activeTab === item.id;
+
           return (
             <button
               key={item.id}
               onClick={() => onTabChange(item.id)}
               className={cn(
-                "w-full flex items-center px-6 py-3 text-left hover:bg-gray-50 transition-colors",
-                activeTab === item.id
-                  ? "bg-blue-50 border-r-2 border-blue-500 text-blue-600"
-                  : "text-gray-600"
+                "w-full flex items-center px-4 py-3.5 text-left rounded-2xl transition-all duration-300 group relative overflow-hidden",
+                isActive
+                  ? "bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg shadow-blue-500/30 scale-[1.02]"
+                  : "text-slate-300 hover:bg-slate-800/50 hover:text-white"
               )}
             >
-              <Icon className="h-5 w-5 mr-3" />
-              {item.label}
+              {/* Glow effect on hover */}
+              <div className={cn(
+                "absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity",
+                !isActive && "bg-gradient-to-r from-blue-500/10 to-purple-600/10"
+              )} />
+
+              {/* Icon */}
+              <div className={cn(
+                "relative z-10 w-10 h-10 rounded-xl flex items-center justify-center transition-all",
+                isActive
+                  ? "bg-white/20"
+                  : "bg-slate-700/50 group-hover:bg-slate-700"
+              )}>
+                <Icon className="h-5 w-5" />
+              </div>
+
+              {/* Label */}
+              <span className="relative z-10 ml-4 font-medium">
+                {item.label}
+              </span>
+
+              {/* Active indicator */}
+              {isActive && (
+                <div className="absolute right-4 w-2 h-2 rounded-full bg-white animate-pulse" />
+              )}
             </button>
           );
         })}
       </nav>
+
+      {/* Bottom Section */}
+      <div className="absolute bottom-0 left-0 right-0 p-6">
+        <div className="bg-gradient-to-r from-blue-500/10 to-purple-600/10 rounded-2xl p-4 border border-slate-700/50">
+          <p className="text-xs text-slate-400 mb-1">System Status</p>
+          <div className="flex items-center gap-2">
+            <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+            <span className="text-sm text-white font-medium">All Systems Operational</span>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

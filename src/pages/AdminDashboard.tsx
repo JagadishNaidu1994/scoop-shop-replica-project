@@ -75,25 +75,30 @@ const AdminDashboard = () => {
   };
 
   return (
-    <div className="flex h-screen bg-gray-100">
+    <div className="flex h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50">
       <AdminSidebar activeTab={activeTab} onTabChange={setActiveTab} />
       <div className="flex-1 flex flex-col overflow-hidden">
-        {/* Header with Back to Site button */}
-        <header className="bg-white shadow-sm border-b px-6 py-4">
+        {/* Modern Header */}
+        <header className="bg-white/80 backdrop-blur-xl border-b border-slate-200/50 px-8 py-6 shadow-sm">
           <div className="flex items-center justify-between">
-            <h1 className="text-2xl font-semibold text-gray-900">Admin Dashboard</h1>
+            <div>
+              <h1 className="text-3xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">
+                {activeTab.charAt(0).toUpperCase() + activeTab.slice(1).replace('-', ' ')}
+              </h1>
+              <p className="text-sm text-slate-500 mt-1">Manage your {activeTab} efficiently</p>
+            </div>
             <Button
-              variant="outline"
               onClick={() => navigate('/')}
-              className="flex items-center gap-2"
+              className="flex items-center gap-2 bg-gradient-to-r from-slate-900 to-slate-700 hover:from-slate-800 hover:to-slate-600 text-white rounded-2xl shadow-lg shadow-slate-900/20 px-6 py-3 transition-all duration-300 hover:scale-105"
             >
               <ArrowLeft className="h-4 w-4" />
               Back to Site
             </Button>
           </div>
         </header>
-        
-        <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-6">
+
+        {/* Main Content with padding and rounded corners */}
+        <main className="flex-1 overflow-x-hidden overflow-y-auto p-8">
           {renderContent()}
         </main>
       </div>

@@ -212,13 +212,13 @@ const SubscriptionsTab = () => {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'active':
-        return <Badge className="bg-green-100 text-green-800">Active</Badge>;
+        return <Badge className="bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-xl px-3 py-1 shadow-sm">Active</Badge>;
       case 'paused':
-        return <Badge className="bg-yellow-100 text-yellow-800">Paused</Badge>;
+        return <Badge className="bg-gradient-to-r from-yellow-500 to-amber-600 text-white rounded-xl px-3 py-1 shadow-sm">Paused</Badge>;
       case 'cancelled':
-        return <Badge className="bg-red-100 text-red-800">Cancelled</Badge>;
+        return <Badge className="bg-gradient-to-r from-red-500 to-rose-600 text-white rounded-xl px-3 py-1 shadow-sm">Cancelled</Badge>;
       default:
-        return <Badge className="bg-gray-100 text-gray-800">{status}</Badge>;
+        return <Badge className="bg-gradient-to-r from-slate-500 to-slate-700 text-white rounded-xl px-3 py-1 shadow-sm">{status}</Badge>;
     }
   };
 
@@ -241,132 +241,192 @@ const SubscriptionsTab = () => {
 
   return (
     <div className="space-y-6">
-      {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-gray-600">Total Subscriptions</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{stats.total}</div>
+      {/* Modern Stats Cards with Gradients */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        {/* Total Subscriptions */}
+        <Card className="border-none shadow-xl bg-gradient-to-br from-slate-50 to-slate-100 rounded-3xl overflow-hidden group hover:shadow-2xl transition-all duration-300">
+          <CardContent className="p-6">
+            <div className="flex items-start justify-between">
+              <div className="flex-1">
+                <p className="text-sm font-medium text-slate-600 mb-2">Total Subscriptions</p>
+                <p className="text-4xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">{stats.total}</p>
+              </div>
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-slate-500 to-slate-700 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                <RefreshCw className="h-6 w-6 text-white" />
+              </div>
+            </div>
           </CardContent>
         </Card>
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-gray-600">Active</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-green-600">{stats.active}</div>
+
+        {/* Active */}
+        <Card className="border-none shadow-xl bg-gradient-to-br from-green-50 to-emerald-100 rounded-3xl overflow-hidden group hover:shadow-2xl transition-all duration-300">
+          <CardContent className="p-6">
+            <div className="flex items-start justify-between">
+              <div className="flex-1">
+                <p className="text-sm font-medium text-green-700 mb-2">Active</p>
+                <p className="text-4xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">{stats.active}</p>
+              </div>
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                <Package className="h-6 w-6 text-white" />
+              </div>
+            </div>
           </CardContent>
         </Card>
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-gray-600">Paused</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-yellow-600">{stats.paused}</div>
+
+        {/* Paused */}
+        <Card className="border-none shadow-xl bg-gradient-to-br from-yellow-50 to-amber-100 rounded-3xl overflow-hidden group hover:shadow-2xl transition-all duration-300">
+          <CardContent className="p-6">
+            <div className="flex items-start justify-between">
+              <div className="flex-1">
+                <p className="text-sm font-medium text-yellow-700 mb-2">Paused</p>
+                <p className="text-4xl font-bold bg-gradient-to-r from-yellow-600 to-amber-600 bg-clip-text text-transparent">{stats.paused}</p>
+              </div>
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-yellow-500 to-amber-600 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                <Calendar className="h-6 w-6 text-white" />
+              </div>
+            </div>
           </CardContent>
         </Card>
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-gray-600">Cancelled</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-red-600">{stats.cancelled}</div>
+
+        {/* Cancelled */}
+        <Card className="border-none shadow-xl bg-gradient-to-br from-red-50 to-rose-100 rounded-3xl overflow-hidden group hover:shadow-2xl transition-all duration-300">
+          <CardContent className="p-6">
+            <div className="flex items-start justify-between">
+              <div className="flex-1">
+                <p className="text-sm font-medium text-red-700 mb-2">Cancelled</p>
+                <p className="text-4xl font-bold bg-gradient-to-r from-red-600 to-rose-600 bg-clip-text text-transparent">{stats.cancelled}</p>
+              </div>
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-red-500 to-rose-600 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                <User className="h-6 w-6 text-white" />
+              </div>
+            </div>
           </CardContent>
         </Card>
       </div>
 
-      {/* Filters and Actions */}
-      <Card>
-        <CardHeader>
+      {/* Modern Filters and Actions Card */}
+      <Card className="border-none shadow-xl rounded-3xl bg-white/80 backdrop-blur-xl">
+        <CardHeader className="border-b border-slate-100 pb-6">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-            <CardTitle>Subscriptions Management</CardTitle>
-            <div className="flex gap-2">
-              <Button onClick={fetchSubscriptions} variant="outline" size="sm">
+            <div>
+              <CardTitle className="text-2xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">
+                Subscriptions Management
+              </CardTitle>
+              <p className="text-sm text-slate-500 mt-1">Monitor and manage all subscription orders</p>
+            </div>
+            <div className="flex gap-3">
+              <Button
+                onClick={fetchSubscriptions}
+                variant="outline"
+                size="sm"
+                className="rounded-2xl border-slate-200 hover:bg-slate-50 transition-all duration-300"
+              >
                 <RefreshCw className="h-4 w-4 mr-2" />
                 Refresh
               </Button>
-              <Button onClick={exportToCSV} size="sm">
+              <Button
+                onClick={exportToCSV}
+                size="sm"
+                className="rounded-2xl bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 shadow-lg shadow-blue-500/30 transition-all duration-300 hover:scale-105"
+              >
                 <Download className="h-4 w-4 mr-2" />
                 Export CSV
               </Button>
             </div>
           </div>
         </CardHeader>
-        <CardContent>
-          <div className="flex flex-col sm:flex-row gap-4 mb-6">
+        <CardContent className="pt-6">
+          <div className="flex flex-col sm:flex-row gap-4 mb-8">
             <div className="flex-1">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <div className="relative group">
+                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-slate-400 group-hover:text-blue-500 transition-colors" />
                 <Input
                   placeholder="Search by order number, customer name, or email..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10"
+                  className="pl-12 pr-4 py-6 rounded-2xl border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all bg-slate-50 hover:bg-white"
                 />
               </div>
             </div>
             <Select value={statusFilter} onValueChange={setStatusFilter}>
-              <SelectTrigger className="w-full sm:w-48">
+              <SelectTrigger className="w-full sm:w-56 py-6 rounded-2xl border-slate-200 bg-slate-50 hover:bg-white transition-all">
                 <SelectValue placeholder="Filter by status" />
               </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Status</SelectItem>
-                <SelectItem value="active">Active</SelectItem>
-                <SelectItem value="paused">Paused</SelectItem>
-                <SelectItem value="cancelled">Cancelled</SelectItem>
+              <SelectContent className="rounded-2xl">
+                <SelectItem value="all" className="rounded-xl">All Status</SelectItem>
+                <SelectItem value="active" className="rounded-xl">Active</SelectItem>
+                <SelectItem value="paused" className="rounded-xl">Paused</SelectItem>
+                <SelectItem value="cancelled" className="rounded-xl">Cancelled</SelectItem>
               </SelectContent>
             </Select>
           </div>
 
-          {/* Table */}
-          <div className="border rounded-lg">
+          {/* Modern Table */}
+          <div className="border border-slate-200 rounded-3xl overflow-hidden bg-white shadow-sm">
             <Table>
               <TableHeader>
-                <TableRow>
-                  <TableHead>Order #</TableHead>
-                  <TableHead>Customer</TableHead>
-                  <TableHead>Frequency</TableHead>
-                  <TableHead>Amount</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Created</TableHead>
-                  <TableHead>Next Delivery</TableHead>
+                <TableRow className="bg-gradient-to-r from-slate-50 to-slate-100 hover:from-slate-100 hover:to-slate-150 border-b-2 border-slate-200">
+                  <TableHead className="font-bold text-slate-700 py-4">Order #</TableHead>
+                  <TableHead className="font-bold text-slate-700">Customer</TableHead>
+                  <TableHead className="font-bold text-slate-700">Frequency</TableHead>
+                  <TableHead className="font-bold text-slate-700">Amount</TableHead>
+                  <TableHead className="font-bold text-slate-700">Status</TableHead>
+                  <TableHead className="font-bold text-slate-700">Created</TableHead>
+                  <TableHead className="font-bold text-slate-700">Next Delivery</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {filteredSubscriptions.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={7} className="text-center text-gray-500 py-8">
-                      No subscriptions found
+                    <TableCell colSpan={7} className="text-center text-slate-500 py-12">
+                      <div className="flex flex-col items-center gap-3">
+                        <Package className="h-12 w-12 text-slate-300" />
+                        <p className="font-medium">No subscriptions found</p>
+                      </div>
                     </TableCell>
                   </TableRow>
                 ) : (
-                  filteredSubscriptions.map((sub) => (
-                    <TableRow key={sub.id}>
-                      <TableCell className="font-medium">
-                        #{sub.order_number.slice(-4).padStart(4, '0')}
+                  filteredSubscriptions.map((sub, index) => (
+                    <TableRow
+                      key={sub.id}
+                      className={`hover:bg-slate-50 transition-colors ${
+                        index !== filteredSubscriptions.length - 1 ? 'border-b border-slate-100' : ''
+                      }`}
+                    >
+                      <TableCell className="font-bold text-slate-900 py-4">
+                        <div className="flex items-center gap-2">
+                          <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+                            <span className="text-xs font-bold text-white">
+                              {sub.order_number.slice(-2)}
+                            </span>
+                          </div>
+                          #{sub.order_number.slice(-4).padStart(4, '0')}
+                        </div>
                       </TableCell>
                       <TableCell>
                         <div>
-                          <div className="font-medium">{sub.user_name}</div>
-                          <div className="text-sm text-gray-500">{sub.user_email}</div>
+                          <div className="font-semibold text-slate-900">{sub.user_name}</div>
+                          <div className="text-sm text-slate-500">{sub.user_email}</div>
                         </div>
                       </TableCell>
-                      <TableCell className="capitalize">{sub.subscription_frequency}</TableCell>
-                      <TableCell>₹{sub.total_amount.toFixed(2)}</TableCell>
-                      <TableCell>{getStatusBadge(sub.subscription_status)}</TableCell>
                       <TableCell>
+                        <Badge className="capitalize bg-slate-100 text-slate-700 hover:bg-slate-200 rounded-xl px-3 py-1">
+                          {sub.subscription_frequency}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="font-bold text-slate-900">₹{sub.total_amount.toFixed(2)}</TableCell>
+                      <TableCell>{getStatusBadge(sub.subscription_status)}</TableCell>
+                      <TableCell className="text-slate-600">
                         {new Date(sub.created_at).toLocaleDateString()}
                       </TableCell>
                       <TableCell>
                         {sub.next_delivery_date ? (
-                          <div className="flex items-center gap-1 text-sm">
-                            <Calendar className="h-3 w-3" />
+                          <div className="flex items-center gap-2 text-sm bg-blue-50 text-blue-700 px-3 py-1.5 rounded-xl w-fit">
+                            <Calendar className="h-3.5 w-3.5" />
                             {new Date(sub.next_delivery_date).toLocaleDateString()}
                           </div>
                         ) : (
-                          <span className="text-gray-400">Not set</span>
+                          <span className="text-slate-400 text-sm">Not set</span>
                         )}
                       </TableCell>
                     </TableRow>
