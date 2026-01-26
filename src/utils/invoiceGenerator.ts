@@ -24,6 +24,8 @@ interface InvoiceData {
   subtotal: number;
   shippingCost: number;
   totalAmount: number;
+  isSubscription?: boolean;
+  subscriptionFrequency?: string;
 }
 
 export const generateInvoice = (data: InvoiceData): void => {
@@ -53,11 +55,32 @@ export const generateInvoice = (data: InvoiceData): void => {
   doc.setFont('helvetica', 'bold');
   doc.text('INVOICE', 150, 25);
 
+  // Subscription Badge (if applicable)
+  if (data.isSubscription) {
+    doc.setFillColor(243, 232, 255); // Purple background
+    doc.roundedRect(148, 10, 42, 8, 2, 2, 'F');
+    doc.setFontSize(9);
+    doc.setTextColor(126, 34, 206); // Purple text
+    doc.setFont('helvetica', 'bold');
+    doc.text('SUBSCRIPTION', 169, 15, { align: 'center' });
+  }
+
   // Order Number and Date
   doc.setFontSize(10);
   doc.setFont('helvetica', 'normal');
+  doc.setTextColor(0, 0, 0);
   doc.text(`Order: #${data.orderNumber}`, 150, 32);
   doc.text(`Date: ${new Date(data.orderDate).toLocaleDateString('en-IN')}`, 150, 37);
+
+  // Subscription Frequency (if applicable)
+  if (data.isSubscription && data.subscriptionFrequency) {
+    doc.setTextColor(126, 34, 206);
+    doc.setFontSize(9);
+    const frequencyText = data.subscriptionFrequency.charAt(0).toUpperCase() + data.subscriptionFrequency.slice(1);
+    doc.text(`Frequency: ${frequencyText}`, 150, 42);
+    doc.text('Saves 20% on every order', 150, 47);
+    doc.setTextColor(0, 0, 0);
+  }
 
   // Customer Information
   doc.setFontSize(12);

@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
-import { CheckCircle, Package, MapPin, CreditCard, ArrowLeft, FileText } from 'lucide-react';
+import { CheckCircle, Package, MapPin, CreditCard, ArrowLeft, FileText, RefreshCw, Calendar } from 'lucide-react';
 import { generateInvoice } from '@/utils/invoiceGenerator';
 
 interface OrderItem {
@@ -29,6 +29,8 @@ interface Order {
   created_at: string;
   shipping_address: any;
   order_items: OrderItem[];
+  is_subscription?: boolean;
+  subscription_frequency?: string;
 }
 
 const OrderDetail = () => {
@@ -115,7 +117,9 @@ const OrderDetail = () => {
       })),
       subtotal: subtotal,
       shippingCost: order.shipping_cost,
-      totalAmount: order.total_amount
+      totalAmount: order.total_amount,
+      isSubscription: order.is_subscription,
+      subscriptionFrequency: order.subscription_frequency
     });
 
     toast({
@@ -174,11 +178,25 @@ const OrderDetail = () => {
             <div>
               <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 flex items-center gap-3">
                 <CheckCircle className="h-8 w-8 text-green-500" />
-                Order Confirmed!
+                {order.is_subscription ? 'Subscription Confirmed!' : 'Order Confirmed!'}
               </h1>
-              <p className="text-gray-600 mt-2">
-                Order #{order.order_number.slice(-4).padStart(4, '0')} • Placed on {new Date(order.created_at).toLocaleDateString()}
-              </p>
+              <div className="flex items-center gap-2 mt-2">
+                <p className="text-gray-600">
+                  Order #{order.order_number.slice(-4).padStart(4, '0')} • Placed on {new Date(order.created_at).toLocaleDateString()}
+                </p>
+                {order.is_subscription && (
+                  <Badge className="bg-purple-100 text-purple-800 rounded-full flex items-center gap-1">
+                    <RefreshCw className="h-3 w-3" />
+                    Subscription
+                  </Badge>
+                )}
+              </div>
+              {order.is_subscription && order.subscription_frequency && (
+                <div className="flex items-center gap-2 text-sm text-purple-600 mt-1">
+                  <Calendar className="h-4 w-4" />
+                  <span className="capitalize">{order.subscription_frequency} delivery • Save 20% on every order</span>
+                </div>
+              )}
             </div>
             <div className="flex flex-col sm:flex-row gap-3 mt-4 sm:mt-0">
               <Button

@@ -13,7 +13,8 @@ import {
   Tag,
   BookOpen,
   ChefHat,
-  Mail
+  Mail,
+  RefreshCw
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -26,6 +27,7 @@ export const AdminSidebar = ({ activeTab, onTabChange }: AdminSidebarProps) => {
   const menuItems = [
     { id: "dashboard", label: "Dashboard", icon: Home },
     { id: "orders", label: "Orders", icon: ShoppingCart },
+    { id: "subscriptions", label: "Subscriptions", icon: RefreshCw },
     { id: "users", label: "Users", icon: Users },
     { id: "products", label: "Products", icon: Package },
     { id: "recipes", label: "Recipes", icon: ChefHat },

@@ -6,6 +6,7 @@ import { useAdminCheck } from "@/hooks/useAdminCheck";
 import { AdminSidebar } from "@/components/admin/AdminSidebar";
 import DashboardOverview from "@/components/admin/DashboardOverview";
 import OrdersTab from "@/components/admin/OrdersTab";
+import SubscriptionsTab from "@/components/admin/SubscriptionsTab";
 import UsersTab from "@/components/admin/UsersTab";
 import ReviewsTab from "@/components/admin/ReviewsTab";
 import ContactSubmissionsTab from "@/components/admin/ContactSubmissionsTab";
@@ -44,6 +45,8 @@ const AdminDashboard = () => {
         return <DashboardOverview />;
       case "orders":
         return <OrdersTab />;
+      case "subscriptions":
+        return <SubscriptionsTab />;
       case "users":
         return <UsersTab />;
       case "products":
