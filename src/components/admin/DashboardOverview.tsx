@@ -129,9 +129,9 @@ const DashboardOverview = () => {
     <div className="space-y-6">
       {/* Low Stock Alert */}
       {lowStockProducts.length > 0 && (
-        <Card className="bg-yellow-50 border-yellow-300">
+        <Card className="bg-gradient-to-r from-yellow-50 to-amber-50 border-slate-200 rounded-3xl shadow-xl backdrop-blur-xl">
           <CardHeader>
-            <CardTitle className="text-yellow-800">Out of Stock Alert</CardTitle>
+            <CardTitle className="bg-gradient-to-r from-yellow-800 to-amber-700 bg-clip-text text-transparent">Out of Stock Alert</CardTitle>
           </CardHeader>
           <CardContent>
             <p className="text-yellow-700">
@@ -150,76 +150,85 @@ const DashboardOverview = () => {
       
       {/* Top Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <Card className="bg-white">
+        <Card className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-xl border-slate-200 hover:shadow-2xl transition-all duration-300">
           <CardHeader className="pb-3">
             <div className="flex items-center justify-between">
               <CardTitle className="text-sm font-medium text-gray-600">
                 Gross sales
               </CardTitle>
-              <ArrowUp className="h-4 w-4 text-green-500" />
+              <div className="p-2 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl shadow-lg">
+                <ArrowUp className="h-4 w-4 text-white" />
+              </div>
             </div>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-gray-900">₹{stats.grossSales.toLocaleString()}</div>
+            <div className="text-2xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">₹{stats.grossSales.toLocaleString()}</div>
             <div className="w-full h-8 mt-2">
-              <div className="w-full h-1 bg-gray-200 rounded">
-                <div className="h-1 bg-blue-500 rounded" style={{ width: stats.grossSales > 0 ? '100%' : '0%' }}></div>
+              <div className="w-full h-1 bg-slate-200 rounded-2xl">
+                <div className="h-1 bg-gradient-to-r from-blue-500 to-blue-600 rounded-2xl transition-all duration-500" style={{ width: stats.grossSales > 0 ? '100%' : '0%' }}></div>
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-white">
+        <Card className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-xl border-slate-200 hover:shadow-2xl transition-all duration-300">
           <CardHeader className="pb-3">
             <div className="flex items-center justify-between">
               <CardTitle className="text-sm font-medium text-gray-600">
                 Returning customer rate
               </CardTitle>
-              <ArrowUp className="h-4 w-4 text-green-500" />
+              <div className="p-2 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl shadow-lg">
+                <ArrowUp className="h-4 w-4 text-white" />
+              </div>
             </div>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-gray-900">{stats.returningCustomerRate}%</div>
+            <div className="text-2xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">{stats.returningCustomerRate}%</div>
             <div className="w-full h-8 mt-2">
-              <div className="w-full h-1 bg-gray-200 rounded">
-                <div className="h-1 bg-green-500 rounded" style={{ width: `${stats.returningCustomerRate}%` }}></div>
+              <div className="w-full h-1 bg-slate-200 rounded-2xl">
+                <div className="h-1 bg-gradient-to-r from-green-500 to-green-600 rounded-2xl transition-all duration-500" style={{ width: `${stats.returningCustomerRate}%` }}></div>
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-white">
+        <Card className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-xl border-slate-200 hover:shadow-2xl transition-all duration-300">
           <CardHeader className="pb-3">
             <div className="flex items-center justify-between">
               <CardTitle className="text-sm font-medium text-gray-600">
                 Orders fulfilled
               </CardTitle>
-              <ArrowUp className="h-4 w-4 text-green-500" />
+              <div className="p-2 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl shadow-lg">
+                <ArrowUp className="h-4 w-4 text-white" />
+              </div>
             </div>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-gray-900">{stats.ordersFulfilled}</div>
+            <div className="text-2xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">{stats.ordersFulfilled}</div>
             <div className="w-full h-8 mt-2">
-              <div className="w-full h-1 bg-gray-200 rounded">
-                <div className="h-1 bg-purple-500 rounded" style={{ width: stats.ordersFulfilled > 0 ? '100%' : '0%' }}></div>
+              <div className="w-full h-1 bg-slate-200 rounded-2xl">
+                <div className="h-1 bg-gradient-to-r from-purple-500 to-purple-600 rounded-2xl transition-all duration-500" style={{ width: stats.ordersFulfilled > 0 ? '100%' : '0%' }}></div>
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-white">
+        <Card className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-xl border-slate-200 hover:shadow-2xl transition-all duration-300">
           <CardHeader className="pb-3">
             <div className="flex items-center justify-between">
               <CardTitle className="text-sm font-medium text-gray-600">
                 Orders
               </CardTitle>
+              <div className="p-2 bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl shadow-lg">
+                <TrendingUp className="h-4 w-4 text-white" />
+              </div>
             </div>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-gray-900">{stats.totalOrders}</div>
+            <div className="text-2xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">{stats.totalOrders}</div>
             <div className="w-full h-8 mt-2">
-              <div className="w-full h-1 bg-gray-200 rounded">
-                <div className="h-1 bg-orange-500 rounded" style={{ width: stats.totalOrders > 0 ? '100%' : '0%' }}></div>
+              <div className="w-full h-1 bg-slate-200 rounded-2xl">
+                <div className="h-1 bg-gradient-to-r from-orange-500 to-orange-600 rounded-2xl transition-all duration-500" style={{ width: stats.totalOrders > 0 ? '100%' : '0%' }}></div>
               </div>
             </div>
           </CardContent>
@@ -229,34 +238,34 @@ const DashboardOverview = () => {
       {/* Main Charts Row */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Total sales over time */}
-        <Card className="lg:col-span-2 bg-white">
+        <Card className="lg:col-span-2 bg-white/80 backdrop-blur-xl rounded-3xl shadow-xl border-slate-200 hover:shadow-2xl transition-all duration-300">
           <CardHeader>
-            <CardTitle className="text-lg font-semibold text-gray-900">
+            <CardTitle className="text-lg font-semibold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">
               Total sales over time
             </CardTitle>
-            <p className="text-2xl font-bold text-gray-900">₹{stats.grossSales.toLocaleString()}</p>
+            <p className="text-2xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">₹{stats.grossSales.toLocaleString()}</p>
           </CardHeader>
           <CardContent>
             <div className="h-64">
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={salesOverTimeData}>
-                  <XAxis 
-                    dataKey="time" 
+                  <XAxis
+                    dataKey="time"
                     axisLine={false}
                     tickLine={false}
                     fontSize={12}
                     textAnchor="middle"
                   />
-                  <YAxis 
+                  <YAxis
                     axisLine={false}
                     tickLine={false}
                     fontSize={12}
                     tickFormatter={(value) => `₹${value}`}
                   />
-                  <Line 
-                    type="monotone" 
-                    dataKey="amount" 
-                    stroke="#3b82f6" 
+                  <Line
+                    type="monotone"
+                    dataKey="amount"
+                    stroke="#3b82f6"
                     strokeWidth={2}
                     dot={false}
                     name="Sales Amount"
@@ -268,19 +277,19 @@ const DashboardOverview = () => {
         </Card>
 
         {/* Total sales breakdown */}
-        <Card className="bg-white">
+        <Card className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-xl border-slate-200 hover:shadow-2xl transition-all duration-300">
           <CardHeader>
-            <CardTitle className="text-lg font-semibold text-gray-900">
+            <CardTitle className="text-lg font-semibold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">
               Total sales breakdown
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
               {stats.salesBreakdown.map((item, index) => (
-                <div key={index} className="flex items-center justify-between">
+                <div key={index} className="flex items-center justify-between hover:bg-slate-50 p-2 rounded-2xl transition-colors duration-200">
                   <div className="flex items-center space-x-2">
-                    <div 
-                      className="w-3 h-3 rounded-full" 
+                    <div
+                      className="w-3 h-3 rounded-full shadow-sm"
                       style={{ backgroundColor: item.color }}
                     ></div>
                     <span className="text-sm text-blue-600">{item.name}</span>
@@ -295,12 +304,12 @@ const DashboardOverview = () => {
         </Card>
       </div>
 
-      
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {/* Sessions by social referrer */}
-        <Card className="bg-white">
+        <Card className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-xl border-slate-200 hover:shadow-2xl transition-all duration-300">
           <CardHeader>
-            <CardTitle className="text-lg font-semibold text-gray-900">
+            <CardTitle className="text-lg font-semibold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">
               Sessions by social referrer
             </CardTitle>
           </CardHeader>
@@ -312,9 +321,9 @@ const DashboardOverview = () => {
         </Card>
 
         {/* Total sales by referrer */}
-        <Card className="bg-white">
+        <Card className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-xl border-slate-200 hover:shadow-2xl transition-all duration-300">
           <CardHeader>
-            <CardTitle className="text-lg font-semibold text-gray-900">
+            <CardTitle className="text-lg font-semibold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">
               Total sales by referrer
             </CardTitle>
           </CardHeader>
@@ -326,9 +335,9 @@ const DashboardOverview = () => {
         </Card>
 
         {/* Sales attributed to marketing */}
-        <Card className="bg-white">
+        <Card className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-xl border-slate-200 hover:shadow-2xl transition-all duration-300">
           <CardHeader>
-            <CardTitle className="text-lg font-semibold text-gray-900">
+            <CardTitle className="text-lg font-semibold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">
               Sales attributed to marketing
             </CardTitle>
           </CardHeader>
@@ -340,9 +349,9 @@ const DashboardOverview = () => {
         </Card>
 
         {/* Sessions by referrer */}
-        <Card className="bg-white">
+        <Card className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-xl border-slate-200 hover:shadow-2xl transition-all duration-300">
           <CardHeader>
-            <CardTitle className="text-lg font-semibold text-gray-900">
+            <CardTitle className="text-lg font-semibold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">
               Sessions by referrer
             </CardTitle>
           </CardHeader>
@@ -354,9 +363,9 @@ const DashboardOverview = () => {
         </Card>
 
         {/* Total sales by POS location */}
-        <Card className="bg-white">
+        <Card className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-xl border-slate-200 hover:shadow-2xl transition-all duration-300">
           <CardHeader>
-            <CardTitle className="text-lg font-semibold text-gray-900">
+            <CardTitle className="text-lg font-semibold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">
               Total sales by POS location
             </CardTitle>
           </CardHeader>
@@ -368,9 +377,9 @@ const DashboardOverview = () => {
         </Card>
 
         {/* Products by sell-through rate */}
-        <Card className="bg-white">
+        <Card className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-xl border-slate-200 hover:shadow-2xl transition-all duration-300">
           <CardHeader>
-            <CardTitle className="text-lg font-semibold text-gray-900">
+            <CardTitle className="text-lg font-semibold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">
               Products by sell-through rate
             </CardTitle>
           </CardHeader>

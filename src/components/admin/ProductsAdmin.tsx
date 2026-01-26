@@ -175,19 +175,19 @@ const ProductsAdmin = () => {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">Products Management</h2>
+          <h2 className="text-2xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">Products Management</h2>
           <p className="text-gray-600">Manage your product catalog</p>
         </div>
-        <Button onClick={() => setIsCreating(true)} className="bg-teal-600 hover:bg-teal-700">
+        <Button onClick={() => setIsCreating(true)} className="bg-gradient-to-r from-teal-600 to-teal-700 hover:from-teal-700 hover:to-teal-800 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300">
           <Plus className="w-4 h-4 mr-2" />
           Add Product
         </Button>
       </div>
 
       {isCreating && (
-        <Card>
+        <Card className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-xl border-slate-200">
           <CardHeader>
-            <CardTitle>{editingProduct ? 'Edit Product' : 'Create New Product'}</CardTitle>
+            <CardTitle className="bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">{editingProduct ? 'Edit Product' : 'Create New Product'}</CardTitle>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
@@ -199,6 +199,7 @@ const ProductsAdmin = () => {
                     value={formData.name}
                     onChange={(e) => setFormData({...formData, name: e.target.value})}
                     required
+                    className="rounded-2xl border-slate-200 focus:ring-2 focus:ring-teal-500 transition-all duration-300"
                   />
                 </div>
                 <div>
@@ -210,6 +211,7 @@ const ProductsAdmin = () => {
                     value={formData.price}
                     onChange={(e) => setFormData({...formData, price: parseFloat(e.target.value)})}
                     required
+                    className="rounded-2xl border-slate-200 focus:ring-2 focus:ring-teal-500 transition-all duration-300"
                   />
                 </div>
               </div>
@@ -220,6 +222,7 @@ const ProductsAdmin = () => {
                   id="description"
                   value={formData.description}
                   onChange={(e) => setFormData({...formData, description: e.target.value})}
+                  className="rounded-2xl border-slate-200 focus:ring-2 focus:ring-teal-500 transition-all duration-300"
                 />
               </div>
 
@@ -230,10 +233,10 @@ const ProductsAdmin = () => {
                     value={formData.category}
                     onValueChange={(value) => setFormData({...formData, category: value})}
                   >
-                    <SelectTrigger>
+                    <SelectTrigger className="rounded-2xl border-slate-200 focus:ring-2 focus:ring-teal-500 transition-all duration-300">
                       <SelectValue placeholder="Select category" />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent className="rounded-2xl border-slate-200">
                       <SelectItem value="tea">Tea</SelectItem>
                       <SelectItem value="coffee">Coffee</SelectItem>
                       <SelectItem value="supplement">Supplement</SelectItem>
@@ -248,6 +251,7 @@ const ProductsAdmin = () => {
                     value={formData.benefits}
                     onChange={(e) => setFormData({...formData, benefits: e.target.value})}
                     placeholder="Energy, Focus, Immunity"
+                    className="rounded-2xl border-slate-200 focus:ring-2 focus:ring-teal-500 transition-all duration-300"
                   />
                 </div>
               </div>
@@ -291,11 +295,11 @@ const ProductsAdmin = () => {
               </div>
 
               <div className="flex space-x-2">
-                <Button type="submit" className="bg-teal-600 hover:bg-teal-700">
+                <Button type="submit" className="bg-gradient-to-r from-teal-600 to-teal-700 hover:from-teal-700 hover:to-teal-800 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300">
                   <Save className="w-4 h-4 mr-2" />
                   {editingProduct ? 'Update' : 'Create'} Product
                 </Button>
-                <Button type="button" variant="outline" onClick={resetForm}>
+                <Button type="button" variant="outline" onClick={resetForm} className="rounded-2xl border-slate-200 hover:bg-slate-100 transition-all duration-300">
                   <X className="w-4 h-4 mr-2" />
                   Cancel
                 </Button>
@@ -305,15 +309,15 @@ const ProductsAdmin = () => {
         </Card>
       )}
 
-      <Card>
+      <Card className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-xl border-slate-200">
         <CardHeader>
-          <CardTitle>Products</CardTitle>
+          <CardTitle className="bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">Products</CardTitle>
           <CardDescription>All products in your catalog</CardDescription>
         </CardHeader>
         <CardContent>
           <Table>
             <TableHeader>
-              <TableRow>
+              <TableRow className="hover:bg-slate-50/50 transition-colors duration-200">
                 <TableHead>Name</TableHead>
                 <TableHead>Price</TableHead>
                 <TableHead>Category</TableHead>
@@ -324,19 +328,19 @@ const ProductsAdmin = () => {
             </TableHeader>
             <TableBody>
               {products.map((product) => (
-                <TableRow key={product.id}>
+                <TableRow key={product.id} className="hover:bg-slate-50/50 transition-colors duration-200">
                   <TableCell className="font-medium">{product.name}</TableCell>
                   <TableCell>£{product.price.toFixed(2)}</TableCell>
                   <TableCell>
-                    <Badge variant="outline">{product.category}</Badge>
+                    <Badge variant="outline" className="rounded-2xl">{product.category}</Badge>
                   </TableCell>
                   <TableCell>
-                    <Badge variant={product.is_active ? "default" : "secondary"}>
+                    <Badge variant={product.is_active ? "default" : "secondary"} className="rounded-2xl">
                       {product.is_active ? "Active" : "Inactive"}
                     </Badge>
                   </TableCell>
                   <TableCell>
-                    <Badge variant={product.in_stock ? "default" : "destructive"}>
+                    <Badge variant={product.in_stock ? "default" : "destructive"} className="rounded-2xl">
                       {product.in_stock ? "In Stock" : "Out of Stock"}
                     </Badge>
                   </TableCell>
@@ -346,6 +350,7 @@ const ProductsAdmin = () => {
                         variant="outline"
                         size="sm"
                         onClick={() => handleEdit(product)}
+                        className="rounded-2xl hover:bg-gradient-to-r hover:from-blue-500 hover:to-blue-600 hover:text-white hover:border-transparent transition-all duration-300"
                       >
                         <Edit className="w-4 h-4" />
                       </Button>
@@ -353,6 +358,7 @@ const ProductsAdmin = () => {
                         variant="outline"
                         size="sm"
                         onClick={() => handleDelete(product.id)}
+                        className="rounded-2xl hover:bg-gradient-to-r hover:from-red-500 hover:to-red-600 hover:text-white hover:border-transparent transition-all duration-300"
                       >
                         <Trash2 className="w-4 h-4" />
                       </Button>

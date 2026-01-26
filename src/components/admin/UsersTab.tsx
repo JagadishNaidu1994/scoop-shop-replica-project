@@ -162,20 +162,22 @@ const UsersTab = () => {
 
   return (
     <div>
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-2xl font-bold">Users</h2>
+      <div className="flex justify-between items-center mb-4 gap-4">
+        <h2 className="text-2xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">Users</h2>
         <Input
           placeholder="Search users..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="max-w-sm"
+          className="max-w-sm rounded-2xl border-slate-200 focus:ring-2 focus:ring-blue-500 transition-all duration-300"
         />
-        <Button onClick={handleExportUsers}>Export to CSV</Button>
+        <Button onClick={handleExportUsers} className="rounded-2xl bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 shadow-lg hover:shadow-xl transition-all duration-300">
+          Export to CSV
+        </Button>
       </div>
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto border border-slate-200 rounded-3xl bg-white/80 backdrop-blur-xl shadow-xl">
         <Table>
           <TableHeader>
-            <TableRow>
+            <TableRow className="hover:bg-slate-50/50 transition-colors duration-200">
               <TableHead>Name</TableHead>
               <TableHead>Email</TableHead>
               <TableHead>Phone</TableHead>
@@ -195,37 +197,38 @@ const UsersTab = () => {
               </TableRow>
             ) : (
               filteredUsers.map((user) => (
-                <TableRow key={user.id}>
+                <TableRow key={user.id} className="hover:bg-slate-50/50 transition-colors duration-200">
                   <TableCell>
-                    {user.first_name && user.last_name 
-                      ? `${user.first_name} ${user.last_name}` 
+                    {user.first_name && user.last_name
+                      ? `${user.first_name} ${user.last_name}`
                       : user.first_name || user.last_name || "N/A"}
                   </TableCell>
                   <TableCell>{user.email || "N/A"}</TableCell>
                   <TableCell>{user.phone || "N/A"}</TableCell>
                   <TableCell>
-                    <Badge variant="outline">{user.total_orders}</Badge>
+                    <Badge variant="outline" className="rounded-2xl">{user.total_orders}</Badge>
                   </TableCell>
                   <TableCell>₹{user.total_spent.toFixed(2)}</TableCell>
                   <TableCell>
-                    <Badge variant="secondary">{user.addresses_count}</Badge>
+                    <Badge variant="secondary" className="rounded-2xl">{user.addresses_count}</Badge>
                   </TableCell>
                   <TableCell>
                     {new Date(user.created_at).toLocaleDateString()}
                   </TableCell>
                   <TableCell>
                     <div className="flex space-x-2">
-                      <Button 
-                        size="sm" 
+                      <Button
+                        size="sm"
                         variant="outline"
                         onClick={() => handleViewUser(user)}
+                        className="rounded-2xl hover:bg-gradient-to-r hover:from-blue-500 hover:to-blue-600 hover:text-white hover:border-transparent transition-all duration-300"
                       >
                         <FaEye />
                       </Button>
-                      <Button size="sm" variant="outline">
+                      <Button size="sm" variant="outline" className="rounded-2xl hover:bg-gradient-to-r hover:from-green-500 hover:to-green-600 hover:text-white hover:border-transparent transition-all duration-300">
                         <FaEdit />
                       </Button>
-                      <Button size="sm" variant="destructive">
+                      <Button size="sm" variant="destructive" className="rounded-2xl hover:shadow-lg transition-all duration-300">
                         <FaTrash />
                       </Button>
                     </div>
@@ -239,21 +242,21 @@ const UsersTab = () => {
 
       {/* User Detail Dialog */}
       <Dialog open={userDetailOpen} onOpenChange={setUserDetailOpen}>
-        <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+        <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto rounded-3xl border-slate-200 shadow-2xl">
           <DialogHeader>
-            <DialogTitle>User Details</DialogTitle>
+            <DialogTitle className="bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">User Details</DialogTitle>
           </DialogHeader>
           {selectedUser && (
             <div className="space-y-6">
               {/* Basic Information */}
               <div>
-                <h3 className="text-lg font-semibold mb-3">Basic Information</h3>
+                <h3 className="text-lg font-semibold mb-3 bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">Basic Information</h3>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <p className="text-sm text-gray-600">Name</p>
                     <p className="font-medium">
-                      {selectedUser.first_name && selectedUser.last_name 
-                        ? `${selectedUser.first_name} ${selectedUser.last_name}` 
+                      {selectedUser.first_name && selectedUser.last_name
+                        ? `${selectedUser.first_name} ${selectedUser.last_name}`
                         : selectedUser.first_name || selectedUser.last_name || "N/A"}
                     </p>
                   </div>
@@ -276,17 +279,17 @@ const UsersTab = () => {
 
               {/* Order Statistics */}
               <div>
-                <h3 className="text-lg font-semibold mb-3">Order Statistics</h3>
+                <h3 className="text-lg font-semibold mb-3 bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">Order Statistics</h3>
                 <div className="grid grid-cols-3 gap-4">
-                  <div className="text-center p-4 bg-blue-50 rounded-lg">
+                  <div className="text-center p-4 bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300">
                     <p className="text-2xl font-bold text-blue-600">{selectedUser.total_orders}</p>
                     <p className="text-sm text-gray-600">Total Orders</p>
                   </div>
-                  <div className="text-center p-4 bg-green-50 rounded-lg">
+                  <div className="text-center p-4 bg-gradient-to-br from-green-50 to-green-100 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300">
                     <p className="text-2xl font-bold text-green-600">₹{selectedUser.total_spent.toFixed(2)}</p>
                     <p className="text-sm text-gray-600">Total Spent</p>
                   </div>
-                  <div className="text-center p-4 bg-purple-50 rounded-lg">
+                  <div className="text-center p-4 bg-gradient-to-br from-purple-50 to-purple-100 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300">
                     <p className="text-2xl font-bold text-purple-600">
                       ₹{selectedUser.total_orders > 0 ? (selectedUser.total_spent / selectedUser.total_orders).toFixed(2) : "0.00"}
                     </p>
@@ -299,15 +302,15 @@ const UsersTab = () => {
 
               {/* Addresses */}
               <div>
-                <h3 className="text-lg font-semibold mb-3">Addresses ({userAddresses.length})</h3>
+                <h3 className="text-lg font-semibold mb-3 bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">Addresses ({userAddresses.length})</h3>
                 {userAddresses.length > 0 ? (
                   <div className="space-y-3">
                     {userAddresses.map((address) => (
-                      <div key={address.id} className="p-4 border rounded-lg">
+                      <div key={address.id} className="p-4 border border-slate-200 rounded-2xl bg-white/80 backdrop-blur-xl shadow-lg hover:shadow-xl transition-all duration-300">
                         <div className="flex justify-between items-start mb-2">
                           <p className="font-medium">{address.full_name}</p>
                           {address.is_default && (
-                            <Badge variant="default" className="text-xs">Default</Badge>
+                            <Badge variant="default" className="text-xs rounded-2xl">Default</Badge>
                           )}
                         </div>
                         <p className="text-sm text-gray-600">
@@ -330,7 +333,7 @@ const UsersTab = () => {
 
               {/* Account Information */}
               <div>
-                <h3 className="text-lg font-semibold mb-3">Account Information</h3>
+                <h3 className="text-lg font-semibold mb-3 bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">Account Information</h3>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <p className="text-sm text-gray-600">Member Since</p>
@@ -338,7 +341,7 @@ const UsersTab = () => {
                   </div>
                   <div>
                     <p className="text-sm text-gray-600">Account Status</p>
-                    <Badge variant="outline" className="text-green-600">Active</Badge>
+                    <Badge variant="outline" className="text-green-600 rounded-2xl">Active</Badge>
                   </div>
                 </div>
               </div>

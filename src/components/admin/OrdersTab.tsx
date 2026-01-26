@@ -130,17 +130,17 @@ const OrdersTab = () => {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold">Orders Management</h2>
-        <Button onClick={exportOrders} variant="outline">
+        <h2 className="text-2xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">Orders Management</h2>
+        <Button onClick={exportOrders} variant="outline" className="rounded-2xl border-slate-200 hover:bg-gradient-to-r hover:from-blue-500 hover:to-blue-600 hover:text-white hover:border-transparent transition-all duration-300 shadow-md hover:shadow-xl">
           <Download className="h-4 w-4 mr-2" />
           Export Orders
         </Button>
       </div>
 
-      <div className="border rounded-lg">
+      <div className="border border-slate-200 rounded-3xl bg-white/80 backdrop-blur-xl shadow-xl overflow-hidden">
         <Table>
           <TableHeader>
-            <TableRow>
+            <TableRow className="hover:bg-slate-50/50 transition-colors duration-200">
               <TableHead>Order ID</TableHead>
               <TableHead>Customer</TableHead>
               <TableHead>Email</TableHead>
@@ -152,7 +152,7 @@ const OrdersTab = () => {
           </TableHeader>
           <TableBody>
             {orders.map((order) => (
-              <TableRow key={order.id}>
+              <TableRow key={order.id} className="hover:bg-slate-50/50 transition-colors duration-200">
                 <TableCell className="font-medium">{order.order_number}</TableCell>
                 <TableCell>{order.user_full_name}</TableCell>
                 <TableCell>{order.user_email}</TableCell>
@@ -170,6 +170,7 @@ const OrdersTab = () => {
                     variant="outline"
                     size="sm"
                     onClick={() => handleViewOrder(order)}
+                    className="rounded-2xl hover:bg-gradient-to-r hover:from-blue-500 hover:to-blue-600 hover:text-white hover:border-transparent transition-all duration-300"
                   >
                     <Eye className="h-4 w-4 mr-2" />
                     View

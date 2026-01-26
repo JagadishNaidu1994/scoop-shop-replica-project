@@ -42,9 +42,9 @@ export const AdminSidebar = ({ activeTab, onTabChange }: AdminSidebarProps) => {
   ];
 
   return (
-    <div className="w-72 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 shadow-2xl">
-      {/* Logo Section */}
-      <div className="p-8 border-b border-slate-700/50">
+    <div className="w-72 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 shadow-2xl flex flex-col h-screen">
+      {/* Logo Section - Fixed */}
+      <div className="p-8 border-b border-slate-700/50 flex-shrink-0">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center shadow-lg">
             <span className="text-white font-bold text-lg">N</span>
@@ -56,8 +56,8 @@ export const AdminSidebar = ({ activeTab, onTabChange }: AdminSidebarProps) => {
         </div>
       </div>
 
-      {/* Navigation */}
-      <nav className="mt-6 px-4 space-y-2">
+      {/* Navigation - Scrollable */}
+      <nav className="flex-1 overflow-y-auto mt-6 px-4 pb-6 space-y-2 scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-slate-800/50">
         {menuItems.map((item) => {
           const Icon = item.icon;
           const isActive = activeTab === item.id;
@@ -103,8 +103,8 @@ export const AdminSidebar = ({ activeTab, onTabChange }: AdminSidebarProps) => {
         })}
       </nav>
 
-      {/* Bottom Section */}
-      <div className="absolute bottom-0 left-0 right-0 p-6">
+      {/* Bottom Section - Fixed at bottom */}
+      <div className="p-6 border-t border-slate-700/50 flex-shrink-0 mt-auto">
         <div className="bg-gradient-to-r from-blue-500/10 to-purple-600/10 rounded-2xl p-4 border border-slate-700/50">
           <p className="text-xs text-slate-400 mb-1">System Status</p>
           <div className="flex items-center gap-2">
