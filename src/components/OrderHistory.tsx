@@ -38,22 +38,44 @@ interface Product {
 
 interface OrderHistoryProps {
   onViewOrder?: (order: Order) => void;
+  preloadedOrders?: Order[];
+  preloadedProducts?: { [key: number]: Product };
 }
 
-const OrderHistory: React.FC<OrderHistoryProps> = ({ onViewOrder }) => {
-  const [orders, setOrders] = useState<Order[]>([]);
-  const [products, setProducts] = useState<{ [key: number]: Product }>({});
-  const [loading, setLoading] = useState(true);
+const OrderHistory: React.FC<OrderHistoryProps> = ({
+  onViewOrder,
+  preloadedOrders,
+  preloadedProducts
+}) => {
+  const [orders, setOrders] = useState<Order[]>(preloadedOrders || []);
+  const [products, setProducts] = useState<{ [key: number]: Product }>(preloadedProducts || {});
+  const [loading, setLoading] = useState(!preloadedOrders);
   const { user } = useAuth();
   const { addToCart, clearCart } = useCart();
   const { toast } = useToast();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (user) {
+    // Update state when preloaded data changes
+    if (preloadedOrders) {
+      setOrders(preloadedOrders);
+      setLoading(false);
+    }
+  }, [preloadedOrders]);
+
+  useEffect(() => {
+    // Update state when preloaded products change
+    if (preloadedProducts) {
+      setProducts(preloadedProducts);
+    }
+  }, [preloadedProducts]);
+
+  useEffect(() => {
+    // Only fetch if we don't have preloaded data
+    if (user && !preloadedOrders) {
       fetchOrders();
     }
-  }, [user]);
+  }, [user, preloadedOrders]);
 
   const fetchOrders = async () => {
     if (!user) return;

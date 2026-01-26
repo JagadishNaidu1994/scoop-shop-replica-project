@@ -47,6 +47,32 @@ interface PaymentMethod {
   is_default: boolean;
 }
 
+interface OrderItem {
+  id: string;
+  product_id: number;
+  product_name: string;
+  product_price: number;
+  quantity: number;
+}
+
+interface Order {
+  id: string;
+  order_number: string;
+  total_amount: number;
+  status: string;
+  created_at: string;
+  delivered_at?: string;
+  order_items: OrderItem[];
+}
+
+interface Product {
+  id: number;
+  name: string;
+  primary_image: string;
+  benefits: string[];
+  description: string;
+}
+
 const Account = () => {
   const { user, signOut } = useAuth();
   const { addToCart } = useCart();
@@ -55,6 +81,8 @@ const Account = () => {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [addresses, setAddresses] = useState<Address[]>([]);
   const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([]);
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [products, setProducts] = useState<{ [key: number]: Product }>({});
   const [loading, setLoading] = useState(true);
   const [isAddressDialogOpen, setIsAddressDialogOpen] = useState(false);
   const [isPaymentDialogOpen, setIsPaymentDialogOpen] = useState(false);
@@ -99,50 +127,107 @@ const Account = () => {
 
   const fetchUserData = async () => {
     try {
-      // Fetch profile
-      const { data: profileData, error: profileError } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', user?.id)
-        .single();
+      // Fetch all data in parallel for better performance
+      const [profileResult, addressesResult, paymentResult, ordersResult] = await Promise.all([
+        // Fetch profile
+        supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', user?.id)
+          .single(),
 
-      if (profileError && profileError.code !== 'PGRST116') {
-        console.error('Error fetching profile:', profileError);
-      } else if (profileData) {
-        setProfile(profileData);
+        // Fetch addresses
+        supabase
+          .from('addresses')
+          .select('*')
+          .eq('user_id', user?.id)
+          .order('created_at', { ascending: false }),
+
+        // Fetch payment methods
+        supabase
+          .from('payment_methods')
+          .select('*')
+          .eq('user_id', user?.id)
+          .order('created_at', { ascending: false }),
+
+        // Fetch orders with items
+        supabase
+          .from('orders')
+          .select(`
+            id,
+            order_number,
+            total_amount,
+            status,
+            created_at,
+            delivered_at,
+            order_items (
+              id,
+              product_id,
+              product_name,
+              product_price,
+              quantity
+            )
+          `)
+          .eq('user_id', user?.id)
+          .order('created_at', { ascending: false })
+      ]);
+
+      // Handle profile
+      if (profileResult.error && profileResult.error.code !== 'PGRST116') {
+        console.error('Error fetching profile:', profileResult.error);
+      } else if (profileResult.data) {
+        setProfile(profileResult.data);
         setProfileForm({
-          full_name: profileData.full_name || '',
-          first_name: profileData.first_name || '',
-          last_name: profileData.last_name || '',
-          phone: profileData.phone || '',
-          gender: profileData.gender || ''
+          full_name: profileResult.data.full_name || '',
+          first_name: profileResult.data.first_name || '',
+          last_name: profileResult.data.last_name || '',
+          phone: profileResult.data.phone || '',
+          gender: profileResult.data.gender || ''
         });
       }
 
-      // Fetch addresses
-      const { data: addressesData, error: addressesError } = await supabase
-        .from('addresses')
-        .select('*')
-        .eq('user_id', user?.id)
-        .order('created_at', { ascending: false });
-
-      if (addressesError) {
-        console.error('Error fetching addresses:', addressesError);
+      // Handle addresses
+      if (addressesResult.error) {
+        console.error('Error fetching addresses:', addressesResult.error);
       } else {
-        setAddresses(addressesData || []);
+        setAddresses(addressesResult.data || []);
       }
 
-      // Fetch payment methods
-      const { data: paymentData, error: paymentError } = await supabase
-        .from('payment_methods')
-        .select('*')
-        .eq('user_id', user?.id)
-        .order('created_at', { ascending: false });
-
-      if (paymentError) {
-        console.error('Error fetching payment methods:', paymentError);
+      // Handle payment methods
+      if (paymentResult.error) {
+        console.error('Error fetching payment methods:', paymentResult.error);
       } else {
-        setPaymentMethods(paymentData || []);
+        setPaymentMethods(paymentResult.data || []);
+      }
+
+      // Handle orders
+      if (ordersResult.error) {
+        console.error('Error fetching orders:', ordersResult.error);
+      } else {
+        const ordersData = ordersResult.data || [];
+        setOrders(ordersData);
+
+        // Fetch product details for all unique product IDs
+        const productIds = [...new Set(ordersData.flatMap(order =>
+          order.order_items?.map((item: any) => item.product_id) || []
+        ))];
+
+        if (productIds.length > 0) {
+          const { data: productsData, error: productsError } = await supabase
+            .from('products')
+            .select('id, name, primary_image, benefits, description')
+            .in('id', productIds);
+
+          if (productsError) {
+            console.error('Error fetching product details:', productsError);
+          } else {
+            const productsMap = productsData?.reduce((acc, product) => {
+              acc[product.id] = product;
+              return acc;
+            }, {} as { [key: number]: Product }) || {};
+            setProducts(productsMap);
+          }
+        }
       }
 
     } catch (error) {
@@ -775,7 +860,12 @@ const Account = () => {
               </Card>
             )}
 
-            {activeTab === 'orders' && <OrderHistory />}
+            {activeTab === 'orders' && (
+              <OrderHistory
+                preloadedOrders={orders}
+                preloadedProducts={products}
+              />
+            )}
 
             {activeTab === 'addresses' && (
               <Card className="border border-gray-200 bg-white rounded-2xl shadow-sm">
