@@ -84,6 +84,7 @@ const Account = () => {
   const [orders, setOrders] = useState<Order[]>([]);
   const [products, setProducts] = useState<{ [key: number]: Product }>({});
   const [loading, setLoading] = useState(true);
+  const [ordersLoading, setOrdersLoading] = useState(true);
   const [isAddressDialogOpen, setIsAddressDialogOpen] = useState(false);
   const [isPaymentDialogOpen, setIsPaymentDialogOpen] = useState(false);
   const [editingAddress, setEditingAddress] = useState<Address | null>(null);
@@ -122,13 +123,17 @@ const Account = () => {
   useEffect(() => {
     if (user) {
       fetchUserData();
+      // Load orders in background after initial render
+      setTimeout(() => {
+        fetchOrders();
+      }, 100);
     }
   }, [user]);
 
   const fetchUserData = async () => {
     try {
-      // Fetch all data in parallel for better performance
-      const [profileResult, addressesResult, paymentResult, ordersResult] = await Promise.all([
+      // Fetch only critical data first (profile, addresses, payments)
+      const [profileResult, addressesResult, paymentResult] = await Promise.all([
         // Fetch profile
         supabase
           .from('profiles')
@@ -147,27 +152,6 @@ const Account = () => {
         supabase
           .from('payment_methods')
           .select('*')
-          .eq('user_id', user?.id)
-          .order('created_at', { ascending: false }),
-
-        // Fetch orders with items
-        supabase
-          .from('orders')
-          .select(`
-            id,
-            order_number,
-            total_amount,
-            status,
-            created_at,
-            delivered_at,
-            order_items (
-              id,
-              product_id,
-              product_name,
-              product_price,
-              quantity
-            )
-          `)
           .eq('user_id', user?.id)
           .order('created_at', { ascending: false })
       ]);
@@ -200,15 +184,46 @@ const Account = () => {
         setPaymentMethods(paymentResult.data || []);
       }
 
-      // Handle orders
-      if (ordersResult.error) {
-        console.error('Error fetching orders:', ordersResult.error);
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchOrders = async () => {
+    if (!user) return;
+
+    try {
+      // Fetch orders with items in background
+      const { data: ordersData, error: ordersError } = await supabase
+        .from('orders')
+        .select(`
+          id,
+          order_number,
+          total_amount,
+          status,
+          created_at,
+          delivered_at,
+          order_items (
+            id,
+            product_id,
+            product_name,
+            product_price,
+            quantity
+          )
+        `)
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false });
+
+      if (ordersError) {
+        console.error('Error fetching orders:', ordersError);
       } else {
-        const ordersData = ordersResult.data || [];
-        setOrders(ordersData);
+        const orders = ordersData || [];
+        setOrders(orders);
 
         // Fetch product details for all unique product IDs
-        const productIds = [...new Set(ordersData.flatMap(order =>
+        const productIds = [...new Set(orders.flatMap(order =>
           order.order_items?.map((item: any) => item.product_id) || []
         ))];
 
@@ -229,11 +244,10 @@ const Account = () => {
           }
         }
       }
-
     } catch (error) {
-      console.error('Error fetching user data:', error);
+      console.error('Error fetching orders:', error);
     } finally {
-      setLoading(false);
+      setOrdersLoading(false);
     }
   };
 
@@ -861,10 +875,29 @@ const Account = () => {
             )}
 
             {activeTab === 'orders' && (
-              <OrderHistory
-                preloadedOrders={orders}
-                preloadedProducts={products}
-              />
+              ordersLoading ? (
+                <Card className="border-gray-200 bg-white rounded-2xl shadow-sm">
+                  <CardContent className="p-4 sm:p-6">
+                    <div className="animate-pulse space-y-4">
+                      {[...Array(3)].map((_, i) => (
+                        <div key={i} className="border rounded-xl p-4">
+                          <div className="flex justify-between items-start mb-2">
+                            <div className="h-4 bg-gray-200 rounded-xl w-32"></div>
+                            <div className="h-6 bg-gray-200 rounded-xl w-20"></div>
+                          </div>
+                          <div className="h-3 bg-gray-200 rounded-xl w-24 mb-2"></div>
+                          <div className="h-4 bg-gray-200 rounded-xl w-16"></div>
+                        </div>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              ) : (
+                <OrderHistory
+                  preloadedOrders={orders}
+                  preloadedProducts={products}
+                />
+              )
             )}
 
             {activeTab === 'addresses' && (
