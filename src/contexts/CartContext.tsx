@@ -11,6 +11,8 @@ interface CartItem {
   product_price: number;
   product_image: string | null;
   quantity: number;
+  is_subscription?: boolean;
+  subscription_frequency?: string;
 }
 
 interface CartContextType {

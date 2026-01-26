@@ -13,6 +13,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { User, Package, Heart, MapPin, CreditCard, Gift, Settings, Plus, Edit, Trash2, LogOut, Trophy, Star } from 'lucide-react';
 import HeaderNavBar from '@/components/HeaderNavBar';
 import OrderHistory from '@/components/OrderHistory';
+import SubscriptionsList from '@/components/SubscriptionsList';
 import OrderDetailModal from '@/components/OrderDetailModal';
 import MobileSidebar from '@/components/MobileSidebar';
 import { indianStatesAndCities } from '@/data/indianStatesAndCities';
@@ -85,6 +86,7 @@ const Account = () => {
   const [addresses, setAddresses] = useState<Address[]>([]);
   const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([]);
   const [orders, setOrders] = useState<Order[]>([]);
+  const [subscriptions, setSubscriptions] = useState<Order[]>([]);
   const [products, setProducts] = useState<{ [key: number]: Product }>({});
   const [loading, setLoading] = useState(true);
   const [ordersLoading, setOrdersLoading] = useState(true);
@@ -213,8 +215,8 @@ const Account = () => {
     if (!user) return;
 
     try {
-      // Fetch orders with items in background
-      const { data: ordersData, error: ordersError } = await supabase
+      // Fetch all orders with items in background
+      const { data: allOrdersData, error: ordersError } = await supabase
         .from('orders')
         .select(`
           id,
@@ -223,6 +225,8 @@ const Account = () => {
           status,
           created_at,
           delivered_at,
+          is_subscription,
+          subscription_frequency,
           order_items (
             id,
             product_id,
@@ -232,13 +236,19 @@ const Account = () => {
           )
         `)
         .eq('user_id', user.id)
-        .order('created_at', { ascending: false });
+        .order('created_at', { ascending: false});
 
       if (ordersError) {
         console.error('Error fetching orders:', ordersError);
       } else {
-        const orders = ordersData || [];
-        setOrders(orders);
+        const allOrders = allOrdersData || [];
+
+        // Separate regular orders from subscriptions
+        const regularOrders = allOrders.filter(order => !order.is_subscription);
+        const subscriptionOrders = allOrders.filter(order => order.is_subscription);
+
+        setOrders(regularOrders);
+        setSubscriptions(subscriptionOrders);
 
         // Fetch product details for all unique product IDs
         const productIds = [...new Set(orders.flatMap(order =>
@@ -1571,14 +1581,29 @@ const Account = () => {
 
             {/* Other tabs with placeholder content */}
             {activeTab === 'subscriptions' && (
-              <Card className="border border-gray-200 bg-white rounded-2xl shadow-sm">
-                <CardHeader>
-                  <CardTitle className="text-xl text-gray-900">Subscriptions</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-gray-600">No active subscriptions.</p>
-                </CardContent>
-              </Card>
+              ordersLoading ? (
+                <Card className="border-gray-200 bg-white rounded-2xl shadow-sm">
+                  <CardContent className="p-4 sm:p-6">
+                    <div className="animate-pulse space-y-4">
+                      {[...Array(3)].map((_, i) => (
+                        <div key={i} className="border rounded-xl p-4">
+                          <div className="flex justify-between items-start mb-2">
+                            <div className="h-4 bg-gray-200 rounded-xl w-32"></div>
+                            <div className="h-6 bg-gray-200 rounded-xl w-20"></div>
+                          </div>
+                          <div className="h-3 bg-gray-200 rounded-xl w-24 mb-2"></div>
+                          <div className="h-4 bg-gray-200 rounded-xl w-16"></div>
+                        </div>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              ) : (
+                <SubscriptionsList
+                  preloadedOrders={subscriptions}
+                  preloadedProducts={products}
+                />
+              )
             )}
 
             {activeTab === 'wishlist' && (

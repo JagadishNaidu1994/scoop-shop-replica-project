@@ -196,7 +196,11 @@ const Checkout = () => {
       
       // Generate order number
       const orderNumber = `order_${Date.now()}`;
-      
+
+      // Check if any items are subscriptions
+      const hasSubscription = items.some(item => item.is_subscription);
+      const subscriptionItem = items.find(item => item.is_subscription);
+
       // Create order - using proper type casting for JSON fields
       const orderData = {
         user_id: user.id,
@@ -206,7 +210,9 @@ const Checkout = () => {
         status: 'pending',
         payment_method: 'card',
         shipping_address: shippingAddress as any,
-        billing_address: shippingAddress as any
+        billing_address: shippingAddress as any,
+        is_subscription: hasSubscription,
+        subscription_frequency: subscriptionItem?.subscription_frequency || null
       };
 
       const { data: order, error: orderError } = await supabase
