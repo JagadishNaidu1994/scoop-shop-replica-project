@@ -15,6 +15,7 @@ import HeaderNavBar from '@/components/HeaderNavBar';
 import OrderHistory from '@/components/OrderHistory';
 import OrderDetailModal from '@/components/OrderDetailModal';
 import MobileSidebar from '@/components/MobileSidebar';
+import { indianStatesAndCities } from '@/data/indianStatesAndCities';
 
 interface UserProfile {
   id: string;
@@ -111,6 +112,8 @@ const Account = () => {
     state: '',
     pincode: ''
   });
+
+  const [availableCities, setAvailableCities] = useState<string[]>([]);
 
   const [paymentForm, setPaymentForm] = useState({
     type: 'card',
@@ -506,7 +509,16 @@ const Account = () => {
       state: address.state,
       pincode: address.pincode
     });
+    // Set available cities based on the address state
+    if (address.state && indianStatesAndCities[address.state]) {
+      setAvailableCities(indianStatesAndCities[address.state]);
+    }
     setIsAddressDialogOpen(true);
+  };
+
+  const handleStateChange = (value: string) => {
+    setAddressForm(prev => ({ ...prev, state: value, city: '' }));
+    setAvailableCities(indianStatesAndCities[value] || []);
   };
 
   const handleEditPayment = (payment: PaymentMethod) => {
@@ -907,7 +919,7 @@ const Account = () => {
                   <CardTitle className="text-xl text-gray-900">Saved Addresses</CardTitle>
                   <Dialog open={isAddressDialogOpen} onOpenChange={setIsAddressDialogOpen}>
                     <DialogTrigger asChild>
-                      <Button 
+                      <Button
                         className="bg-black text-white hover:bg-gray-800 rounded-full"
                         onClick={() => {
                           setEditingAddress(null);
@@ -920,6 +932,7 @@ const Account = () => {
                             state: '',
                             pincode: ''
                           });
+                          setAvailableCities([]);
                         }}
                       >
                         <Plus className="h-4 w-4 mr-2" />
@@ -971,19 +984,10 @@ const Account = () => {
                         </div>
                         <div className="grid grid-cols-2 gap-4">
                           <div>
-                            <Label htmlFor="city">City</Label>
-                            <Input
-                              id="city"
-                              value={addressForm.city}
-                              onChange={(e) => setAddressForm(prev => ({ ...prev, city: e.target.value }))}
-                              className="border-gray-300 rounded-xl"
-                            />
-                          </div>
-                          <div>
                             <Label htmlFor="state">State</Label>
                             <Select
                               value={addressForm.state}
-                              onValueChange={(value) => setAddressForm(prev => ({ ...prev, state: value }))}
+                              onValueChange={handleStateChange}
                             >
                               <SelectTrigger className="border-gray-300 rounded-xl">
                                 <SelectValue placeholder="Select State" />
@@ -1025,6 +1029,25 @@ const Account = () => {
                                 <SelectItem value="Ladakh">Ladakh</SelectItem>
                                 <SelectItem value="Lakshadweep">Lakshadweep</SelectItem>
                                 <SelectItem value="Puducherry">Puducherry</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+                          <div>
+                            <Label htmlFor="city">City</Label>
+                            <Select
+                              value={addressForm.city}
+                              onValueChange={(value) => setAddressForm(prev => ({ ...prev, city: value }))}
+                              disabled={!addressForm.state}
+                            >
+                              <SelectTrigger className="border-gray-300 rounded-xl">
+                                <SelectValue placeholder={addressForm.state ? "Select City" : "Select State First"} />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {availableCities.map((city) => (
+                                  <SelectItem key={city} value={city}>
+                                    {city}
+                                  </SelectItem>
+                                ))}
                               </SelectContent>
                             </Select>
                           </div>
