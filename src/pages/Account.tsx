@@ -9,6 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Badge } from '@/components/ui/badge';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { User, Package, Heart, MapPin, CreditCard, Gift, Settings, Plus, Edit, Trash2, LogOut, Trophy, Star } from 'lucide-react';
 import HeaderNavBar from '@/components/HeaderNavBar';
 import OrderHistory from '@/components/OrderHistory';
@@ -980,12 +981,52 @@ const Account = () => {
                           </div>
                           <div>
                             <Label htmlFor="state">State</Label>
-                            <Input
-                              id="state"
+                            <Select
                               value={addressForm.state}
-                              onChange={(e) => setAddressForm(prev => ({ ...prev, state: e.target.value }))}
-                              className="border-gray-300 rounded-xl"
-                            />
+                              onValueChange={(value) => setAddressForm(prev => ({ ...prev, state: value }))}
+                            >
+                              <SelectTrigger className="border-gray-300 rounded-xl">
+                                <SelectValue placeholder="Select State" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="Andhra Pradesh">Andhra Pradesh</SelectItem>
+                                <SelectItem value="Arunachal Pradesh">Arunachal Pradesh</SelectItem>
+                                <SelectItem value="Assam">Assam</SelectItem>
+                                <SelectItem value="Bihar">Bihar</SelectItem>
+                                <SelectItem value="Chhattisgarh">Chhattisgarh</SelectItem>
+                                <SelectItem value="Goa">Goa</SelectItem>
+                                <SelectItem value="Gujarat">Gujarat</SelectItem>
+                                <SelectItem value="Haryana">Haryana</SelectItem>
+                                <SelectItem value="Himachal Pradesh">Himachal Pradesh</SelectItem>
+                                <SelectItem value="Jharkhand">Jharkhand</SelectItem>
+                                <SelectItem value="Karnataka">Karnataka</SelectItem>
+                                <SelectItem value="Kerala">Kerala</SelectItem>
+                                <SelectItem value="Madhya Pradesh">Madhya Pradesh</SelectItem>
+                                <SelectItem value="Maharashtra">Maharashtra</SelectItem>
+                                <SelectItem value="Manipur">Manipur</SelectItem>
+                                <SelectItem value="Meghalaya">Meghalaya</SelectItem>
+                                <SelectItem value="Mizoram">Mizoram</SelectItem>
+                                <SelectItem value="Nagaland">Nagaland</SelectItem>
+                                <SelectItem value="Odisha">Odisha</SelectItem>
+                                <SelectItem value="Punjab">Punjab</SelectItem>
+                                <SelectItem value="Rajasthan">Rajasthan</SelectItem>
+                                <SelectItem value="Sikkim">Sikkim</SelectItem>
+                                <SelectItem value="Tamil Nadu">Tamil Nadu</SelectItem>
+                                <SelectItem value="Telangana">Telangana</SelectItem>
+                                <SelectItem value="Tripura">Tripura</SelectItem>
+                                <SelectItem value="Uttar Pradesh">Uttar Pradesh</SelectItem>
+                                <SelectItem value="Uttarakhand">Uttarakhand</SelectItem>
+                                <SelectItem value="West Bengal">West Bengal</SelectItem>
+                                <SelectItem value="Andaman and Nicobar Islands">Andaman and Nicobar Islands</SelectItem>
+                                <SelectItem value="Chandigarh">Chandigarh</SelectItem>
+                                <SelectItem value="Dadra and Nagar Haveli and Daman and Diu">Dadra and Nagar Haveli and Daman and Diu</SelectItem>
+                                <SelectItem value="Delhi">Delhi</SelectItem>
+                                <SelectItem value="Jammu and Kashmir">Jammu and Kashmir</SelectItem>
+                                <SelectItem value="Ladakh">Ladakh</SelectItem>
+                                <SelectItem value="Lakshadweep">Lakshadweep</SelectItem>
+                                <SelectItem value="Puducherry">Puducherry</SelectItem>
+                              </SelectContent>
+                            </Select>
                           </div>
                         </div>
                         <div>
