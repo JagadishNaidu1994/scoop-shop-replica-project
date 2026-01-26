@@ -951,59 +951,60 @@ const Account = () => {
           {/* Main Content */}
           <div className="flex-1">
             {activeTab === 'dashboard' && (
-              <Card className="border border-gray-200 bg-white rounded-2xl shadow-sm">
-                <CardHeader>
-                  <CardTitle className="text-xl text-gray-900">Profile Information</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <Label htmlFor="full_name">Full Name</Label>
-                      <Input
-                        id="full_name"
-                        value={profileForm.full_name}
-                        onChange={(e) => setProfileForm(prev => ({ ...prev, full_name: e.target.value }))}
-                        className="border-gray-300 rounded-xl"
-                      />
+              <div className="space-y-6">
+                <Card className="border border-gray-200 bg-white rounded-2xl shadow-sm">
+                  <CardHeader>
+                    <CardTitle className="text-xl text-gray-900">Profile Information</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <Label htmlFor="full_name">Full Name</Label>
+                        <Input
+                          id="full_name"
+                          value={profileForm.full_name}
+                          onChange={(e) => setProfileForm(prev => ({ ...prev, full_name: e.target.value }))}
+                          className="border-gray-300 rounded-xl"
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="first_name">First Name</Label>
+                        <Input
+                          id="first_name"
+                          value={profileForm.first_name}
+                          onChange={(e) => setProfileForm(prev => ({ ...prev, first_name: e.target.value }))}
+                          className="border-gray-300 rounded-xl"
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="last_name">Last Name</Label>
+                        <Input
+                          id="last_name"
+                          value={profileForm.last_name}
+                          onChange={(e) => setProfileForm(prev => ({ ...prev, last_name: e.target.value }))}
+                          className="border-gray-300 rounded-xl"
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="phone">Phone</Label>
+                        <Input
+                          id="phone"
+                          value={profileForm.phone}
+                          onChange={(e) => setProfileForm(prev => ({ ...prev, phone: e.target.value }))}
+                          className="border-gray-300 rounded-xl"
+                        />
+                      </div>
                     </div>
-                    <div>
-                      <Label htmlFor="first_name">First Name</Label>
-                      <Input
-                        id="first_name"
-                        value={profileForm.first_name}
-                        onChange={(e) => setProfileForm(prev => ({ ...prev, first_name: e.target.value }))}
-                        className="border-gray-300 rounded-xl"
-                      />
+                    <div className="flex gap-4 pt-4">
+                      <Button onClick={handleUpdateProfile} className="bg-black text-white hover:bg-gray-800 rounded-full">
+                        Update Profile
+                      </Button>
                     </div>
-                    <div>
-                      <Label htmlFor="last_name">Last Name</Label>
-                      <Input
-                        id="last_name"
-                        value={profileForm.last_name}
-                        onChange={(e) => setProfileForm(prev => ({ ...prev, last_name: e.target.value }))}
-                        className="border-gray-300 rounded-xl"
-                      />
-                    </div>
-                    <div>
-                      <Label htmlFor="phone">Phone</Label>
-                      <Input
-                        id="phone"
-                        value={profileForm.phone}
-                        onChange={(e) => setProfileForm(prev => ({ ...prev, phone: e.target.value }))}
-                        className="border-gray-300 rounded-xl"
-                      />
-                    </div>
-                  </div>
-                  <div className="flex gap-4 pt-4">
-                    <Button onClick={handleUpdateProfile} className="bg-black text-white hover:bg-gray-800 rounded-full">
-                      Update Profile
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
+                  </CardContent>
+                </Card>
 
-              {/* Change Password Section */}
-              <Card className="border border-gray-200 bg-white rounded-2xl shadow-sm mt-6">
+                {/* Change Password Section */}
+                <Card className="border border-gray-200 bg-white rounded-2xl shadow-sm">
                 <CardHeader>
                   <CardTitle className="text-xl text-gray-900">Change Password</CardTitle>
                 </CardHeader>
@@ -1065,6 +1066,7 @@ const Account = () => {
                   </form>
                 </CardContent>
               </Card>
+              </div>
             )}
 
             {activeTab === 'orders' && (
