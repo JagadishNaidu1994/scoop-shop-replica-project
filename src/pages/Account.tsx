@@ -126,6 +126,18 @@ const Account = () => {
     cvv: ''
   });
 
+  const [passwordForm, setPasswordForm] = useState({
+    currentPassword: '',
+    newPassword: '',
+    confirmPassword: ''
+  });
+
+  const [passwordErrors, setPasswordErrors] = useState({
+    currentPassword: '',
+    newPassword: '',
+    confirmPassword: ''
+  });
+
   useEffect(() => {
     if (user) {
       fetchUserData();
@@ -539,6 +551,104 @@ const Account = () => {
     setIsPaymentDialogOpen(true);
   };
 
+  const validatePassword = (password: string): string[] => {
+    const errors: string[] = [];
+    if (password.length < 8) {
+      errors.push('Password must be at least 8 characters long');
+    }
+    if (!/[A-Z]/.test(password)) {
+      errors.push('Password must contain at least one uppercase letter');
+    }
+    if (!/[a-z]/.test(password)) {
+      errors.push('Password must contain at least one lowercase letter');
+    }
+    if (!/[0-9]/.test(password)) {
+      errors.push('Password must contain at least one number');
+    }
+    return errors;
+  };
+
+  const handleChangePassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    // Reset errors
+    setPasswordErrors({
+      currentPassword: '',
+      newPassword: '',
+      confirmPassword: ''
+    });
+
+    // Validate current password
+    if (!passwordForm.currentPassword) {
+      setPasswordErrors(prev => ({
+        ...prev,
+        currentPassword: 'Current password is required'
+      }));
+      return;
+    }
+
+    // Validate new password
+    const passwordValidationErrors = validatePassword(passwordForm.newPassword);
+    if (passwordValidationErrors.length > 0) {
+      setPasswordErrors(prev => ({
+        ...prev,
+        newPassword: passwordValidationErrors.join('. ')
+      }));
+      return;
+    }
+
+    // Validate password match
+    if (passwordForm.newPassword !== passwordForm.confirmPassword) {
+      setPasswordErrors(prev => ({
+        ...prev,
+        confirmPassword: 'Passwords do not match'
+      }));
+      return;
+    }
+
+    try {
+      // First, verify current password by attempting to sign in
+      const { error: signInError } = await supabase.auth.signInWithPassword({
+        email: user?.email || '',
+        password: passwordForm.currentPassword
+      });
+
+      if (signInError) {
+        setPasswordErrors(prev => ({
+          ...prev,
+          currentPassword: 'Current password is incorrect'
+        }));
+        return;
+      }
+
+      // Update password
+      const { error: updateError } = await supabase.auth.updateUser({
+        password: passwordForm.newPassword
+      });
+
+      if (updateError) throw updateError;
+
+      toast({
+        title: "Password Updated",
+        description: "Your password has been changed successfully"
+      });
+
+      // Clear form
+      setPasswordForm({
+        currentPassword: '',
+        newPassword: '',
+        confirmPassword: ''
+      });
+    } catch (error: any) {
+      console.error('Error changing password:', error);
+      toast({
+        title: "Error",
+        description: error.message || "Failed to change password",
+        variant: "destructive"
+      });
+    }
+  };
+
   const handleSignOut = async () => {
     await signOut();
     toast({
@@ -889,6 +999,70 @@ const Account = () => {
                       Update Profile
                     </Button>
                   </div>
+                </CardContent>
+              </Card>
+
+              {/* Change Password Section */}
+              <Card className="border border-gray-200 bg-white rounded-2xl shadow-sm mt-6">
+                <CardHeader>
+                  <CardTitle className="text-xl text-gray-900">Change Password</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <form onSubmit={handleChangePassword} className="space-y-4">
+                    <div>
+                      <Label htmlFor="currentPassword">Current Password</Label>
+                      <Input
+                        id="currentPassword"
+                        type="password"
+                        value={passwordForm.currentPassword}
+                        onChange={(e) => setPasswordForm(prev => ({ ...prev, currentPassword: e.target.value }))}
+                        className={`border-gray-300 rounded-xl mt-1 ${passwordErrors.currentPassword ? 'border-red-500' : ''}`}
+                        placeholder="Enter current password"
+                      />
+                      {passwordErrors.currentPassword && (
+                        <p className="text-red-500 text-sm mt-1">{passwordErrors.currentPassword}</p>
+                      )}
+                    </div>
+
+                    <div>
+                      <Label htmlFor="newPassword">New Password</Label>
+                      <Input
+                        id="newPassword"
+                        type="password"
+                        value={passwordForm.newPassword}
+                        onChange={(e) => setPasswordForm(prev => ({ ...prev, newPassword: e.target.value }))}
+                        className={`border-gray-300 rounded-xl mt-1 ${passwordErrors.newPassword ? 'border-red-500' : ''}`}
+                        placeholder="Enter new password"
+                      />
+                      {passwordErrors.newPassword && (
+                        <p className="text-red-500 text-sm mt-1">{passwordErrors.newPassword}</p>
+                      )}
+                      <p className="text-gray-500 text-xs mt-1">
+                        Password must be at least 8 characters with uppercase, lowercase, and numbers
+                      </p>
+                    </div>
+
+                    <div>
+                      <Label htmlFor="confirmPassword">Confirm New Password</Label>
+                      <Input
+                        id="confirmPassword"
+                        type="password"
+                        value={passwordForm.confirmPassword}
+                        onChange={(e) => setPasswordForm(prev => ({ ...prev, confirmPassword: e.target.value }))}
+                        className={`border-gray-300 rounded-xl mt-1 ${passwordErrors.confirmPassword ? 'border-red-500' : ''}`}
+                        placeholder="Confirm new password"
+                      />
+                      {passwordErrors.confirmPassword && (
+                        <p className="text-red-500 text-sm mt-1">{passwordErrors.confirmPassword}</p>
+                      )}
+                    </div>
+
+                    <div className="flex gap-4 pt-4">
+                      <Button type="submit" className="bg-black text-white hover:bg-gray-800 rounded-full">
+                        Change Password
+                      </Button>
+                    </div>
+                  </form>
                 </CardContent>
               </Card>
             )}
