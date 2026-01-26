@@ -286,6 +286,70 @@ const Checkout = () => {
           console.warn('Failed to send confirmation email (non-critical):', emailError);
           // Continue with order completion even if email fails
         }
+
+        // Save shipping address to saved addresses if it's a new address
+        if (selectedAddressId === 'new') {
+          try {
+            console.log('Saving new address to saved addresses...');
+
+            // Check if address already exists
+            const { data: existingAddresses, error: checkError } = await supabase
+              .from('addresses')
+              .select('id')
+              .eq('user_id', user.id)
+              .eq('address_line1', shippingAddress.address)
+              .eq('city', shippingAddress.city)
+              .eq('state', shippingAddress.state)
+              .eq('pincode', shippingAddress.postalCode);
+
+            if (checkError) {
+              console.error('Error checking existing addresses:', checkError);
+            }
+
+            // Only save if address doesn't already exist
+            if (!existingAddresses || existingAddresses.length === 0) {
+              // Check if this is the user's first address
+              const { data: userAddresses, error: countError } = await supabase
+                .from('addresses')
+                .select('id')
+                .eq('user_id', user.id);
+
+              if (countError) {
+                console.error('Error counting addresses:', countError);
+              }
+
+              const isFirstAddress = !userAddresses || userAddresses.length === 0;
+
+              // Save the new address
+              const { error: saveError } = await supabase
+                .from('addresses')
+                .insert({
+                  user_id: user.id,
+                  full_name: `${shippingAddress.firstName} ${shippingAddress.lastName}`,
+                  phone: shippingAddress.phone,
+                  address_line1: shippingAddress.address,
+                  address_line2: shippingAddress.addressLine2 || null,
+                  landmark: shippingAddress.landmark || null,
+                  city: shippingAddress.city,
+                  state: shippingAddress.state,
+                  pincode: shippingAddress.postalCode,
+                  is_default: isFirstAddress // Set as default if it's the first address
+                });
+
+              if (saveError) {
+                console.error('Error saving address (non-critical):', saveError);
+                // Don't fail the order if address saving fails
+              } else {
+                console.log('Address saved successfully to saved addresses');
+              }
+            } else {
+              console.log('Address already exists in saved addresses, skipping save');
+            }
+          } catch (addressError) {
+            console.warn('Failed to save address (non-critical):', addressError);
+            // Continue with order completion even if address saving fails
+          }
+        }
       }
 
       // Clear cart
