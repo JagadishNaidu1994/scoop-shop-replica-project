@@ -33,6 +33,7 @@ interface Address {
   phone: string;
   address_line1: string;
   address_line2?: string;
+  landmark?: string;
   city: string;
   state: string;
   pincode: string;
@@ -108,6 +109,7 @@ const Account = () => {
     phone: '',
     address_line1: '',
     address_line2: '',
+    landmark: '',
     city: '',
     state: '',
     pincode: ''
@@ -310,6 +312,7 @@ const Account = () => {
         phone: '',
         address_line1: '',
         address_line2: '',
+        landmark: '',
         city: '',
         state: '',
         pincode: ''
@@ -348,6 +351,7 @@ const Account = () => {
         phone: '',
         address_line1: '',
         address_line2: '',
+        landmark: '',
         city: '',
         state: '',
         pincode: ''
@@ -505,6 +509,7 @@ const Account = () => {
       phone: address.phone,
       address_line1: address.address_line1,
       address_line2: address.address_line2 || '',
+      landmark: address.landmark || '',
       city: address.city,
       state: address.state,
       pincode: address.pincode
@@ -928,6 +933,7 @@ const Account = () => {
                             phone: '',
                             address_line1: '',
                             address_line2: '',
+                            landmark: '',
                             city: '',
                             state: '',
                             pincode: ''
@@ -980,6 +986,16 @@ const Account = () => {
                             value={addressForm.address_line2}
                             onChange={(e) => setAddressForm(prev => ({ ...prev, address_line2: e.target.value }))}
                             className="border-gray-300 rounded-xl"
+                          />
+                        </div>
+                        <div>
+                          <Label htmlFor="landmark">Landmark (Optional)</Label>
+                          <Input
+                            id="landmark"
+                            value={addressForm.landmark}
+                            onChange={(e) => setAddressForm(prev => ({ ...prev, landmark: e.target.value }))}
+                            className="border-gray-300 rounded-xl"
+                            placeholder="e.g., Near Metro Station"
                           />
                         </div>
                         <div className="grid grid-cols-2 gap-4">
@@ -1096,6 +1112,11 @@ const Account = () => {
                                 {address.address_line1}
                                 {address.address_line2 && `, ${address.address_line2}`}
                               </p>
+                              {address.landmark && (
+                                <p className="text-gray-600">
+                                  Landmark: {address.landmark}
+                                </p>
+                              )}
                               <p className="text-gray-600">
                                 {address.city}, {address.state} - {address.pincode}
                               </p>
