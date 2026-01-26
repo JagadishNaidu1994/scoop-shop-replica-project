@@ -77,7 +77,7 @@ const Account = () => {
   const { user, signOut } = useAuth();
   const { addToCart } = useCart();
   const { toast } = useToast();
-  const [activeTab, setActiveTab] = useState('orders'); // Changed from 'dashboard' to 'orders'
+  const [activeTab, setActiveTab] = useState('dashboard');
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [addresses, setAddresses] = useState<Address[]>([]);
   const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([]);
