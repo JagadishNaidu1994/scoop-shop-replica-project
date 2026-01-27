@@ -23,6 +23,7 @@ export type Database = {
           full_name: string
           id: string
           is_default: boolean | null
+          landmark: string | null
           phone: string
           pincode: string
           state: string
@@ -37,6 +38,7 @@ export type Database = {
           full_name: string
           id?: string
           is_default?: boolean | null
+          landmark?: string | null
           phone: string
           pincode: string
           state: string
@@ -51,6 +53,7 @@ export type Database = {
           full_name?: string
           id?: string
           is_default?: boolean | null
+          landmark?: string | null
           phone?: string
           pincode?: string
           state?: string
@@ -84,33 +87,39 @@ export type Database = {
         Row: {
           created_at: string | null
           id: string
+          is_subscription: boolean | null
           product_id: number
           product_image: string | null
           product_name: string
           product_price: number
           quantity: number
+          subscription_frequency: string | null
           updated_at: string | null
           user_id: string | null
         }
         Insert: {
           created_at?: string | null
           id?: string
+          is_subscription?: boolean | null
           product_id: number
           product_image?: string | null
           product_name: string
           product_price: number
           quantity?: number
+          subscription_frequency?: string | null
           updated_at?: string | null
           user_id?: string | null
         }
         Update: {
           created_at?: string | null
           id?: string
+          is_subscription?: boolean | null
           product_id?: number
           product_image?: string | null
           product_name?: string
           product_price?: number
           quantity?: number
+          subscription_frequency?: string | null
           updated_at?: string | null
           user_id?: string | null
         }
@@ -354,6 +363,8 @@ export type Database = {
           delivered_at: string | null
           estimated_delivery_date: string | null
           id: string
+          is_subscription: boolean | null
+          next_delivery_date: string | null
           order_number: string
           payment_method: string | null
           shipped_at: string | null
@@ -361,6 +372,7 @@ export type Database = {
           shipping_cost: number | null
           shipping_method_id: string | null
           status: string | null
+          subscription_frequency: string | null
           total_amount: number
           tracking_number: string | null
           updated_at: string | null
@@ -372,6 +384,8 @@ export type Database = {
           delivered_at?: string | null
           estimated_delivery_date?: string | null
           id?: string
+          is_subscription?: boolean | null
+          next_delivery_date?: string | null
           order_number: string
           payment_method?: string | null
           shipped_at?: string | null
@@ -379,6 +393,7 @@ export type Database = {
           shipping_cost?: number | null
           shipping_method_id?: string | null
           status?: string | null
+          subscription_frequency?: string | null
           total_amount: number
           tracking_number?: string | null
           updated_at?: string | null
@@ -390,6 +405,8 @@ export type Database = {
           delivered_at?: string | null
           estimated_delivery_date?: string | null
           id?: string
+          is_subscription?: boolean | null
+          next_delivery_date?: string | null
           order_number?: string
           payment_method?: string | null
           shipped_at?: string | null
@@ -397,6 +414,7 @@ export type Database = {
           shipping_cost?: number | null
           shipping_method_id?: string | null
           status?: string | null
+          subscription_frequency?: string | null
           total_amount?: number
           tracking_number?: string | null
           updated_at?: string | null
@@ -845,6 +863,50 @@ export type Database = {
         }
         Relationships: []
       }
+      subscription_status: {
+        Row: {
+          created_at: string | null
+          id: string
+          order_id: string
+          paused_until: string | null
+          previous_status: string | null
+          reason: string | null
+          status: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          order_id: string
+          paused_until?: string | null
+          previous_status?: string | null
+          reason?: string | null
+          status: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          order_id?: string
+          paused_until?: string | null
+          previous_status?: string | null
+          reason?: string | null
+          status?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "subscription_status_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_coupons: {
         Row: {
           assigned_at: string
@@ -879,6 +941,72 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      wholesale_enquiries: {
+        Row: {
+          business_type: string
+          created_at: string
+          email: string
+          id: string
+          message: string | null
+          name: string
+          notes: string | null
+          phone: string
+          status: string
+        }
+        Insert: {
+          business_type: string
+          created_at?: string
+          email: string
+          id?: string
+          message?: string | null
+          name: string
+          notes?: string | null
+          phone: string
+          status?: string
+        }
+        Update: {
+          business_type?: string
+          created_at?: string
+          email?: string
+          id?: string
+          message?: string | null
+          name?: string
+          notes?: string | null
+          phone?: string
+          status?: string
+        }
+        Relationships: []
+      }
+      wishlist: {
+        Row: {
+          created_at: string | null
+          id: string
+          product_id: number
+          product_image: string | null
+          product_name: string
+          product_price: number
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          product_id: number
+          product_image?: string | null
+          product_name: string
+          product_price: number
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          product_id?: number
+          product_image?: string | null
+          product_name?: string
+          product_price?: number
+          user_id?: string
+        }
+        Relationships: []
       }
     }
     Views: {
