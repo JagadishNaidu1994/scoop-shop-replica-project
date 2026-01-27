@@ -32,33 +32,35 @@ const Shop = () => {
   }, []);
 
   const fetchProducts = async () => {
-    // Ensure minimum 1 second loading animation
     const startTime = Date.now();
 
     try {
-      const {
-        data,
-        error
-      } = await supabase.from('products').select('id, name, price, description, primary_image, hover_image, category, benefits, in_stock, is_active').eq('is_active', true).order('name');
+      const result = await supabase
+        .from('products')
+        .select('*')
+        .eq('is_active', true)
+        .order('name');
 
-      if (error) {
-        console.error('Error fetching products:', error);
+      if (result.error) {
+        console.error('Error fetching products:', result.error);
         setProducts([]);
+      } else if (result.data) {
+        setProducts(result.data);
       } else {
-        setProducts(data || []);
+        setProducts([]);
       }
     } catch (error) {
       console.error('Error fetching products:', error);
       setProducts([]);
-    } finally {
-      // Ensure animation shows for at least 1 second
-      const elapsedTime = Date.now() - startTime;
-      const remainingTime = Math.max(0, 1000 - elapsedTime);
-
-      setTimeout(() => {
-        setLoading(false);
-      }, remainingTime);
     }
+
+    // Ensure minimum 1 second animation for better UX
+    const elapsedTime = Date.now() - startTime;
+    const remainingTime = Math.max(0, 1000 - elapsedTime);
+
+    setTimeout(() => {
+      setLoading(false);
+    }, remainingTime);
   };
 
   // Memoize categories to prevent recalculation on every render
