@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import HeaderNavBar from '@/components/HeaderNavBar';
 import Footer from '@/components/Footer';
+import MatchaLoadingAnimation from '@/components/MatchaLoadingAnimation';
 import { supabase } from '@/integrations/supabase/client';
 import { Link } from 'react-router-dom';
 import { sampleRecipes } from '@/data/sampleRecipes';
@@ -89,9 +90,7 @@ const Recipes = () => {
         </div>
 
         {/* Recipe Grid */}
-        {loading ? <div className="flex items-center justify-center py-16">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-black"></div>
-          </div> : <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 pb-16">
+        {loading ? <MatchaLoadingAnimation message="Loading recipes..." /> : <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 pb-16">
             {allRecipes.slice(1).map(recipe => <Link key={recipe.id} to={`/recipes/${recipe.id}`} className="group block">
                 <div className="aspect-[4/3] overflow-hidden rounded-lg mb-4">
                   <img src={recipe.image} alt={recipe.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />

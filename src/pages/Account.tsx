@@ -14,6 +14,7 @@ import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { User, Package, Heart, MapPin, CreditCard, Gift, Settings, Plus, Edit, Trash2, LogOut, Trophy, Star } from 'lucide-react';
 import HeaderNavBar from '@/components/HeaderNavBar';
+import MatchaLoadingAnimation from '@/components/MatchaLoadingAnimation';
 import OrderHistory from '@/components/OrderHistory';
 import SubscriptionsList from '@/components/SubscriptionsList';
 import OrderDetailModal from '@/components/OrderDetailModal';
@@ -807,16 +808,7 @@ const Account = () => {
     return (
       <div className="min-h-screen bg-gray-50">
         <HeaderNavBar />
-        <div className="container mx-auto px-4 py-8">
-          <div className="animate-pulse">
-            <div className="h-8 bg-gray-200 rounded-xl w-1/4 mb-4"></div>
-            <div className="space-y-4">
-              <div className="h-32 bg-gray-200 rounded-xl"></div>
-              <div className="h-32 bg-gray-200 rounded-xl"></div>
-              <div className="h-32 bg-gray-200 rounded-xl"></div>
-            </div>
-          </div>
-        </div>
+        <MatchaLoadingAnimation message="Loading your account..." />
       </div>
     );
   }

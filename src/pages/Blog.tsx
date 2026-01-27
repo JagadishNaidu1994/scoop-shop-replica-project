@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import HeaderNavBar from '@/components/HeaderNavBar';
 import Footer from '@/components/Footer';
 import AdminImageUpload from '@/components/AdminImageUpload';
+import MatchaLoadingAnimation from '@/components/MatchaLoadingAnimation';
 import { supabase } from '@/integrations/supabase/client';
 import { Badge } from '@/components/ui/badge';
 
@@ -54,9 +55,7 @@ const Blog = () => {
     return (
       <div className="min-h-screen bg-white">
         <HeaderNavBar />
-        <div className="flex items-center justify-center min-h-screen">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-black"></div>
-        </div>
+        <MatchaLoadingAnimation message="Loading blog posts..." />
         <Footer />
       </div>
     );

@@ -18,6 +18,7 @@ import { CouponsTab } from "@/components/admin/CouponsTab";
 import ProductsAdmin from "@/components/admin/ProductsAdmin";
 import RecipesAdmin from "@/components/admin/RecipesAdmin";
 import JournalsAdmin from "@/components/admin/JournalsAdmin";
+import MatchaLoadingAnimation from "@/components/MatchaLoadingAnimation";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Menu, X } from "lucide-react";
 
@@ -30,8 +31,8 @@ const AdminDashboard = () => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
+      <div className="min-h-screen bg-white">
+        <MatchaLoadingAnimation message="Loading admin dashboard..." />
       </div>
     );
   }
