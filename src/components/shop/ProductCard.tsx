@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, memo } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 interface Product {
@@ -15,7 +15,7 @@ interface ProductCardProps {
   product: Product;
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
+const ProductCardComponent: React.FC<ProductCardProps> = ({ product }) => {
   const [isHovered, setIsHovered] = useState(false);
   const navigate = useNavigate();
 
@@ -80,5 +80,8 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     </div>
   );
 };
+
+const ProductCard = memo(ProductCardComponent);
+ProductCard.displayName = 'ProductCard';
 
 export default ProductCard;

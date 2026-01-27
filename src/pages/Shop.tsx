@@ -1,14 +1,11 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, lazy, Suspense } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import HeaderNavBar from '@/components/HeaderNavBar';
-import Footer from '@/components/Footer';
 import ProductGrid from '@/components/shop/ProductGrid';
-import { Button } from '@/components/ui/button';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Input } from '@/components/ui/input';
-import { Search, Filter, X } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
-import { sampleProducts } from '@/data/sampleProducts';
+
+// Lazy load Footer to improve initial load
+const Footer = lazy(() => import('@/components/Footer'));
 interface Product {
   id: number;
   name: string;
@@ -29,30 +26,38 @@ const Shop = () => {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [sortBy, setSortBy] = useState('name');
   const [showFilters, setShowFilters] = useState(false);
+
   useEffect(() => {
     fetchProducts();
   }, []);
+
   const fetchProducts = async () => {
+    // Ensure minimum 1 second loading animation
+    const startTime = Date.now();
+
     try {
       const {
         data,
         error
-      } = await supabase.from('products').select('*').eq('is_active', true).order('name');
+      } = await supabase.from('products').select('id, name, price, description, primary_image, hover_image, category, benefits, in_stock, is_active').eq('is_active', true).order('name');
+
       if (error) {
         console.error('Error fetching products:', error);
-        // Fallback to sample data if database query fails
-        setProducts(sampleProducts);
-      } else if (data && data.length > 0) {
-        setProducts(data);
+        setProducts([]);
       } else {
-        // Use sample data if no products in database
-        setProducts(sampleProducts);
+        setProducts(data || []);
       }
     } catch (error) {
       console.error('Error fetching products:', error);
-      setProducts(sampleProducts);
+      setProducts([]);
     } finally {
-      setLoading(false);
+      // Ensure animation shows for at least 1 second
+      const elapsedTime = Date.now() - startTime;
+      const remainingTime = Math.max(0, 1000 - elapsedTime);
+
+      setTimeout(() => {
+        setLoading(false);
+      }, remainingTime);
     }
   };
 
@@ -79,6 +84,7 @@ const Shop = () => {
       }
     });
   }, [products, searchTerm, selectedCategory, sortBy]);
+
   if (loading) {
     return <div className="min-h-screen bg-white">
         <HeaderNavBar />
@@ -105,7 +111,7 @@ const Shop = () => {
 
           {/* Products Grid Skeleton */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[...Array(6)].map((_, i) => (
+            {[...Array(3)].map((_, i) => (
               <div key={i} className="animate-pulse">
                 <div className="aspect-square bg-gray-200 rounded-lg mb-4"></div>
                 <div className="h-6 bg-gray-200 rounded w-3/4 mb-2"></div>
@@ -128,6 +134,7 @@ const Shop = () => {
         `}</style>
       </div>;
   }
+
   return <div className="min-h-screen bg-white">
       <HeaderNavBar />
       
@@ -152,7 +159,9 @@ const Shop = () => {
         <ProductGrid products={filteredProducts} />
       </div>
 
-      <Footer />
+      <Suspense fallback={<div className="h-96"></div>}>
+        <Footer />
+      </Suspense>
     </div>;
 };
 export default Shop;

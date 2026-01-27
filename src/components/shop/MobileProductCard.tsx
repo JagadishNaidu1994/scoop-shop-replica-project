@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { memo } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 interface Product {
@@ -14,7 +14,7 @@ interface MobileProductCardProps {
   product: Product;
 }
 
-const MobileProductCard: React.FC<MobileProductCardProps> = ({ product }) => {
+const MobileProductCardComponent: React.FC<MobileProductCardProps> = ({ product }) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
@@ -78,5 +78,8 @@ const MobileProductCard: React.FC<MobileProductCardProps> = ({ product }) => {
     </div>
   );
 };
+
+const MobileProductCard = memo(MobileProductCardComponent);
+MobileProductCard.displayName = 'MobileProductCard';
 
 export default MobileProductCard;

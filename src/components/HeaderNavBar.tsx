@@ -32,8 +32,10 @@ const HeaderNavBar = () => {
       if (profileCache.current[user.id]) {
         setFirstName(profileCache.current[user.id]);
       } else if (lastFetchedUserId.current !== user.id) {
-        // Only fetch if we haven't fetched for this user yet
-        fetchUserProfile();
+        // Defer fetch to not block render
+        setTimeout(() => {
+          fetchUserProfile();
+        }, 0);
         lastFetchedUserId.current = user.id;
       }
     } else {
