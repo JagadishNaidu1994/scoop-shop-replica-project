@@ -439,7 +439,8 @@ const Checkout = () => {
                     </div>
                   )}
 
-                  {/* Address Form */}
+                  {/* Address Form - Only show when "Add New Address" is selected or no saved addresses */}
+                  {(selectedAddressId === 'new' || savedAddresses.length === 0) && (
                   <div className="space-y-4">
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
@@ -590,6 +591,7 @@ const Checkout = () => {
                       />
                     </div>
                   </div>
+                  )}
                 </form>
               </CardContent>
             </Card>

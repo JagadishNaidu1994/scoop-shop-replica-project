@@ -29,7 +29,7 @@ const ReviewsTab = () => {
 
   return (
     <div>
-      <h2 className="text-2xl font-bold mb-4">Customer Reviews</h2>
+      <h2 className="text-3xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent mb-4">Customer Reviews</h2>
       
       <Tabs defaultValue="active" className="w-full">
         <TabsList>
@@ -45,7 +45,7 @@ const ReviewsTab = () => {
             </div>
           ) : reviews.length > 0 ? (
             reviews.map((review) => (
-              <Card key={review.id}>
+              <Card key={review.id} className="rounded-3xl bg-white/80 backdrop-blur-xl shadow-xl border-slate-200">
                 <CardContent className="p-6">
                   <div className="flex justify-between items-start">
                     <div>
@@ -53,8 +53,8 @@ const ReviewsTab = () => {
                       <p className="text-sm text-muted-foreground">{review.user_email}</p>
                       <div className="flex items-center mt-2">
                         <span className="text-sm">Rating: {review.rating}/5</span>
-                        <Badge 
-                          className="ml-2" 
+                        <Badge
+                          className="ml-2 rounded-2xl"
                           variant={review.is_approved ? "default" : "secondary"}
                         >
                           {review.is_approved ? "Approved" : "Pending"}
@@ -73,9 +73,9 @@ const ReviewsTab = () => {
               </Card>
             ))
           ) : (
-            <Card>
+            <Card className="rounded-3xl bg-white/80 backdrop-blur-xl shadow-xl border-slate-200">
               <CardHeader>
-                <CardTitle>No Reviews System</CardTitle>
+                <CardTitle className="text-xl bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">No Reviews System</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="text-center py-8">
@@ -97,9 +97,9 @@ const ReviewsTab = () => {
         </TabsContent>
         
         <TabsContent value="favorites" className="space-y-4">
-          <Card>
+          <Card className="rounded-3xl bg-white/80 backdrop-blur-xl shadow-xl border-slate-200">
             <CardHeader>
-              <CardTitle>Favorite Reviews</CardTitle>
+              <CardTitle className="text-xl bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">Favorite Reviews</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-center py-8">
@@ -110,9 +110,9 @@ const ReviewsTab = () => {
         </TabsContent>
 
         <TabsContent value="archived" className="space-y-4">
-          <Card>
+          <Card className="rounded-3xl bg-white/80 backdrop-blur-xl shadow-xl border-slate-200">
             <CardHeader>
-              <CardTitle>Archived Reviews</CardTitle>
+              <CardTitle className="text-xl bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">Archived Reviews</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-center py-8">

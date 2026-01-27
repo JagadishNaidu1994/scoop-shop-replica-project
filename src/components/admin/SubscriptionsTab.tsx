@@ -362,7 +362,7 @@ const SubscriptionsTab = () => {
           </div>
 
           {/* Modern Table */}
-          <div className="border border-slate-200 rounded-3xl overflow-hidden bg-white shadow-sm">
+          <div className="border border-slate-200 rounded-3xl overflow-hidden overflow-x-auto bg-white shadow-sm">
             <Table>
               <TableHeader>
                 <TableRow className="bg-gradient-to-r from-slate-50 to-slate-100 hover:from-slate-100 hover:to-slate-150 border-b-2 border-slate-200">

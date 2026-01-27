@@ -3,9 +3,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 const ContactSubmissionsTab = () => {
   return (
-    <Card className="bg-white">
+    <Card className="rounded-3xl bg-white/80 backdrop-blur-xl shadow-xl border-slate-200">
       <CardHeader>
-        <CardTitle className="text-xl font-semibold text-gray-900">User Messages</CardTitle>
+        <CardTitle className="text-2xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">User Messages</CardTitle>
         <p className="text-gray-600">Contact submissions feature coming soon</p>
       </CardHeader>
       <CardContent>

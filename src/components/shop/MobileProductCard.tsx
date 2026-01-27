@@ -34,10 +34,11 @@ const MobileProductCard: React.FC<MobileProductCardProps> = ({ product }) => {
       className="bg-white rounded-lg overflow-hidden cursor-pointer shadow-sm"
       onClick={handleClick}
     >
-      <div className="relative aspect-square overflow-hidden">
+      <div className="relative aspect-square overflow-hidden bg-gray-100">
         <img
           src={product.primaryImage}
           alt={product.name}
+          loading="lazy"
           className="w-full h-full object-cover"
         />
         

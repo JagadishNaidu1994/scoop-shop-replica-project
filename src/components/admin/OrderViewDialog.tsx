@@ -40,9 +40,9 @@ const OrderViewDialog = ({ order, isOpen, onClose }: OrderViewDialogProps) => {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto bg-white">
+      <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto rounded-3xl border-slate-200 shadow-2xl bg-white">
         <DialogHeader>
-          <DialogTitle>Order Details #{orderNumber}</DialogTitle>
+          <DialogTitle className="text-2xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">Order Details #{orderNumber}</DialogTitle>
         </DialogHeader>
         
         <div className="space-y-6">
@@ -60,7 +60,7 @@ const OrderViewDialog = ({ order, isOpen, onClose }: OrderViewDialogProps) => {
             </div>
             <div>
               <h3 className="font-semibold mb-2">Status</h3>
-              <Badge variant={order.status === 'delivered' ? 'default' : 'secondary'}>
+              <Badge variant={order.status === 'delivered' ? 'default' : 'secondary'} className="rounded-2xl">
                 {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
               </Badge>
             </div>
@@ -94,17 +94,17 @@ const OrderViewDialog = ({ order, isOpen, onClose }: OrderViewDialogProps) => {
 
           {/* Action Buttons */}
           <div className="flex justify-between pt-4 border-t">
-            <Button variant="outline" onClick={onClose}>
+            <Button variant="outline" onClick={onClose} className="rounded-2xl">
               Close
             </Button>
             <div className="flex space-x-2">
-              <Button variant="outline">
+              <Button variant="outline" className="rounded-2xl">
                 📋 Download Invoice
               </Button>
-              <Button variant="outline">
+              <Button variant="outline" className="rounded-2xl">
                 🔄 Reorder Items
               </Button>
-              <Button variant="outline">
+              <Button variant="outline" className="rounded-2xl">
                 📦 Track Order
               </Button>
             </div>

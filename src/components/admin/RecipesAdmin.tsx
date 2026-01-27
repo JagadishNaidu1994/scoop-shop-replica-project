@@ -177,19 +177,19 @@ const RecipesAdmin = () => {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">Recipes Management</h2>
+          <h2 className="text-3xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">Recipes Management</h2>
           <p className="text-gray-600">Manage your recipe collection</p>
         </div>
-        <Button onClick={() => setIsCreating(true)} className="bg-teal-600 hover:bg-teal-700">
+        <Button onClick={() => setIsCreating(true)} className="rounded-2xl bg-gradient-to-r from-teal-600 to-teal-700 hover:from-teal-700 hover:to-teal-800 shadow-lg">
           <Plus className="w-4 h-4 mr-2" />
           Add Recipe
         </Button>
       </div>
 
       {isCreating && (
-        <Card>
+        <Card className="rounded-3xl bg-white/80 backdrop-blur-xl shadow-xl border-slate-200">
           <CardHeader>
-            <CardTitle>{editingRecipe ? 'Edit Recipe' : 'Create New Recipe'}</CardTitle>
+            <CardTitle className="text-2xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">{editingRecipe ? 'Edit Recipe' : 'Create New Recipe'}</CardTitle>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
@@ -201,6 +201,7 @@ const RecipesAdmin = () => {
                     value={formData.title}
                     onChange={(e) => setFormData({...formData, title: e.target.value})}
                     required
+                    className="rounded-2xl border-slate-200 focus:ring-2 focus:ring-teal-500"
                   />
                 </div>
                 <div>
@@ -209,6 +210,7 @@ const RecipesAdmin = () => {
                     id="category"
                     value={formData.category}
                     onChange={(e) => setFormData({...formData, category: e.target.value})}
+                    className="rounded-2xl border-slate-200 focus:ring-2 focus:ring-teal-500"
                   />
                 </div>
               </div>
@@ -221,6 +223,7 @@ const RecipesAdmin = () => {
                     value={formData.read_time}
                     onChange={(e) => setFormData({...formData, read_time: e.target.value})}
                     placeholder="5 min read"
+                    className="rounded-2xl border-slate-200 focus:ring-2 focus:ring-teal-500"
                   />
                 </div>
                 <div>
@@ -282,11 +285,11 @@ const RecipesAdmin = () => {
               </div>
 
               <div className="flex space-x-2">
-                <Button type="submit" className="bg-teal-600 hover:bg-teal-700">
+                <Button type="submit" className="rounded-2xl bg-gradient-to-r from-teal-600 to-teal-700 hover:from-teal-700 hover:to-teal-800">
                   <Save className="w-4 h-4 mr-2" />
                   {editingRecipe ? 'Update' : 'Create'} Recipe
                 </Button>
-                <Button type="button" variant="outline" onClick={resetForm}>
+                <Button type="button" variant="outline" onClick={resetForm} className="rounded-2xl">
                   <X className="w-4 h-4 mr-2" />
                   Cancel
                 </Button>
@@ -296,12 +299,13 @@ const RecipesAdmin = () => {
         </Card>
       )}
 
-      <Card>
+      <Card className="rounded-3xl bg-white/80 backdrop-blur-xl shadow-xl border-slate-200">
         <CardHeader>
-          <CardTitle>Recipes</CardTitle>
+          <CardTitle className="text-xl bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">Recipes</CardTitle>
           <CardDescription>All recipes in your collection</CardDescription>
         </CardHeader>
         <CardContent>
+          <div className="rounded-3xl shadow-xl border border-slate-200 overflow-hidden overflow-x-auto">
           <Table>
             <TableHeader>
               <TableRow>
@@ -318,11 +322,11 @@ const RecipesAdmin = () => {
                 <TableRow key={recipe.id}>
                   <TableCell className="font-medium">{recipe.title}</TableCell>
                   <TableCell>
-                    <Badge variant="outline">{recipe.category}</Badge>
+                    <Badge variant="outline" className="rounded-2xl">{recipe.category}</Badge>
                   </TableCell>
                   <TableCell>{recipe.read_time}</TableCell>
                   <TableCell>
-                    <Badge variant={recipe.is_published ? "default" : "secondary"}>
+                    <Badge variant={recipe.is_published ? "default" : "secondary"} className="rounded-2xl">
                       {recipe.is_published ? "Published" : "Draft"}
                     </Badge>
                   </TableCell>
@@ -333,6 +337,7 @@ const RecipesAdmin = () => {
                         variant="outline"
                         size="sm"
                         onClick={() => handleEdit(recipe)}
+                        className="rounded-2xl"
                       >
                         <Edit className="w-4 h-4" />
                       </Button>
@@ -340,6 +345,7 @@ const RecipesAdmin = () => {
                         variant="outline"
                         size="sm"
                         onClick={() => handleDelete(recipe.id)}
+                        className="rounded-2xl"
                       >
                         <Trash2 className="w-4 h-4" />
                       </Button>
@@ -349,6 +355,7 @@ const RecipesAdmin = () => {
               ))}
             </TableBody>
           </Table>
+          </div>
         </CardContent>
       </Card>
     </div>

@@ -134,18 +134,18 @@ const EnquiriesTab = () => {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">Wholesale Enquiries</h2>
+          <h2 className="text-3xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">Wholesale Enquiries</h2>
           <p className="text-gray-600 mt-1">
             Manage and respond to wholesale partnership requests
           </p>
         </div>
-        <Badge variant="outline" className="text-lg px-4 py-2">
+        <Badge variant="outline" className="text-lg px-4 py-2 rounded-2xl">
           {enquiries.length} Total Enquiries
         </Badge>
       </div>
 
       {enquiries.length === 0 ? (
-        <Card className="p-12 text-center">
+        <Card className="p-12 text-center rounded-3xl bg-white/80 backdrop-blur-xl shadow-xl border-slate-200">
           <MessageSquare className="mx-auto h-12 w-12 text-gray-400 mb-4" />
           <h3 className="text-lg font-medium text-gray-900 mb-2">No enquiries yet</h3>
           <p className="text-gray-600">
@@ -155,12 +155,12 @@ const EnquiriesTab = () => {
       ) : (
         <div className="grid gap-6">
           {enquiries.map((enquiry) => (
-            <Card key={enquiry.id} className="p-6 hover:shadow-lg transition-shadow">
+            <Card key={enquiry.id} className="p-6 hover:shadow-lg transition-shadow rounded-3xl bg-white/80 backdrop-blur-xl shadow-xl border-slate-200">
               <div className="flex items-start justify-between mb-4">
                 <div>
                   <h3 className="text-xl font-bold text-gray-900 mb-1">{enquiry.name}</h3>
                   <div className="flex items-center gap-2 mb-2">
-                    <Badge className={getStatusColor(enquiry.status)}>
+                    <Badge className={`${getStatusColor(enquiry.status)} rounded-2xl`}>
                       {enquiry.status.toUpperCase()}
                     </Badge>
                     <span className="text-sm text-gray-500 flex items-center gap-1">
@@ -174,7 +174,7 @@ const EnquiriesTab = () => {
                     <Button
                       size="sm"
                       onClick={() => updateStatus(enquiry.id, 'contacted')}
-                      className="bg-blue-600 hover:bg-blue-700"
+                      className="rounded-2xl bg-blue-600 hover:bg-blue-700"
                     >
                       <Check className="h-4 w-4 mr-1" />
                       Mark Contacted
@@ -184,7 +184,7 @@ const EnquiriesTab = () => {
                     <Button
                       size="sm"
                       onClick={() => updateStatus(enquiry.id, 'completed')}
-                      className="bg-green-600 hover:bg-green-700"
+                      className="rounded-2xl bg-green-600 hover:bg-green-700"
                     >
                       <Check className="h-4 w-4 mr-1" />
                       Mark Completed
@@ -195,7 +195,7 @@ const EnquiriesTab = () => {
                       size="sm"
                       variant="outline"
                       onClick={() => updateStatus(enquiry.id, 'rejected')}
-                      className="text-red-600 border-red-600 hover:bg-red-50"
+                      className="rounded-2xl text-red-600 border-red-600 hover:bg-red-50"
                     >
                       <X className="h-4 w-4 mr-1" />
                       Reject
@@ -247,6 +247,7 @@ const EnquiriesTab = () => {
                         setEditingNotes(enquiry.id);
                         setNotesValue(enquiry.notes || '');
                       }}
+                      className="rounded-2xl"
                     >
                       Edit Notes
                     </Button>
@@ -259,10 +260,10 @@ const EnquiriesTab = () => {
                       onChange={(e) => setNotesValue(e.target.value)}
                       placeholder="Add internal notes about this enquiry..."
                       rows={3}
-                      className="w-full"
+                      className="w-full rounded-2xl border-slate-200 focus:ring-2 focus:ring-teal-500"
                     />
                     <div className="flex gap-2">
-                      <Button size="sm" onClick={() => saveNotes(enquiry.id)}>
+                      <Button size="sm" onClick={() => saveNotes(enquiry.id)} className="rounded-2xl bg-gradient-to-r from-teal-600 to-teal-700 hover:from-teal-700 hover:to-teal-800">
                         Save Notes
                       </Button>
                       <Button
@@ -272,6 +273,7 @@ const EnquiriesTab = () => {
                           setEditingNotes(null);
                           setNotesValue('');
                         }}
+                        className="rounded-2xl"
                       >
                         Cancel
                       </Button>

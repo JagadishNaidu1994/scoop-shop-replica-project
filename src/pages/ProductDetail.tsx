@@ -5,6 +5,7 @@ import Footer from '@/components/Footer';
 import AdminImageUpload from '@/components/AdminImageUpload';
 import { supabase } from '@/integrations/supabase/client';
 import { useCart } from '@/contexts/CartContext';
+import { useWishlist } from '@/contexts/WishlistContext';
 import { Button } from '@/components/ui/button';
 import { Star, Plus, Minus, ChevronDown, Heart, Share2, Truck, Shield, RefreshCw, Award, CheckCircle, X, Microscope, Leaf, Users, Globe, Zap, Brain, Sparkles, TrendingUp, Camera, Play, ChevronLeft, ChevronRight } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
@@ -30,6 +31,7 @@ const ProductDetail = () => {
   const {
     addToCart
   } = useCart();
+  const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(1);
@@ -37,9 +39,12 @@ const ProductDetail = () => {
   const [subscriptionType, setSubscriptionType] = useState<'one-time' | 'subscribe'>('one-time');
   const [subscriptionFrequency, setSubscriptionFrequency] = useState('Every 4 weeks');
   const [currentIngredient, setCurrentIngredient] = useState(0);
-  const [isWishlisted, setIsWishlisted] = useState(false);
   const [showImageModal, setShowImageModal] = useState(false);
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
+  const [whyChooseOpen, setWhyChooseOpen] = useState(false);
+  const [ingredientsOpen, setIngredientsOpen] = useState(false);
+  const [scienceOpen, setScienceOpen] = useState(false);
+  const [howToUseOpen, setHowToUseOpen] = useState(false);
   const ingredients = [{
     name: 'Vitamin B9',
     amount: '12% RI per serving',
@@ -176,12 +181,21 @@ const ProductDetail = () => {
         : `${quantity}x ${product.name} added to your cart.`
     });
   };
-  const handleWishlist = () => {
-    setIsWishlisted(!isWishlisted);
-    toast({
-      title: isWishlisted ? "Removed from wishlist" : "Added to wishlist",
-      description: isWishlisted ? "Item removed from your wishlist" : "Item saved to your wishlist"
-    });
+  const handleWishlist = async () => {
+    if (!product) return;
+
+    const isCurrentlyWishlisted = isInWishlist(product.id);
+
+    if (isCurrentlyWishlisted) {
+      await removeFromWishlist(product.id);
+    } else {
+      await addToWishlist({
+        product_id: product.id,
+        product_name: product.name,
+        product_price: product.price,
+        product_image: product.primary_image
+      });
+    }
   };
   const handleShare = () => {
     if (navigator.share) {
@@ -274,8 +288,8 @@ const ProductDetail = () => {
               
               {/* Floating Action Buttons */}
               <div className="absolute top-4 right-4 flex flex-col space-y-2">
-                <button onClick={handleWishlist} className={`p-2 rounded-full backdrop-blur-md transition-all duration-200 ${isWishlisted ? 'bg-red-500 text-white shadow-lg' : 'bg-white/80 text-gray-600 hover:bg-white hover:shadow-lg'}`}>
-                  <Heart className={`w-4 h-4 ${isWishlisted ? 'fill-current' : ''}`} />
+                <button onClick={handleWishlist} className={`p-2 rounded-full backdrop-blur-md transition-all duration-200 ${product && isInWishlist(product.id) ? 'bg-red-500 text-white shadow-lg' : 'bg-white/80 text-gray-600 hover:bg-white hover:shadow-lg'}`}>
+                  <Heart className={`w-4 h-4 ${product && isInWishlist(product.id) ? 'fill-current' : ''}`} />
                 </button>
                 <button onClick={handleShare} className="p-2 rounded-full bg-white/80 backdrop-blur-md text-gray-600 hover:bg-white hover:shadow-lg transition-all duration-200">
                   <Share2 className="w-4 h-4" />
@@ -318,7 +332,7 @@ const ProductDetail = () => {
                 NASTEA {product.name}
               </h1>
               <p className="text-lg text-gray-600 font-medium">
-                Energy, focus, beauty
+                Cert Organic | Calm Energy | No Additives
               </p>
               <p className="text-gray-700 leading-relaxed text-sm">
                 The creamiest, ceremonial-grade Matcha with Lion's Mane, Tremella, and essential B vitamins.
@@ -422,11 +436,11 @@ const ProductDetail = () => {
               
 
               {/* More payment options */}
-              <div className="text-center">
+              {/* <div className="text-center">
                 <button className="text-sm text-gray-600 hover:text-gray-800 underline">
                   More payment options
                 </button>
-              </div>
+              </div> */}
 
               {/* Benefits */}
               <div className="mt-6 space-y-3">
@@ -468,88 +482,93 @@ const ProductDetail = () => {
             {/* Collapsible Sections */}
             <div className="pt-4 border-t border-gray-200 space-y-2">
               {/* Why choose NASTEA Section */}
-              <Collapsible>
+              <Collapsible open={whyChooseOpen} onOpenChange={setWhyChooseOpen}>
                 <CollapsibleTrigger className="flex items-center justify-between w-full py-2 border-b border-gray-200 hover:bg-gray-50/50 transition-colors">
-                  <h3 className="text-sm font-semibold text-gray-900">Why choose NASTEA</h3>
-                  <Plus className="w-4 h-4 text-gray-500 group-data-[state=open]:rotate-45 transition-transform" />
+                  <h3 className="text-sm font-semibold text-gray-900">Why choose Nastea Rituals</h3>
+                  {whyChooseOpen ? (
+                    <Minus className="w-4 h-4 text-gray-500 transition-transform" />
+                  ) : (
+                    <Plus className="w-4 h-4 text-gray-500 transition-transform" />
+                  )}
                 </CollapsibleTrigger>
-                <CollapsibleContent className="pt-2 pb-1">
-                  <div className="space-y-2">
-                    <div className="flex items-start space-x-2">
-                      <div className="w-1 h-1 bg-black rounded-full mt-1 flex-shrink-0"></div>
-                      <p className="text-xs text-gray-700">NASTEA's Matcha Super Latte isn't just delicious - it's a powerhouse for your mind and body. Crafted with 100% pure ceremonial-grade Japanese matcha, Lion's Mane, Tremella mushrooms and vitamins, our matcha powder enhances focus, beauty, energy, supports your nervous system, mental clarity, skin health, immunity, and wellbeing.</p>
-                    </div>
-                    <div className="flex items-start space-x-2">
-                      <div className="w-1 h-1 bg-black rounded-full mt-1 flex-shrink-0"></div>
-                      <p className="text-xs text-gray-700">Complete 100% plant glucans</p>
-                    </div>
-                    <div className="flex items-start space-x-2">
-                      <div className="w-1 h-1 bg-black rounded-full mt-1 flex-shrink-0"></div>
-                      <p className="text-xs text-gray-700">Zero sugars and sweeteners added</p>
-                    </div>
-                    <div className="flex items-start space-x-2">
-                      <div className="w-1 h-1 bg-black rounded-full mt-1 flex-shrink-0"></div>
-                      <p className="text-xs text-gray-700">Boost the skin and anti-ageing benefits</p>
-                    </div>
+                <CollapsibleContent className="pt-2 pb-1 overflow-hidden transition-all duration-300 ease-in-out">
+                  <div className="space-y-3 text-xs text-gray-700">
+                    <p>
+                      Nastea Rituals isn't "just matcha." It's an Organic Ceremonial Japanese matcha built for real life - smooth enough to sip straight, bold enough to cut through milk, and vibrant enough to make every cup look like a flex. We source Japan-grown matcha (hello, Kagoshima), keep it clean, and obsess over the things that actually matter: flavour, colour, and consistency.
+                    </p>
+                    <p>
+                      Most matcha brands whisper and hope you don't notice the bitterness. We don't. Our matcha is shade-grown and stone-milled for a rounded, umami-forward taste that feels indulgent without being sugary. It's the kind of clean caffeine ritual that fits your mornings, your workouts, your deep-work blocks, and your "I'm trying to be healthy but still fun" era - without the crashy chaos.
+                    </p>
                   </div>
-                  <p className="text-xs text-gray-600 mt-2">
-                    Feel the difference with NASTEA Matcha Mushroom Super Latte! Elevate your daily energize and mind and stay focused!
-                  </p>
                 </CollapsibleContent>
               </Collapsible>
 
               {/* Ingredients Section */}
-              <Collapsible>
+              <Collapsible open={ingredientsOpen} onOpenChange={setIngredientsOpen}>
                 <CollapsibleTrigger className="flex items-center justify-between w-full py-2 border-b border-gray-200 hover:bg-gray-50/50 transition-colors">
                   <h3 className="text-sm font-semibold text-gray-900">Ingredients</h3>
-                  <Plus className="w-4 h-4 text-gray-500 group-data-[state=open]:rotate-45 transition-transform" />
+                  {ingredientsOpen ? (
+                    <Minus className="w-4 h-4 text-gray-500 transition-transform" />
+                  ) : (
+                    <Plus className="w-4 h-4 text-gray-500 transition-transform" />
+                  )}
                 </CollapsibleTrigger>
-                <CollapsibleContent className="pt-2 pb-1">
+                <CollapsibleContent className="pt-2 pb-1 overflow-hidden transition-all duration-300 ease-in-out">
                   <div className="space-y-1 text-xs text-gray-700">
-                    <p><strong>Organic Ceremonial-Grade Matcha Powder:</strong></p>
-                    <p><strong>Organic Lion's Mane Mushroom Extract:</strong></p>
-                    <p><strong>Organic Tremella Mushroom Extract:</strong></p>
-                    <p><strong>Organic Mesquite Leaf Powder:</strong></p>
-                    <p><strong>Organic Coconut Milk Powder:</strong></p>
-                    <p><strong>Vitamin B1 (Thiamine HCI):</strong></p>
-                    <p><strong>Vitamin B2 (Riboflavin):</strong></p>
-                    <p><strong>Vitamin B6 (Pyridoxine HCI):</strong></p>
-                    <p><strong>Vitamin B9 (Folic Acid):</strong></p>
-                    <p><strong>Organic Coconut Milk Powder:</strong></p>
-                    <p><strong>Organic Vanilla Extract</strong></p>
+                    <p><strong>Organic Ceremonial Grade Matcha</strong></p>
                   </div>
                 </CollapsibleContent>
               </Collapsible>
 
               {/* The Science Section */}
-              <Collapsible>
+              <Collapsible open={scienceOpen} onOpenChange={setScienceOpen}>
                 <CollapsibleTrigger className="flex items-center justify-between w-full py-2 border-b border-gray-200 hover:bg-gray-50/50 transition-colors">
                   <h3 className="text-sm font-semibold text-gray-900">The Science</h3>
-                  <Plus className="w-4 h-4 text-gray-500 group-data-[state=open]:rotate-45 transition-transform" />
+                  {scienceOpen ? (
+                    <Minus className="w-4 h-4 text-gray-500 transition-transform" />
+                  ) : (
+                    <Plus className="w-4 h-4 text-gray-500 transition-transform" />
+                  )}
                 </CollapsibleTrigger>
-                <CollapsibleContent className="pt-2 pb-1">
-                  <div className="space-y-2 text-xs text-gray-700">
-                    <p>Matcha comes from the Camellia sinensis plant, like green tea, but is made by finely grinding whole tea leaves into a powder. The traditional cultivation methods cultivate a relationship with nature, using nutrients like amino and antioxidants and promotes relaxation while enhancing focus.</p>
-                    
-                    <p><strong>Lion's Mane mushroom supports cognitive function and focus,</strong> which supports information and neural pathways responsible for critical brain function processes like cognition and memory.</p>
-                    
-                    <p><strong>Tremella mushroom provides a collagen and biotin boost,</strong> which supports skin health and hydration. It's been used for centuries in traditional Chinese medicine as a beauty tonic.</p>
+                <CollapsibleContent className="pt-2 pb-1 overflow-hidden transition-all duration-300 ease-in-out">
+                  <div className="space-y-3 text-xs text-gray-700">
+                    <p>
+                      Matcha comes from the Camellia sinensis plant (same as green tea), but it's made differently: the leaves are shade-grown, then finely milled into a powder. That means you're not just steeping tea and tossing the leaves — you're consuming the leaf itself. Result: a richer, more concentrated matcha experience in both taste and naturally occurring compounds.
+                    </p>
+                    <p>
+                      Matcha's energy also tends to feel… more composed. That's because matcha naturally contains caffeine + L-theanine — a tea amino acid often linked to a calmer, more focused "alert" feel compared to caffeine drinks' spike-and-crash reputation. Translation: steady energy, cleaner headspace, fewer "why am I vibrating?" moments.
+                    </p>
+                    <p>
+                      Depending on the product you're drinking, matcha also contains a mix of plant compounds that shape how it tastes and why it's been respected for centuries:
+                    </p>
+                    <ul className="list-disc list-inside space-y-1 ml-2">
+                      <li><strong>L-theanine</strong> — associated with calm-focus vibes (especially alongside caffeine)</li>
+                      <li><strong>Catechins</strong> — the crisp, slightly bitter plant compounds in green tea (yes, the "real matcha" taste cue)</li>
+                      <li><strong>Chlorophyll</strong> — the pigment that makes matcha that vivid, neon-clean green (shade-growing helps)</li>
+                    </ul>
+                    <p>
+                      If you're looking at functional blends that pair matcha with other ingredients (like mushrooms or vitamins), the goal is usually to build on matcha's natural "calm energy" profile — but the core is still the same: ceremonial matcha done properly, as a daily ritual that feels good and tastes even better.
+                    </p>
                   </div>
                 </CollapsibleContent>
               </Collapsible>
 
               {/* How to Use Section */}
-              <Collapsible>
+              <Collapsible open={howToUseOpen} onOpenChange={setHowToUseOpen}>
                 <CollapsibleTrigger className="flex items-center justify-between w-full py-2 border-b border-gray-200 hover:bg-gray-50/50 transition-colors">
-                  <h3 className="text-sm font-semibold text-gray-900">How to Use</h3>
-                  <Plus className="w-4 h-4 text-gray-500 group-data-[state=open]:rotate-45 transition-transform" />
+                  <h3 className="text-sm font-semibold text-gray-900">How to Nastea</h3>
+                  {howToUseOpen ? (
+                    <Minus className="w-4 h-4 text-gray-500 transition-transform" />
+                  ) : (
+                    <Plus className="w-4 h-4 text-gray-500 transition-transform" />
+                  )}
                 </CollapsibleTrigger>
-                <CollapsibleContent className="pt-2 pb-1">
+                <CollapsibleContent className="pt-2 pb-1 overflow-hidden transition-all duration-300 ease-in-out">
                   <div className="space-y-1 text-xs text-gray-700">
-                    <p>1. Add 1-2 tsp of NASTEA Matcha to a cup</p>
-                    <p>2. Pour 60ml of hot water (80°C or cold water)</p>
-                    <p>3. Stir or whisk until frothy and smooth</p>
-                    <p>4. Add your choice of milk and enjoy!</p>
+                    <p>1. Whisk 3g NR Matcha with a splash of warm water until smooth + frothy.</p>
+                    <p>2. Fill a glass with ice (skip ice if you want it hot).</p>
+                    <p>3. Pour in milk of choice (almond/oat milk is elite).</p>
+                    <p>4. Top with the whisked matcha, stir, sip like you've got plans.</p>
                   </div>
                 </CollapsibleContent>
               </Collapsible>

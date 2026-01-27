@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Menu, X, ShoppingCart, User, Settings, Shield } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
@@ -18,21 +18,33 @@ const HeaderNavBar = () => {
   const { getTotalItems } = useCart();
   const { isAdmin } = useAdminCheck();
   const location = useLocation();
-  
+
+  // Cache to prevent unnecessary profile fetches
+  const profileCache = useRef<{ [userId: string]: string }>({});
+  const lastFetchedUserId = useRef<string | null>(null);
+
   // Check if we're on the account page
   const isAccountPage = location.pathname === '/account';
 
   useEffect(() => {
-    if (user) {
-      fetchUserProfile();
+    if (user?.id) {
+      // Check cache first
+      if (profileCache.current[user.id]) {
+        setFirstName(profileCache.current[user.id]);
+      } else if (lastFetchedUserId.current !== user.id) {
+        // Only fetch if we haven't fetched for this user yet
+        fetchUserProfile();
+        lastFetchedUserId.current = user.id;
+      }
     } else {
       setFirstName('');
+      lastFetchedUserId.current = null;
     }
-  }, [user]);
+  }, [user?.id]);
 
   const fetchUserProfile = async () => {
     if (!user) return;
-    
+
     try {
       const { data, error } = await supabase
         .from('profiles')
@@ -47,6 +59,8 @@ const HeaderNavBar = () => {
 
       const displayName = data?.first_name || data?.full_name?.split(' ')[0] || '';
       setFirstName(displayName);
+      // Cache the result
+      profileCache.current[user.id] = displayName;
     } catch (error) {
       console.error('Error fetching user profile:', error);
     }
@@ -127,9 +141,10 @@ const HeaderNavBar = () => {
               <Link to="/wholesale" className="text-black hover:text-gray-600 transition-colors font-medium">
                 WHOLESALE
               </Link>
-              <Link to="/refer-friend" className="text-black hover:text-gray-600 transition-colors font-medium">
+              {/* Temporarily hidden - Refer a Friend in parking */}
+              {/* <Link to="/refer-friend" className="text-black hover:text-gray-600 transition-colors font-medium">
                 REFER A FRIEND
-              </Link>
+              </Link> */}
             </nav>
 
             {/* Right side icons */}
@@ -257,10 +272,11 @@ const HeaderNavBar = () => {
                       <Link to="/wholesale" className="block text-lg font-medium text-black hover:text-gray-600 border-b border-gray-200 pb-2">
                         WHOLESALE
                       </Link>
-                      
-                      <Link to="/refer-friend" className="block text-lg font-medium text-black hover:text-gray-600 border-b border-gray-200 pb-2">
+
+                      {/* Temporarily hidden - Refer a Friend in parking */}
+                      {/* <Link to="/refer-friend" className="block text-lg font-medium text-black hover:text-gray-600 border-b border-gray-200 pb-2">
                         REFER A FRIEND
-                      </Link>
+                      </Link> */}
                     </div>
 
                     {/* Bottom section */}

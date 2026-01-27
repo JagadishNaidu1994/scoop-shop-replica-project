@@ -158,20 +158,20 @@ const ShippingTab = () => {
   return (
     <div>
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-2xl font-bold">Shipping Methods</h2>
+        <h2 className="text-3xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">Shipping Methods</h2>
         <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
           <DialogTrigger asChild>
             <Button onClick={() => {
               setEditingMethod(null);
               resetForm();
-            }}>
+            }} className="rounded-2xl bg-gradient-to-r from-teal-600 to-teal-700 hover:from-teal-700 hover:to-teal-800 shadow-lg">
               <FaPlus className="mr-2" />
               Add Method
             </Button>
           </DialogTrigger>
-          <DialogContent className="bg-white dark:bg-gray-900">
+          <DialogContent className="rounded-3xl border-slate-200 shadow-2xl bg-white dark:bg-gray-900">
             <DialogHeader>
-              <DialogTitle>
+              <DialogTitle className="text-2xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">
                 {editingMethod ? "Edit Shipping Method" : "Add Shipping Method"}
               </DialogTitle>
             </DialogHeader>
@@ -183,6 +183,7 @@ const ShippingTab = () => {
                   value={form.name}
                   onChange={(e) => setForm({ ...form, name: e.target.value })}
                   required
+                  className="rounded-2xl border-slate-200 focus:ring-2 focus:ring-teal-500"
                 />
               </div>
               <div>
@@ -191,6 +192,7 @@ const ShippingTab = () => {
                   id="description"
                   value={form.description}
                   onChange={(e) => setForm({ ...form, description: e.target.value })}
+                  className="rounded-2xl border-slate-200 focus:ring-2 focus:ring-teal-500"
                 />
               </div>
               <div>
@@ -202,6 +204,7 @@ const ShippingTab = () => {
                   value={form.base_rate}
                   onChange={(e) => setForm({ ...form, base_rate: e.target.value })}
                   required
+                  className="rounded-2xl border-slate-200 focus:ring-2 focus:ring-teal-500"
                 />
               </div>
               <div>
@@ -211,6 +214,7 @@ const ShippingTab = () => {
                   value={form.estimated_days}
                   onChange={(e) => setForm({ ...form, estimated_days: e.target.value })}
                   required
+                  className="rounded-2xl border-slate-200 focus:ring-2 focus:ring-teal-500"
                 />
               </div>
               <div className="flex justify-end space-x-2">
@@ -218,10 +222,11 @@ const ShippingTab = () => {
                   type="button"
                   variant="outline"
                   onClick={() => setIsModalOpen(false)}
+                  className="rounded-2xl"
                 >
                   Cancel
                 </Button>
-                <Button type="submit" disabled={loading}>
+                <Button type="submit" disabled={loading} className="rounded-2xl bg-gradient-to-r from-teal-600 to-teal-700 hover:from-teal-700 hover:to-teal-800">
                   {loading ? "Saving..." : "Save"}
                 </Button>
               </div>
@@ -229,7 +234,7 @@ const ShippingTab = () => {
           </DialogContent>
         </Dialog>
       </div>
-      <div className="overflow-x-auto">
+      <div className="rounded-3xl shadow-xl border border-slate-200 overflow-hidden bg-white/80 backdrop-blur-xl">
         <Table>
           <TableHeader>
             <TableRow>
@@ -256,9 +261,9 @@ const ShippingTab = () => {
                   <TableCell>₹{method.base_rate.toFixed(2)}</TableCell>
                   <TableCell>{method.estimated_days}</TableCell>
                   <TableCell>
-                    <span className={`px-2 py-1 rounded text-xs ${
-                      method.is_active 
-                        ? 'bg-green-100 text-green-800' 
+                    <span className={`px-2 py-1 rounded-2xl text-xs ${
+                      method.is_active
+                        ? 'bg-green-100 text-green-800'
                         : 'bg-red-100 text-red-800'
                     }`}>
                       {method.is_active ? 'Active' : 'Inactive'}
@@ -270,13 +275,15 @@ const ShippingTab = () => {
                         size="sm"
                         variant="outline"
                         onClick={() => handleEdit(method)}
+                        className="rounded-2xl"
                       >
                         <FaEdit />
                       </Button>
-                      <Button 
-                        size="sm" 
+                      <Button
+                        size="sm"
                         variant="destructive"
                         onClick={() => handleDelete(method.id)}
+                        className="rounded-2xl"
                       >
                         <FaTrash />
                       </Button>

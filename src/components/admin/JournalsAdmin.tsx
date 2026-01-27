@@ -166,19 +166,19 @@ const JournalsAdmin = () => {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">Journals Management</h2>
+          <h2 className="text-3xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">Journals Management</h2>
           <p className="text-gray-600">Manage your journal articles</p>
         </div>
-        <Button onClick={() => setIsCreating(true)} className="bg-teal-600 hover:bg-teal-700">
+        <Button onClick={() => setIsCreating(true)} className="rounded-2xl bg-gradient-to-r from-teal-600 to-teal-700 hover:from-teal-700 hover:to-teal-800 shadow-lg">
           <Plus className="w-4 h-4 mr-2" />
           Add Journal
         </Button>
       </div>
 
       {isCreating && (
-        <Card>
+        <Card className="rounded-3xl bg-white/80 backdrop-blur-xl shadow-xl border-slate-200">
           <CardHeader>
-            <CardTitle>{editingJournal ? 'Edit Journal' : 'Create New Journal'}</CardTitle>
+            <CardTitle className="text-2xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">{editingJournal ? 'Edit Journal' : 'Create New Journal'}</CardTitle>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
@@ -190,6 +190,7 @@ const JournalsAdmin = () => {
                     value={formData.title}
                     onChange={(e) => setFormData({...formData, title: e.target.value})}
                     required
+                    className="rounded-2xl border-slate-200 focus:ring-2 focus:ring-teal-500"
                   />
                 </div>
                 <div>
@@ -198,6 +199,7 @@ const JournalsAdmin = () => {
                     id="author"
                     value={formData.author}
                     onChange={(e) => setFormData({...formData, author: e.target.value})}
+                    className="rounded-2xl border-slate-200 focus:ring-2 focus:ring-teal-500"
                   />
                 </div>
               </div>
@@ -209,6 +211,7 @@ const JournalsAdmin = () => {
                     id="category"
                     value={formData.category}
                     onChange={(e) => setFormData({...formData, category: e.target.value})}
+                    className="rounded-2xl border-slate-200 focus:ring-2 focus:ring-teal-500"
                   />
                 </div>
                 <div>
@@ -218,6 +221,7 @@ const JournalsAdmin = () => {
                     value={formData.read_time}
                     onChange={(e) => setFormData({...formData, read_time: e.target.value})}
                     placeholder="5 min read"
+                    className="rounded-2xl border-slate-200 focus:ring-2 focus:ring-teal-500"
                   />
                 </div>
               </div>
@@ -262,11 +266,11 @@ const JournalsAdmin = () => {
               </div>
 
               <div className="flex space-x-2">
-                <Button type="submit" className="bg-teal-600 hover:bg-teal-700">
+                <Button type="submit" className="rounded-2xl bg-gradient-to-r from-teal-600 to-teal-700 hover:from-teal-700 hover:to-teal-800">
                   <Save className="w-4 h-4 mr-2" />
                   {editingJournal ? 'Update' : 'Create'} Journal
                 </Button>
-                <Button type="button" variant="outline" onClick={resetForm}>
+                <Button type="button" variant="outline" onClick={resetForm} className="rounded-2xl">
                   <X className="w-4 h-4 mr-2" />
                   Cancel
                 </Button>
@@ -276,12 +280,13 @@ const JournalsAdmin = () => {
         </Card>
       )}
 
-      <Card>
+      <Card className="rounded-3xl bg-white/80 backdrop-blur-xl shadow-xl border-slate-200">
         <CardHeader>
-          <CardTitle>Journals</CardTitle>
+          <CardTitle className="text-xl bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">Journals</CardTitle>
           <CardDescription>All journal articles</CardDescription>
         </CardHeader>
         <CardContent>
+          <div className="rounded-3xl shadow-xl border border-slate-200 overflow-hidden overflow-x-auto">
           <Table>
             <TableHeader>
               <TableRow>
@@ -300,11 +305,11 @@ const JournalsAdmin = () => {
                   <TableCell className="font-medium">{journal.title}</TableCell>
                   <TableCell>{journal.author}</TableCell>
                   <TableCell>
-                    <Badge variant="outline">{journal.category}</Badge>
+                    <Badge variant="outline" className="rounded-2xl">{journal.category}</Badge>
                   </TableCell>
                   <TableCell>{journal.read_time}</TableCell>
                   <TableCell>
-                    <Badge variant={journal.is_published ? "default" : "secondary"}>
+                    <Badge variant={journal.is_published ? "default" : "secondary"} className="rounded-2xl">
                       {journal.is_published ? "Published" : "Draft"}
                     </Badge>
                   </TableCell>
@@ -315,6 +320,7 @@ const JournalsAdmin = () => {
                         variant="outline"
                         size="sm"
                         onClick={() => handleEdit(journal)}
+                        className="rounded-2xl"
                       >
                         <Edit className="w-4 h-4" />
                       </Button>
@@ -322,6 +328,7 @@ const JournalsAdmin = () => {
                         variant="outline"
                         size="sm"
                         onClick={() => handleDelete(journal.id)}
+                        className="rounded-2xl"
                       >
                         <Trash2 className="w-4 h-4" />
                       </Button>
@@ -331,6 +338,7 @@ const JournalsAdmin = () => {
               ))}
             </TableBody>
           </Table>
+          </div>
         </CardContent>
       </Card>
     </div>

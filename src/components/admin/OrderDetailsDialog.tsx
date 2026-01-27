@@ -130,10 +130,10 @@ const OrderDetailsDialog = ({ order, isOpen, onClose }: OrderDetailsDialogProps)
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-5xl max-h-[90vh] overflow-y-auto bg-white">
+      <DialogContent className="max-w-5xl max-h-[90vh] overflow-y-auto rounded-3xl border-slate-200 shadow-2xl bg-white">
         <DialogHeader className="pb-6">
           <div className="flex items-center justify-between">
-            <DialogTitle className="text-2xl font-semibold">
+            <DialogTitle className="text-3xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">
               Order Number #{orderNumber}
             </DialogTitle>
             <div className="flex items-center gap-4 text-sm text-gray-600">

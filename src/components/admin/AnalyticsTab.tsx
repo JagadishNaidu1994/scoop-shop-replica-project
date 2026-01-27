@@ -168,9 +168,9 @@ const AnalyticsTab = () => {
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <Card>
+        <Card className="rounded-3xl bg-white/80 backdrop-blur-xl shadow-xl border-slate-200">
           <CardHeader>
-            <CardTitle>Total Revenue</CardTitle>
+            <CardTitle className="text-xl bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">Total Revenue</CardTitle>
           </CardHeader>
           <CardContent>
             <ResponsiveContainer width="100%" height={300}>
@@ -185,9 +185,9 @@ const AnalyticsTab = () => {
             </ResponsiveContainer>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="rounded-3xl bg-white/80 backdrop-blur-xl shadow-xl border-slate-200">
           <CardHeader>
-            <CardTitle>Total Orders</CardTitle>
+            <CardTitle className="text-xl bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">Total Orders</CardTitle>
           </CardHeader>
           <CardContent>
             <ResponsiveContainer width="100%" height={300}>
@@ -202,9 +202,9 @@ const AnalyticsTab = () => {
             </ResponsiveContainer>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="rounded-3xl bg-white/80 backdrop-blur-xl shadow-xl border-slate-200">
           <CardHeader>
-            <CardTitle>New Customers</CardTitle>
+            <CardTitle className="text-xl bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">New Customers</CardTitle>
           </CardHeader>
           <CardContent>
             <ResponsiveContainer width="100%" height={300}>
@@ -220,9 +220,9 @@ const AnalyticsTab = () => {
           </CardContent>
         </Card>
       </div>
-      <Card>
+      <Card className="rounded-3xl bg-white/80 backdrop-blur-xl shadow-xl border-slate-200">
         <CardHeader>
-          <CardTitle>Sales by Product</CardTitle>
+          <CardTitle className="text-xl bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">Sales by Product</CardTitle>
         </CardHeader>
         <CardContent>
           <ResponsiveContainer width="100%" height={400}>

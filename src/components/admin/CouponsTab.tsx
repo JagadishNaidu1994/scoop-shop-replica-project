@@ -188,20 +188,20 @@ export const CouponsTab = () => {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold">Coupon Codes</h2>
+        <h2 className="text-3xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">Coupon Codes</h2>
         <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
           <DialogTrigger asChild>
             <Button onClick={() => {
               setEditingCoupon(null);
               resetForm();
-            }}>
+            }} className="rounded-2xl bg-gradient-to-r from-teal-600 to-teal-700 hover:from-teal-700 hover:to-teal-800 shadow-lg">
               <Plus className="h-4 w-4 mr-2" />
               Create Coupon
             </Button>
           </DialogTrigger>
-          <DialogContent className="max-w-2xl bg-white">
+          <DialogContent className="max-w-2xl rounded-3xl border-slate-200 shadow-2xl bg-white">
             <DialogHeader>
-              <DialogTitle>
+              <DialogTitle className="text-2xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">
                 {editingCoupon ? "Edit Coupon" : "Create New Coupon"}
               </DialogTitle>
             </DialogHeader>
@@ -215,12 +215,13 @@ export const CouponsTab = () => {
                     onChange={(e) => setForm({ ...form, code: e.target.value })}
                     placeholder="SAVE20"
                     required
+                    className="rounded-2xl border-slate-200 focus:ring-2 focus:ring-teal-500"
                   />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="discount_type">Discount Type</Label>
                   <Select value={form.discount_type} onValueChange={(value) => setForm({ ...form, discount_type: value })}>
-                    <SelectTrigger>
+                    <SelectTrigger className="rounded-2xl border-slate-200 focus:ring-2 focus:ring-teal-500">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -243,6 +244,7 @@ export const CouponsTab = () => {
                     value={form.discount_value}
                     onChange={(e) => setForm({ ...form, discount_value: e.target.value })}
                     required
+                    className="rounded-2xl border-slate-200 focus:ring-2 focus:ring-teal-500"
                   />
                 </div>
                 <div className="space-y-2">
@@ -253,6 +255,7 @@ export const CouponsTab = () => {
                     step="0.01"
                     value={form.minimum_order_amount}
                     onChange={(e) => setForm({ ...form, minimum_order_amount: e.target.value })}
+                    className="rounded-2xl border-slate-200 focus:ring-2 focus:ring-teal-500"
                   />
                 </div>
               </div>
@@ -265,6 +268,7 @@ export const CouponsTab = () => {
                     type="number"
                     value={form.max_uses}
                     onChange={(e) => setForm({ ...form, max_uses: e.target.value })}
+                    className="rounded-2xl border-slate-200 focus:ring-2 focus:ring-teal-500"
                   />
                 </div>
                 <div className="space-y-2">
@@ -274,6 +278,7 @@ export const CouponsTab = () => {
                     type="date"
                     value={form.expires_at}
                     onChange={(e) => setForm({ ...form, expires_at: e.target.value })}
+                    className="rounded-2xl border-slate-200 focus:ring-2 focus:ring-teal-500"
                   />
                 </div>
               </div>
@@ -312,10 +317,11 @@ export const CouponsTab = () => {
                   type="button"
                   variant="outline"
                   onClick={() => setIsModalOpen(false)}
+                  className="rounded-2xl"
                 >
                   Cancel
                 </Button>
-                <Button type="submit" disabled={loading}>
+                <Button type="submit" disabled={loading} className="rounded-2xl bg-gradient-to-r from-teal-600 to-teal-700 hover:from-teal-700 hover:to-teal-800">
                   {loading ? "Saving..." : "Save Coupon"}
                 </Button>
               </div>
@@ -324,9 +330,9 @@ export const CouponsTab = () => {
         </Dialog>
       </div>
 
-      <Card>
+      <Card className="rounded-3xl bg-white/80 backdrop-blur-xl shadow-xl border-slate-200">
         <CardHeader>
-          <CardTitle>All Coupons ({coupons.length})</CardTitle>
+          <CardTitle className="text-xl bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">All Coupons ({coupons.length})</CardTitle>
         </CardHeader>
         <CardContent>
           {loading ? (
@@ -341,6 +347,7 @@ export const CouponsTab = () => {
               <p className="text-muted-foreground">Create your first coupon to get started</p>
             </div>
           ) : (
+            <div className="rounded-3xl shadow-xl border border-slate-200 overflow-hidden overflow-x-auto">
             <Table>
               <TableHeader>
                 <TableRow>
@@ -362,7 +369,7 @@ export const CouponsTab = () => {
                       </code>
                     </TableCell>
                     <TableCell>
-                      <Badge variant="secondary">
+                      <Badge variant="secondary" className="rounded-2xl">
                         {formatDiscount(coupon.discount_type, coupon.discount_value)} OFF
                       </Badge>
                     </TableCell>
@@ -371,7 +378,7 @@ export const CouponsTab = () => {
                       {coupon.used_count} / {coupon.max_uses || "∞"}
                     </TableCell>
                     <TableCell>
-                      <Badge variant={coupon.is_active ? "default" : "secondary"}>
+                      <Badge variant={coupon.is_active ? "default" : "secondary"} className="rounded-2xl">
                         {coupon.is_active ? "Active" : "Inactive"}
                       </Badge>
                     </TableCell>
@@ -387,6 +394,7 @@ export const CouponsTab = () => {
                           variant="outline"
                           size="sm"
                           onClick={() => handleEdit(coupon)}
+                          className="rounded-2xl"
                         >
                           <Edit className="h-4 w-4" />
                         </Button>
@@ -394,6 +402,7 @@ export const CouponsTab = () => {
                           variant="destructive"
                           size="sm"
                           onClick={() => handleDelete(coupon.id)}
+                          className="rounded-2xl"
                         >
                           <Trash2 className="h-4 w-4" />
                         </Button>
@@ -403,13 +412,14 @@ export const CouponsTab = () => {
                 ))}
               </TableBody>
             </Table>
+            </div>
           )}
         </CardContent>
       </Card>
 
       {/* Summary Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card>
+        <Card className="rounded-3xl bg-white/80 backdrop-blur-xl shadow-xl border-slate-200">
           <CardContent className="pt-6">
             <div className="text-center">
               <p className="text-2xl font-bold">{coupons.length}</p>
@@ -417,7 +427,7 @@ export const CouponsTab = () => {
             </div>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="rounded-3xl bg-white/80 backdrop-blur-xl shadow-xl border-slate-200">
           <CardContent className="pt-6">
             <div className="text-center">
               <p className="text-2xl font-bold text-green-600">
@@ -427,7 +437,7 @@ export const CouponsTab = () => {
             </div>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="rounded-3xl bg-white/80 backdrop-blur-xl shadow-xl border-slate-200">
           <CardContent className="pt-6">
             <div className="text-center">
               <p className="text-2xl font-bold text-blue-600">
@@ -437,7 +447,7 @@ export const CouponsTab = () => {
             </div>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="rounded-3xl bg-white/80 backdrop-blur-xl shadow-xl border-slate-200">
           <CardContent className="pt-6">
             <div className="text-center">
               <p className="text-2xl font-bold text-purple-600">

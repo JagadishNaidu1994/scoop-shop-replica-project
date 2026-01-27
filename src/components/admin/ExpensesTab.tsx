@@ -59,13 +59,13 @@ const ExpensesTab = () => {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold text-gray-900">Expenses Management</h2>
+        <h2 className="text-3xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">Expenses Management</h2>
         <div className="flex space-x-2">
-          <Button variant="outline">
+          <Button variant="outline" className="rounded-2xl">
             <Download className="w-4 h-4 mr-2" />
             Export
           </Button>
-          <Button>
+          <Button className="rounded-2xl bg-gradient-to-r from-teal-600 to-teal-700 hover:from-teal-700 hover:to-teal-800 shadow-lg">
             <Plus className="w-4 h-4 mr-2" />
             Add Expense
           </Button>
@@ -73,7 +73,7 @@ const ExpensesTab = () => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <Card>
+        <Card className="rounded-3xl bg-white/80 backdrop-blur-xl shadow-xl border-slate-200">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Expenses</CardTitle>
             <TrendingDown className="h-4 w-4 text-muted-foreground" />
@@ -84,7 +84,7 @@ const ExpensesTab = () => {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="rounded-3xl bg-white/80 backdrop-blur-xl shadow-xl border-slate-200">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Pending</CardTitle>
             <Calendar className="h-4 w-4 text-muted-foreground" />
@@ -95,7 +95,7 @@ const ExpensesTab = () => {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="rounded-3xl bg-white/80 backdrop-blur-xl shadow-xl border-slate-200">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Average</CardTitle>
             <TrendingDown className="h-4 w-4 text-muted-foreground" />
@@ -108,11 +108,12 @@ const ExpensesTab = () => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <Card className="lg:col-span-2">
+        <Card className="lg:col-span-2 rounded-3xl bg-white/80 backdrop-blur-xl shadow-xl border-slate-200">
           <CardHeader>
-            <CardTitle>Recent Expenses</CardTitle>
+            <CardTitle className="text-xl bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">Recent Expenses</CardTitle>
           </CardHeader>
           <CardContent>
+            <div className="rounded-3xl shadow-xl border border-slate-200 overflow-hidden overflow-x-auto">
             <Table>
               <TableHeader>
                 <TableRow>
@@ -129,12 +130,13 @@ const ExpensesTab = () => {
                     <TableCell>{new Date(expense.date).toLocaleDateString()}</TableCell>
                     <TableCell className="font-medium">{expense.description}</TableCell>
                     <TableCell>
-                      <Badge variant="outline">{expense.category}</Badge>
+                      <Badge variant="outline" className="rounded-2xl">{expense.category}</Badge>
                     </TableCell>
                     <TableCell>£{expense.amount.toFixed(2)}</TableCell>
                     <TableCell>
-                      <Badge 
+                      <Badge
                         variant={expense.status === 'paid' ? 'default' : expense.status === 'pending' ? 'secondary' : 'destructive'}
+                        className="rounded-2xl"
                       >
                         {expense.status}
                       </Badge>
@@ -143,12 +145,13 @@ const ExpensesTab = () => {
                 ))}
               </TableBody>
             </Table>
+            </div>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="rounded-3xl bg-white/80 backdrop-blur-xl shadow-xl border-slate-200">
           <CardHeader>
-            <CardTitle>Add New Expense</CardTitle>
+            <CardTitle className="text-xl bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">Add New Expense</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div>
@@ -157,6 +160,7 @@ const ExpensesTab = () => {
                 id="description"
                 value={newExpense.description}
                 onChange={(e) => setNewExpense({...newExpense, description: e.target.value})}
+                className="rounded-2xl border-slate-200 focus:ring-2 focus:ring-teal-500"
               />
             </div>
             
@@ -166,7 +170,7 @@ const ExpensesTab = () => {
                 value={newExpense.category}
                 onValueChange={(value) => setNewExpense({...newExpense, category: value})}
               >
-                <SelectTrigger>
+                <SelectTrigger className="rounded-2xl border-slate-200 focus:ring-2 focus:ring-teal-500">
                   <SelectValue placeholder="Select category" />
                 </SelectTrigger>
                 <SelectContent>
@@ -186,6 +190,7 @@ const ExpensesTab = () => {
                 step="0.01"
                 value={newExpense.amount}
                 onChange={(e) => setNewExpense({...newExpense, amount: e.target.value})}
+                className="rounded-2xl border-slate-200 focus:ring-2 focus:ring-teal-500"
               />
             </div>
 
@@ -196,10 +201,11 @@ const ExpensesTab = () => {
                 type="date"
                 value={newExpense.date}
                 onChange={(e) => setNewExpense({...newExpense, date: e.target.value})}
+                className="rounded-2xl border-slate-200 focus:ring-2 focus:ring-teal-500"
               />
             </div>
 
-            <Button className="w-full">
+            <Button className="w-full rounded-2xl bg-gradient-to-r from-teal-600 to-teal-700 hover:from-teal-700 hover:to-teal-800">
               <Plus className="w-4 h-4 mr-2" />
               Add Expense
             </Button>

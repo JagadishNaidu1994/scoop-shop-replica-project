@@ -184,8 +184,8 @@ const CLVAnalyticsTab = () => {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold">Customer Lifetime Value Analysis</h2>
-        <Button onClick={exportToCSV} variant="outline">
+        <h2 className="text-3xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">Customer Lifetime Value Analysis</h2>
+        <Button onClick={exportToCSV} variant="outline" className="rounded-2xl">
           <FaDownload className="mr-2" />
           Export CSV
         </Button>
@@ -193,7 +193,7 @@ const CLVAnalyticsTab = () => {
 
       {/* Statistics Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card>
+        <Card className="rounded-3xl bg-white/80 backdrop-blur-xl shadow-xl border-slate-200">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Customers</CardTitle>
             <FaUser className="h-4 w-4 text-muted-foreground" />
@@ -203,7 +203,7 @@ const CLVAnalyticsTab = () => {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="rounded-3xl bg-white/80 backdrop-blur-xl shadow-xl border-slate-200">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
             <FaDollarSign className="h-4 w-4 text-muted-foreground" />
@@ -213,7 +213,7 @@ const CLVAnalyticsTab = () => {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="rounded-3xl bg-white/80 backdrop-blur-xl shadow-xl border-slate-200">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Average CLV</CardTitle>
             <FaShoppingCart className="h-4 w-4 text-muted-foreground" />
@@ -223,7 +223,7 @@ const CLVAnalyticsTab = () => {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="rounded-3xl bg-white/80 backdrop-blur-xl shadow-xl border-slate-200">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Top Customer Value</CardTitle>
             <FaTrophy className="h-4 w-4 text-muted-foreground" />
@@ -235,12 +235,12 @@ const CLVAnalyticsTab = () => {
       </div>
 
       {/* Customer CLV Table */}
-      <Card>
+      <Card className="rounded-3xl bg-white/80 backdrop-blur-xl shadow-xl border-slate-200">
         <CardHeader>
-          <CardTitle>Customer Rankings by Lifetime Value</CardTitle>
+          <CardTitle className="text-xl bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">Customer Rankings by Lifetime Value</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="overflow-x-auto">
+          <div className="rounded-3xl shadow-xl border border-slate-200 overflow-hidden overflow-x-auto">
             <Table>
               <TableHeader>
                 <TableRow>
@@ -290,7 +290,7 @@ const CLVAnalyticsTab = () => {
                           </div>
                         </TableCell>
                         <TableCell>
-                          <Badge className={tier.color}>
+                          <Badge className={`${tier.color} rounded-2xl`}>
                             {tier.tier}
                           </Badge>
                         </TableCell>

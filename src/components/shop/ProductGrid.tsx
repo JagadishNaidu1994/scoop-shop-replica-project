@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, memo } from 'react';
 import ProductCard from './ProductCard';
 import MobileProductCard from './MobileProductCard';
 
@@ -18,7 +18,7 @@ interface ProductGridProps {
   products: Product[];
 }
 
-const ProductGrid: React.FC<ProductGridProps> = ({ products }) => {
+const ProductGridComponent: React.FC<ProductGridProps> = ({ products }) => {
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
@@ -26,10 +26,10 @@ const ProductGrid: React.FC<ProductGridProps> = ({ products }) => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768);
     };
-    
+
     checkMobile();
     window.addEventListener('resize', checkMobile);
-    
+
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
@@ -63,5 +63,8 @@ const ProductGrid: React.FC<ProductGridProps> = ({ products }) => {
     </div>
   );
 };
+
+const ProductGrid = memo(ProductGridComponent);
+ProductGrid.displayName = 'ProductGrid';
 
 export default ProductGrid;

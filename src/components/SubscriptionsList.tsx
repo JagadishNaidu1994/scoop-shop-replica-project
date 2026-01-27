@@ -143,7 +143,8 @@ const SubscriptionsList: React.FC<SubscriptionsListProps> = ({
       toast({
         title: "Error",
         description: "Failed to load subscriptions",
-        variant: "destructive"
+        variant: "destructive",
+        duration: 4000
       });
     } finally {
       setLoading(false);
@@ -226,7 +227,8 @@ const SubscriptionsList: React.FC<SubscriptionsListProps> = ({
 
       toast({
         title: "Subscription Paused",
-        description: `Your subscription will resume on ${pausedUntilDate.toLocaleDateString()}`
+        description: `Your subscription will resume on ${pausedUntilDate.toLocaleDateString()}`,
+        duration: 4000
       });
 
       setPauseDialogOpen(false);
@@ -237,7 +239,8 @@ const SubscriptionsList: React.FC<SubscriptionsListProps> = ({
       toast({
         title: "Error",
         description: "Failed to pause subscription",
-        variant: "destructive"
+        variant: "destructive",
+        duration: 4000
       });
     } finally {
       setActionLoading(false);
@@ -264,7 +267,8 @@ const SubscriptionsList: React.FC<SubscriptionsListProps> = ({
 
       toast({
         title: "Subscription Cancelled",
-        description: "Your subscription has been cancelled successfully"
+        description: "Your subscription has been cancelled successfully",
+        duration: 4000
       });
 
       setCancelDialogOpen(false);
@@ -275,7 +279,8 @@ const SubscriptionsList: React.FC<SubscriptionsListProps> = ({
       toast({
         title: "Error",
         description: "Failed to cancel subscription",
-        variant: "destructive"
+        variant: "destructive",
+        duration: 4000
       });
     } finally {
       setActionLoading(false);
@@ -301,7 +306,8 @@ const SubscriptionsList: React.FC<SubscriptionsListProps> = ({
 
       toast({
         title: "Subscription Updated",
-        description: `Frequency changed to ${newFrequency}`
+        description: `Frequency changed to ${newFrequency}`,
+        duration: 4000
       });
 
       setUpdateDialogOpen(false);
@@ -311,7 +317,8 @@ const SubscriptionsList: React.FC<SubscriptionsListProps> = ({
       toast({
         title: "Error",
         description: "Failed to update subscription",
-        variant: "destructive"
+        variant: "destructive",
+        duration: 4000
       });
     } finally {
       setActionLoading(false);

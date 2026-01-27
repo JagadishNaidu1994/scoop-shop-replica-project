@@ -137,7 +137,7 @@ const OrdersTab = () => {
         </Button>
       </div>
 
-      <div className="border border-slate-200 rounded-3xl bg-white/80 backdrop-blur-xl shadow-xl overflow-hidden">
+      <div className="border border-slate-200 rounded-3xl bg-white/80 backdrop-blur-xl shadow-xl overflow-hidden overflow-x-auto">
         <Table>
           <TableHeader>
             <TableRow className="hover:bg-slate-50/50 transition-colors duration-200">

@@ -33,10 +33,11 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <div className="relative aspect-square overflow-hidden">
+      <div className="relative aspect-square overflow-hidden bg-gray-100">
         <img
           src={isHovered ? product.hoverImage : product.primaryImage}
           alt={product.name}
+          loading="lazy"
           className="w-full h-full object-cover transition-all duration-500"
         />
         

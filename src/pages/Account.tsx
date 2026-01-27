@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useCart } from '@/contexts/CartContext';
+import { useWishlist } from '@/contexts/WishlistContext';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -80,7 +82,9 @@ interface Product {
 const Account = () => {
   const { user, signOut } = useAuth();
   const { addToCart } = useCart();
+  const { items: wishlistItems, removeFromWishlist } = useWishlist();
   const { toast } = useToast();
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('dashboard');
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [addresses, setAddresses] = useState<Address[]>([]);
@@ -1489,95 +1493,7 @@ const Account = () => {
             )}
 
             {/* Rewards Section - Hidden for now */}
-            {/* {activeTab === 'rewards' && (
-              <Card className="border border-gray-200 bg-white rounded-2xl shadow-sm">
-                <CardHeader>
-                  <CardTitle className="text-xl text-gray-900 flex items-center gap-2">
-                    <Trophy className="h-6 w-6 text-yellow-500" />
-                    Rewards Program
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                  <div className="bg-gradient-to-r from-yellow-50 to-orange-50 rounded-2xl p-6">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <h3 className="text-2xl font-bold text-gray-900">150 Points</h3>
-                        <p className="text-gray-600">Available to redeem</p>
-                      </div>
-                      <div className="text-right">
-                        <p className="text-lg font-semibold text-gray-900">₹75</p>
-                        <p className="text-gray-600">Cash value</p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div>
-                    <h4 className="font-semibold text-gray-900 mb-4">Earn More Points</h4>
-                    <div className="grid gap-4">
-                      <div className="flex items-center gap-4 p-4 border border-gray-200 rounded-xl">
-                        <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
-                          <Star className="h-6 w-6 text-green-600" />
-                        </div>
-                        <div className="flex-1">
-                          <h5 className="font-medium text-gray-900">Complete Purchase</h5>
-                          <p className="text-gray-600">Earn 1 point for every ₹10 spent</p>
-                        </div>
-                        <div className="text-green-600 font-semibold">+1 pt/₹10</div>
-                      </div>
-
-                      <div className="flex items-center gap-4 p-4 border border-gray-200 rounded-xl">
-                        <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                          <Heart className="h-6 w-6 text-blue-600" />
-                        </div>
-                        <div className="flex-1">
-                          <h5 className="font-medium text-gray-900">Write a Review</h5>
-                          <p className="text-gray-600">Share your experience with products</p>
-                        </div>
-                        <div className="text-blue-600 font-semibold">+50 pts</div>
-                      </div>
-
-                      <div className="flex items-center gap-4 p-4 border border-gray-200 rounded-xl">
-                        <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
-                          <Gift className="h-6 w-6 text-purple-600" />
-                        </div>
-                        <div className="flex-1">
-                          <h5 className="font-medium text-gray-900">Refer a Friend</h5>
-                          <p className="text-gray-600">Both you and your friend get points</p>
-                        </div>
-                        <div className="text-purple-600 font-semibold">+100 pts</div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div>
-                    <h4 className="font-semibold text-gray-900 mb-4">Recent Activity</h4>
-                    <div className="space-y-3">
-                      <div className="flex justify-between items-center py-2 border-b border-gray-100">
-                        <div>
-                          <p className="font-medium text-gray-900">Order #WU0123</p>
-                          <p className="text-sm text-gray-600">2 days ago</p>
-                        </div>
-                        <div className="text-green-600 font-semibold">+25 pts</div>
-                      </div>
-                      <div className="flex justify-between items-center py-2 border-b border-gray-100">
-                        <div>
-                          <p className="font-medium text-gray-900">Product Review</p>
-                          <p className="text-sm text-gray-600">1 week ago</p>
-                        </div>
-                        <div className="text-green-600 font-semibold">+50 pts</div>
-                      </div>
-                      <div className="flex justify-between items-center py-2">
-                        <div>
-                          <p className="font-medium text-gray-900">Welcome Bonus</p>
-                          <p className="text-sm text-gray-600">2 weeks ago</p>
-                        </div>
-                        <div className="text-green-600 font-semibold">+75 pts</div>
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            )} */}
+            {/* Rewards section commented out - uncomment when ready to implement */}
 
             {/* Other tabs with placeholder content */}
             {activeTab === 'subscriptions' && (
@@ -1612,7 +1528,72 @@ const Account = () => {
                   <CardTitle className="text-xl text-gray-900">Wishlist</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-gray-600">Your wishlist is empty.</p>
+                  {wishlistItems.length > 0 ? (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                      {wishlistItems.map((item) => (
+                        <div key={item.id} className="border border-gray-200 rounded-2xl overflow-hidden hover:shadow-lg transition-all duration-300">
+                          <div
+                            className="aspect-square bg-gray-100 cursor-pointer"
+                            onClick={() => navigate(`/products/${item.product_id}`)}
+                          >
+                            {item.product_image && (
+                              <img
+                                src={item.product_image}
+                                alt={item.product_name}
+                                className="w-full h-full object-cover"
+                              />
+                            )}
+                          </div>
+                          <div className="p-4">
+                            <h3
+                              className="font-semibold text-gray-900 mb-2 cursor-pointer hover:text-gray-600"
+                              onClick={() => navigate(`/products/${item.product_id}`)}
+                            >
+                              {item.product_name}
+                            </h3>
+                            <p className="text-lg font-bold text-gray-900 mb-4">
+                              £{item.product_price.toFixed(2)}
+                            </p>
+                            <div className="flex gap-2">
+                              <Button
+                                onClick={() => {
+                                  addToCart({
+                                    product_id: item.product_id,
+                                    product_name: item.product_name,
+                                    product_price: item.product_price,
+                                    quantity: 1,
+                                    product_image: item.product_image
+                                  });
+                                }}
+                                className="flex-1 bg-black text-white hover:bg-gray-800 rounded-full"
+                              >
+                                Add to Cart
+                              </Button>
+                              <Button
+                                onClick={() => removeFromWishlist(item.product_id)}
+                                variant="outline"
+                                className="border-red-300 text-red-600 hover:bg-red-50 rounded-full"
+                              >
+                                <Heart className="h-4 w-4 fill-current" />
+                              </Button>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="text-center py-12">
+                      <Heart className="h-16 w-16 text-gray-300 mx-auto mb-4" />
+                      <p className="text-gray-600 text-lg mb-2">Your wishlist is empty</p>
+                      <p className="text-gray-500 mb-6">Save your favorite products for later</p>
+                      <Button
+                        onClick={() => navigate('/shop')}
+                        className="bg-black text-white hover:bg-gray-800 rounded-full"
+                      >
+                        Continue Shopping
+                      </Button>
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             )}

@@ -5,12 +5,12 @@ const ContentTab = () => {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold">Coupon Management</h2>
+        <h2 className="text-3xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">Coupon Management</h2>
       </div>
 
-      <Card className="bg-white">
+      <Card className="rounded-3xl bg-white/80 backdrop-blur-xl shadow-xl border-slate-200">
         <CardHeader>
-          <CardTitle className="text-xl font-semibold text-gray-900">Coupon Management</CardTitle>
+          <CardTitle className="text-2xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">Coupon Management</CardTitle>
           <p className="text-gray-600">Coupon management feature coming soon</p>
         </CardHeader>
         <CardContent>

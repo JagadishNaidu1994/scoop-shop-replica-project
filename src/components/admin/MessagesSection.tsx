@@ -57,19 +57,19 @@ const MessagesSection: React.FC = () => {
   );
 
   return (
-    <Card className="h-96">
+    <Card className="h-96 rounded-3xl bg-white/80 backdrop-blur-xl shadow-xl border-slate-200">
       <CardHeader>
         <CardTitle className="flex items-center justify-between">
           <div className="flex items-center">
             <MessageCircle className="w-5 h-5 mr-2" />
             Messages
             {unreadCount > 0 && (
-              <Badge variant="destructive" className="ml-2">
+              <Badge variant="destructive" className="ml-2 rounded-2xl">
                 {unreadCount}
               </Badge>
             )}
           </div>
-          <Button size="sm">
+          <Button size="sm" className="rounded-2xl bg-gradient-to-r from-teal-600 to-teal-700 hover:from-teal-700 hover:to-teal-800">
             <Send className="w-4 h-4 mr-1" />
             Compose
           </Button>
@@ -80,7 +80,7 @@ const MessagesSection: React.FC = () => {
             placeholder="Search messages..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10"
+            className="pl-10 rounded-2xl border-slate-200 focus:ring-2 focus:ring-teal-500"
           />
         </div>
       </CardHeader>
@@ -98,9 +98,9 @@ const MessagesSection: React.FC = () => {
                   <span className={`text-sm ${!message.isRead ? 'font-semibold' : 'font-medium'}`}>
                     {message.sender}
                   </span>
-                  <Badge 
+                  <Badge
                     variant={message.priority === 'high' ? 'destructive' : message.priority === 'medium' ? 'secondary' : 'outline'}
-                    className="text-xs"
+                    className="text-xs rounded-2xl"
                   >
                     {message.priority}
                   </Badge>
