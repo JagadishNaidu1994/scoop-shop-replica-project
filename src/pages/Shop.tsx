@@ -29,17 +29,25 @@ const Shop = () => {
 
   const fetchProducts = async () => {
     try {
+      // Only select essential fields - exclude large image data initially
       const { data, error } = await supabase
         .from('products')
         .select('id, name, price, primary_image, hover_image, category, benefits, description, in_stock, is_active')
         .eq('is_active', true)
-        .order('name');
+        .order('name')
+        .limit(50);
 
       if (error) {
         console.error('Error fetching products:', error);
         setProducts([]);
       } else {
-        setProducts(data || []);
+        // Filter out products with massive base64 images (> 10KB) and use placeholder
+        const processedProducts = (data || []).map(product => ({
+          ...product,
+          primary_image: isValidImageUrl(product.primary_image) ? product.primary_image : '/placeholder.svg',
+          hover_image: isValidImageUrl(product.hover_image) ? product.hover_image : null
+        }));
+        setProducts(processedProducts);
       }
     } catch (error) {
       console.error('Error:', error);
@@ -47,6 +55,17 @@ const Shop = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  // Check if image is a valid URL (not a huge base64 string)
+  const isValidImageUrl = (url: string | null): boolean => {
+    if (!url) return false;
+    // If it's a base64 image larger than 5KB, skip it
+    if (url.startsWith('data:image')) {
+      return url.length < 5000;
+    }
+    // Accept regular URLs
+    return url.startsWith('/') || url.startsWith('http');
   };
 
   if (loading) {
