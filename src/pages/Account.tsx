@@ -71,6 +71,19 @@ interface Order {
   order_items: OrderItem[];
 }
 
+interface SubscriptionOrder {
+  id: string;
+  order_number: string;
+  total_amount: number;
+  status: string;
+  created_at: string;
+  subscription_frequency: string;
+  order_items: OrderItem[];
+  subscription_status?: string;
+  paused_until?: string;
+  next_delivery_date?: string;
+}
+
 interface Product {
   id: number;
   name: string;
@@ -90,7 +103,7 @@ const Account = () => {
   const [addresses, setAddresses] = useState<Address[]>([]);
   const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([]);
   const [orders, setOrders] = useState<Order[]>([]);
-  const [subscriptions, setSubscriptions] = useState<Order[]>([]);
+  const [subscriptions, setSubscriptions] = useState<SubscriptionOrder[]>([]);
   const [products, setProducts] = useState<{ [key: number]: Product }>({});
   const [loading, setLoading] = useState(true);
   const [ordersLoading, setOrdersLoading] = useState(true);

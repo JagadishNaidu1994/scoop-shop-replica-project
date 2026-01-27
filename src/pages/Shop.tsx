@@ -1,9 +1,9 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import HeaderNavBar from '@/components/HeaderNavBar';
 import Footer from '@/components/Footer';
 import ProductGrid from '@/components/shop/ProductGrid';
 import { supabase } from '@/integrations/supabase/client';
-import { sampleProducts } from '@/data/sampleProducts';
+
 interface Product {
   id: number;
   name: string;
@@ -16,15 +16,15 @@ interface Product {
   in_stock: boolean | null;
   is_active: boolean | null;
 }
+
 const Shop = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
-  const [searchTerm] = useState('');
-  const [selectedCategory] = useState('all');
-  const [sortBy] = useState('name');
+
   useEffect(() => {
     fetchProducts();
   }, []);
+
   const fetchProducts = async () => {
     const startTime = Date.now();
 
@@ -33,19 +33,24 @@ const Shop = () => {
         .from('products')
         .select('*')
         .eq('is_active', true)
-        .order('name');
+        .order('name')
+        .limit(50);
 
       if (error) {
         console.error('Error fetching products:', error);
-        setProducts(sampleProducts);
-      } else if (data && data.length > 0) {
-        setProducts(data);
+        setProducts([]);
       } else {
-        setProducts(sampleProducts);
+        // Filter out products with massive base64 images (> 5KB) and use placeholder
+        const processedProducts = (data || []).map(product => ({
+          ...product,
+          primary_image: isValidImageUrl(product.primary_image) ? product.primary_image : '/placeholder.svg',
+          hover_image: isValidImageUrl(product.hover_image) ? product.hover_image : null
+        }));
+        setProducts(processedProducts);
       }
     } catch (error) {
-      console.error('Error fetching products:', error);
-      setProducts(sampleProducts);
+      console.error('Error:', error);
+      setProducts([]);
     }
 
     // Ensure minimum 1 second animation for better UX
@@ -56,32 +61,21 @@ const Shop = () => {
       setLoading(false);
     }, remainingTime);
   };
-  // Memoize categories to prevent recalculation on every render
-  const categories = useMemo(() => {
-    return ['all', ...Array.from(new Set(products.map(p => p.category).filter(Boolean)))];
-  }, [products]);
 
-  // Memoize filtered and sorted products
-  const filteredProducts = useMemo(() => {
-    return products.filter(product => {
-      const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        product.description && product.description.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesCategory = selectedCategory === 'all' || product.category === selectedCategory;
-      return matchesSearch && matchesCategory;
-    }).sort((a, b) => {
-      switch (sortBy) {
-        case 'price-low':
-          return a.price - b.price;
-        case 'price-high':
-          return b.price - a.price;
-        case 'name':
-        default:
-          return a.name.localeCompare(b.name);
-      }
-    });
-  }, [products, searchTerm, selectedCategory, sortBy]);
+  // Check if image is a valid URL (not a huge base64 string)
+  const isValidImageUrl = (url: string | null): boolean => {
+    if (!url) return false;
+    // If it's a base64 image larger than 5KB, skip it
+    if (url.startsWith('data:image')) {
+      return url.length < 5000;
+    }
+    // Accept regular URLs
+    return url.startsWith('/') || url.startsWith('http');
+  };
+
   if (loading) {
-    return <div className="min-h-screen bg-white">
+    return (
+      <div className="min-h-screen bg-white">
         <HeaderNavBar />
         <div className="responsive-container py-8">
           {/* Matcha Loading Animation */}
@@ -127,13 +121,15 @@ const Shop = () => {
             100% { transform: translateY(-20px) scale(1.2); opacity: 0; }
           }
         `}</style>
-      </div>;
+      </div>
+    );
   }
-  return <div className="min-h-screen bg-white">
+
+  return (
+    <div className="min-h-screen bg-white">
       <HeaderNavBar />
 
       <div className="responsive-container py-8">
-        {/* Header */}
         <div className="mb-8">
           <h1 className="responsive-heading font-bold text-black mb-4">Shop NASTEA</h1>
           <p className="responsive-text text-gray-600">
@@ -141,19 +137,12 @@ const Shop = () => {
           </p>
         </div>
 
-        {/* Search and Filters */}
-
-
-        {/* Results Count */}
-        <div className="mb-6">
-
-        </div>
-
-        {/* Products Grid */}
-        <ProductGrid products={filteredProducts} />
+        <ProductGrid products={products} />
       </div>
 
       <Footer />
-    </div>;
+    </div>
+  );
 };
+
 export default Shop;
