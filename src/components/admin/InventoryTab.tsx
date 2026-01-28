@@ -26,7 +26,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { Package, AlertTriangle, Plus, Minus, History, Download, Search } from "lucide-react";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Package, AlertTriangle, Plus, Minus, History, Download, Search, AlertCircle } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 
 interface Product {
@@ -57,6 +58,7 @@ const InventoryTab = () => {
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [stockFilter, setStockFilter] = useState("all");
+  const [migrationNeeded, setMigrationNeeded] = useState(false);
 
   // Adjust stock dialog
   const [isAdjustDialogOpen, setIsAdjustDialogOpen] = useState(false);
@@ -83,18 +85,49 @@ const InventoryTab = () => {
 
   const fetchProducts = async () => {
     try {
-      const { data, error } = await supabase
+      // First try to fetch with inventory columns
+      let { data, error } = await supabase
         .from("products")
         .select("id, name, sku, stock_quantity, low_stock_threshold, price, image_url, category")
         .order("name");
 
-      if (error) throw error;
+      // If inventory columns don't exist, fetch basic product info and add default values
+      if (error && error.message?.includes("does not exist")) {
+        console.log("Inventory columns not found, fetching basic product info...");
+        setMigrationNeeded(true);
+
+        const basicFetch = await supabase
+          .from("products")
+          .select("id, name, price, image_url, category")
+          .order("name");
+
+        if (basicFetch.error) throw basicFetch.error;
+
+        // Add default inventory values
+        data = basicFetch.data?.map(product => ({
+          ...product,
+          sku: null,
+          stock_quantity: 0,
+          low_stock_threshold: 5,
+        })) || [];
+
+        toast({
+          title: "Inventory System Not Set Up",
+          description: "Please apply the inventory management migration (20260128000100_add_inventory_management.sql) in your Supabase dashboard to enable full inventory features.",
+          variant: "destructive",
+        });
+      } else if (error) {
+        throw error;
+      } else {
+        setMigrationNeeded(false);
+      }
+
       setProducts(data || []);
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error fetching products:", error);
       toast({
         title: "Error",
-        description: "Failed to fetch products",
+        description: error?.message || "Failed to fetch products. Please check console for details.",
         variant: "destructive",
       });
     } finally {
@@ -302,6 +335,21 @@ const InventoryTab = () => {
           Export Inventory
         </Button>
       </div>
+
+      {/* Migration Warning Banner */}
+      {migrationNeeded && (
+        <Alert className="border-amber-300 bg-amber-50 rounded-2xl">
+          <AlertCircle className="h-4 w-4 text-amber-600" />
+          <AlertTitle className="text-amber-900 font-semibold">Database Migration Required</AlertTitle>
+          <AlertDescription className="text-amber-800">
+            To enable full inventory management features (stock tracking, SKUs, low stock alerts), please apply the migration file{" "}
+            <code className="bg-amber-200 px-2 py-1 rounded text-sm">
+              20260128000100_add_inventory_management.sql
+            </code>
+            {" "}in your Supabase dashboard. Products are displayed with default values until the migration is applied.
+          </AlertDescription>
+        </Alert>
+      )}
 
       {/* Alert Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
