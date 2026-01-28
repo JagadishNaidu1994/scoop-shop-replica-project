@@ -245,6 +245,7 @@ const Account = () => {
           delivered_at,
           is_subscription,
           subscription_frequency,
+          next_delivery_date,
           order_items (
             id,
             product_id,
@@ -265,8 +266,43 @@ const Account = () => {
         const regularOrders = allOrders.filter(order => !order.is_subscription);
         const subscriptionOrders = allOrders.filter(order => order.is_subscription);
 
+        // Fetch subscription statuses for subscriptions
+        const subscriptionIds = subscriptionOrders.map(s => s.id);
+        let subscriptionStatuses = [];
+
+        if (subscriptionIds.length > 0) {
+          const { data: statusData, error: statusError } = await supabase
+            .from('subscription_status')
+            .select('*')
+            .in('order_id', subscriptionIds)
+            .order('created_at', { ascending: false });
+
+          if (statusError) {
+            console.error('Error fetching subscription statuses:', statusError);
+          } else {
+            subscriptionStatuses = statusData || [];
+          }
+        }
+
+        // Map subscription statuses to subscriptions (get most recent status per subscription)
+        const statusMap = new Map();
+        subscriptionStatuses.forEach(status => {
+          if (!statusMap.has(status.order_id)) {
+            statusMap.set(status.order_id, status);
+          }
+        });
+
+        const subscriptionsWithStatus = subscriptionOrders.map(sub => {
+          const statusInfo = statusMap.get(sub.id);
+          return {
+            ...sub,
+            subscription_status: statusInfo?.status || 'active',
+            paused_until: statusInfo?.paused_until || null,
+          };
+        });
+
         setOrders(regularOrders);
-        setSubscriptions(subscriptionOrders);
+        setSubscriptions(subscriptionsWithStatus);
 
         // Fetch product details for all unique product IDs
         const productIds = [...new Set(orders.flatMap(order =>

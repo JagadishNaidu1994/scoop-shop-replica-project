@@ -112,14 +112,21 @@ const SubscriptionsList: React.FC<SubscriptionsListProps> = ({
       }
 
       // Fetch subscription statuses for each order
-      const { data: statusData, error: statusError } = await supabase
-        .from('subscription_status')
-        .select('order_id, status, paused_until')
-        .eq('user_id', user.id)
-        .order('created_at', { ascending: false });
+      const orderIds = ordersData?.map(o => o.id) || [];
+      let statusData = [];
 
-      if (statusError) {
-        console.error('Error fetching subscription statuses:', statusError);
+      if (orderIds.length > 0) {
+        const { data, error: statusError } = await supabase
+          .from('subscription_status')
+          .select('order_id, status, paused_until')
+          .in('order_id', orderIds)
+          .order('created_at', { ascending: false });
+
+        if (statusError) {
+          console.error('Error fetching subscription statuses:', statusError);
+        } else {
+          statusData = data || [];
+        }
       }
 
       // Map status to orders
@@ -208,31 +215,51 @@ const SubscriptionsList: React.FC<SubscriptionsListProps> = ({
 
     setActionLoading(true);
     try {
-      const pausedUntilDate = new Date();
-      pausedUntilDate.setDate(pausedUntilDate.getDate() + parseInt(pauseDuration));
+      const isCurrentlyPaused = selectedSubscription.subscription_status === 'paused';
 
-      // Insert subscription status
-      const { error: statusError } = await supabase
-        .from('subscription_status')
-        .insert({
-          order_id: selectedSubscription.id,
-          user_id: user.id,
-          status: 'paused',
-          previous_status: selectedSubscription.subscription_status || 'active',
-          reason: pauseReason,
-          paused_until: pausedUntilDate.toISOString()
+      if (isCurrentlyPaused) {
+        // Resume subscription
+        const { error: statusError } = await supabase
+          .from('subscription_status')
+          .insert({
+            order_id: selectedSubscription.id,
+            status: 'active',
+            reason: 'Customer resumed subscription'
+          });
+
+        if (statusError) throw statusError;
+
+        toast({
+          title: "Subscription Resumed",
+          description: "Your subscription has been reactivated",
+          duration: 4000
         });
+      } else {
+        // Pause subscription
+        const pausedUntilDate = new Date();
+        pausedUntilDate.setDate(pausedUntilDate.getDate() + parseInt(pauseDuration));
 
-      if (statusError) throw statusError;
+        const { error: statusError } = await supabase
+          .from('subscription_status')
+          .insert({
+            order_id: selectedSubscription.id,
+            status: 'paused',
+            reason: pauseReason || 'Customer paused subscription',
+            paused_until: pausedUntilDate.toISOString()
+          });
 
-      toast({
-        title: "Subscription Paused",
-        description: `Your subscription will resume on ${pausedUntilDate.toLocaleDateString()}`,
-        duration: 4000
-      });
+        if (statusError) throw statusError;
+
+        toast({
+          title: "Subscription Paused",
+          description: `Your subscription will resume on ${pausedUntilDate.toLocaleDateString()}`,
+          duration: 4000
+        });
+      }
 
       setPauseDialogOpen(false);
       setPauseReason('');
+      setPauseDuration('30');
       fetchSubscriptions(); // Refresh the list
     } catch (error) {
       console.error('Error pausing subscription:', error);
@@ -257,10 +284,8 @@ const SubscriptionsList: React.FC<SubscriptionsListProps> = ({
         .from('subscription_status')
         .insert({
           order_id: selectedSubscription.id,
-          user_id: user.id,
           status: 'cancelled',
-          previous_status: selectedSubscription.subscription_status || 'active',
-          reason: cancelReason
+          reason: cancelReason || 'Customer cancelled subscription'
         });
 
       if (statusError) throw statusError;
