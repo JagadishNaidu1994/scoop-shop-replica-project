@@ -15,7 +15,8 @@ import {
   ChefHat,
   Mail,
   RefreshCw,
-  Warehouse
+  Warehouse,
+  RotateCcw
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -28,6 +29,7 @@ export const AdminSidebar = ({ activeTab, onTabChange }: AdminSidebarProps) => {
   const menuItems = [
     { id: "dashboard", label: "Dashboard", icon: Home },
     { id: "orders", label: "Orders", icon: ShoppingCart },
+    { id: "returns", label: "Returns & Refunds", icon: RotateCcw },
     { id: "subscriptions", label: "Subscriptions", icon: RefreshCw },
     { id: "users", label: "Users", icon: Users },
     { id: "products", label: "Products", icon: Package },

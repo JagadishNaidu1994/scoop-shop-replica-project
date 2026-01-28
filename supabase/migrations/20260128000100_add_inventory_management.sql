@@ -1,6 +1,20 @@
--- Add inventory management fields to products table
-ALTER TABLE public.products ADD COLUMN IF NOT EXISTS sku TEXT UNIQUE;
+-- Add inventory management fields to products table (stock_quantity already exists from previous migration)
+ALTER TABLE public.products ADD COLUMN IF NOT EXISTS sku TEXT;
 ALTER TABLE public.products ADD COLUMN IF NOT EXISTS low_stock_threshold INTEGER DEFAULT 5;
+
+-- Make SKU unique if it exists
+DO $$
+BEGIN
+  IF EXISTS (
+    SELECT 1 FROM information_schema.columns
+    WHERE table_name = 'products' AND column_name = 'sku'
+  ) THEN
+    -- Drop existing constraint if any
+    ALTER TABLE public.products DROP CONSTRAINT IF EXISTS products_sku_key;
+    -- Add unique constraint
+    ALTER TABLE public.products ADD CONSTRAINT products_sku_unique UNIQUE (sku);
+  END IF;
+END $$;
 
 -- Create inventory_history table to track all stock changes
 CREATE TABLE IF NOT EXISTS public.inventory_history (
@@ -20,6 +34,10 @@ CREATE INDEX IF NOT EXISTS idx_inventory_history_created_at ON public.inventory_
 
 -- Enable RLS on inventory_history table
 ALTER TABLE public.inventory_history ENABLE ROW LEVEL SECURITY;
+
+-- Drop existing policies if they exist
+DROP POLICY IF EXISTS "Admins can view inventory history" ON public.inventory_history;
+DROP POLICY IF EXISTS "Admins can insert inventory history" ON public.inventory_history;
 
 -- Create policies for inventory_history
 CREATE POLICY "Admins can view inventory history"
@@ -53,7 +71,7 @@ BEGIN
       'Automatic tracking from product update',
       auth.uid()
     );
-  ELSIF (TG_OP = 'INSERT' AND NEW.stock_quantity > 0) THEN
+  ELSIF (TG_OP = 'INSERT' AND NEW.stock_quantity IS NOT NULL AND NEW.stock_quantity > 0) THEN
     INSERT INTO public.inventory_history (
       product_id,
       quantity_change,
@@ -81,7 +99,7 @@ CREATE TRIGGER trigger_log_inventory_change
   FOR EACH ROW
   EXECUTE FUNCTION public.log_inventory_change();
 
--- Add comment to products table columns
+-- Add comments to products table columns
 COMMENT ON COLUMN public.products.sku IS 'Stock Keeping Unit - unique product identifier';
 COMMENT ON COLUMN public.products.stock_quantity IS 'Current available stock quantity';
 COMMENT ON COLUMN public.products.low_stock_threshold IS 'Alert threshold for low stock warnings';
