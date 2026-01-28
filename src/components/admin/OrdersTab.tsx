@@ -19,7 +19,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Eye, Download, Search, Filter, X } from "lucide-react";
+import { Eye, Download, Search, Filter, X, Package, Truck, CheckCircle, Clock, ShoppingCart } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
 import OrderDetailsDialog from "./OrderDetailsDialog";
 
 interface Order {
@@ -175,6 +176,15 @@ const OrdersTab = () => {
 
   const hasActiveFilters = searchQuery.trim() !== "" || statusFilter !== "all";
 
+  // Calculate order statistics
+  const stats = {
+    total: orders.length,
+    pending: orders.filter(o => o.status === 'pending').length,
+    processing: orders.filter(o => o.status === 'processing').length,
+    shipped: orders.filter(o => o.status === 'shipped').length,
+    delivered: orders.filter(o => o.status === 'delivered').length,
+  };
+
   if (loading) {
     return <div className="p-4">Loading orders...</div>;
   }
@@ -198,6 +208,84 @@ const OrdersTab = () => {
           <Download className="h-4 w-4 mr-2" />
           Export Orders
         </Button>
+      </div>
+
+      {/* Order Statistics Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+        {/* Total Orders */}
+        <Card className="border-none shadow-xl bg-gradient-to-br from-slate-50 to-slate-100 rounded-3xl overflow-hidden group hover:shadow-2xl transition-all duration-300">
+          <CardContent className="p-6">
+            <div className="flex items-start justify-between">
+              <div className="flex-1">
+                <p className="text-sm font-medium text-slate-600 mb-2">Total Orders</p>
+                <p className="text-4xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">{stats.total}</p>
+              </div>
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-slate-500 to-slate-700 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                <ShoppingCart className="h-6 w-6 text-white" />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Pending */}
+        <Card className="border-none shadow-xl bg-gradient-to-br from-gray-50 to-gray-100 rounded-3xl overflow-hidden group hover:shadow-2xl transition-all duration-300">
+          <CardContent className="p-6">
+            <div className="flex items-start justify-between">
+              <div className="flex-1">
+                <p className="text-sm font-medium text-gray-600 mb-2">Pending</p>
+                <p className="text-4xl font-bold bg-gradient-to-r from-gray-700 to-gray-900 bg-clip-text text-transparent">{stats.pending}</p>
+              </div>
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-gray-500 to-gray-700 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                <Clock className="h-6 w-6 text-white" />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Processing */}
+        <Card className="border-none shadow-xl bg-gradient-to-br from-yellow-50 to-amber-100 rounded-3xl overflow-hidden group hover:shadow-2xl transition-all duration-300">
+          <CardContent className="p-6">
+            <div className="flex items-start justify-between">
+              <div className="flex-1">
+                <p className="text-sm font-medium text-yellow-700 mb-2">Processing</p>
+                <p className="text-4xl font-bold bg-gradient-to-r from-yellow-600 to-amber-600 bg-clip-text text-transparent">{stats.processing}</p>
+              </div>
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-yellow-500 to-amber-600 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                <Package className="h-6 w-6 text-white" />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Shipped */}
+        <Card className="border-none shadow-xl bg-gradient-to-br from-blue-50 to-cyan-100 rounded-3xl overflow-hidden group hover:shadow-2xl transition-all duration-300">
+          <CardContent className="p-6">
+            <div className="flex items-start justify-between">
+              <div className="flex-1">
+                <p className="text-sm font-medium text-blue-700 mb-2">Shipped</p>
+                <p className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">{stats.shipped}</p>
+              </div>
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-500 to-cyan-600 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                <Truck className="h-6 w-6 text-white" />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Delivered */}
+        <Card className="border-none shadow-xl bg-gradient-to-br from-green-50 to-emerald-100 rounded-3xl overflow-hidden group hover:shadow-2xl transition-all duration-300">
+          <CardContent className="p-6">
+            <div className="flex items-start justify-between">
+              <div className="flex-1">
+                <p className="text-sm font-medium text-green-700 mb-2">Delivered</p>
+                <p className="text-4xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">{stats.delivered}</p>
+              </div>
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                <CheckCircle className="h-6 w-6 text-white" />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       </div>
 
       {/* Search and Filter Bar */}
