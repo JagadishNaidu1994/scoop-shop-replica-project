@@ -4,7 +4,6 @@ import Footer from '@/components/Footer';
 import MatchaLoadingAnimation from '@/components/MatchaLoadingAnimation';
 import { supabase } from '@/integrations/supabase/client';
 import { Link } from 'react-router-dom';
-import { sampleRecipes } from '@/data/sampleRecipes';
 interface Recipe {
   id: string;
   title: string;
@@ -41,15 +40,15 @@ const Recipes = () => {
     }
   };
 
-  // Combine database recipes with sample recipes
-  const allRecipes = [...sampleRecipes, ...dbRecipes.map(recipe => ({
+  // Use only database recipes (admin-created content)
+  const allRecipes = dbRecipes.map(recipe => ({
     id: recipe.id,
     title: recipe.title,
     image: recipe.image_url || 'https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=600&h=400&fit=crop',
     category: recipe.category || 'Recipes',
     readTime: recipe.read_time || '5 min',
     description: recipe.description || ''
-  }))];
+  }));
   return <div className="min-h-screen bg-white">
       <HeaderNavBar />
       

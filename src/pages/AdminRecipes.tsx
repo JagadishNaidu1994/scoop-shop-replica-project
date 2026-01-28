@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import HeaderNavBar from '@/components/HeaderNavBar';
 import Footer from '@/components/Footer';
-import SampleRecipeSeeder from '@/components/SampleRecipeSeeder';
 import MatchaLoadingAnimation from '@/components/MatchaLoadingAnimation';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
@@ -223,8 +222,6 @@ const AdminRecipes = () => {
             Add New Recipe
           </Button>
         </div>
-
-        <SampleRecipeSeeder />
 
         {showForm && (
           <div className="bg-gray-50 p-6 rounded-lg mb-8">
