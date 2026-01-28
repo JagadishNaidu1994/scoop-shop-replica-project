@@ -37,7 +37,7 @@ interface Product {
   stock_quantity: number;
   low_stock_threshold: number;
   price: number;
-  image_url: string | null;
+  primary_image: string | null;
   category: string | null;
 }
 
@@ -88,7 +88,7 @@ const InventoryTab = () => {
       // First try to fetch with inventory columns
       let { data, error } = await supabase
         .from("products")
-        .select("id, name, sku, stock_quantity, low_stock_threshold, price, image_url, category")
+        .select("id, name, sku, stock_quantity, low_stock_threshold, price, primary_image, category")
         .order("name");
 
       // If inventory columns don't exist, fetch basic product info and add default values
@@ -98,7 +98,7 @@ const InventoryTab = () => {
 
         const basicFetch = await supabase
           .from("products")
-          .select("id, name, price, image_url, category")
+          .select("id, name, price, primary_image, category")
           .order("name");
 
         if (basicFetch.error) throw basicFetch.error;
@@ -438,7 +438,7 @@ const InventoryTab = () => {
                     <TableCell>
                       <div className="flex items-center gap-3">
                         <img
-                          src={product.image_url || "/placeholder.svg"}
+                          src={product.primary_image || "/placeholder.svg"}
                           alt={product.name}
                           className="w-10 h-10 rounded object-cover"
                         />
