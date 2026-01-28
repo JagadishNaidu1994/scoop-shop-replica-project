@@ -45,10 +45,18 @@ const DashboardOverview = () => {
       const totalOrders = orders?.length || 0;
       const grossSales = orders?.reduce((sum, order) => sum + Number(order.total_amount || 0), 0) || 0;
       const deliveredOrders = orders?.filter(order => order.status === 'delivered').length || 0;
-      
-      // Get unique customers
-      const uniqueCustomers = new Set(orders?.map(order => order.user_id)).size;
-      const returningCustomerRate = uniqueCustomers > 1 ? ((uniqueCustomers - 1) / uniqueCustomers * 100) : 0;
+
+      // Calculate CORRECT returning customer rate
+      // Count how many customers have placed more than one order
+      const ordersByCustomer = new Map<string, number>();
+      orders?.forEach(order => {
+        const count = ordersByCustomer.get(order.user_id) || 0;
+        ordersByCustomer.set(order.user_id, count + 1);
+      });
+
+      const uniqueCustomers = ordersByCustomer.size;
+      const customersWithMultipleOrders = Array.from(ordersByCustomer.values()).filter(count => count > 1).length;
+      const returningCustomerRate = uniqueCustomers > 0 ? (customersWithMultipleOrders / uniqueCustomers * 100) : 0;
 
       // Prepare chart data based on recent orders
       const recentOrdersData = orders?.slice(0, 10).map((order, index) => ({
@@ -57,13 +65,48 @@ const DashboardOverview = () => {
         orders: 1
       })) || [];
 
-      // Sales breakdown
+      // Calculate REAL shipping costs from orders
+      const actualShippingCosts = orders?.reduce((sum, order) => sum + Number(order.shipping_cost || 0), 0) || 0;
+
+      // Get REAL discount amounts (from coupon usage or order discounts)
+      const { data: couponsData } = await supabase
+        .from('coupon_codes')
+        .select('discount_value, discount_type, used_count');
+
+      let totalDiscounts = 0;
+      if (couponsData) {
+        // Calculate total discounts based on actual usage
+        // This is a simplified calculation - you may need to query order-specific discount amounts
+        totalDiscounts = couponsData.reduce((sum, coupon) => {
+          if (coupon.discount_type === 'percentage') {
+            // For percentage discounts, estimate based on average order value
+            const avgOrder = grossSales / (totalOrders || 1);
+            return sum + (avgOrder * (coupon.discount_value / 100) * (coupon.used_count || 0));
+          } else {
+            // Fixed amount discounts
+            return sum + (coupon.discount_value * (coupon.used_count || 0));
+          }
+        }, 0);
+      }
+
+      // Get REAL return amounts
+      const { data: returnsData } = await supabase
+        .from('returns')
+        .select('refund_amount')
+        .eq('status', 'refunded');
+
+      const totalReturns = returnsData?.reduce((sum, ret) => sum + Number(ret.refund_amount || 0), 0) || 0;
+
+      // Calculate net sales
+      const netSales = grossSales - totalDiscounts - totalReturns;
+
+      // Sales breakdown with REAL data
       const salesBreakdown = [
         { name: 'Gross sales', value: grossSales, color: '#3b82f6' },
-        { name: 'Discounts', value: grossSales * 0.05, color: '#ef4444' }, // 5% estimated discounts
-        { name: 'Returns', value: grossSales * 0.02, color: '#f59e0b' }, // 2% estimated returns
-        { name: 'Net sales', value: grossSales * 0.93, color: '#10b981' }, // Net after discounts/returns
-        { name: 'Shipping charges', value: totalOrders * 50, color: '#8b5cf6' }, // ₹50 per order estimated
+        { name: 'Discounts', value: totalDiscounts, color: '#ef4444' },
+        { name: 'Returns', value: totalReturns, color: '#f59e0b' },
+        { name: 'Net sales', value: netSales, color: '#10b981' },
+        { name: 'Shipping charges', value: actualShippingCosts, color: '#8b5cf6' },
         { name: 'Return fees', value: 0, color: '#f97316' },
         { name: 'Taxes', value: grossSales * 0.18, color: '#06b6d4' }, // 18% GST
         { name: 'Total sales', value: grossSales, color: '#1f2937' },

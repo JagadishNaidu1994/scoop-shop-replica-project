@@ -20,7 +20,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { RefreshCw, Download, Search, Calendar, User, Package } from 'lucide-react';
+import { RefreshCw, Download, Search, Calendar, User, Package, Pause, Play, XCircle, SkipForward, Edit2 } from 'lucide-react';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 
 interface Subscription {
   id: string;
@@ -45,6 +53,15 @@ const SubscriptionsTab = () => {
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState('');
   const { toast } = useToast();
+
+  // Management dialog states
+  const [isManageDialogOpen, setIsManageDialogOpen] = useState(false);
+  const [selectedSubscription, setSelectedSubscription] = useState<Subscription | null>(null);
+  const [pauseDate, setPauseDate] = useState('');
+  const [nextDeliveryDate, setNextDeliveryDate] = useState('');
+  const [frequency, setFrequency] = useState('');
+  const [cancelReason, setCancelReason] = useState('');
+  const [processing, setProcessing] = useState(false);
 
   useEffect(() => {
     fetchSubscriptions();
@@ -207,6 +224,232 @@ const SubscriptionsTab = () => {
 
       return true;
     });
+  };
+
+  const openManageDialog = (subscription: Subscription) => {
+    setSelectedSubscription(subscription);
+    setNextDeliveryDate(subscription.next_delivery_date || '');
+    setFrequency(subscription.subscription_frequency);
+    setCancelReason('');
+    setPauseDate('');
+    setIsManageDialogOpen(true);
+  };
+
+  const handlePauseSubscription = async () => {
+    if (!selectedSubscription || !pauseDate) {
+      toast({
+        title: 'Error',
+        description: 'Please select a pause until date',
+        variant: 'destructive'
+      });
+      return;
+    }
+
+    setProcessing(true);
+    try {
+      const { error } = await supabase
+        .from('subscription_status')
+        .insert({
+          order_id: selectedSubscription.id,
+          status: 'paused',
+          paused_until: pauseDate,
+          reason: 'Admin paused subscription'
+        });
+
+      if (error) throw error;
+
+      toast({
+        title: 'Subscription Paused',
+        description: `Subscription paused until ${new Date(pauseDate).toLocaleDateString()}`
+      });
+
+      fetchSubscriptions();
+      setIsManageDialogOpen(false);
+    } catch (error) {
+      console.error('Error pausing subscription:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to pause subscription',
+        variant: 'destructive'
+      });
+    } finally {
+      setProcessing(false);
+    }
+  };
+
+  const handleResumeSubscription = async () => {
+    if (!selectedSubscription) return;
+
+    setProcessing(true);
+    try {
+      const { error } = await supabase
+        .from('subscription_status')
+        .insert({
+          order_id: selectedSubscription.id,
+          status: 'active',
+          reason: 'Admin resumed subscription'
+        });
+
+      if (error) throw error;
+
+      toast({
+        title: 'Subscription Resumed',
+        description: 'Subscription has been reactivated'
+      });
+
+      fetchSubscriptions();
+      setIsManageDialogOpen(false);
+    } catch (error) {
+      console.error('Error resuming subscription:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to resume subscription',
+        variant: 'destructive'
+      });
+    } finally {
+      setProcessing(false);
+    }
+  };
+
+  const handleCancelSubscription = async () => {
+    if (!selectedSubscription || !cancelReason.trim()) {
+      toast({
+        title: 'Error',
+        description: 'Please provide a cancellation reason',
+        variant: 'destructive'
+      });
+      return;
+    }
+
+    setProcessing(true);
+    try {
+      const { error } = await supabase
+        .from('subscription_status')
+        .insert({
+          order_id: selectedSubscription.id,
+          status: 'cancelled',
+          reason: cancelReason
+        });
+
+      if (error) throw error;
+
+      toast({
+        title: 'Subscription Cancelled',
+        description: 'Subscription has been cancelled'
+      });
+
+      fetchSubscriptions();
+      setIsManageDialogOpen(false);
+    } catch (error) {
+      console.error('Error cancelling subscription:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to cancel subscription',
+        variant: 'destructive'
+      });
+    } finally {
+      setProcessing(false);
+    }
+  };
+
+  const handleSkipNextDelivery = async () => {
+    if (!selectedSubscription) return;
+
+    setProcessing(true);
+    try {
+      // Calculate new next delivery date (skip one cycle)
+      const currentDate = new Date(selectedSubscription.next_delivery_date || new Date());
+      let daysToAdd = 30; // default monthly
+
+      switch (selectedSubscription.subscription_frequency) {
+        case 'weekly':
+          daysToAdd = 7;
+          break;
+        case 'biweekly':
+          daysToAdd = 14;
+          break;
+        case 'monthly':
+          daysToAdd = 30;
+          break;
+      }
+
+      const newDate = new Date(currentDate);
+      newDate.setDate(currentDate.getDate() + daysToAdd);
+
+      const { error } = await supabase
+        .from('orders')
+        .update({ next_delivery_date: newDate.toISOString() })
+        .eq('id', selectedSubscription.id);
+
+      if (error) throw error;
+
+      toast({
+        title: 'Delivery Skipped',
+        description: `Next delivery moved to ${newDate.toLocaleDateString()}`
+      });
+
+      fetchSubscriptions();
+      setIsManageDialogOpen(false);
+    } catch (error) {
+      console.error('Error skipping delivery:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to skip delivery',
+        variant: 'destructive'
+      });
+    } finally {
+      setProcessing(false);
+    }
+  };
+
+  const handleUpdateSubscription = async () => {
+    if (!selectedSubscription) return;
+
+    setProcessing(true);
+    try {
+      const updates: any = {};
+
+      if (nextDeliveryDate) {
+        updates.next_delivery_date = nextDeliveryDate;
+      }
+
+      if (frequency && frequency !== selectedSubscription.subscription_frequency) {
+        updates.subscription_frequency = frequency;
+      }
+
+      if (Object.keys(updates).length === 0) {
+        toast({
+          title: 'No Changes',
+          description: 'No changes were made',
+          variant: 'destructive'
+        });
+        return;
+      }
+
+      const { error } = await supabase
+        .from('orders')
+        .update(updates)
+        .eq('id', selectedSubscription.id);
+
+      if (error) throw error;
+
+      toast({
+        title: 'Subscription Updated',
+        description: 'Subscription details have been updated'
+      });
+
+      fetchSubscriptions();
+      setIsManageDialogOpen(false);
+    } catch (error) {
+      console.error('Error updating subscription:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to update subscription',
+        variant: 'destructive'
+      });
+    } finally {
+      setProcessing(false);
+    }
   };
 
   const getStatusBadge = (status: string) => {
@@ -373,12 +616,13 @@ const SubscriptionsTab = () => {
                   <TableHead className="font-bold text-slate-700">Status</TableHead>
                   <TableHead className="font-bold text-slate-700">Created</TableHead>
                   <TableHead className="font-bold text-slate-700">Next Delivery</TableHead>
+                  <TableHead className="font-bold text-slate-700">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {filteredSubscriptions.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={7} className="text-center text-slate-500 py-12">
+                    <TableCell colSpan={8} className="text-center text-slate-500 py-12">
                       <div className="flex flex-col items-center gap-3">
                         <Package className="h-12 w-12 text-slate-300" />
                         <p className="font-medium">No subscriptions found</p>
@@ -429,6 +673,17 @@ const SubscriptionsTab = () => {
                           <span className="text-slate-400 text-sm">Not set</span>
                         )}
                       </TableCell>
+                      <TableCell>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => openManageDialog(sub)}
+                          className="rounded-xl hover:bg-blue-500 hover:text-white transition-all"
+                        >
+                          <Edit2 className="h-4 w-4 mr-1" />
+                          Manage
+                        </Button>
+                      </TableCell>
                     </TableRow>
                   ))
                 )}
@@ -437,6 +692,192 @@ const SubscriptionsTab = () => {
           </div>
         </CardContent>
       </Card>
+
+      {/* Management Dialog */}
+      <Dialog open={isManageDialogOpen} onOpenChange={setIsManageDialogOpen}>
+        <DialogContent className="max-w-2xl rounded-3xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="text-2xl font-bold">Manage Subscription</DialogTitle>
+          </DialogHeader>
+
+          {selectedSubscription && (
+            <div className="space-y-6">
+              {/* Subscription Info */}
+              <div className="bg-gray-50 p-4 rounded-xl">
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <p className="text-sm text-gray-600">Order Number</p>
+                    <p className="font-bold">{selectedSubscription.order_number}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-600">Customer</p>
+                    <p className="font-bold">{selectedSubscription.user_name}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-600">Current Status</p>
+                    {getStatusBadge(selectedSubscription.subscription_status)}
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-600">Amount</p>
+                    <p className="font-bold">₹{selectedSubscription.total_amount}</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Quick Actions */}
+              <div>
+                <Label className="text-base font-semibold mb-3">Quick Actions</Label>
+                <div className="flex flex-wrap gap-2 mt-2">
+                  {selectedSubscription.subscription_status === 'active' && (
+                    <>
+                      <Button
+                        type="button"
+                        onClick={handleSkipNextDelivery}
+                        disabled={processing}
+                        variant="outline"
+                        className="rounded-xl"
+                      >
+                        <SkipForward className="h-4 w-4 mr-2" />
+                        Skip Next Delivery
+                      </Button>
+                    </>
+                  )}
+
+                  {selectedSubscription.subscription_status === 'paused' && (
+                    <Button
+                      type="button"
+                      onClick={handleResumeSubscription}
+                      disabled={processing}
+                      className="rounded-xl bg-green-500 hover:bg-green-600"
+                    >
+                      <Play className="h-4 w-4 mr-2" />
+                      Resume Subscription
+                    </Button>
+                  )}
+
+                  {selectedSubscription.subscription_status !== 'cancelled' && (
+                    <Button
+                      type="button"
+                      onClick={() => {}} // Will show cancel section
+                      disabled={processing}
+                      variant="destructive"
+                      className="rounded-xl"
+                    >
+                      <XCircle className="h-4 w-4 mr-2" />
+                      Cancel Subscription
+                    </Button>
+                  )}
+                </div>
+              </div>
+
+              {/* Pause Section */}
+              {selectedSubscription.subscription_status === 'active' && (
+                <div className="border-t pt-4">
+                  <Label className="text-base font-semibold">Pause Subscription</Label>
+                  <p className="text-sm text-gray-600 mt-1 mb-3">
+                    Temporarily pause deliveries until a specific date
+                  </p>
+                  <div className="space-y-3">
+                    <div>
+                      <Label>Pause Until</Label>
+                      <Input
+                        type="date"
+                        value={pauseDate}
+                        onChange={(e) => setPauseDate(e.target.value)}
+                        className="rounded-xl mt-1"
+                        min={new Date().toISOString().split('T')[0]}
+                      />
+                    </div>
+                    <Button
+                      type="button"
+                      onClick={handlePauseSubscription}
+                      disabled={processing || !pauseDate}
+                      className="rounded-xl bg-yellow-500 hover:bg-yellow-600"
+                    >
+                      <Pause className="h-4 w-4 mr-2" />
+                      {processing ? 'Processing...' : 'Pause Subscription'}
+                    </Button>
+                  </div>
+                </div>
+              )}
+
+              {/* Edit Subscription Details */}
+              <div className="border-t pt-4">
+                <Label className="text-base font-semibold">Edit Subscription Details</Label>
+                <p className="text-sm text-gray-600 mt-1 mb-3">
+                  Update frequency and delivery schedule
+                </p>
+                <div className="space-y-3">
+                  <div>
+                    <Label>Delivery Frequency</Label>
+                    <Select value={frequency} onValueChange={setFrequency}>
+                      <SelectTrigger className="rounded-xl mt-1">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="weekly">Weekly</SelectItem>
+                        <SelectItem value="biweekly">Bi-Weekly</SelectItem>
+                        <SelectItem value="monthly">Monthly</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div>
+                    <Label>Next Delivery Date</Label>
+                    <Input
+                      type="date"
+                      value={nextDeliveryDate}
+                      onChange={(e) => setNextDeliveryDate(e.target.value)}
+                      className="rounded-xl mt-1"
+                      min={new Date().toISOString().split('T')[0]}
+                    />
+                  </div>
+                  <Button
+                    type="button"
+                    onClick={handleUpdateSubscription}
+                    disabled={processing}
+                    className="rounded-xl bg-blue-500 hover:bg-blue-600"
+                  >
+                    <Edit2 className="h-4 w-4 mr-2" />
+                    {processing ? 'Updating...' : 'Update Subscription'}
+                  </Button>
+                </div>
+              </div>
+
+              {/* Cancel Section */}
+              {selectedSubscription.subscription_status !== 'cancelled' && (
+                <div className="border-t pt-4">
+                  <Label className="text-base font-semibold text-red-600">Cancel Subscription</Label>
+                  <p className="text-sm text-gray-600 mt-1 mb-3">
+                    Permanently cancel this subscription
+                  </p>
+                  <div className="space-y-3">
+                    <div>
+                      <Label>Cancellation Reason (Required)</Label>
+                      <Textarea
+                        value={cancelReason}
+                        onChange={(e) => setCancelReason(e.target.value)}
+                        placeholder="Please provide a reason for cancellation..."
+                        className="rounded-xl mt-1"
+                        rows={3}
+                      />
+                    </div>
+                    <Button
+                      type="button"
+                      onClick={handleCancelSubscription}
+                      disabled={processing || !cancelReason.trim()}
+                      variant="destructive"
+                      className="rounded-xl"
+                    >
+                      <XCircle className="h-4 w-4 mr-2" />
+                      {processing ? 'Processing...' : 'Confirm Cancellation'}
+                    </Button>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
