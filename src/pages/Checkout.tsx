@@ -257,6 +257,56 @@ const Checkout = () => {
 
         console.log('Order items created successfully');
 
+        // Deduct stock quantities for purchased items
+        console.log('Deducting stock quantities...');
+        for (const item of items) {
+          try {
+            // Get current stock quantity
+            const { data: product, error: productError } = await supabase
+              .from('products')
+              .select('stock_quantity')
+              .eq('id', item.product_id)
+              .single();
+
+            if (productError) {
+              console.error(`Error fetching product ${item.product_id}:`, productError);
+              continue; // Skip this item but continue with others
+            }
+
+            if (product) {
+              const newQuantity = Math.max(0, product.stock_quantity - item.quantity);
+
+              // Update stock quantity
+              const { error: updateError } = await supabase
+                .from('products')
+                .update({ stock_quantity: newQuantity })
+                .eq('id', item.product_id);
+
+              if (updateError) {
+                console.error(`Error updating stock for product ${item.product_id}:`, updateError);
+              } else {
+                // Log inventory change
+                await supabase
+                  .from('inventory_history')
+                  .insert({
+                    product_id: item.product_id,
+                    quantity_change: -item.quantity,
+                    new_quantity: newQuantity,
+                    reason: 'sale',
+                    notes: `Sold via order ${orderNumber}`,
+                    user_id: user.id
+                  });
+
+                console.log(`Stock deducted for product ${item.product_id}: -${item.quantity} (new: ${newQuantity})`);
+              }
+            }
+          } catch (stockError) {
+            console.error(`Failed to deduct stock for product ${item.product_id}:`, stockError);
+            // Continue processing other items even if one fails
+          }
+        }
+        console.log('Stock deduction completed');
+
         // Send order confirmation email
         try {
           console.log('Sending order confirmation email...');

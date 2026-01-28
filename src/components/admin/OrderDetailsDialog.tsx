@@ -128,21 +128,32 @@ const OrderDetailsDialog = ({ order, isOpen, onClose, onOrderUpdated }: OrderDet
   };
 
   const updateOrderStatus = async (newStatus: string) => {
-    if (!order) return;
+    if (!order) {
+      console.error("No order found");
+      return;
+    }
 
+    console.log("Updating order:", order.id, "to status:", newStatus);
     setUpdating(true);
+
     try {
       // Update order status
-      const { error: orderError } = await supabase
+      const { data: updateData, error: orderError } = await supabase
         .from("orders")
         .update({ status: newStatus })
-        .eq("id", order.id);
+        .eq("id", order.id)
+        .select();
 
-      if (orderError) throw orderError;
+      if (orderError) {
+        console.error("Order update error:", orderError);
+        throw new Error(`Failed to update order: ${orderError.message}`);
+      }
+
+      console.log("Order updated successfully:", updateData);
 
       // Add tracking entry
       const trackingMessage = `Order status updated to ${newStatus}`;
-      const { error: trackingError } = await supabase
+      const { data: trackingData, error: trackingError } = await supabase
         .from("order_tracking")
         .insert({
           order_id: order.id,
@@ -151,15 +162,19 @@ const OrderDetailsDialog = ({ order, isOpen, onClose, onOrderUpdated }: OrderDet
             ? `${trackingMessage}. Tracking: ${carrier} - ${trackingNumber}`
             : trackingMessage,
           location: trackingNumber ? `${carrier} - ${trackingNumber}` : null
-        });
+        })
+        .select();
 
       if (trackingError) {
         console.error("Error adding tracking:", trackingError);
+        // Don't throw here - tracking is optional
+      } else {
+        console.log("Tracking added successfully:", trackingData);
       }
 
       toast({
-        title: "Order Updated",
-        description: `Order status changed to ${newStatus}`,
+        title: "Order Updated Successfully",
+        description: `Order #${orderNumber} status changed to ${newStatus}`,
       });
 
       // Call callback to refresh parent
@@ -167,13 +182,16 @@ const OrderDetailsDialog = ({ order, isOpen, onClose, onOrderUpdated }: OrderDet
         onOrderUpdated();
       }
 
-      // Close dialog
-      onClose();
-    } catch (error) {
+      // Close dialog after successful update
+      setTimeout(() => {
+        onClose();
+      }, 500);
+
+    } catch (error: any) {
       console.error("Error updating order:", error);
       toast({
-        title: "Error",
-        description: "Failed to update order status",
+        title: "Update Failed",
+        description: error?.message || "Failed to update order status. Please check console for details.",
         variant: "destructive",
       });
     } finally {
@@ -261,35 +279,38 @@ const OrderDetailsDialog = ({ order, isOpen, onClose, onOrderUpdated }: OrderDet
                 <div className="flex flex-wrap gap-2">
                   {order.status === 'pending' && (
                     <Button
+                      type="button"
                       onClick={() => handleQuickStatusUpdate('processing')}
                       disabled={updating}
-                      className="rounded-xl bg-yellow-500 hover:bg-yellow-600"
+                      className="rounded-xl bg-yellow-500 hover:bg-yellow-600 text-white"
                       size="sm"
                     >
                       <Clock className="h-4 w-4 mr-2" />
-                      Mark as Processing
+                      {updating ? "Updating..." : "Mark as Processing"}
                     </Button>
                   )}
                   {(order.status === 'pending' || order.status === 'processing') && (
                     <Button
+                      type="button"
                       onClick={() => handleQuickStatusUpdate('shipped')}
                       disabled={updating}
-                      className="rounded-xl bg-blue-500 hover:bg-blue-600"
+                      className="rounded-xl bg-blue-500 hover:bg-blue-600 text-white"
                       size="sm"
                     >
                       <Truck className="h-4 w-4 mr-2" />
-                      Mark as Shipped
+                      {updating ? "Updating..." : "Mark as Shipped"}
                     </Button>
                   )}
                   {order.status === 'shipped' && (
                     <Button
+                      type="button"
                       onClick={() => handleQuickStatusUpdate('delivered')}
                       disabled={updating}
-                      className="rounded-xl bg-green-500 hover:bg-green-600"
+                      className="rounded-xl bg-green-500 hover:bg-green-600 text-white"
                       size="sm"
                     >
                       <CheckCircle className="h-4 w-4 mr-2" />
-                      Mark as Delivered
+                      {updating ? "Updating..." : "Mark as Delivered"}
                     </Button>
                   )}
                 </div>
@@ -347,9 +368,10 @@ const OrderDetailsDialog = ({ order, isOpen, onClose, onOrderUpdated }: OrderDet
                   )}
 
                   <Button
+                    type="button"
                     onClick={() => updateOrderStatus(selectedStatus)}
                     disabled={updating || selectedStatus === order.status}
-                    className="w-full rounded-xl bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600"
+                    className="w-full rounded-xl bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white"
                   >
                     {updating ? "Updating..." : "Update Order Status"}
                   </Button>

@@ -18,6 +18,7 @@ import { CouponsTab } from "@/components/admin/CouponsTab";
 import ProductsAdmin from "@/components/admin/ProductsAdmin";
 import RecipesAdmin from "@/components/admin/RecipesAdmin";
 import JournalsAdmin from "@/components/admin/JournalsAdmin";
+import InventoryTab from "@/components/admin/InventoryTab";
 import MatchaLoadingAnimation from "@/components/MatchaLoadingAnimation";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Menu, X } from "lucide-react";
@@ -53,6 +54,8 @@ const AdminDashboard = () => {
         return <UsersTab />;
       case "products":
         return <ProductsAdmin />;
+      case "inventory":
+        return <InventoryTab />;
       case "recipes":
         return <RecipesAdmin />;
       case "journals":
