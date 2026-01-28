@@ -1,19 +1,18 @@
--- Add inventory management fields to products table (stock_quantity already exists from previous migration)
+-- Add inventory management fields to products table
+-- Add stock_quantity first if it doesn't exist
+ALTER TABLE public.products ADD COLUMN IF NOT EXISTS stock_quantity INTEGER DEFAULT 0;
 ALTER TABLE public.products ADD COLUMN IF NOT EXISTS sku TEXT;
 ALTER TABLE public.products ADD COLUMN IF NOT EXISTS low_stock_threshold INTEGER DEFAULT 5;
 
--- Make SKU unique if it exists
+-- Make SKU unique (drop existing constraint first if it exists)
 DO $$
 BEGIN
-  IF EXISTS (
-    SELECT 1 FROM information_schema.columns
-    WHERE table_name = 'products' AND column_name = 'sku'
-  ) THEN
-    -- Drop existing constraint if any
-    ALTER TABLE public.products DROP CONSTRAINT IF EXISTS products_sku_key;
-    -- Add unique constraint
-    ALTER TABLE public.products ADD CONSTRAINT products_sku_unique UNIQUE (sku);
-  END IF;
+  -- Drop existing unique constraint if any
+  ALTER TABLE public.products DROP CONSTRAINT IF EXISTS products_sku_key;
+  ALTER TABLE public.products DROP CONSTRAINT IF EXISTS products_sku_unique;
+
+  -- Add unique constraint only for non-null SKUs
+  CREATE UNIQUE INDEX IF NOT EXISTS products_sku_unique_idx ON public.products (sku) WHERE sku IS NOT NULL;
 END $$;
 
 -- Create inventory_history table to track all stock changes
@@ -92,12 +91,24 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
--- Create trigger to automatically log inventory changes
+-- Drop existing trigger if it exists
 DROP TRIGGER IF EXISTS trigger_log_inventory_change ON public.products;
-CREATE TRIGGER trigger_log_inventory_change
-  AFTER INSERT OR UPDATE OF stock_quantity ON public.products
-  FOR EACH ROW
-  EXECUTE FUNCTION public.log_inventory_change();
+
+-- Only create trigger if stock_quantity column exists
+DO $$
+BEGIN
+  IF EXISTS (
+    SELECT 1 FROM information_schema.columns
+    WHERE table_schema = 'public'
+    AND table_name = 'products'
+    AND column_name = 'stock_quantity'
+  ) THEN
+    CREATE TRIGGER trigger_log_inventory_change
+      AFTER INSERT OR UPDATE OF stock_quantity ON public.products
+      FOR EACH ROW
+      EXECUTE FUNCTION public.log_inventory_change();
+  END IF;
+END $$;
 
 -- Add comments to products table columns
 COMMENT ON COLUMN public.products.sku IS 'Stock Keeping Unit - unique product identifier';
