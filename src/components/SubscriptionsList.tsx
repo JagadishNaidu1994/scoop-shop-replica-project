@@ -261,11 +261,12 @@ const SubscriptionsList: React.FC<SubscriptionsListProps> = ({
       setPauseReason('');
       setPauseDuration('30');
       fetchSubscriptions(); // Refresh the list
-    } catch (error) {
-      console.error('Error pausing subscription:', error);
+    } catch (error: any) {
+      const isCurrentlyPaused = selectedSubscription?.subscription_status === 'paused';
+      console.error(`Error ${isCurrentlyPaused ? 'resuming' : 'pausing'} subscription:`, error);
       toast({
         title: "Error",
-        description: "Failed to pause subscription",
+        description: error?.message || `Failed to ${isCurrentlyPaused ? 'resume' : 'pause'} subscription. Please try again or contact support.`,
         variant: "destructive",
         duration: 4000
       });
