@@ -55,12 +55,7 @@ const ScienceStepsGrid = () => {
             >
               {/* Content */}
               <div className={`space-y-6 ${step.reverse ? 'lg:col-start-2' : ''}`}>
-                <div className="flex items-center space-x-4">
-                  <span className="bg-black text-white w-10 h-10 rounded-full flex items-center justify-center font-bold">
-                    {index + 1}
-                  </span>
-                  <h3 className="text-2xl font-bold text-black">{step.title}</h3>
-                </div>
+                <h3 className="text-2xl font-bold text-black">{step.title}</h3>
                 <p className="text-lg text-gray-600 leading-relaxed">
                   {step.description}
                 </p>
