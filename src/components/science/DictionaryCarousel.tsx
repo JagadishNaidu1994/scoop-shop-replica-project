@@ -1,7 +1,10 @@
 
-import React from 'react';
+import React, { useRef } from 'react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const DictionaryCarousel = () => {
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+
   const dictionaryTerms = [
     {
       name: "Caffeine",
@@ -47,16 +50,53 @@ const DictionaryCarousel = () => {
     }
   ];
 
+  const scroll = (direction: 'left' | 'right') => {
+    if (scrollContainerRef.current) {
+      const scrollAmount = 400;
+      const newScrollLeft = direction === 'left'
+        ? scrollContainerRef.current.scrollLeft - scrollAmount
+        : scrollContainerRef.current.scrollLeft + scrollAmount;
+
+      scrollContainerRef.current.scrollTo({
+        left: newScrollLeft,
+        behavior: 'smooth'
+      });
+    }
+  };
+
   return (
     <section className="py-20 bg-gray-50 w-full">
       <div className="w-full px-4 sm:px-6 lg:px-8">
-        <div className="mb-12">
+        <div className="flex justify-between items-center mb-12">
           <h2 className="text-4xl font-bold text-black">NASTEA Dictionary</h2>
+          <div className="flex gap-2">
+            <button
+              onClick={() => scroll('left')}
+              className="p-3 rounded-full bg-white hover:bg-gray-100 shadow-md transition-colors"
+              aria-label="Scroll left"
+            >
+              <ChevronLeft className="w-6 h-6 text-black" />
+            </button>
+            <button
+              onClick={() => scroll('right')}
+              className="p-3 rounded-full bg-white hover:bg-gray-100 shadow-md transition-colors"
+              aria-label="Scroll right"
+            >
+              <ChevronRight className="w-6 h-6 text-black" />
+            </button>
+          </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div
+          ref={scrollContainerRef}
+          className="flex gap-6 overflow-x-auto scrollbar-hide snap-x snap-mandatory"
+          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+        >
           {dictionaryTerms.map((term, index) => (
-            <div key={index} className="bg-white rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow">
+            <div
+              key={index}
+              className="flex-shrink-0 w-[320px] bg-white rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow snap-start"
+            >
               <img
                 src={term.image}
                 alt={term.name}
