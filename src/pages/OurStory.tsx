@@ -1,9 +1,57 @@
 
-import React from 'react';
+import React, { useRef } from 'react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import HeaderNavBar from '@/components/HeaderNavBar';
 import AdminImageUpload from '@/components/AdminImageUpload';
 
 const OurStory = () => {
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+  const storyCards = [
+    {
+      text: "Three friends, one plan: upgrade your caffeine ritual without the crashy chaos.",
+      image: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+    },
+    {
+      text: "Inspired by Japan's matcha heritage - delivered with NR personality.",
+      image: "https://images.unsplash.com/photo-1544787219-7f47181a629a?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+    },
+    {
+      text: "We went to the source (Kagoshima) to understand what separates real matcha from green imposters.",
+      image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+    },
+    {
+      text: "We chose single-origin, shade-grown, stone-milled matcha because quality is… kind of the point.",
+      image: "https://images.unsplash.com/photo-1571115764595-644a1f56a55c?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+    },
+    {
+      text: "Designed to work everywhere: whisked, shaken, iced, latte'd, and café-served.",
+      image: "https://images.unsplash.com/photo-1564890369478-c89ca6d9cde9?w=400&h=400&fit=crop"
+    },
+    {
+      text: "Pure leaf. Loud standards.",
+      image: "https://images.unsplash.com/photo-1582793988951-9aed5509eb97?w=400&h=400&fit=crop"
+    },
+    {
+      text: "Nastea Rituals was born.",
+      image: "https://images.unsplash.com/photo-1563822249366-707a0051d2f7?w=400&h=400&fit=crop"
+    }
+  ];
+
+  const scroll = (direction: 'left' | 'right') => {
+    if (scrollContainerRef.current) {
+      const scrollAmount = 400;
+      const newScrollLeft = direction === 'left'
+        ? scrollContainerRef.current.scrollLeft - scrollAmount
+        : scrollContainerRef.current.scrollLeft + scrollAmount;
+
+      scrollContainerRef.current.scrollTo({
+        left: newScrollLeft,
+        behavior: 'smooth'
+      });
+    }
+  };
+
   return (
     <div className="min-h-screen bg-white">
       <HeaderNavBar />
@@ -64,54 +112,51 @@ const OurStory = () => {
       {/* The NASTEA Story Section */}
       <section className="py-20 px-4 bg-gray-900 text-white">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-5xl lg:text-6xl font-light mb-6">
+          <div className="flex justify-between items-center mb-16">
+            <h2 className="text-5xl lg:text-6xl font-light">
               The NASTEA story
             </h2>
-            <p className="text-xl text-gray-300 max-w-4xl mx-auto leading-relaxed">
-              In 2016, we discovered the power of functional mushrooms and 
-              experienced a transformation in our energy, focus, and resilience.
-            </p>
+            <div className="flex gap-2">
+              <button
+                onClick={() => scroll('left')}
+                className="p-3 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
+                aria-label="Scroll left"
+              >
+                <ChevronLeft className="w-6 h-6 text-white" />
+              </button>
+              <button
+                onClick={() => scroll('right')}
+                className="p-3 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
+                aria-label="Scroll right"
+              >
+                <ChevronRight className="w-6 h-6 text-white" />
+              </button>
+            </div>
           </div>
-          
-          {/* 4 Image Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <div className="relative group">
-              <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Two brothers" className="w-full h-96 object-cover rounded-lg" />
-              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6 rounded-b-lg">
-                <p className="text-white text-sm leading-relaxed">
-                  Three friends, one plan: upgrade your caffeine ritual without the crashy chaos.
-                </p>
-              </div>
-            </div>
-            
-            <div className="relative group">
-              <img src="https://images.unsplash.com/photo-1544787219-7f47181a629a?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Ancient tea ceremony" className="w-full h-96 object-cover rounded-lg" />
-              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6 rounded-b-lg">
-                <p className="text-white text-sm leading-relaxed">
-                  Inspired by Japan’s matcha heritage - delivered with NR personality.
 
-                </p>
+          {/* Horizontal Carousel */}
+          <div
+            ref={scrollContainerRef}
+            className="flex gap-6 overflow-x-auto scrollbar-hide snap-x snap-mandatory"
+            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+          >
+            {storyCards.map((card, index) => (
+              <div
+                key={index}
+                className="flex-shrink-0 w-[350px] relative group snap-start"
+              >
+                <img
+                  src={card.image}
+                  alt={`Story card ${index + 1}`}
+                  className="w-full h-96 object-cover rounded-lg"
+                />
+                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6 rounded-b-lg">
+                  <p className="text-white text-sm leading-relaxed">
+                    {card.text}
+                  </p>
+                </div>
               </div>
-            </div>
-            
-            <div className="relative group">
-              <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Mountain landscape" className="w-full h-96 object-cover rounded-lg" />
-              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6 rounded-b-lg">
-                <p className="text-white text-sm leading-relaxed">
-We went to the source (Kagoshima) to understand what separates real matcha from green imposters.                </p>
-              </div>
-            </div>
-            
-            <div className="relative group">
-              <img src="https://images.unsplash.com/photo-1571115764595-644a1f56a55c?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Mushroom blend preparation" className="w-full h-96 object-cover rounded-lg" />
-              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6 rounded-b-lg">
-                <p className="text-white text-sm leading-relaxed">
-                  We chose single-origin, shade-grown, stone-milled matcha because quality is… kind of the point.
-
-                </p>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>
