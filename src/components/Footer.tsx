@@ -103,7 +103,7 @@ const Footer = () => {
         {/* Large NASTEA Branding */}
         <div className="border-t border-gray-800 pt-4 pb-4">
           <div className="text-center overflow-hidden py-2">
-            <h1 className="text-[24vw] md:text-[24vw] lg:text-[22vw] font-bold leading-none tracking-tighter text-white/10">
+            <h1 className="text-[24vw] md:text-[28vw] lg:text-[23vw] font-bold leading-none tracking-tighter text-white/10">
               NASTEA
             </h1>
           </div>
