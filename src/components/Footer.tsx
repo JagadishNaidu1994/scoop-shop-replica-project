@@ -101,13 +101,13 @@ const Footer = () => {
         </div>
 
         {/* Large NASTEA Branding */}
-        <div className="border-t border-gray-800 pt-8 pb-4 -mx-4 sm:-mx-6 lg:-mx-8">
-          <div className="text-center mb-4 overflow-hidden">
-            <h1 className="text-[14rem] md:text-[20rem] lg:text-[28rem] font-bold leading-none tracking-tighter text-white/10" style={{ marginTop: '-2rem', marginBottom: '-2rem' }}>
+        <div className="border-t border-gray-800 pt-4 pb-4">
+          <div className="text-center overflow-hidden py-2">
+            <h1 className="text-[20vw] md:text-[18vw] lg:text-[16vw] font-bold leading-none tracking-tighter text-white/10">
               NASTEA
             </h1>
           </div>
-          <div className="flex flex-col md:flex-row justify-between items-center px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col md:flex-row justify-between items-center pt-4">
             <div className="text-xs text-gray-500 mb-4 md:mb-0">
               © NASTEA. NASTEA is a trademark of NASTEA Limited.
             </div>
