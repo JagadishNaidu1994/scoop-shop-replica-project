@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Instagram, Facebook } from 'lucide-react';
 
 const Footer = () => {
+  console.log("Footer component rendered");
+  console.log("Footer rendered");
   const [email, setEmail] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -109,7 +111,7 @@ const Footer = () => {
           </div>
           <div className="flex flex-col md:flex-row justify-between items-center pt-4">
             <div className="text-xs text-gray-500 mb-4 md:mb-0">
-              © NASTEA. NASTEA is a trademark of NASTEA Limited.
+              NASTEA. NASTEA is a trademark of NASTEA Limited.
             </div>
             <div className="flex gap-2 flex-wrap justify-center">
               <img src="https://upload.wikimedia.org/wikipedia/commons/b/b7/American_Express_logo_%282018%29.svg" alt="American Express" className="h-6" />

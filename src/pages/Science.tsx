@@ -1,4 +1,3 @@
-
 import React from 'react';
 import HeaderNavBar from '@/components/HeaderNavBar';
 import Footer from '@/components/Footer';
@@ -23,6 +22,16 @@ const Science = () => {
       <DictionaryCarousel />
       <FarmSection />
       <ScienceStepsGrid />
+
+      {/* Shop our range button */}
+      <div className="flex justify-center my-12">
+        <a href="/shop">
+          <button className="bg-black text-white px-8 py-3 rounded-full text-lg font-semibold hover:bg-gray-800 transition-colors">
+            Shop our range
+          </button>
+        </a>
+      </div>
+
       <Footer />
     </div>
   );

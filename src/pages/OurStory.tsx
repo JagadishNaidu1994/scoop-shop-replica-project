@@ -1,8 +1,8 @@
-
 import React, { useRef } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import HeaderNavBar from '@/components/HeaderNavBar';
 import AdminImageUpload from '@/components/AdminImageUpload';
+import Footer from '@/components/Footer';
 
 const OurStory = () => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -299,56 +299,7 @@ Pure Leaf, Loud Standards
         </div>
       </section>
 
-      {/* Footer CTA */}
-      <section className="py-20 px-4 bg-white text-center">
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-6xl lg:text-8xl font-light mb-8 text-black">NASTEA</h2>
-          <div className="flex justify-center space-x-2 mb-12">
-            {[...Array(6)].map((_, i) => <div key={i} className="w-3 h-3 bg-black rounded-full"></div>)}
-          </div>
-          <p className="text-2xl text-gray-600 mb-16 font-light">
-            Shop for the future
-          </p>
-          <div className="grid md:grid-cols-4 gap-8 text-left">
-            <div>
-              <h4 className="font-semibold mb-4 text-black">Products</h4>
-              <ul className="space-y-2 text-gray-600">
-                <li>Clarity Focus</li>
-                <li>Balance Adaptogen</li>
-                <li>Immunity Support</li>
-                <li>All Products</li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-4 text-black">Company</h4>
-              <ul className="space-y-2 text-gray-600">
-                <li>About Us</li>
-                <li>Our Story</li>
-                <li>Contact</li>
-                <li>Careers</li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-4 text-black">Support</h4>
-              <ul className="space-y-2 text-gray-600">
-                <li>FAQ</li>
-                <li>Shipping</li>
-                <li>Returns</li>
-                <li>Support</li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-4 text-black">Follow</h4>
-              <ul className="space-y-2 text-gray-600">
-                <li>Instagram</li>
-                <li>Facebook</li>
-                <li>Twitter</li>
-                <li>YouTube</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </section>
+      <Footer key={Date.now()} />
     </div>
   );
 };

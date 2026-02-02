@@ -1,23 +1,18 @@
 import React, { useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+
 const ProductShowcaseGrid = () => {
   const [selectedImage, setSelectedImage] = useState(0);
   const products = [{
     id: 0,
-    name: "NASTEA Coffee",
-    description: "Arabica Beans Coffee with 100% Pure Lion's Mane Extract for Energy, Focus & Clarity",
+    name: "Japan Classic",
+    description: "Japan-Grown | Daily Driver | No Additives",
     thumbnail: "/lovable-uploads/be44778f-fd8a-49f3-aef5-7422ebd30ed1.png",
     mainImage: "/lovable-uploads/be44778f-fd8a-49f3-aef5-7422ebd30ed1.png"
   }, {
     id: 1,
-    name: "NASTEA Matcha",
-    description: "Sassy Strawberry Ceremonial Matcha for a vibrant and energizing experience",
-    thumbnail: "/lovable-uploads/4d9c0a46-fb6f-49ac-b221-299e60a15fa5.png",
-    mainImage: "/lovable-uploads/4d9c0a46-fb6f-49ac-b221-299e60a15fa5.png"
-  }, {
-    id: 2,
-    name: "NASTEA White Chocolate",
-    description: "Witty White Chocolate Ceremonial Matcha for Energy, Balance & Focus",
+    name: "Organic Ceremonial",
+    description: "Cert Organic | Calm Energy | No Additives",
     thumbnail: "/lovable-uploads/18fa3a22-212e-489f-bdee-5bb2266db6a4.png",
     mainImage: "/lovable-uploads/18fa3a22-212e-489f-bdee-5bb2266db6a4.png"
   }];
@@ -42,7 +37,7 @@ const ProductShowcaseGrid = () => {
             {/* Main Heading */}
             <div className="space-y-4">
               <h2 className="text-4xl font-bold text-black">
-                Discover our award winning range of Super Blends to optimise your daily routine
+                Choose your ritual for flex, for everyday, for chaos in the kitchen.
               </h2>
             </div>
 
@@ -50,23 +45,21 @@ const ProductShowcaseGrid = () => {
             <div className="space-y-6">
               <div>
                 <h3 className={`text-2xl font-bold mb-2 transition-colors duration-300 ${selectedImage === 0 ? 'text-black' : 'text-gray-600'}`}>
-                  NASTEA Coffee
+                  Organic Ceremonial
                 </h3>
-                <h4 className={`text-xl font-semibold mb-2 transition-colors duration-300 ${selectedImage === 1 ? 'text-black' : 'text-gray-600'}`}>
-                  NASTEA Matcha
-                </h4>
-                <h4 className={`text-xl font-semibold transition-colors duration-300 ${selectedImage === 2 ? 'text-black' : 'text-gray-600'}`}>
-                  NASTEA Cacao
+                <h4 className={`text-xl font-semibold transition-colors duration-300 ${selectedImage === 1 ? 'text-black' : 'text-gray-600'}`}>
+                  Japan Classic
                 </h4>
               </div>
             </div>
 
             {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row gap-4">
-              <button className="bg-black text-white px-8 py-3 rounded-full font-medium hover:bg-gray-800 transition-colors">
-                SHOP NOW
-              </button>
-              
+              <a href="/shop">
+                <button className="bg-black text-white px-8 py-3 rounded-full text-lg font-semibold hover:bg-gray-800 transition-colors">
+                  Shop Now
+                </button>
+              </a>
             </div>
 
             {/* Selected Product Info */}
