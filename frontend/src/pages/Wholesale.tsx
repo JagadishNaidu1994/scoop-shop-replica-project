@@ -222,17 +222,17 @@ We are the wholesale arm of Nastea Rituals, we provide matcha guidance to cafes,
                 <p className="text-gray-700 mb-6">
                   Premium Japanese matcha grades tailored for every application—from signature drinks to culinary creations.
                 </p>
-                <div className="space-y-3 text-gray-600">
-                  <div className="bg-green-50 p-3 rounded-lg">
-                    <span className="font-semibold text-green-800">Organic Imperial Ceremonial Grade</span>
+                <div className="space-y-3">
+                  <div className="bg-green-50 p-4 rounded-lg">
+                    <span className="font-semibold text-green-700 block text-base">Organic Imperial Ceremonial Grade</span>
                     <p className="text-sm text-gray-600 mt-1">Premium lattes & signature drinks</p>
                   </div>
-                  <div className="bg-green-50 p-3 rounded-lg">
-                    <span className="font-semibold text-green-800">Organic Ceremonial Grade</span>
+                  <div className="bg-green-50 p-4 rounded-lg">
+                    <span className="font-semibold text-green-700 block text-base">Organic Ceremonial Grade</span>
                     <p className="text-sm text-gray-600 mt-1">Daily lattes, iced drinks, high-volume service</p>
                   </div>
-                  <div className="bg-green-50 p-3 rounded-lg">
-                    <span className="font-semibold text-green-800">Japanese Classic Grade</span>
+                  <div className="bg-green-50 p-4 rounded-lg">
+                    <span className="font-semibold text-green-700 block text-base">Japanese Classic Grade</span>
                     <p className="text-sm text-gray-600 mt-1">Baking, desserts, R&D, matcha infusions</p>
                   </div>
                 </div>
@@ -255,26 +255,20 @@ We are the wholesale arm of Nastea Rituals, we provide matcha guidance to cafes,
                 <p className="text-gray-700 mb-6">
                   Trial-friendly minimums and flexible payment terms designed for growing cafés and established partners.
                 </p>
-                <ul className="space-y-3 text-gray-600">
-                  <li className="flex items-start">
-                    <span className="w-2 h-2 bg-amber-600 rounded-full mr-3 mt-2 flex-shrink-0"></span>
-                    <div>
-                      <span className="font-semibold text-gray-800">MOQ:</span> Starting from as low as 250g (trial-friendly)
-                    </div>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="w-2 h-2 bg-amber-600 rounded-full mr-3 mt-2 flex-shrink-0"></span>
-                    <div>
-                      <span className="font-semibold text-gray-800">Payment terms:</span> UPI / bank transfer (credit terms for repeat partners)
-                    </div>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="w-2 h-2 bg-amber-600 rounded-full mr-3 mt-2 flex-shrink-0"></span>
-                    <div>
-                      <span className="font-semibold text-gray-800">Samples:</span> 10g at INR 500 + delivery. Available for cafés ready for onboarding
-                    </div>
-                  </li>
-                </ul>
+                <div className="space-y-3">
+                  <div className="bg-amber-50 p-4 rounded-lg">
+                    <span className="font-semibold text-amber-700 block text-base">MOQ: Starting from 250g</span>
+                    <p className="text-sm text-gray-600 mt-1">Trial-friendly entry point for new partners</p>
+                  </div>
+                  <div className="bg-amber-50 p-4 rounded-lg">
+                    <span className="font-semibold text-amber-700 block text-base">Payment Terms</span>
+                    <p className="text-sm text-gray-600 mt-1">UPI / bank transfer (credit terms for repeat partners)</p>
+                  </div>
+                  <div className="bg-amber-50 p-4 rounded-lg">
+                    <span className="font-semibold text-amber-700 block text-base">Samples Available</span>
+                    <p className="text-sm text-gray-600 mt-1">10g at INR 500 + delivery for cafés ready for onboarding</p>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -289,31 +283,25 @@ We are the wholesale arm of Nastea Rituals, we provide matcha guidance to cafes,
               <div className="p-8">
                 <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
                   <Truck className="text-blue-600" size={24} />
-                  Supply & Delivery (consistent, not chaotic)
+                  Supply & Delivery
                 </h3>
                 <p className="text-gray-700 mb-6">
                   Reliable recurring supply with fast delivery and batch-to-batch consistency you can trust.
                 </p>
-                <ul className="space-y-3 text-gray-600">
-                  <li className="flex items-start">
-                    <span className="w-2 h-2 bg-blue-600 rounded-full mr-3 mt-2 flex-shrink-0"></span>
-                    <div>
-                      <span className="font-semibold text-gray-800">Recurring supply:</span> Bi-weekly / monthly re-stocks tailored to your needs
-                    </div>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="w-2 h-2 bg-blue-600 rounded-full mr-3 mt-2 flex-shrink-0"></span>
-                    <div>
-                      <span className="font-semibold text-gray-800">Lead time:</span> 5 days or under. Fast dispatch + Pan-India shipping
-                    </div>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="w-2 h-2 bg-blue-600 rounded-full mr-3 mt-2 flex-shrink-0"></span>
-                    <div>
-                      <span className="font-semibold text-gray-800">Consistency:</span> Batch standard for colour + taste (barista-proof)
-                    </div>
-                  </li>
-                </ul>
+                <div className="space-y-3">
+                  <div className="bg-blue-50 p-4 rounded-lg">
+                    <span className="font-semibold text-blue-700 block text-base">Recurring Supply</span>
+                    <p className="text-sm text-gray-600 mt-1">Bi-weekly / monthly re-stocks tailored to your needs</p>
+                  </div>
+                  <div className="bg-blue-50 p-4 rounded-lg">
+                    <span className="font-semibold text-blue-700 block text-base">Fast Lead Time</span>
+                    <p className="text-sm text-gray-600 mt-1">5 days or under. Fast dispatch + Pan-India shipping</p>
+                  </div>
+                  <div className="bg-blue-50 p-4 rounded-lg">
+                    <span className="font-semibold text-blue-700 block text-base">Batch Consistency</span>
+                    <p className="text-sm text-gray-600 mt-1">Standard colour + taste across batches (barista-proof)</p>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -328,37 +316,29 @@ We are the wholesale arm of Nastea Rituals, we provide matcha guidance to cafes,
               <div className="p-8">
                 <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
                   <GraduationCap className="text-purple-600" size={24} />
-                  Training & Growth Support (we help you sell it)
+                  Training & Growth Support
                 </h3>
                 <p className="text-gray-700 mb-6">
                   Comprehensive barista training, menu engineering, and co-marketing support to help your matcha offerings thrive.
                 </p>
-                <ul className="space-y-3 text-gray-600">
-                  <li className="flex items-start">
-                    <span className="w-2 h-2 bg-purple-600 rounded-full mr-3 mt-2 flex-shrink-0"></span>
-                    <div>
-                      <span className="font-semibold text-gray-800">Free barista training:</span> Recipes, ratios, workflow, speed tips
-                    </div>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="w-2 h-2 bg-purple-600 rounded-full mr-3 mt-2 flex-shrink-0"></span>
-                    <div>
-                      <span className="font-semibold text-gray-800">Menu engineering:</span> Best-sellers + pricing guidance
-                    </div>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="w-2 h-2 bg-purple-600 rounded-full mr-3 mt-2 flex-shrink-0"></span>
-                    <div>
-                      <span className="font-semibold text-gray-800">POS assets:</span> Table-talkers, menu inserts, QR codes
-                    </div>
-                  </li>
-                  <li className="flex items-start">
-                    <span className="w-2 h-2 bg-purple-600 rounded-full mr-3 mt-2 flex-shrink-0"></span>
-                    <div>
-                      <span className="font-semibold text-gray-800">Co-marketing:</span> Reels, collabs, seasonal drops, "NR x Your Café" moments
-                    </div>
-                  </li>
-                </ul>
+                <div className="space-y-3">
+                  <div className="bg-purple-50 p-4 rounded-lg">
+                    <span className="font-semibold text-purple-700 block text-base">Free Barista Training</span>
+                    <p className="text-sm text-gray-600 mt-1">Recipes, ratios, workflow, speed tips</p>
+                  </div>
+                  <div className="bg-purple-50 p-4 rounded-lg">
+                    <span className="font-semibold text-purple-700 block text-base">Menu Engineering</span>
+                    <p className="text-sm text-gray-600 mt-1">Best-sellers + pricing guidance</p>
+                  </div>
+                  <div className="bg-purple-50 p-4 rounded-lg">
+                    <span className="font-semibold text-purple-700 block text-base">Marketing Assets</span>
+                    <p className="text-sm text-gray-600 mt-1">Table-talkers, menu inserts, QR codes</p>
+                  </div>
+                  <div className="bg-purple-50 p-4 rounded-lg">
+                    <span className="font-semibold text-purple-700 block text-base">Co-Marketing</span>
+                    <p className="text-sm text-gray-600 mt-1">Reels, collabs, seasonal drops, "NR x Your Café" moments</p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
