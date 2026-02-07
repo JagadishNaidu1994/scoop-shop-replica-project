@@ -14,6 +14,8 @@ const HeaderNavBar = () => {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [firstName, setFirstName] = useState('');
+  const [isHeaderVisible, setIsHeaderVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
   const { user } = useAuth();
   const { getTotalItems } = useCart();
   const { isAdmin } = useAdminCheck();
@@ -25,6 +27,29 @@ const HeaderNavBar = () => {
 
   // Check if we're on the account page
   const isAccountPage = location.pathname === '/account';
+
+  // Handle scroll behavior
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      
+      if (currentScrollY > lastScrollY && currentScrollY > 100) {
+        // Scrolling down - hide header
+        setIsHeaderVisible(false);
+      } else if (currentScrollY < lastScrollY) {
+        // Scrolling up - show header
+        setIsHeaderVisible(true);
+      }
+      
+      setLastScrollY(currentScrollY);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [lastScrollY]);
 
   useEffect(() => {
     if (user?.id) {
@@ -85,7 +110,9 @@ const HeaderNavBar = () => {
   return (
     <>
       {/* Top promotional banner - fast scrolling on all devices */}
-      <div className="bg-gray-100 text-center py-2 text-sm font-medium text-black sticky top-0 z-50 overflow-hidden">
+      <div className={`bg-gray-100 text-center py-2 text-sm font-medium text-black fixed top-0 left-0 right-0 z-50 overflow-hidden transition-transform duration-300 ${
+        isHeaderVisible ? 'translate-y-0' : '-translate-y-full'
+      }`}>
         <div className="whitespace-nowrap animate-[scroll-seamless_6s_linear_infinite] sm:animate-[scroll-seamless_8s_linear_infinite] lg:animate-[scroll-seamless_8s_linear_infinite]">
           <span className="inline-block mx-8">15% OFF EVERY SUBSCRIPTION</span>
           <span className="inline-block mx-2">•</span>
@@ -106,7 +133,9 @@ const HeaderNavBar = () => {
       </div>
       
       {/* Main header */}
-      <header className="bg-white shadow-sm sticky top-8 z-40 border-b border-gray-100">
+      <header className={`bg-white shadow-sm fixed top-8 left-0 right-0 z-40 border-b border-gray-100 transition-transform duration-300 ${
+        isHeaderVisible ? 'translate-y-0' : '-translate-y-full'
+      }`}>
         <div className="w-full px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             {/* Mobile menu button - Left */}
