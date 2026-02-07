@@ -282,52 +282,41 @@ NR isn’t a quick fix. It’s choosing a cleaner, smarter way to sip and making
         </div>
       </section>
 
-      {/* Commitment to Quality Section - Text Left / Image Right */}
-      <section className="py-20 px-3 bg-gray-100">
+      {/* The NASTEA Standard Section */}
+      <section className="py-20 px-3 bg-gray-50">
         <div className="grid grid-cols-2 gap-12 items-center">
-          <div>
-            <h2 className="text-5xl font-light text-gray-900 mb-6">
-              Commitment to quality & manufacturing
-            </h2>
-            <p className="text-lg text-gray-700 leading-[1.6] mb-8">
-              Purity and efficacy come first. We go beyond industry standards, ensuring that every DIRTEA blend is tested, extracted, and formulated for maximum benefit.
-            </p>
+          {/* Left Content */}
+          <div className="space-y-8">
+            <h2 className="text-4xl font-bold text-black">The NASTEA Standard</h2>
+
             <div className="space-y-6">
-              <div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                  100% fruiting body extracts
-                </h3>
+              <div className="border-l-4 border-orange-400 pl-6">
+                <h3 className="text-xl font-semibold text-black mb-2">Japan-Grown, Shade-Grown</h3>
+                <p className="text-gray-600">We source Kagoshima Japanese matcha that's shade-grown for the signature umami and smoothness for your daily routine.</p>
               </div>
-              <div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                  Dual-extraction
-                </h3>
-                <p className="text-base text-gray-600">
-                  Dual-extracted for better absorption – optimised to over 40% Beta Glucans.
-                </p>
+
+              <div className="border-l-4 border-orange-400 pl-6">
+                <h3 className="text-xl font-semibold text-black mb-2">Stone-Milled for Silk-Smooth Sips</h3>
+                <p className="text-gray-600">Our leaves are stone-milled into a fine, fluffy powder that blends clean, whisks fast, and drinks like velvet—no grit, no swampy bitterness.</p>
               </div>
-              <div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                  Sourced from the best
-                </h3>
-                <p className="text-base text-gray-600">
-                  Sourced from the best regions worldwide – only the highest-quality mushrooms.
-                </p>
+
+              <div className="border-l-4 border-orange-400 pl-6">
+                <h3 className="text-xl font-semibold text-black mb-2">Grades That Match Your Mood</h3>
+                <p className="text-gray-600">From Ceremonial for your main-character mornings to Premium for daily lattes and café menus, our lineup is built for consistency in taste, texture, and that neon-clean colour everyone notices.</p>
               </div>
-              <div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                  Tested for purity & efficacy
-                </h3>
-                <p className="text-base text-gray-600">
-                  Tested for purity & efficacy – no heavy metals, no contaminants.
-                </p>
+
+              <div className="border-l-4 border-orange-400 pl-6">
+                <h3 className="text-xl font-semibold text-black mb-2">Consistency You Can Count On</h3>
+                <p className="text-gray-600">Every batch is selected to hit the same flavour-and-colour standard—so your cup (and your café drinks) look iconic, taste smooth, and never surprise you in a bad way.</p>
               </div>
             </div>
           </div>
-          <div className="h-[420px] overflow-hidden rounded-lg">
+
+          {/* Right Image */}
+          <div className="relative h-[500px] overflow-hidden rounded-lg">
             <img
-              src="https://images.unsplash.com/photo-1582793988951-9aed5509eb97?w=800&h=800&fit=crop"
-              alt="Hands holding mushroom latte"
+              src="/lovable-uploads/da6fe5b0-6a57-4ada-a9b8-042646881f03.png"
+              alt="Hands holding mushroom coffee cup"
               className="w-full h-full object-cover"
             />
           </div>
