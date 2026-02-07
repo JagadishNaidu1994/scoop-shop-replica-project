@@ -138,29 +138,29 @@ const ProductDetail = () => {
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-16 py-12">
         <div className="grid lg:grid-cols-2 gap-12">
           {/* Left Column - Image Gallery */}
-          <div className="flex gap-4">
-            {/* Thumbnail Gallery - Vertical */}
-            <div className="flex flex-col gap-3">
-              {productImages.map((img, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => setSelectedImage(idx)}
-                  className={`flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-all ${
-                    selectedImage === idx ? 'border-gray-900' : 'border-gray-200'
-                  }`}
-                >
-                  <img src={img} alt={`View ${idx + 1}`} className="w-full h-full object-cover" />
-                </button>
-              ))}
-            </div>
-
+          <div className="space-y-4">
             {/* Main Image */}
-            <div className="flex-1 relative aspect-square overflow-hidden rounded-lg bg-gray-100">
+            <div className="relative aspect-square overflow-hidden rounded-lg bg-gray-100">
               <img
                 src={productImages[selectedImage]}
                 alt={product.name}
                 className="w-full h-full object-cover"
               />
+            </div>
+
+            {/* Thumbnail Gallery */}
+            <div className="flex gap-3 overflow-x-auto">
+              {productImages.map((img, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setSelectedImage(idx)}
+                  className={`flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-all ${
+                    selectedImage === idx ? 'border-green-600' : 'border-gray-200'
+                  }`}
+                >
+                  <img src={img} alt={`View ${idx + 1}`} className="w-full h-full object-cover" />
+                </button>
+              ))}
             </div>
           </div>
 
@@ -187,57 +187,95 @@ const ProductDetail = () => {
             {/* Key Benefits Icons */}
             <div className="flex gap-6">
               <div className="flex flex-col items-center">
-                <div className="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center mb-2">
+                <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center mb-2">
                   <span className="text-2xl">⚡</span>
                 </div>
                 <span className="text-sm text-gray-600">Energy</span>
               </div>
               <div className="flex flex-col items-center">
-                <div className="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center mb-2">
+                <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center mb-2">
                   <span className="text-2xl">🧠</span>
                 </div>
                 <span className="text-sm text-gray-600">Focus</span>
               </div>
               <div className="flex flex-col items-center">
-                <div className="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center mb-2">
+                <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center mb-2">
                   <span className="text-2xl">✨</span>
                 </div>
                 <span className="text-sm text-gray-600">Skin</span>
               </div>
             </div>
 
-            {/* Subscription Option */}
-            <div className="border-2 border-gray-900 rounded-lg p-5">
-              <div className="flex items-center justify-between mb-3">
-                <div className="flex items-center gap-3">
-                  <input
-                    type="radio"
-                    checked={subscriptionType === 'subscribe'}
-                    onChange={() => setSubscriptionType('subscribe')}
-                    className="w-5 h-5"
-                  />
-                  <div>
-                    <div className="font-semibold text-gray-900">EVERY 4 WEEKS</div>
+            {/* Subscription Options */}
+            <div className="space-y-4 border-t border-b border-gray-200 py-6">
+              {/* Subscribe Option */}
+              <div
+                onClick={() => setSubscriptionType('subscribe')}
+                className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
+                  subscriptionType === 'subscribe'
+                    ? 'border-green-600 bg-green-50'
+                    : 'border-gray-200'
+                }`}
+              >
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center gap-3">
+                    <input
+                      type="radio"
+                      checked={subscriptionType === 'subscribe'}
+                      onChange={() => setSubscriptionType('subscribe')}
+                      className="w-5 h-5"
+                    />
+                    <div>
+                      <div className="font-semibold text-gray-900">EVERY 4 WEEKS</div>
+                      <div className="text-sm text-green-600 font-medium">20% OFF</div>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-2xl font-bold text-gray-900">£{subscriptionPrice}</div>
+                    <div className="text-sm text-gray-500">£{(parseFloat(subscriptionPrice) / 30).toFixed(2)} per serving</div>
                   </div>
                 </div>
-                <div className="bg-black text-white px-3 py-1 rounded text-sm font-semibold">
-                  20% OFF
-                </div>
-              </div>
-              <div className="flex items-baseline justify-between mb-3">
-                <div className="text-3xl font-bold text-gray-900">£{subscriptionPrice}</div>
-                <div className="text-sm text-gray-500">£{(parseFloat(subscriptionPrice) / 30).toFixed(2)} per serving</div>
+                <p className="text-sm text-gray-600 ml-8">Manage your subscription anytime</p>
               </div>
 
-              {/* Quantity Selector */}
-              <div className="flex items-center border border-gray-300 rounded-lg mb-4 w-32">
+              {/* One-Time Purchase Option */}
+              <div
+                onClick={() => setSubscriptionType('one-time')}
+                className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
+                  subscriptionType === 'one-time'
+                    ? 'border-green-600 bg-green-50'
+                    : 'border-gray-200'
+                }`}
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <input
+                      type="radio"
+                      checked={subscriptionType === 'one-time'}
+                      onChange={() => setSubscriptionType('one-time')}
+                      className="w-5 h-5"
+                    />
+                    <div className="font-semibold text-gray-900">One-Time Purchase</div>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-2xl font-bold text-gray-900">£{oneTimePrice}</div>
+                    <div className="text-sm text-gray-500">£{(product.price / 30).toFixed(2)} per serving</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Quantity Selector */}
+            <div className="flex items-center gap-4">
+              <span className="font-medium text-gray-700">Quantity:</span>
+              <div className="flex items-center border border-gray-300 rounded-lg">
                 <button
                   onClick={() => setQuantity(Math.max(1, quantity - 1))}
                   className="p-3 hover:bg-gray-100 transition-colors"
                 >
                   <Minus className="w-4 h-4" />
                 </button>
-                <span className="flex-1 text-center font-medium">{quantity}</span>
+                <span className="px-6 py-2 font-medium">{quantity}</span>
                 <button
                   onClick={() => setQuantity(quantity + 1)}
                   className="p-3 hover:bg-gray-100 transition-colors"
@@ -245,58 +283,28 @@ const ProductDetail = () => {
                   <Plus className="w-4 h-4" />
                 </button>
               </div>
-
-              {/* Add to Cart Button */}
-              <Button
-                onClick={handleAddToCart}
-                className="w-full bg-gray-900 hover:bg-gray-800 text-white py-6 text-base font-semibold rounded-lg mb-3"
-              >
-                ADD TO CART - £{subscriptionType === 'subscribe' ? subscriptionPrice : oneTimePrice}
-              </Button>
-
-              {/* Secondary CTA */}
-              <Button
-                className="w-full bg-[#5A31F4] hover:bg-[#4A21D4] text-white py-6 text-base font-semibold rounded-lg mb-3"
-              >
-                Buy with shop
-              </Button>
-
-              <div className="text-center mb-4">
-                <button className="text-sm text-gray-600 underline hover:text-gray-900">
-                  More payment options
-                </button>
-              </div>
-
-              <p className="text-sm text-gray-600 flex items-center gap-2">
-                <span className="w-5 h-5 rounded-full bg-black text-white flex items-center justify-center text-xs">i</span>
-                Manage your subscription anytime
-              </p>
             </div>
 
-            {/* One-Time Purchase Option */}
-            <div
-              onClick={() => setSubscriptionType('one-time')}
-              className={`p-5 rounded-lg border-2 cursor-pointer transition-all ${
-                subscriptionType === 'one-time'
-                  ? 'border-gray-900 bg-gray-50'
-                  : 'border-gray-200'
-              }`}
+            {/* Add to Cart Button */}
+            <Button
+              onClick={handleAddToCart}
+              className="w-full bg-green-600 hover:bg-green-700 text-white py-6 text-lg font-semibold rounded-lg"
             >
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <input
-                    type="radio"
-                    checked={subscriptionType === 'one-time'}
-                    onChange={() => setSubscriptionType('one-time')}
-                    className="w-5 h-5"
-                  />
-                  <div className="font-semibold text-gray-900">One-Time Purchase</div>
-                </div>
-                <div className="text-right">
-                  <div className="text-2xl font-bold text-gray-900">£{oneTimePrice}</div>
-                  <div className="text-sm text-gray-500">£{(product.price / 30).toFixed(2)} per serving</div>
-                </div>
-              </div>
+              ADD TO CART - £{subscriptionType === 'subscribe' ? subscriptionPrice : oneTimePrice}
+            </Button>
+
+            {/* Secondary CTA */}
+            <Button
+              variant="outline"
+              className="w-full border-2 border-gray-900 py-6 text-lg font-semibold rounded-lg"
+            >
+              Buy with shop
+            </Button>
+
+            <div className="text-center">
+              <button className="text-sm text-gray-600 underline hover:text-gray-900">
+                More payment options
+              </button>
             </div>
           </div>
         </div>
