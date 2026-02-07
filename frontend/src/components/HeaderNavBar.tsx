@@ -51,6 +51,19 @@ const HeaderNavBar = () => {
     };
   }, [lastScrollY]);
 
+  // Prevent body scroll when mobile menu is open
+  useEffect(() => {
+    if (isMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isMenuOpen]);
+
   useEffect(() => {
     if (user?.id) {
       // Check cache first
@@ -264,10 +277,10 @@ const HeaderNavBar = () => {
 
           {/* Mobile Navigation Menu */}
           {isMenuOpen && (
-            <div className="md:hidden fixed inset-0 top-24 bg-white z-50">
-              <div className="flex flex-col h-full">
+            <div className="md:hidden fixed inset-0 bg-white z-[60] overflow-y-auto">
+              <div className="flex flex-col min-h-full pt-24">
                 {/* Close button */}
-                <div className="flex justify-end p-4">
+                <div className="flex justify-end p-4 bg-white sticky top-0 z-10 border-b border-gray-200">
                   <button
                     onClick={() => setIsMenuOpen(false)}
                     className="text-black hover:text-gray-600 rounded-full p-2 hover:bg-gray-100"
@@ -277,30 +290,54 @@ const HeaderNavBar = () => {
                 </div>
 
                 {/* Menu items */}
-                <div className="flex-1 px-6 py-4 space-y-6">
+                <div className="flex-1 px-6 py-4 space-y-6 bg-white">
                   <div className="space-y-4">
-                    <Link to="/shop" className="block text-lg font-medium text-black hover:text-gray-600 border-b border-gray-200 pb-2">
+                    <Link 
+                      to="/shop" 
+                      className="block text-lg font-medium text-black hover:text-gray-600 border-b border-gray-200 pb-2"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
                       SHOP NASTEA
                     </Link>
                     
                     <div className="space-y-4">
-                      <Link to="/recipes" className="block text-lg font-medium text-black hover:text-gray-600 border-b border-gray-200 pb-2">
+                      <Link 
+                        to="/recipes" 
+                        className="block text-lg font-medium text-black hover:text-gray-600 border-b border-gray-200 pb-2"
+                        onClick={() => setIsMenuOpen(false)}
+                      >
                         RECIPES
                       </Link>
                       
-                      <Link to="/journal" className="block text-lg font-medium text-black hover:text-gray-600 border-b border-gray-200 pb-2">
+                      <Link 
+                        to="/journal" 
+                        className="block text-lg font-medium text-black hover:text-gray-600 border-b border-gray-200 pb-2"
+                        onClick={() => setIsMenuOpen(false)}
+                      >
                         JOURNAL
                       </Link>
                                          
-                      <Link to="/science" className="block text-lg font-medium text-black hover:text-gray-600 border-b border-gray-200 pb-2">
+                      <Link 
+                        to="/science" 
+                        className="block text-lg font-medium text-black hover:text-gray-600 border-b border-gray-200 pb-2"
+                        onClick={() => setIsMenuOpen(false)}
+                      >
                         SCIENCE
                       </Link>
                       
-                      <Link to="/our-story" className="block text-lg font-medium text-black hover:text-gray-600 border-b border-gray-200 pb-2">
+                      <Link 
+                        to="/our-story" 
+                        className="block text-lg font-medium text-black hover:text-gray-600 border-b border-gray-200 pb-2"
+                        onClick={() => setIsMenuOpen(false)}
+                      >
                         OUR STORY
                       </Link>
                       
-                      <Link to="/wholesale" className="block text-lg font-medium text-black hover:text-gray-600 border-b border-gray-200 pb-2">
+                      <Link 
+                        to="/wholesale" 
+                        className="block text-lg font-medium text-black hover:text-gray-600 border-b border-gray-200 pb-2"
+                        onClick={() => setIsMenuOpen(false)}
+                      >
                         WHOLESALE
                       </Link>
 
@@ -326,22 +363,37 @@ const HeaderNavBar = () => {
                       
                       {!user && (
                         <button 
-                          onClick={() => setIsAuthModalOpen(true)}
+                          onClick={() => {
+                            setIsAuthModalOpen(true);
+                            setIsMenuOpen(false);
+                          }}
                           className="block text-base text-gray-600 hover:text-black"
                         >
                           Log in
                         </button>
                       )}
                       
-                      <Link to="/account" className="block text-base text-gray-600 hover:text-black">
+                      <Link 
+                        to="/account" 
+                        className="block text-base text-gray-600 hover:text-black"
+                        onClick={() => setIsMenuOpen(false)}
+                      >
                         Rewards
                       </Link>
                       
-                      <Link to="/faq" className="block text-base text-gray-600 hover:text-black">
+                      <Link 
+                        to="/faq" 
+                        className="block text-base text-gray-600 hover:text-black"
+                        onClick={() => setIsMenuOpen(false)}
+                      >
                         FAQs
                       </Link>
                       
-                      <Link to="/contact" className="block text-base text-gray-600 hover:text-black">
+                      <Link 
+                        to="/contact" 
+                        className="block text-base text-gray-600 hover:text-black"
+                        onClick={() => setIsMenuOpen(false)}
+                      >
                         Contact Us
                       </Link>
                     </div>
