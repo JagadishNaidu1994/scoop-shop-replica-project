@@ -401,6 +401,128 @@ const HeaderNavBar = () => {
       </header>
       </div>
 
+      {/* Mobile Navigation Menu - Full Screen Overlay (Moved outside header) */}
+      {isMenuOpen && (
+        <div className="md:hidden fixed inset-0 bg-white z-[100] overflow-y-auto">
+          <div className="flex flex-col h-full">
+            {/* Close button - Top Right */}
+            <div className="flex justify-between items-center p-6 border-b border-gray-200">
+              <h2 className="text-2xl font-bold text-black">Menu</h2>
+              <button
+                onClick={() => setIsMenuOpen(false)}
+                className="text-black hover:text-gray-600 rounded-full p-2 hover:bg-gray-100"
+                aria-label="Close menu"
+              >
+                <X size={32} />
+              </button>
+            </div>
+
+            {/* Menu items */}
+            <div className="flex-1 px-6 py-8 overflow-y-auto">
+              <nav className="space-y-6">
+                <Link 
+                  to="/shop" 
+                  className="block text-2xl font-semibold text-black hover:text-gray-600 border-b border-gray-200 pb-4"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  SHOP NASTEA
+                </Link>
+                
+                <Link 
+                  to="/recipes" 
+                  className="block text-2xl font-semibold text-black hover:text-gray-600 border-b border-gray-200 pb-4"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  RECIPES
+                </Link>
+                
+                <Link 
+                  to="/journal" 
+                  className="block text-2xl font-semibold text-black hover:text-gray-600 border-b border-gray-200 pb-4"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  JOURNAL
+                </Link>
+                                   
+                <Link 
+                  to="/science" 
+                  className="block text-2xl font-semibold text-black hover:text-gray-600 border-b border-gray-200 pb-4"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  SCIENCE
+                </Link>
+                
+                <Link 
+                  to="/our-story" 
+                  className="block text-2xl font-semibold text-black hover:text-gray-600 border-b border-gray-200 pb-4"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  OUR STORY
+                </Link>
+                
+                <Link 
+                  to="/wholesale" 
+                  className="block text-2xl font-semibold text-black hover:text-gray-600 border-b border-gray-200 pb-4"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  WHOLESALE
+                </Link>
+
+                {/* Bottom section */}
+                <div className="pt-8 space-y-4 border-t border-gray-200">
+                  {isAdmin && (
+                    <Link 
+                      to="/admin/dashboard" 
+                      className="flex items-center gap-2 text-lg text-gray-600 hover:text-black"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      <Shield size={20} />
+                      Admin Dashboard
+                    </Link>
+                  )}
+                  
+                  {!user && (
+                    <button 
+                      onClick={() => {
+                        setIsAuthModalOpen(true);
+                        setIsMenuOpen(false);
+                      }}
+                      className="block text-lg text-gray-600 hover:text-black text-left w-full"
+                    >
+                      Log in
+                    </button>
+                  )}
+                  
+                  <Link 
+                    to="/account" 
+                    className="block text-lg text-gray-600 hover:text-black"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Rewards
+                  </Link>
+                  
+                  <Link 
+                    to="/faq" 
+                    className="block text-lg text-gray-600 hover:text-black"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    FAQs
+                  </Link>
+                  
+                  <Link 
+                    to="/contact" 
+                    className="block text-lg text-gray-600 hover:text-black"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Contact Us
+                  </Link>
+                </div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Auth Modal */}
       <AuthModal 
         isOpen={isAuthModalOpen} 
