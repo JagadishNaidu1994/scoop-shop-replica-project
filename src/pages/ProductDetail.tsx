@@ -8,7 +8,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useCart } from '@/contexts/CartContext';
 import { useWishlist } from '@/contexts/WishlistContext';
 import { Button } from '@/components/ui/button';
-import { Star, Plus, Minus, ChevronDown, Heart, Share2, Truck, Shield, RefreshCw, Award, CheckCircle, X, Microscope, Leaf, Users, Globe, Zap, Brain, Sparkles, TrendingUp, Camera, Play, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Star, Plus, Minus, ChevronDown, Heart, Share2, Truck, Shield, RefreshCw, Award, CheckCircle, X, Microscope, Leaf, Users, Globe, Zap, Brain, Sparkles, TrendingUp, Camera, Play, ChevronLeft, ChevronRight, Coffee } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 import { Badge } from '@/components/ui/badge';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
@@ -37,7 +37,8 @@ const ProductDetail = () => {
   const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(1);
   const [selectedImage, setSelectedImage] = useState(0);
-  const [subscriptionType, setSubscriptionType] = useState<'one-time' | 'subscribe'>('one-time');
+  const [selectedSize, setSelectedSize] = useState<'60G' | '240G'>('60G');
+  const [subscriptionType, setSubscriptionType] = useState<'one-time' | 'subscribe'>('subscribe');
   const [subscriptionFrequency, setSubscriptionFrequency] = useState('Every 4 weeks');
   const [currentIngredient, setCurrentIngredient] = useState(0);
   const [showImageModal, setShowImageModal] = useState(false);
@@ -231,7 +232,7 @@ const ProductDetail = () => {
   if (!product) {
     return <div className="min-h-screen bg-white">
         <HeaderNavBar />
-        <div className="w-full px-4 sm:px-6 lg:px-8 py-16">
+        <div className="w-full px-5 py-16">
           <div className="text-center">
             <h1 className="text-2xl font-bold text-gray-900 mb-4">Product Not Found</h1>
             <Button onClick={() => navigate('/shop')}>Back to Shop</Button>
@@ -241,208 +242,255 @@ const ProductDetail = () => {
       </div>;
   }
   const subscriptionPrice = product.price * 0.8;
-  return <div className="min-h-screen bg-white">
-      <HeaderNavBar />
-      
-      {/* Breadcrumb */}
-      <div className="w-full px-4 sm:px-6 lg:px-8 py-3">
-        <nav className="flex text-sm text-gray-500 font-medium">
-          <span className="hover:text-gray-700 cursor-pointer" onClick={() => navigate('/')}>Home</span>
-          <span className="mx-2">/</span>
-          <span className="hover:text-gray-700 cursor-pointer" onClick={() => navigate('/shop')}>Shop</span>
-          <span className="mx-2">/</span>
-          <span className="text-gray-900">{product.name}</span>
-        </nav>
+  return (
+    <div className="min-h-screen bg-white">
+      <div className="sticky top-0 z-50 bg-white shadow-sm">
+        <HeaderNavBar />
       </div>
 
-      <main className="w-full px-4 sm:px-6 lg:px-8 pb-16">
-        {/* Product Section with Sticky Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-20">
-          {/* Left Side - Image Gallery (Sticky) */}
-          <div className="lg:sticky lg:top-6 lg:h-fit space-y-3">
-            {/* Main Image with Controls */}
-            <div className="relative group">
-              <Badge className="absolute top-4 left-4 z-10 bg-gradient-to-r from-purple-600 to-pink-600 text-white text-xs font-semibold px-2 py-1 rounded-full">
-                BEST SELLER
-              </Badge>
-              
-              <div className="aspect-square bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl overflow-hidden cursor-zoom-in relative" onClick={() => setShowImageModal(true)}>
-                <AdminImageUpload src={productImages[selectedImage]} alt={product.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" imagePath="product-detail-main" />
-                
-                {/* Navigation Arrows */}
-                <button onClick={e => {
-                e.stopPropagation();
-                prevImage();
-              }} className="absolute left-3 top-1/2 -translate-y-1/2 p-2 rounded-full bg-white/80 backdrop-blur-md text-gray-800 hover:bg-white hover:shadow-lg transition-all duration-200 opacity-0 group-hover:opacity-100">
-                  <ChevronLeft className="w-4 h-4" />
-                </button>
-                
-                <button onClick={e => {
-                e.stopPropagation();
-                nextImage();
-              }} className="absolute right-3 top-1/2 -translate-y-1/2 p-2 rounded-full bg-white/80 backdrop-blur-md text-gray-800 hover:bg-white hover:shadow-lg transition-all duration-200 opacity-0 group-hover:opacity-100">
-                  <ChevronRight className="w-4 h-4" />
-                </button>
-              </div>
-              
-              {/* Floating Action Buttons */}
-              <div className="absolute top-4 right-4 flex flex-col space-y-2">
-                <button onClick={handleWishlist} className={`p-2 rounded-full backdrop-blur-md transition-all duration-200 ${product && isInWishlist(product.id) ? 'bg-red-500 text-white shadow-lg' : 'bg-white/80 text-gray-600 hover:bg-white hover:shadow-lg'}`}>
-                  <Heart className={`w-4 h-4 ${product && isInWishlist(product.id) ? 'fill-current' : ''}`} />
-                </button>
-                <button onClick={handleShare} className="p-2 rounded-full bg-white/80 backdrop-blur-md text-gray-600 hover:bg-white hover:shadow-lg transition-all duration-200">
-                  <Share2 className="w-4 h-4" />
-                </button>
-              </div>
-            </div>
-            
-            {/* Thumbnail Grid */}
-            <div className="grid grid-cols-6 gap-2">
-              {productImages.map((image, index) => <button key={index} onClick={() => setSelectedImage(index)} className={`aspect-square rounded-lg overflow-hidden border-2 transition-all duration-200 ${selectedImage === index ? 'border-black shadow-lg scale-105' : 'border-gray-200 hover:border-gray-300 hover:shadow-md'}`}>
-                  <AdminImageUpload src={image} alt={`${product.name} ${index + 1}`} className="w-full h-full object-cover" imagePath={`product-detail-thumbnail-${index + 1}`} />
-                </button>)}
-            </div>
+      <div className="w-full px-5">
+        {/* Breadcrumb */}
+        <div className="w-full px-0 py-3">
+          <nav className="flex text-sm text-gray-500 font-medium">
+            <span className="hover:text-gray-700 cursor-pointer" onClick={() => navigate('/')}>Home</span>
+            <span className="mx-2">/</span>
+            <span className="hover:text-gray-700 cursor-pointer" onClick={() => navigate('/shop')}>Shop</span>
+            <span className="mx-2">/</span>
+            <span className="text-gray-900">{product.name}</span>
+          </nav>
+        </div>
 
-            {/* Image Counter */}
-            <div className="text-center text-xs text-gray-500">
-              {selectedImage + 1} / {productImages.length}
-            </div>
-          </div>
+        <main className="w-full px-0 pb-16">
+          {/* Product Section with Sticky Layout */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-20">
+            {/* Left Side - Image Gallery (Sticky) */}
+            <div className="lg:sticky lg:top-6 lg:h-fit space-y-3">
+              {/* Main Image with Controls */}
+              <div className="relative group">
+                <Badge className="absolute top-4 left-4 z-10 bg-gradient-to-r from-purple-600 to-pink-600 text-white text-xs font-semibold px-2 py-1 rounded-full">
+                  BEST SELLER
+                </Badge>
 
-          {/* Right Side - Product Info (Scrollable) */}
-          <div className="space-y-3 lg:max-h-screen lg:overflow-y-auto lg:pr-2">
-            {/* Rating and Reviews */}
-            <div className="flex items-center space-x-3">
-              <div className="flex items-center space-x-1">
-                <div className="flex text-yellow-400">
-                  {[...Array(5)].map((_, i) => <Star key={i} className="w-4 h-4 fill-current" />)}
+                <div className="aspect-square bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl overflow-hidden cursor-zoom-in relative" onClick={() => setShowImageModal(true)}>
+                  <AdminImageUpload src={productImages[selectedImage]} alt={product.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" imagePath="product-detail-main" />
+
+                  {/* Navigation Arrows */}
+                  <button
+                    onClick={e => {
+                      e.stopPropagation();
+                      prevImage();
+                    }}
+                    className="absolute left-3 top-1/2 -translate-y-1/2 p-2 rounded-full bg-white/80 backdrop-blur-md text-gray-800 hover:bg-white hover:shadow-lg transition-all duration-200 opacity-0 group-hover:opacity-100"
+                  >
+                    <ChevronLeft className="w-4 h-4" />
+                  </button>
+
+                  <button
+                    onClick={e => {
+                      e.stopPropagation();
+                      nextImage();
+                    }}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 p-2 rounded-full bg-white/80 backdrop-blur-md text-gray-800 hover:bg-white hover:shadow-lg transition-all duration-200 opacity-0 group-hover:opacity-100"
+                  >
+                    <ChevronRight className="w-4 h-4" />
+                  </button>
                 </div>
-                <span className="text-sm text-gray-600 font-medium ml-1">4.9</span>
-              </div>
-              <span className="text-xs text-gray-500">•</span>
-              <span className="text-sm text-gray-600 font-medium">20,564 Reviews</span>
-              <span className="text-xs text-gray-500">•</span>
-              <span className="text-sm text-green-600 font-medium">✓ Verified</span>
-            </div>
 
-            {/* Product Title and Description */}
-            <div className="space-y-2">
-              <h1 className="text-2xl font-bold text-gray-900 leading-tight">
-                NASTEA {product.name}
-              </h1>
-              <p className="text-lg text-gray-600 font-medium">
-                Cert Organic | Calm Energy | No Additives
-              </p>
-              <p className="text-gray-700 leading-relaxed text-sm">
-                The creamiest, ceremonial-grade Matcha with Lion's Mane, Tremella, and essential B vitamins.
-              </p>
-            </div>
-
-            {/* Benefits Badges */}
-            <div className="flex flex-wrap gap-2">
-              <Badge variant="outline" className="flex items-center space-x-1 px-2 py-1 text-xs font-semibold bg-gradient-to-r from-yellow-50 to-orange-50 border-yellow-200">
-                <span>⚡</span><span>Energy</span>
-              </Badge>
-              <Badge variant="outline" className="flex items-center space-x-1 px-2 py-1 text-xs font-semibold bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200">
-                <span>🎯</span><span>Focus</span>
-              </Badge>
-              <Badge variant="outline" className="flex items-center space-x-1 px-2 py-1 text-xs font-semibold bg-gradient-to-r from-pink-50 to-rose-50 border-pink-200">
-                <span>✨</span><span>Skin</span>
-              </Badge>
-            </div>
-
-            {/* Servings Info */}
-            <div className="flex items-center space-x-2 text-gray-600 text-sm">
-              <span className="text-lg">🥄</span>
-              <span className="font-semibold">30 servings</span>
-              <span className="text-gray-400">•</span>
-              <span className="text-xs">£{(product.price / 30).toFixed(2)} per serving</span>
-            </div>
-
-            {/* Pricing Options - Updated to match reference image */}
-            <div className="bg-gray-50 rounded-2xl p-6 border border-gray-200">
-              {/* One-time Purchase */}
-              <div className={`p-4 border-2 rounded-xl cursor-pointer transition-all duration-200 mb-4 ${subscriptionType === 'one-time' ? 'border-gray-300 bg-white' : 'border-gray-200 bg-white hover:border-gray-300'}`} onClick={() => setSubscriptionType('one-time')}>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-3">
-                    <div className="relative">
-                      <input type="radio" checked={subscriptionType === 'one-time'} readOnly className="w-5 h-5 text-blue-600 border-2 border-gray-300 focus:ring-blue-500" />
-                    </div>
-                    <div>
-                      <span className="font-medium text-gray-900">One-time Purchase</span>
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <span className="text-xl font-bold text-gray-900">£{product.price.toFixed(2)}</span>
-                  </div>
+                {/* Floating Action Buttons */}
+                <div className="absolute top-4 right-4 flex flex-col space-y-2">
+                  <button onClick={handleWishlist} className={`p-2 rounded-full backdrop-blur-md transition-all duration-200 ${product && isInWishlist(product.id) ? 'bg-red-500 text-white shadow-lg' : 'bg-white/80 text-gray-600 hover:bg-white hover:shadow-lg'}`}>
+                    <Heart className={`w-4 h-4 ${product && isInWishlist(product.id) ? 'fill-current' : ''}`} />
+                  </button>
+                  <button onClick={handleShare} className="p-2 rounded-full bg-white/80 backdrop-blur-md text-gray-600 hover:bg-white hover:shadow-lg transition-all duration-200">
+                    <Share2 className="w-4 h-4" />
+                  </button>
                 </div>
               </div>
 
-              {/* Subscribe & Save */}
-              <div className={`p-4 border-2 rounded-xl cursor-pointer transition-all duration-200 ${subscriptionType === 'subscribe' ? 'border-blue-500 bg-blue-50' : 'border-gray-200 bg-white hover:border-gray-300'}`} onClick={() => setSubscriptionType('subscribe')}>
-                <div className="flex items-center justify-between mb-3">
-                  <div className="flex items-center space-x-3">
-                    <div className="relative">
-                      <input type="radio" checked={subscriptionType === 'subscribe'} readOnly className="w-5 h-5 text-blue-600 border-2 border-gray-300 focus:ring-blue-500" />
-                    </div>
-                    <div>
-                      <div className="flex items-center space-x-2">
-                        <span className="font-medium text-gray-900">Subscribe & Save</span>
-                        <div className="bg-gray-900 text-white text-xs font-bold px-2 py-1 rounded">
-                          20% OFF
+              {/* Thumbnail Grid */}
+              <div className="grid grid-cols-6 gap-2">
+                {productImages.map((image, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setSelectedImage(index)}
+                    className={`aspect-square rounded-lg overflow-hidden border-2 transition-all duration-200 ${selectedImage === index ? 'border-black shadow-lg scale-105' : 'border-gray-200 hover:border-gray-300 hover:shadow-md'}`}
+                  >
+                    <AdminImageUpload src={image} alt={`${product.name} ${index + 1}`} className="w-full h-full object-cover" imagePath={`product-detail-thumbnail-${index + 1}`} />
+                  </button>
+                ))}
+              </div>
+
+              {/* Image Counter */}
+              <div className="text-center text-xs text-gray-500">
+                {selectedImage + 1} / {productImages.length}
+              </div>
+            </div>
+
+            {/* Right Side - Product Info (Scrollable) */}
+            <div className="w-full space-y-6 lg:max-h-screen lg:overflow-y-auto lg:pr-2">
+              {/* Rating and Reviews */}
+              <div className="flex items-center gap-2 text-sm">
+                <div className="flex items-center gap-1">
+                  <div className="flex text-yellow-400">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="w-4 h-4 fill-current" />
+                    ))}
+                  </div>
+                  <span className="text-sm text-gray-700 font-semibold ml-1">4.9</span>
+                </div>
+                <span className="text-gray-400">•</span>
+                <span className="text-sm text-gray-600 font-medium">22,196 Reviews</span>
+                <span className="text-gray-400">•</span>
+                <span className="text-sm text-green-600 font-medium">✓ Verified</span>
+              </div>
+
+              {/* Product Title and Description */}
+              <div className="space-y-3">
+                <h1 className="text-3xl font-serif font-bold text-gray-900 leading-tight">Organic Ceremonial Matcha</h1>
+
+                {/* Servings Info */}
+                <div className="flex items-center gap-2 text-gray-800 text-sm font-semibold">
+                  <Coffee className="w-4 h-4" />
+                  <span>30 servings</span>
+                </div>
+
+                <p className="text-sm leading-relaxed text-gray-800 max-w-prose">
+                  Cert Organic | Calm Energy | No Additives
+                </p>
+
+                <div className="space-y-1 text-sm text-gray-800">
+                  <div className="flex items-center gap-2">
+                    <CheckCircle className="w-4 h-4 text-gray-900" />
+                    <span>30% off on first order</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <CheckCircle className="w-4 h-4 text-gray-900" />
+                    <span>20% off on second & third orders</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <CheckCircle className="w-4 h-4 text-gray-900" />
+                    <span>Manage subscription anytime</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <CheckCircle className="w-4 h-4 text-gray-900" />
+                    <span>Free delivery over ₹2500</span>
+                  </div>
+                </div>
+
+                <div className="flex flex-wrap gap-2">
+                  <Badge variant="outline" className="flex items-center gap-1 px-3 py-1 text-xs font-semibold rounded-full bg-white border-gray-200">
+                    <span>🎯</span>
+                    <span>Focus</span>
+                  </Badge>
+                  <Badge variant="outline" className="flex items-center gap-1 px-3 py-1 text-xs font-semibold rounded-full bg-white border-gray-200">
+                    <span>🧠</span>
+                    <span>Cognition</span>
+                  </Badge>
+                  <Badge variant="outline" className="flex items-center gap-1 px-3 py-1 text-xs font-semibold rounded-full bg-white border-gray-200">
+                    <span>🛡️</span>
+                    <span>Immunity</span>
+                  </Badge>
+                </div>
+              </div>
+
+              {/* Size Selection (UI only, logic untouched) */}
+              <div className="space-y-2">
+                <p className="text-sm font-semibold text-gray-800">Size</p>
+                <div className="flex items-center gap-3">
+                  <button
+                    type="button"
+                    className={`px-4 py-2 rounded-full border text-sm font-semibold transition ${selectedSize === '60G' ? 'bg-gray-900 text-white border-gray-900' : 'bg-white text-gray-800 border-gray-300'}`}
+                    onClick={() => setSelectedSize('60G')}
+                  >
+                    60G
+                  </button>
+                  <button
+                    type="button"
+                    className={`px-4 py-2 rounded-full border text-sm font-semibold transition ${selectedSize === '240G' ? 'bg-gray-900 text-white border-gray-900' : 'bg-white text-gray-800 border-gray-300'}`}
+                    onClick={() => setSelectedSize('240G')}
+                  >
+                    240G
+                  </button>
+                </div>
+              </div>
+
+              {/* Purchase Options */}
+              <div className="space-y-5 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+                {/* Subscription first (default) */}
+                <div className={`p-4 border-2 rounded-xl cursor-pointer transition-all duration-200 ${subscriptionType === 'subscribe' ? 'border-gray-900 bg-white' : 'border-gray-200 bg-white hover:border-gray-300'}`} onClick={() => setSubscriptionType('subscribe')}>
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center space-x-3">
+                      <div className="relative">
+                        <input type="radio" checked={subscriptionType === 'subscribe'} readOnly className="w-5 h-5 text-gray-900 border-2 border-gray-300 focus:ring-gray-900" />
+                      </div>
+                      <div>
+                        <div className="flex items-center space-x-2">
+                          <span className="font-bold text-gray-900 uppercase text-sm">Every 4 weeks</span>
                         </div>
                       </div>
-                      <p className="text-sm text-gray-600 mt-1">Pouch only, free gifts NOT included</p>
+                    </div>
+                    <div className="text-right space-y-1">
+                      <div className="flex items-center justify-end gap-2">
+                        <div className="bg-gray-900 text-white text-xs font-black px-2 py-1 rounded-full">20% OFF</div>
+                        <div className="text-xl font-bold text-gray-900">£{subscriptionPrice.toFixed(0)}</div>
+                      </div>
+                      <div className="text-sm text-gray-600">£{(subscriptionPrice / 30).toFixed(2)} per serving</div>
                     </div>
                   </div>
-                  <div className="text-right">
-                    <div className="text-xl font-bold text-gray-900">£{subscriptionPrice.toFixed(0)}</div>
-                    <div className="text-sm text-gray-600">£{(subscriptionPrice / 30).toFixed(2)} per serving</div>
+                </div>
+
+                <div className="flex items-center gap-2 text-sm text-gray-700">
+                  <CheckCircle className="w-4 h-4 text-gray-900" />
+                  <span>Manage your subscription anytime</span>
+                </div>
+
+                <div className="h-px bg-gray-200" />
+
+                {/* One-time Purchase */}
+                <div className={`p-4 border-2 rounded-xl cursor-pointer transition-all duration-200 ${subscriptionType === 'one-time' ? 'border-gray-900 bg-white' : 'border-gray-200 bg-white hover:border-gray-300'}`} onClick={() => setSubscriptionType('one-time')}>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-3">
+                      <div className="relative">
+                        <input type="radio" checked={subscriptionType === 'one-time'} readOnly className="w-5 h-5 text-gray-900 border-2 border-gray-300 focus:ring-gray-900" />
+                      </div>
+                      <div>
+                        <span className="font-semibold text-gray-900">One-time Purchase</span>
+                        <p className="text-sm text-gray-600">Free gifts NOT included</p>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <span className="text-xl font-bold text-gray-900">£{product.price.toFixed(2)}</span>
+                      <div className="text-sm text-gray-600">£{(product.price / 30).toFixed(2)} per serving</div>
+                    </div>
                   </div>
                 </div>
-                
-                {subscriptionType === 'subscribe' && <div className="relative">
-                    <select value={subscriptionFrequency} onChange={e => setSubscriptionFrequency(e.target.value)} className="w-full p-3 border border-gray-300 rounded-lg text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white appearance-none pr-10">
-                      <option>Every 4 weeks (Bestseller)</option>
-                      <option>Every 6 weeks</option>
-                      <option>Every 8 weeks</option>
-                    </select>
-                    <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-500 pointer-events-none" />
-                  </div>}
-              </div>
 
-              {/* Quantity Selector */}
-              <div className="flex items-center justify-between mt-6 mb-4">
-                <div className="flex items-center border border-gray-300 rounded-full">
-                  <button onClick={decrementQuantity} className="p-2 hover:bg-gray-100 transition-colors rounded-l-full" disabled={quantity <= 1}>
-                    <Minus className="w-4 h-4" />
-                  </button>
-                  <span className="px-4 py-2 font-medium min-w-[50px] text-center">
-                    {quantity}
-                  </span>
-                  <button onClick={incrementQuantity} className="p-2 hover:bg-gray-100 transition-colors rounded-r-full">
-                    <Plus className="w-4 h-4" />
-                  </button>
+                {/* Quantity + Add to Cart */}
+                <div className="flex items-center gap-3 pt-2">
+                  <div className="flex items-center border border-gray-300 rounded-full">
+                    <button onClick={decrementQuantity} className="p-2 hover:bg-gray-100 transition-colors rounded-l-full" disabled={quantity <= 1}>
+                      <Minus className="w-4 h-4" />
+                    </button>
+                    <span className="px-4 py-2 font-medium min-w-[50px] text-center">{quantity}</span>
+                    <button onClick={incrementQuantity} className="p-2 hover:bg-gray-100 transition-colors rounded-r-full">
+                      <Plus className="w-4 h-4" />
+                    </button>
+                  </div>
+
+                  <Button onClick={handleAddToCart} className="flex-1 bg-gray-900 text-white hover:bg-black py-2.5 text-base font-semibold rounded-xl transition-all duration-200">
+                    ADD TO CART - £{((subscriptionType === 'subscribe' ? subscriptionPrice : product.price) * quantity).toFixed(0)}
+                  </Button>
                 </div>
+
+                <Button className="w-full bg-[#5c2dd5] text-white hover:bg-[#4a20b4] py-2.5 text-base font-semibold rounded-xl transition-all duration-200">
+                  Buy with Shop
+                </Button>
+
+                <button className="mx-auto block text-sm text-gray-600 underline underline-offset-4">More payment options</button>
               </div>
-
-              {/* Add to Cart Button */}
-              <Button onClick={handleAddToCart} className="w-full bg-gray-900 text-white hover:bg-black py-4 text-base font-semibold rounded-xl transition-all duration-200 mb-3">
-                ADD TO CART - £{((subscriptionType === 'subscribe' ? subscriptionPrice : product.price) * quantity).toFixed(0)}
-              </Button>
-
-              {/* Buy with ShopPay */}
-              
-
-              {/* More payment options */}
-              {/* <div className="text-center">
-                <button className="text-sm text-gray-600 hover:text-gray-800 underline">
-                  More payment options
-                </button>
-              </div> */}
 
               {/* Benefits */}
-              <div className="mt-6 space-y-3">
+              <div className="space-y-3">
                 <div className="flex items-center space-x-2">
                   <div className="w-6 h-6 bg-gray-900 rounded-full flex items-center justify-center">
                     <CheckCircle className="w-4 h-4 text-white" />
@@ -456,527 +504,354 @@ const ProductDetail = () => {
                   <span className="text-sm text-gray-700">20% off every subscription order</span>
                 </div>
               </div>
-            </div>
 
-            {/* Trust Indicators */}
-            <div className="grid grid-cols-2 gap-3 pt-3 border-t border-gray-200">
-              <div className="flex items-center space-x-2 text-xs text-gray-600">
-                <Truck className="w-4 h-4 text-green-600" />
-                <span>Free shipping over £50</span>
+              {/* Trust Indicators */}
+              <div className="grid grid-cols-2 gap-3 pt-3 border-t border-gray-200">
+                <div className="flex items-center space-x-2 text-xs text-gray-600">
+                  <Truck className="w-4 h-4 text-green-600" />
+                  <span>Free shipping over £50</span>
+                </div>
+                <div className="flex items-center space-x-2 text-xs text-gray-600">
+                  <Shield className="w-4 h-4 text-blue-600" />
+                  <span>30-day money back</span>
+                </div>
+                <div className="flex items-center space-x-2 text-xs text-gray-600">
+                  <RefreshCw className="w-4 h-4 text-purple-600" />
+                  <span>Skip or cancel anytime</span>
+                </div>
+                <div className="flex items-center space-x-2 text-xs text-gray-600">
+                  <Award className="w-4 h-4 text-orange-600" />
+                  <span>Award-winning quality</span>
+                </div>
               </div>
-              <div className="flex items-center space-x-2 text-xs text-gray-600">
-                <Shield className="w-4 h-4 text-blue-600" />
-                <span>30-day money back</span>
+
+              {/* Accordions */}
+              <div className="space-y-4 pt-4 border-t border-gray-200">
+                <Collapsible open={scienceOpen} onOpenChange={setScienceOpen}>
+                  <CollapsibleTrigger className="flex items-center justify-between w-full py-2 border-b border-gray-200 hover:bg-gray-50/50 transition-colors">
+                    <h3 className="text-sm font-semibold text-gray-900">The Science</h3>
+                    {scienceOpen ? <Minus className="w-4 h-4 text-gray-500 transition-transform" /> : <Plus className="w-4 h-4 text-gray-500 transition-transform" />}
+                  </CollapsibleTrigger>
+                  <CollapsibleContent className="pt-2 pb-1 overflow-hidden transition-all duration-300 ease-in-out">
+                    <div className="space-y-3 text-xs text-gray-700">
+                      <p>
+                        Matcha comes from the Camellia sinensis plant (same as green tea), but it's made differently: the leaves are shade-grown, then finely milled into a powder. That means you're not just steeping tea and tossing the leaves — you're consuming the leaf itself. Result: a richer, more concentrated matcha experience in both taste and naturally occurring compounds.
+                      </p>
+                      <p>
+                        Matcha's energy also tends to feel… more composed. That's because matcha naturally contains caffeine + L-theanine — a tea amino acid often linked to a calmer, more focused "alert" feel compared to caffeine drinks' spike-and-crash reputation. Translation: steady energy, cleaner headspace, fewer "why am I vibrating?" moments.
+                      </p>
+                      <p>
+                        Depending on the product you're drinking, matcha also contains a mix of plant compounds that shape how it tastes and why it's been respected for centuries:
+                      </p>
+                      <ul className="list-disc list-inside space-y-1 ml-2">
+                        <li>
+                          <strong>L-theanine</strong> — associated with calm-focus vibes (especially alongside caffeine)
+                        </li>
+                        <li>
+                          <strong>Catechins</strong> — the crisp, slightly bitter plant compounds in green tea (yes, the "real matcha" taste cue)
+                        </li>
+                        <li>
+                          <strong>Chlorophyll</strong> — the pigment that makes matcha that vivid, neon-clean green (shade-growing helps)
+                        </li>
+                      </ul>
+                      <p>
+                        If you're looking at functional blends that pair matcha with other ingredients (like mushrooms or vitamins), the goal is usually to build on matcha's natural "calm energy" profile — but the core is still the same: ceremonial matcha done properly, as a daily ritual that feels good and tastes even better.
+                      </p>
+                    </div>
+                  </CollapsibleContent>
+                </Collapsible>
+
+                <Collapsible open={howToUseOpen} onOpenChange={setHowToUseOpen}>
+                  <CollapsibleTrigger className="flex items-center justify-between w-full py-2 border-b border-gray-200 hover:bg-gray-50/50 transition-colors">
+                    <h3 className="text-sm font-semibold text-gray-900">How to NASTEA</h3>
+                    {howToUseOpen ? <Minus className="w-4 h-4 text-gray-500 transition-transform" /> : <Plus className="w-4 h-4 text-gray-500 transition-transform" />}
+                  </CollapsibleTrigger>
+                  <CollapsibleContent className="pt-2 pb-1 overflow-hidden transition-all duration-300 ease-in-out">
+                    <div className="space-y-1 text-xs text-gray-700">
+                      <p>1. Whisk 3g NR Matcha with a splash of warm water until smooth + frothy.</p>
+                      <p>2. Fill a glass with ice (skip ice if you want it hot).</p>
+                      <p>3. Pour in milk of choice (almond/oat milk is elite).</p>
+                      <p>4. Top with the whisked matcha, stir, sip like you've got plans.</p>
+                    </div>
+                  </CollapsibleContent>
+                </Collapsible>
               </div>
-              <div className="flex items-center space-x-2 text-xs text-gray-600">
-                <RefreshCw className="w-4 h-4 text-purple-600" />
-                <span>Skip or cancel anytime</span>
-              </div>
-              <div className="flex items-center space-x-2 text-xs text-gray-600">
-                <Award className="w-4 h-4 text-orange-600" />
-                <span>Award-winning quality</span>
-              </div>
-            </div>
-
-            {/* Collapsible Sections */}
-            <div className="pt-4 border-t border-gray-200 space-y-2">
-              {/* Why choose NASTEA Section */}
-              <Collapsible open={whyChooseOpen} onOpenChange={setWhyChooseOpen}>
-                <CollapsibleTrigger className="flex items-center justify-between w-full py-2 border-b border-gray-200 hover:bg-gray-50/50 transition-colors">
-                  <h3 className="text-sm font-semibold text-gray-900">Why choose Nastea Rituals</h3>
-                  {whyChooseOpen ? (
-                    <Minus className="w-4 h-4 text-gray-500 transition-transform" />
-                  ) : (
-                    <Plus className="w-4 h-4 text-gray-500 transition-transform" />
-                  )}
-                </CollapsibleTrigger>
-                <CollapsibleContent className="pt-2 pb-1 overflow-hidden transition-all duration-300 ease-in-out">
-                  <div className="space-y-3 text-xs text-gray-700">
-                    <p>
-                      Nastea Rituals isn't "just matcha." It's an Organic Ceremonial Japanese matcha built for real life - smooth enough to sip straight, bold enough to cut through milk, and vibrant enough to make every cup look like a flex. We source Japan-grown matcha (hello, Kagoshima), keep it clean, and obsess over the things that actually matter: flavour, colour, and consistency.
-                    </p>
-                    <p>
-                      Most matcha brands whisper and hope you don't notice the bitterness. We don't. Our matcha is shade-grown and stone-milled for a rounded, umami-forward taste that feels indulgent without being sugary. It's the kind of clean caffeine ritual that fits your mornings, your workouts, your deep-work blocks, and your "I'm trying to be healthy but still fun" era - without the crashy chaos.
-                    </p>
-                  </div>
-                </CollapsibleContent>
-              </Collapsible>
-
-              {/* Ingredients Section */}
-              <Collapsible open={ingredientsOpen} onOpenChange={setIngredientsOpen}>
-                <CollapsibleTrigger className="flex items-center justify-between w-full py-2 border-b border-gray-200 hover:bg-gray-50/50 transition-colors">
-                  <h3 className="text-sm font-semibold text-gray-900">Ingredients</h3>
-                  {ingredientsOpen ? (
-                    <Minus className="w-4 h-4 text-gray-500 transition-transform" />
-                  ) : (
-                    <Plus className="w-4 h-4 text-gray-500 transition-transform" />
-                  )}
-                </CollapsibleTrigger>
-                <CollapsibleContent className="pt-2 pb-1 overflow-hidden transition-all duration-300 ease-in-out">
-                  <div className="space-y-1 text-xs text-gray-700">
-                    <p><strong>Organic Ceremonial Grade Matcha</strong></p>
-                  </div>
-                </CollapsibleContent>
-              </Collapsible>
-
-              {/* The Science Section */}
-              <Collapsible open={scienceOpen} onOpenChange={setScienceOpen}>
-                <CollapsibleTrigger className="flex items-center justify-between w-full py-2 border-b border-gray-200 hover:bg-gray-50/50 transition-colors">
-                  <h3 className="text-sm font-semibold text-gray-900">The Science</h3>
-                  {scienceOpen ? (
-                    <Minus className="w-4 h-4 text-gray-500 transition-transform" />
-                  ) : (
-                    <Plus className="w-4 h-4 text-gray-500 transition-transform" />
-                  )}
-                </CollapsibleTrigger>
-                <CollapsibleContent className="pt-2 pb-1 overflow-hidden transition-all duration-300 ease-in-out">
-                  <div className="space-y-3 text-xs text-gray-700">
-                    <p>
-                      Matcha comes from the Camellia sinensis plant (same as green tea), but it's made differently: the leaves are shade-grown, then finely milled into a powder. That means you're not just steeping tea and tossing the leaves — you're consuming the leaf itself. Result: a richer, more concentrated matcha experience in both taste and naturally occurring compounds.
-                    </p>
-                    <p>
-                      Matcha's energy also tends to feel… more composed. That's because matcha naturally contains caffeine + L-theanine — a tea amino acid often linked to a calmer, more focused "alert" feel compared to caffeine drinks' spike-and-crash reputation. Translation: steady energy, cleaner headspace, fewer "why am I vibrating?" moments.
-                    </p>
-                    <p>
-                      Depending on the product you're drinking, matcha also contains a mix of plant compounds that shape how it tastes and why it's been respected for centuries:
-                    </p>
-                    <ul className="list-disc list-inside space-y-1 ml-2">
-                      <li><strong>L-theanine</strong> — associated with calm-focus vibes (especially alongside caffeine)</li>
-                      <li><strong>Catechins</strong> — the crisp, slightly bitter plant compounds in green tea (yes, the "real matcha" taste cue)</li>
-                      <li><strong>Chlorophyll</strong> — the pigment that makes matcha that vivid, neon-clean green (shade-growing helps)</li>
-                    </ul>
-                    <p>
-                      If you're looking at functional blends that pair matcha with other ingredients (like mushrooms or vitamins), the goal is usually to build on matcha's natural "calm energy" profile — but the core is still the same: ceremonial matcha done properly, as a daily ritual that feels good and tastes even better.
-                    </p>
-                  </div>
-                </CollapsibleContent>
-              </Collapsible>
-
-              {/* How to Use Section */}
-              <Collapsible open={howToUseOpen} onOpenChange={setHowToUseOpen}>
-                <CollapsibleTrigger className="flex items-center justify-between w-full py-2 border-b border-gray-200 hover:bg-gray-50/50 transition-colors">
-                  <h3 className="text-sm font-semibold text-gray-900">How to Nastea</h3>
-                  {howToUseOpen ? (
-                    <Minus className="w-4 h-4 text-gray-500 transition-transform" />
-                  ) : (
-                    <Plus className="w-4 h-4 text-gray-500 transition-transform" />
-                  )}
-                </CollapsibleTrigger>
-                <CollapsibleContent className="pt-2 pb-1 overflow-hidden transition-all duration-300 ease-in-out">
-                  <div className="space-y-1 text-xs text-gray-700">
-                    <p>1. Whisk 3g NR Matcha with a splash of warm water until smooth + frothy.</p>
-                    <p>2. Fill a glass with ice (skip ice if you want it hot).</p>
-                    <p>3. Pour in milk of choice (almond/oat milk is elite).</p>
-                    <p>4. Top with the whisked matcha, stir, sip like you've got plans.</p>
-                  </div>
-                </CollapsibleContent>
-              </Collapsible>
             </div>
           </div>
-        </div>
 
-        {/* Product Information Tabs */}
-        <section className="mb-20 w-full">
-          <Tabs defaultValue="ingredients" className="w-full">
-            <TabsList className="grid w-full grid-cols-4 mb-8">
-              <TabsTrigger value="ingredients" className="text-lg font-semibold">Ingredients</TabsTrigger>
-              <TabsTrigger value="benefits" className="text-lg font-semibold">Benefits</TabsTrigger>
-              <TabsTrigger value="usage" className="text-lg font-semibold">How to Use</TabsTrigger>
-              <TabsTrigger value="reviews" className="text-lg font-semibold">Reviews</TabsTrigger>
-            </TabsList>
-            
-            <TabsContent value="ingredients">
-              <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-8">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                  <div className="p-8 rounded-2xl bg-white/0">
-                    <h3 className="text-3xl font-bold text-gray-900 mb-8 text-center">
-                      Pure ingredients,<br />
-                      powerful benefits.
-                    </h3>
-                    
-                    <div className="text-center">
-                      <div className="mb-6">
-                        <div className="text-6xl mb-4">{ingredients[currentIngredient].icon}</div>
-                        <h4 className="text-xl font-bold text-gray-900 mb-2">
-                          {ingredients[currentIngredient].name}
-                        </h4>
-                        <p className="text-lg text-gray-600 mb-4 font-medium">
-                          {ingredients[currentIngredient].amount}
-                        </p>
-                        <div className="w-full bg-gray-200 rounded-full h-2 mb-4 max-w-xs mx-auto">
-                          <div className="bg-gradient-to-r from-green-400 to-blue-500 h-2 rounded-full transition-all duration-500" style={{
-                          width: `${ingredients[currentIngredient].percentage}%`
-                        }}></div>
-                        </div>
-                        <p className="text-gray-500 max-w-sm mx-auto leading-relaxed">
-                          {ingredients[currentIngredient].description}
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="flex justify-center space-x-2 mt-6">
-                      {ingredients.map((_, index) => <button key={index} onClick={() => setCurrentIngredient(index)} className={`w-2 h-2 rounded-full transition-all duration-300 ${index === currentIngredient ? 'bg-black w-6' : 'bg-gray-300 hover:bg-gray-400'}`} />)}
-                    </div>
+          <div className="bg-white">
+            {/* SECTION 1 — Pure ingredients, powerful benefits. */}
+            <section className="w-full py-16">
+              <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center px-0">
+                <div className="space-y-6">
+                  <p className="text-sm uppercase tracking-[0.2em] text-gray-500">Mushroom Matcha</p>
+                  <h2 className="text-4xl lg:text-5xl font-serif font-bold text-gray-900 leading-tight">
+                    Pure ingredients,
+                    <br />
+                    powerful benefits.
+                  </h2>
+                </div>
+                <div className="relative">
+                  <div className="relative overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.08)] lg:translate-x-6">
+                    <AdminImageUpload src="/lovable-uploads/b4c48a6c-d28c-480e-b907-ec5d22258308.png" alt="Pure ingredients macro" className="w-full h-full object-cover" imagePath="pure-ingredients-hero" />
                   </div>
+                </div>
+              </div>
+            </section>
 
-                  <div className="relative">
-                    <div className="aspect-square rounded-2xl overflow-hidden shadow-xl">
-                      <AdminImageUpload src="/lovable-uploads/a61d3c6a-fc59-45fe-9266-350a3c40ae91.png" alt="Energy Focus Beauty lifestyle" className="w-full h-full object-cover" imagePath="product-detail-lifestyle" />
+            {/* SECTION 2 — Ingredient Texture + Benefit Explanation */}
+            <section className="w-full py-16">
+              <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center px-0">
+                <div className="relative">
+                  <div className="overflow-hidden shadow-[0_16px_40px_rgba(0,0,0,0.06)]">
+                    <AdminImageUpload src="/lovable-uploads/b9b609e5-82c9-4039-98a5-3da3b835c962.png" alt="Ingredient texture" className="w-full h-full object-cover" imagePath="texture-shot" />
+                  </div>
+                </div>
+                <div className="space-y-6">
+                  <h3 className="text-3xl lg:text-4xl font-serif font-bold text-gray-900">Your everyday essential for sharper focus and improved productivity</h3>
+                  <p className="text-gray-700 text-lg leading-relaxed">Ceremonial-grade matcha paired with functional mushrooms for clean energy, calm clarity, and nourished skin—all in one ritual.</p>
+                  <div className="space-y-3 text-gray-800">
+                    <div className="flex items-center space-x-3">
+                      <span className="w-2 h-2 rounded-full bg-gray-900 inline-block"></span>
+                      <p className="font-medium">Focus</p>
+                    </div>
+                    <div className="flex items-center space-x-3">
+                      <span className="w-2 h-2 rounded-full bg-gray-900 inline-block"></span>
+                      <p className="font-medium">Mental clarity</p>
+                    </div>
+                    <div className="flex items-center space-x-3">
+                      <span className="w-2 h-2 rounded-full bg-gray-900 inline-block"></span>
+                      <p className="font-medium">Cognitive performance</p>
                     </div>
                   </div>
                 </div>
               </div>
-            </TabsContent>
-            
-            <TabsContent value="benefits">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {[{
-                icon: '⚡',
-                title: 'Natural Energy',
-                desc: 'Sustained energy without the crash from ceremonial-grade matcha and B vitamins.'
-              }, {
-                icon: '🧠',
-                title: 'Mental Focus',
-                desc: 'Lion\'s Mane mushroom supports cognitive function and mental clarity.'
-              }, {
-                icon: '✨',
-                title: 'Beauty Support',
-                desc: 'Tremella mushroom provides natural hydration and skin health benefits.'
-              }].map((benefit, index) => <div key={index} className="bg-white p-6 rounded-xl border border-gray-200 hover:shadow-lg transition-shadow">
-                    <div className="text-4xl mb-4">{benefit.icon}</div>
-                    <h4 className="text-xl font-semibold mb-3 text-gray-900">{benefit.title}</h4>
-                    <p className="text-gray-600 leading-relaxed">{benefit.desc}</p>
-                  </div>)}
-              </div>
-            </TabsContent>
-            
-            <TabsContent value="usage">
-              <div className="bg-white p-8 rounded-xl border border-gray-200">
-                <h3 className="text-2xl font-bold mb-6 text-gray-900">How to Use</h3>
+            </section>
+
+            {/* SECTION 3 — How to Use (Instructional) */}
+            <section className="w-full py-16">
+              <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center px-0">
                 <div className="space-y-4">
-                  <div className="flex items-start space-x-4">
-                    <div className="bg-black text-white rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm">1</div>
-                    <div>
-                      <h4 className="font-semibold text-gray-900">Add 1-2 teaspoons</h4>
-                      <p className="text-gray-600">Add to your favorite hot or cold beverage</p>
-                    </div>
+                  <div className="w-48 overflow-hidden shadow-[0_12px_30px_rgba(0,0,0,0.08)]">
+                    <AdminImageUpload src="/lovable-uploads/8edc40eb-3dfa-45fb-8cac-fc1a12ec6a3c.png" alt="Product container" className="w-full h-full object-cover" imagePath="how-to-thumb" />
                   </div>
-                  <div className="flex items-start space-x-4">
-                    <div className="bg-black text-white rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm">2</div>
-                    <div>
-                      <h4 className="font-semibold text-gray-900">Mix well</h4>
-                      <p className="text-gray-600">Use a whisk or frother for best results</p>
+                  <h3 className="text-3xl font-serif font-bold text-gray-900">How to NASTEA</h3>
+                  <p className="text-gray-700 text-lg leading-relaxed">Just add 2g of pure Lion’s Mane powder to hot water or add 2g to your daily coffee or workout smoothie.</p>
+                </div>
+                <div className="relative overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.08)]">
+                  <AdminImageUpload src="/lovable-uploads/65581248-fb35-4b2f-8b55-04877e634119.png" alt="Stirring powder into a drink" className="w-full h-full object-cover" imagePath="how-to-lifestyle" />
+                </div>
+              </div>
+            </section>
+
+            {/* SECTION 4 — Benefit Pills / Feature Highlights */}
+            <section className="w-full py-16">
+              <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center px-0">
+                <div className="space-y-4">
+                  {['Mental clarity', 'Cognitive function', 'Immune support'].map(label => (
+                    <div key={label} className="px-6 py-4 bg-white/70 shadow-[0_12px_30px_rgba(0,0,0,0.06)] text-xl font-semibold text-gray-900 w-fit">
+                      {label}
                     </div>
-                  </div>
-                  <div className="flex items-start space-x-4">
-                    <div className="bg-black text-white rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm">3</div>
-                    <div>
-                      <h4 className="font-semibold text-gray-900">Enjoy daily</h4>
-                      <p className="text-gray-600">Best consumed in the morning for sustained energy</p>
+                  ))}
+                </div>
+                <div className="relative overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.08)]">
+                  <AdminImageUpload src="/lovable-uploads/e3cb3dde-3127-4252-8b46-ab17c78f4ad8.png" alt="Wellness lifestyle" className="w-full h-full object-cover" imagePath="benefit-lifestyle" />
+                </div>
+              </div>
+            </section>
+
+            {/* SECTION 5 — Comparison (“How it Compares”) */}
+            <section className="w-full py-16">
+              <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center px-0">
+                <div className="relative overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.08)]">
+                  <AdminImageUpload src="/lovable-uploads/45a06faf-330b-4d76-a34b-4c50248900a2.png" alt="Hand holding beverage" className="w-full h-full object-cover" imagePath="compare-hand" />
+                </div>
+                <div className="space-y-6">
+                  <h3 className="text-3xl lg:text-4xl font-serif font-bold text-gray-900">How it Compares</h3>
+                  <div className="space-y-4 text-gray-800">
+                    <div className="space-y-2">
+                      <p className="text-lg font-semibold">NASTEA vs Coffee</p>
+                      <div className="flex items-start space-x-3">
+                        <CheckCircle className="w-5 h-5 text-gray-800 mt-1" />
+                        <p>Calm, sustained energy without jitters.</p>
+                      </div>
+                      <div className="flex items-start space-x-3">
+                        <CheckCircle className="w-5 h-5 text-gray-800 mt-1" />
+                        <p>Adaptogens to support focus and immunity.</p>
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <p className="text-lg font-semibold">NASTEA vs Synthetic Nootropics</p>
+                      <div className="flex items-start space-x-3">
+                        <CheckCircle className="w-5 h-5 text-gray-800 mt-1" />
+                        <p>Natural ingredients, lab-tested for purity.</p>
+                      </div>
+                      <div className="flex items-start space-x-3">
+                        <CheckCircle className="w-5 h-5 text-gray-800 mt-1" />
+                        <p>No crash, no artificial stimulants.</p>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </TabsContent>
-            
-            <TabsContent value="reviews">
-              <div className="space-y-6">
-                {[{
-                name: "Sarah M.",
-                review: "Amazing quality! I've been using this for 3 months now and really notice the difference in my energy levels. Highly recommend!",
-                time: "2 weeks ago",
-                rating: 5
-              }, {
-                name: "James L.",
-                review: "The taste is incredible and I feel so much more focused throughout the day. Worth every penny!",
-                time: "1 month ago",
-                rating: 5
-              }, {
-                name: "Emma R.",
-                review: "Best matcha I've ever tried. The ceremonial grade quality really shows. Will definitely reorder!",
-                time: "3 weeks ago",
-                rating: 5
-              }].map((review, index) => <div key={index} className="bg-white p-6 rounded-xl border border-gray-200 hover:shadow-md transition-shadow">
-                    <div className="flex items-start space-x-4">
-                      <div className="w-12 h-12 bg-gradient-to-br from-gray-400 to-gray-600 rounded-full flex items-center justify-center text-white font-bold">
-                        {review.name[0]}
-                      </div>
-                      <div className="flex-1">
-                        <div className="flex items-center justify-between mb-3">
-                          <div>
-                            <span className="font-semibold text-gray-900">{review.name}</span>
-                            <div className="flex text-yellow-400 mt-1">
-                              {[...Array(review.rating)].map((_, i) => <Star key={i} className="w-4 h-4 fill-current" />)}
-                            </div>
-                          </div>
-                          <span className="text-sm text-gray-500">{review.time}</span>
+            </section>
+
+            {/* SECTION 6 — Social Proof Intro */}
+            <section className="w-full py-10">
+              <div className="w-full px-0 text-center">
+                <h3 className="text-3xl lg:text-4xl font-serif font-bold text-gray-900">Here’s what our customers say</h3>
+              </div>
+            </section>
+
+            {/* SECTION 7 — Recipe / Use-Case Cards */}
+            <section className="w-full py-16">
+              <div className="w-full space-y-10 px-0">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch bg-white/70 shadow-[0_14px_40px_rgba(0,0,0,0.06)] overflow-hidden">
+                  <div className="relative">
+                    <AdminImageUpload src="/lovable-uploads/65581248-fb35-4b2f-8b55-04877e634119.png" alt="The Focus Coffee" className="w-full h-full object-cover" imagePath="focus-coffee" />
+                  </div>
+                  <div className="p-8 flex flex-col justify-center space-y-4">
+                    <h4 className="text-3xl font-serif font-bold text-gray-900">The Focus Coffee</h4>
+                    <ul className="space-y-2 text-gray-700">
+                      <li>• Brew your coffee as usual.</li>
+                      <li>• Whisk 2g NASTEA with a splash of hot water.</li>
+                      <li>• Pour together for calm, steady energy.</li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch bg-white/70 shadow-[0_14px_40px_rgba(0,0,0,0.06)] overflow-hidden">
+                  <div className="p-8 flex flex-col justify-center space-y-4 order-2 lg:order-1">
+                    <h4 className="text-3xl font-serif font-bold text-gray-900">The Focus Smoothie</h4>
+                    <ul className="space-y-2 text-gray-700">
+                      <li>• Blend fruits, greens, and your choice of milk.</li>
+                      <li>• Add 2g NASTEA for cognitive support.</li>
+                      <li>• Enjoy chilled, creamy clarity.</li>
+                    </ul>
+                  </div>
+                  <div className="relative order-1 lg:order-2">
+                    <AdminImageUpload src="/lovable-uploads/b9b609e5-82c9-4039-98a5-3da3b835c962.png" alt="The Focus Smoothie" className="w-full h-full object-cover" imagePath="focus-smoothie" />
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            {/* SECTION 8 — You may also like (Carousel/Grid) */}
+            {false && (
+              <section className="w-full py-16">
+                <div className="w-full px-0 space-y-8">
+                  <h4 className="text-2xl font-serif font-bold text-gray-900">You may also like</h4>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    {relatedProducts.map((item, index) => (
+                      <div key={index} className="bg-white/80 shadow-[0_12px_30px_rgba(0,0,0,0.05)] overflow-hidden">
+                        <div className="aspect-square overflow-hidden">
+                          <AdminImageUpload src={item.image} alt={item.name} className="w-full h-full object-cover" imagePath={`related-${index}`} />
                         </div>
-                        <p className="text-gray-700 leading-relaxed">{review.review}</p>
-                        <p className="text-sm text-green-600 mt-2 flex items-center">
-                          <CheckCircle className="w-4 h-4 mr-1" />
-                          Verified Purchase
-                        </p>
+                        <div className="p-4 space-y-1">
+                          <p className="text-sm uppercase tracking-wide text-gray-500">{item.description}</p>
+                          <p className="text-lg font-semibold text-gray-900">{item.name}</p>
+                          <p className="text-gray-700 text-sm">{item.price}</p>
+                        </div>
                       </div>
-                    </div>
-                  </div>)}
-              </div>
-            </TabsContent>
-          </Tabs>
-        </section>
-
-        {/* NEW SECTION 2: Pure ingredients, powerful benefits */}
-        <section className="mb-20 w-full">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div className="relative">
-              <div className="aspect-square rounded-3xl overflow-hidden">
-                <AdminImageUpload src="/lovable-uploads/b4c48a6c-d28c-480e-b907-ec5d22258308.png" alt="Pure ingredients powerful benefits" className="w-full h-full object-cover" imagePath="pure-ingredients" />
-              </div>
-            </div>
-
-            <div className="space-y-8">
-              <div>
-                <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
-                  Pure ingredients,<br />
-                  powerful benefits.
-                </h2>
-              </div>
-
-              <div className="space-y-6">
-                <div className="flex items-start space-x-4">
-                  <div className="text-2xl">🍃</div>
-                  <div>
-                    <h3 className="font-semibold text-gray-900 mb-2">100% Organic</h3>
-                    <p className="text-gray-700">
-                      All our ingredients are certified organic and sustainably sourced from the finest suppliers around the world.
-                    </p>
+                    ))}
                   </div>
                 </div>
+              </section>
+            )}
 
-                <div className="flex items-start space-x-4">
-                  <div className="text-2xl">🔬</div>
-                  <div>
-                    <h3 className="font-semibold text-gray-900 mb-2">Lab Tested</h3>
-                    <p className="text-gray-700">
-                      Every batch is third-party tested for purity, potency, and heavy metals to ensure the highest quality standards.
-                    </p>
-                  </div>
+            {/* SECTION 9 — Brand Standards / FAQ (Accordion) */}
+            <section className="w-full py-16">
+              <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-start px-0">
+                <div className="space-y-4">
+                  <p className="text-sm uppercase tracking-[0.2em] text-gray-500">Quality Promise</p>
+                  <h4 className="text-3xl lg:text-4xl font-serif font-bold text-gray-900">The NASTEA Standard</h4>
+                  <p className="text-gray-700 leading-relaxed">Crafted with organic ingredients, rigorously tested, and designed for daily rituals that elevate body and mind.</p>
                 </div>
-
-                <div className="flex items-start space-x-4">
-                  <div className="text-2xl">⚡</div>
-                  <div>
-                    <h3 className="font-semibold text-gray-900 mb-2">Bioavailable</h3>
-                    <p className="text-gray-700">
-                      Our extraction methods ensure maximum bioavailability so your body can absorb and utilize every nutrient.
-                    </p>
-                  </div>
+                <div className="bg-white/80 shadow-[0_14px_40px_rgba(0,0,0,0.06)] divide-y divide-gray-200">
+                  {[{
+                    q: 'How does NR matcha support steady energy and calm focus?',
+                    a: 'Matcha naturally contains caffeine plus L-theanine — a combo many people find feels smoother and steadier than coffee.'
+                  }, {
+                    q: 'How does NR matcha help the skin?',
+                    a: 'Matcha contains plant antioxidants (like catechins) and chlorophylls; skincare outcomes vary by person, diet, and routine — we keep it as a daily ritual, not a miracle claim.'
+                  }, {
+                    q: 'What makes NR different from regular matcha?',
+                    a: 'Japan-grown, shade-grown, stone-milled matcha chosen for what matters in-cup: smooth taste, vivid colour, and consistency (no “green powder” cosplay).'
+                  }, {
+                    q: 'What grades do you offer?',
+                    a: 'Imperial Ceremonial (straight sipping + premium cups), Organic Ceremonial (daily lattes + cafés), Japanese Classic (baking/recipes/R&D).'
+                  }, {
+                    q: 'When is the best time to drink matcha?',
+                    a: 'Morning or early afternoon is ideal for most people — especially if you’re caffeine-sensitive later in the day.'
+                  }, {
+                    q: 'Is NR matcha vegan?',
+                    a: 'Yes — it’s pure matcha (just tea leaf powder).'
+                  }, {
+                    q: 'Is there any sugar in NR matcha?',
+                    a: 'No added sugar — any sweetness comes from what you add (milk, honey, syrup, etc.).'
+                  }, {
+                    q: 'Is your matcha organic?',
+                    a: 'Yes — our matcha is organic (see product page/pack for certification details per SKU).'
+                  }, {
+                    q: 'Is it gluten-free?',
+                    a: 'Matcha is naturally gluten-free; if you have severe sensitivities, check the pack for facility/allergen statements.'
+                  }, {
+                    q: 'Can I drink matcha if I’m pregnant or breastfeeding?',
+                    a: 'Caffeine guidelines vary — best to check with your clinician and factor in total daily caffeine from all sources.'
+                  }, {
+                    q: 'How should I store matcha?',
+                    a: 'Seal it tight, keep it cool and dry, away from heat/light and strong smells; refrigerate only if you can prevent moisture/odours.'
+                  }, {
+                    q: 'How much matcha should I use per drink?',
+                    a: 'Start with 2–3g per serving and adjust to taste and caffeine tolerance.'
+                  }, {
+                    q: 'Does matcha have caffeine?',
+                    a: 'Yes — amount depends on grams used and the tea; matcha typically feels “cleaner” for many people because of L-theanine.'
+                  }, {
+                    q: 'Can I take matcha with other supplements?',
+                    a: 'Generally yes, but if you’re on medication or sensitive to caffeine, check with a professional.'
+                  }, {
+                    q: 'Are there any allergens?',
+                    a: 'Matcha is a single-ingredient tea leaf powder; always check your pack for facility handling statements.'
+                  }, {
+                    q: 'How and where is NR made?',
+                    a: 'Sourced from Japan; final packing is done to keep it fresh and café-ready (see product page/pack for the exact details per SKU).'
+                  }, {
+                    q: 'Can kids have matcha?',
+                    a: 'Because it contains caffeine, we generally recommend avoiding it for children unless advised by a healthcare professional.'
+                  }, {
+                    q: 'Can I drink it every day?',
+                    a: 'Yes — many people do; just keep an eye on your total daily caffeine and how you feel.'
+                  }].map((item, idx) => (
+                    <Collapsible key={idx}>
+                      <CollapsibleTrigger className="flex items-center justify-between w-full py-4 px-6 text-left font-semibold text-gray-900">
+                        {item.q}
+                        <ChevronRight className="w-5 h-5 text-gray-500" />
+                      </CollapsibleTrigger>
+                      <CollapsibleContent className="px-6 pb-4 text-gray-700">{item.a}</CollapsibleContent>
+                    </Collapsible>
+                  ))}
                 </div>
               </div>
-            </div>
+            </section>
           </div>
-        </section>
-
-        {/* NEW SECTION 3: For calm energy and better focus */}
-        <section className="mb-20 w-full">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div className="space-y-8">
-              <div>
-                <p className="text-lg text-gray-600 mb-4">Your everyday essential</p>
-                <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
-                  For calm energy and better focus
-                </h2>
-              </div>
-
-              <div className="space-y-6">
-                <div className="border-b border-gray-200 pb-4">
-                  <h3 className="font-semibold text-gray-900 mb-2">Good for:</h3>
-                  <p className="text-gray-700">
-                    NASTEA Matcha mushroom powder fortified with Lion's Mane, Tremella and B vitamin 
-                    complex enhances energy, boosts focus and hydrates and nourishes the skin.
-                  </p>
-                </div>
-
-                <div className="border-b border-gray-200 pb-4">
-                  <h3 className="font-semibold text-gray-900 mb-2">Tastes like:</h3>
-                  <p className="text-gray-700">
-                    A deliciously smooth taste with soft grassy notes and a subtly sweet and creamy flavour.
-                  </p>
-                </div>
-
-                <div>
-                  <h3 className="font-semibold text-gray-900 mb-2">Did you know?</h3>
-                  <p className="text-gray-700">
-                    Samurai warriors drank matcha for its energising and calming effects, as it provided 
-                    sustained focus and mental clarity, useful in battle or meditation.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="relative">
-              <div className="aspect-square rounded-3xl overflow-hidden">
-                <AdminImageUpload src="/lovable-uploads/e3cb3dde-3127-4252-8b46-ab17c78f4ad8.png" alt="Matcha powder with ceremonial design" className="w-full h-full object-cover" imagePath="matcha-ceremonial" />
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* NEW SECTION 4: How to NASTEA */}
-        <section className="mb-20 w-full">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div className="space-y-8">
-              <div>
-                <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 leading-tight mb-8">
-                  How to NASTEA
-                </h2>
-                <h3 className="text-2xl lg:text-3xl font-bold text-gray-900">
-                  Add 6g of NASTEA Matcha powder to a cup
-                </h3>
-              </div>
-
-              {/* Step thumbnails */}
-              <div className="flex space-x-4">
-                {[...Array(4)].map((_, index) => <div key={index} className={`w-24 h-24 rounded-xl overflow-hidden border-2 transition-all ${index === 0 ? 'border-black' : 'border-gray-200'}`}>
-                    <AdminImageUpload src="/lovable-uploads/b9b609e5-82c9-4039-98a5-3da3b835c962.png" alt={`Step ${index + 1}`} className="w-full h-full object-cover" imagePath={`how-to-step-${index + 1}`} />
-                  </div>)}
-              </div>
-            </div>
-
-            <div className="relative">
-              <div className="aspect-[4/3] rounded-3xl overflow-hidden bg-gray-50">
-                <AdminImageUpload src="/lovable-uploads/b9b609e5-82c9-4039-98a5-3da3b835c962.png" alt="Adding matcha powder to cup" className="w-full h-full object-cover" imagePath="how-to-main" />
-              </div>
-              <div className="absolute bottom-6 right-6 flex items-center space-x-2 text-white">
-                <span className="text-sm font-medium">1/4</span>
-                <ChevronLeft className="w-4 h-4" />
-                <ChevronRight className="w-4 h-4" />
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* NEW SECTION 5: Drink for benefits */}
-        <section className="mb-20 w-full">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div className="space-y-8">
-              <div>
-                <p className="text-lg text-gray-600 mb-4">Drink for</p>
-                <div className="space-y-2">
-                  <h2 className="text-4xl lg:text-5xl font-bold text-gray-400">Steady energy</h2>
-                  <h2 className="text-4xl lg:text-5xl font-bold text-gray-400">Calm focus</h2>
-                  <h2 className="text-4xl lg:text-5xl font-bold text-gray-900">Hydrated skin</h2>
-                </div>
-              </div>
-
-              <Button className="bg-gray-900 text-white hover:bg-black px-8 py-4 text-lg font-semibold rounded-full transition-all duration-200" onClick={() => navigate('/recipes')}>
-                SEE RECIPES
-              </Button>
-            </div>
-
-            <div className="relative">
-              <div className="aspect-[4/3] rounded-3xl overflow-hidden">
-                <AdminImageUpload src="/lovable-uploads/65581248-fb35-4b2f-8b55-04877e634119.png" alt="Person enjoying matcha drink" className="w-full h-full object-cover" imagePath="lifestyle-drink" />
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* NEW SECTION 6: How it Compares */}
-        <section className="mb-20 w-full">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div className="relative">
-              <div className="aspect-square rounded-3xl overflow-hidden bg-gradient-to-br from-amber-50 to-orange-50">
-                <AdminImageUpload src="/lovable-uploads/45a06faf-330b-4d76-a34b-4c50248900a2.png" alt="Hands holding matcha drink with mushroom art" className="w-full h-full object-cover" imagePath="mushroom-matcha" />
-              </div>
-            </div>
-
-            <div className="space-y-8">
-              <div>
-                <p className="text-lg text-gray-600 mb-4">Mushroom Matcha</p>
-                <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
-                  How it Compares
-                </h2>
-              </div>
-
-              <div className="space-y-6">
-                <div className="border-b border-gray-200 pb-6">
-                  <h3 className="font-semibold text-gray-900 mb-3">What is mushroom matcha?</h3>
-                  <p className="text-gray-700 leading-relaxed">
-                    NASTEA Matcha blends premium Japanese ceremonial-grade matcha with Lion's Mane and Tremella for an 
-                    elevated experience. Unlike standard matcha, our matcha mushroom blend supports focus, cognition, and 
-                    skin hydration with added adaptogens.
-                  </p>
-                </div>
-
-                <div className="border-b border-gray-200 pb-6">
-                  <h3 className="font-semibold text-gray-900 mb-3">Matcha mushroom benefits</h3>
-                  <p className="text-gray-700 leading-relaxed">
-                    Perfect for sustained energy, mental clarity, and glowing skin. While standard matcha offers antioxidants 
-                    and caffeine, NASTEA Matcha enhances cognitive function and hydration with powerful mushrooms.
-                  </p>
-                </div>
-
-                <div>
-                  <h3 className="font-semibold text-gray-900 mb-3">Where does it fit in your routine?</h3>
-                  <p className="text-gray-700 leading-relaxed">
-                    Enjoy it in the morning or early afternoon for a jitter-free energy boost. Instead of your standard matcha 
-                    powder, buy matcha mushroom powder for a more nourishing, nootropic-powered ritual.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* NEW SECTION 7: Customer Reviews */}
-        <section className="mb-20 w-full">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-8">
-              Here's what our customers say
-            </h2>
-          </div>
-
-          <div className="relative">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {testimonials.map((testimonial, index) => <Card key={index} className="border border-gray-200 hover:shadow-lg transition-shadow">
-                  <CardContent className="p-0">
-                    <div className="aspect-square bg-gray-100 rounded-t-lg overflow-hidden">
-                      <AdminImageUpload src={testimonial.image} alt={`Customer ${testimonial.name}`} className="w-full h-full object-cover" imagePath={`testimonial-image-${index + 1}`} />
-                    </div>
-                    <div className="p-6">
-                      <div className="flex text-yellow-400 mb-4">
-                        {[...Array(testimonial.rating)].map((_, i) => <Star key={i} className="w-4 h-4 fill-current" />)}
-                      </div>
-                      <h4 className="font-semibold text-gray-900 mb-3">{testimonial.name}</h4>
-                      <p className="text-gray-700 text-sm leading-relaxed">{testimonial.review}</p>
-                    </div>
-                  </CardContent>
-                </Card>)}
-            </div>
-            
-            <button className="absolute right-0 top-1/2 -translate-y-1/2 p-2 bg-white border border-gray-300 rounded-full shadow-sm hover:shadow-md transition-all">
-              <ChevronRight className="w-5 h-5 text-gray-600" />
-            </button>
-          </div>
-        </section>
-
-        {/* NEW SECTION 8: You may also like */}
-        <section className="mb-20 w-full">
-          
-        </section>
-      </main>
+        </main>
+      </div>
 
       {/* Image Modal */}
-      {showImageModal && <div className="fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center p-4">
+      {showImageModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center p-4">
           <div className="relative max-w-4xl max-h-full">
             <button onClick={() => setShowImageModal(false)} className="absolute top-4 right-4 text-white hover:text-gray-300 z-10">
               <X className="w-8 h-8" />
             </button>
-            <img src={productImages[selectedImage]} alt={product.name} className="max-w-full max-h-full object-contain rounded-lg" />
+            <img src={productImages[selectedImage]} alt={product.name} className="max-w-full max-h-full object-contain" />
           </div>
-        </div>}
+        </div>
+      )}
 
       <Footer />
-    </div>;
+    </div>
+  );
 };
 export default ProductDetail;
