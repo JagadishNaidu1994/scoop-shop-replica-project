@@ -336,12 +336,12 @@ const ProductDetail = () => {
                       <Star key={i} className="w-4 h-4 fill-current" />
                     ))}
                   </div>
-                  <span className="text-sm text-gray-700 font-semibold ml-1">4.9</span>
+                  {/* <span className="text-sm text-gray-700 font-semibold ml-1">4.9</span> */}
                 </div>
-                <span className="text-gray-400">•</span>
-                <span className="text-sm text-gray-600 font-medium">22,196 Reviews</span>
-                <span className="text-gray-400">•</span>
-                <span className="text-sm text-green-600 font-medium">✓ Verified</span>
+                {/* <span className="text-gray-400">•</span> */}
+                {/* <span className="text-sm text-gray-600 font-medium">22,196 Reviews</span> */}
+                {/* <span className="text-gray-400">•</span> */}
+                {/* <span className="text-sm text-green-600 font-medium">✓ Verified</span> */}
               </div>
 
               {/* Product Title and Description */}
@@ -377,7 +377,7 @@ const ProductDetail = () => {
                   </div>
                 </div>
 
-                <div className="flex flex-wrap gap-2">
+                {/* <div className="flex flex-wrap gap-2">
                   <Badge variant="outline" className="flex items-center gap-1 px-3 py-1 text-xs font-semibold rounded-full bg-white border-gray-200">
                     <span>🎯</span>
                     <span>Focus</span>
@@ -390,7 +390,7 @@ const ProductDetail = () => {
                     <span>🛡️</span>
                     <span>Immunity</span>
                   </Badge>
-                </div>
+                </div> */}
               </div>
 
               {/* Size Selection (UI only, logic untouched) */}
