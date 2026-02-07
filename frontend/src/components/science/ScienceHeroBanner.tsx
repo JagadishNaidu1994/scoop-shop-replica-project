@@ -21,7 +21,7 @@ const ScienceHeroBanner = () => {
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6">
             Our science
           </h1>
-          <p className="text-lg md:text-xl lg:text-2xl text-gray-800 leading-relaxed">
+          <p className="text-lg md:text-xl lg:text-2xl text-white-800 leading-relaxed">
 At Nastea Rituals, we’re not here to be another wellness brand. We’re here to set the matcha standard - clean, consistent, and barista-proof.          </p>
         </div>
       </div>
