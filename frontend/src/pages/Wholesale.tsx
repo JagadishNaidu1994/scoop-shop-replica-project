@@ -129,10 +129,7 @@ const Wholesale = () => {
 Premium Japanese matcha, barista training, menu support, flexible bulk packs, and a team you can actually rely on.              </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <button className="bg-amber-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-amber-700 transition-colors">
-                  Get Started
-                </button>
-                <button className="border-2 border-amber-600 text-amber-600 px-8 py-3 rounded-lg font-semibold hover:bg-amber-50 transition-colors">
-                  Learn More
+                  Get in touch
                 </button>
               </div>
             </div>
