@@ -38,33 +38,150 @@ const OurStory = () => {
       {/* The DIRTEA Story Section */}
       <section className="py-20 px-3 bg-gray-900">
         <h2 className="text-5xl font-light text-white text-center mb-8">
-          The NASTEA story
+          The DIRTEA story
         </h2>
         <p className="text-lg text-white text-center mb-8 max-w-3xl mx-auto">
-          We discovered the power of matcha and experienced a transformation in our energy, focus, and resilience.
+          In 2016, we discovered the power of functional mushrooms and experienced a transformation in our energy, focus, and resilience.
         </p>
-        <div className="grid grid-cols-3 gap-6">
-          <div className="h-[260px] overflow-hidden rounded-lg">
-            <img
-              src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-              alt="Founder"
-              className="w-full h-full object-cover"
-            />
+        
+        {/* Carousel Container */}
+        <div className="relative max-w-7xl mx-auto">
+          <div className="flex gap-6 overflow-x-auto scroll-smooth scrollbar-hide snap-x snap-mandatory" id="carousel">
+            {/* Slide 1 */}
+            <div className="flex-shrink-0 w-[400px] snap-start">
+              <div className="relative h-[500px] overflow-hidden rounded-lg group cursor-pointer">
+                <img
+                  src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                  alt="Matcha ritual"
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
+                <div className="absolute bottom-0 left-0 right-0 p-6">
+                  <p className="text-white text-lg leading-relaxed">
+                    Three friends, one plan: upgrade your caffeine ritual without the crashy chaos.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Slide 2 */}
+            <div className="flex-shrink-0 w-[400px] snap-start">
+              <div className="relative h-[500px] overflow-hidden rounded-lg group cursor-pointer">
+                <img
+                  src="https://images.unsplash.com/photo-1544787219-7f47181a629a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                  alt="Japan matcha heritage"
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
+                <div className="absolute bottom-0 left-0 right-0 p-6">
+                  <p className="text-white text-lg leading-relaxed">
+                    Inspired by Japan's matcha heritage - delivered with NR personality.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Slide 3 */}
+            <div className="flex-shrink-0 w-[400px] snap-start">
+              <div className="relative h-[500px] overflow-hidden rounded-lg group cursor-pointer">
+                <img
+                  src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                  alt="Kagoshima landscape"
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
+                <div className="absolute bottom-0 left-0 right-0 p-6">
+                  <p className="text-white text-lg leading-relaxed">
+                    We went to the source (Kagoshima) to understand what separates real matcha from green imposters.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Slide 4 */}
+            <div className="flex-shrink-0 w-[400px] snap-start">
+              <div className="relative h-[500px] overflow-hidden rounded-lg group cursor-pointer">
+                <img
+                  src="https://images.unsplash.com/photo-1571115764595-644a1f56a55c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                  alt="Matcha leaves"
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
+                <div className="absolute bottom-0 left-0 right-0 p-6">
+                  <p className="text-white text-lg leading-relaxed">
+                    We chose single-origin, shade-grown, stone-milled matcha because quality is… kind of the point.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Slide 5 */}
+            <div className="flex-shrink-0 w-[400px] snap-start">
+              <div className="relative h-[500px] overflow-hidden rounded-lg group cursor-pointer">
+                <img
+                  src="https://images.unsplash.com/photo-1564890369478-c89ca6d9cde9?w=800&h=800&fit=crop"
+                  alt="Matcha preparation methods"
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
+                <div className="absolute bottom-0 left-0 right-0 p-6">
+                  <p className="text-white text-lg leading-relaxed">
+                    Designed to work everywhere: whisked, shaken, iced, latte'd, and café-served.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Slide 6 */}
+            <div className="flex-shrink-0 w-[400px] snap-start">
+              <div className="relative h-[500px] overflow-hidden rounded-lg group cursor-pointer">
+                <img
+                  src="https://images.unsplash.com/photo-1582793988951-9aed5509eb97?w=800&h=800&fit=crop"
+                  alt="Pure matcha leaf"
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
+                <div className="absolute bottom-0 left-0 right-0 p-6">
+                  <p className="text-white text-lg leading-relaxed">
+                    Pure leaf. Loud standards.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Slide 7 */}
+            <div className="flex-shrink-0 w-[400px] snap-start">
+              <div className="relative h-[500px] overflow-hidden rounded-lg group cursor-pointer">
+                <img
+                  src="https://images.unsplash.com/photo-1563822249366-707a0051d2f7?w=800&h=800&fit=crop"
+                  alt="Nastea Rituals"
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
+                <div className="absolute bottom-0 left-0 right-0 p-6">
+                  <p className="text-white text-lg leading-relaxed">
+                    Nastea Rituals was born.
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
-          <div className="h-[260px] overflow-hidden rounded-lg">
-            <img
-              src="https://images.unsplash.com/photo-1544787219-7f47181a629a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-              alt="Tea preparation"
-              className="w-full h-full object-cover"
-            />
-          </div>
-          <div className="h-[260px] overflow-hidden rounded-lg">
-            <img
-              src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-              alt="Nature landscape"
-              className="w-full h-full object-cover"
-            />
-          </div>
+
+          {/* Carousel Navigation Button */}
+          <button
+            onClick={() => {
+              const carousel = document.getElementById('carousel');
+              if (carousel) {
+                carousel.scrollBy({ left: 416, behavior: 'smooth' });
+              }
+            }}
+            className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/30 backdrop-blur-sm p-4 rounded-full transition-colors z-10"
+            aria-label="Next slide"
+          >
+            <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
         </div>
       </section>
 
