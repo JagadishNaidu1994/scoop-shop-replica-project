@@ -109,33 +109,33 @@ const HeaderNavBar = () => {
 
   return (
     <>
-      {/* Top promotional banner - fast scrolling on all devices */}
-      <div className={`bg-gray-100 text-center py-2 text-sm font-medium text-black fixed top-0 left-0 right-0 z-50 overflow-hidden transition-transform duration-300 ${
+      {/* Header wrapper for both banner and main header */}
+      <div className={`fixed top-0 left-0 right-0 z-50 transition-transform duration-300 ${
         isHeaderVisible ? 'translate-y-0' : '-translate-y-full'
       }`}>
-        <div className="whitespace-nowrap animate-[scroll-seamless_6s_linear_infinite] sm:animate-[scroll-seamless_8s_linear_infinite] lg:animate-[scroll-seamless_8s_linear_infinite]">
-          <span className="inline-block mx-8">15% OFF EVERY SUBSCRIPTION</span>
-          <span className="inline-block mx-2">•</span>
-          <span className="inline-block mx-8">10% OFF FIRST ORDER</span>
-          <span className="inline-block mx-2">•</span>
-          <span className="inline-block mx-8">FREE SHIPPING ON ORDERS ABOVE INR 1000</span>
-          <span className="inline-block mx-2">•</span>
-          <span className="inline-block mx-8">REFER A FRIEND & GET 150 OFF</span>
-          <span className="inline-block mx-2">•</span>
-          <span className="inline-block mx-8">15% OFF EVERY SUBSCRIPTION</span>
-          <span className="inline-block mx-2">•</span>
-          <span className="inline-block mx-8">10% OFF FIRST ORDER</span>
-          <span className="inline-block mx-2">•</span>
-          <span className="inline-block mx-8">FREE SHIPPING ON ORDERS ABOVE INR 1000</span>
-          <span className="inline-block mx-2">•</span>
-          <span className="inline-block mx-8">REFER A FRIEND & GET 150 OFF</span>
+        {/* Top promotional banner */}
+        <div className="bg-gray-100 text-center py-2 text-sm font-medium text-black overflow-hidden">
+          <div className="whitespace-nowrap animate-[scroll-seamless_6s_linear_infinite] sm:animate-[scroll-seamless_8s_linear_infinite] lg:animate-[scroll-seamless_8s_linear_infinite]">
+            <span className="inline-block mx-8">15% OFF EVERY SUBSCRIPTION</span>
+            <span className="inline-block mx-2">•</span>
+            <span className="inline-block mx-8">10% OFF FIRST ORDER</span>
+            <span className="inline-block mx-2">•</span>
+            <span className="inline-block mx-8">FREE SHIPPING ON ORDERS ABOVE INR 1000</span>
+            <span className="inline-block mx-2">•</span>
+            <span className="inline-block mx-8">REFER A FRIEND & GET 150 OFF</span>
+            <span className="inline-block mx-2">•</span>
+            <span className="inline-block mx-8">15% OFF EVERY SUBSCRIPTION</span>
+            <span className="inline-block mx-2">•</span>
+            <span className="inline-block mx-8">10% OFF FIRST ORDER</span>
+            <span className="inline-block mx-2">•</span>
+            <span className="inline-block mx-8">FREE SHIPPING ON ORDERS ABOVE INR 1000</span>
+            <span className="inline-block mx-2">•</span>
+            <span className="inline-block mx-8">REFER A FRIEND & GET 150 OFF</span>
+          </div>
         </div>
-      </div>
-      
-      {/* Main header */}
-      <header className={`bg-white shadow-sm fixed top-8 left-0 right-0 z-40 border-b border-gray-100 transition-transform duration-300 ${
-        isHeaderVisible ? 'translate-y-0' : '-translate-y-full'
-      }`}>
+        
+        {/* Main header */}
+        <header className="bg-white shadow-sm border-b border-gray-100">
         <div className="w-full px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             {/* Mobile menu button - Left */}
@@ -352,6 +352,7 @@ const HeaderNavBar = () => {
           )}
         </div>
       </header>
+      </div>
 
       {/* Auth Modal */}
       <AuthModal 
