@@ -128,7 +128,15 @@ const Wholesale = () => {
               <p className="text-xl text-gray-700 mb-8">
 Premium Japanese matcha, barista training, menu support, flexible bulk packs, and a team you can actually rely on.              </p>
               <div className="flex flex-col sm:flex-row gap-4">
-                <button className="bg-amber-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-amber-700 transition-colors">
+                <button 
+                  onClick={() => {
+                    const contactSection = document.querySelector('#contact-form');
+                    if (contactSection) {
+                      contactSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                  }}
+                  className="bg-amber-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-amber-700 transition-colors"
+                >
                   Get in touch
                 </button>
               </div>
