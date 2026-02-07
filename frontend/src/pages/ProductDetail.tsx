@@ -25,6 +25,7 @@ interface Product {
   category: string;
   benefits: string[];
 }
+
 const ProductDetail = () => {
   const {
     id
