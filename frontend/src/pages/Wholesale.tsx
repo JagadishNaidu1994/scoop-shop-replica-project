@@ -116,14 +116,14 @@ const Wholesale = () => {
       <HeaderNavBar />
       
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-amber-50 to-orange-100 py-20">
+      <section className="relative bg-gradient-to-br from-green-50 to-green-100 py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
               <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
                 Your next 
 <br />
-                <span className="text-amber-600">Matcha Partner.</span>
+                <span className="text-green-600">Matcha Partner.</span>
               </h1>
               <p className="text-xl text-gray-700 mb-8">
 Premium Japanese matcha, barista training, menu support, flexible bulk packs, and a team you can actually rely on.              </p>
@@ -135,7 +135,7 @@ Premium Japanese matcha, barista training, menu support, flexible bulk packs, an
                       contactSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
                     }
                   }}
-                  className="bg-amber-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-amber-700 transition-colors"
+                  className="bg-green-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors"
                 >
                   Get in touch
                 </button>
@@ -180,15 +180,15 @@ We are the wholesale arm of Nastea Rituals, we provide matcha guidance to cafes,
               </p>
               <div className="space-y-4">
                 <div className="flex items-center space-x-3">
-                  <Award className="text-amber-600 flex-shrink-0" size={24} />
+                  <Award className="text-green-600 flex-shrink-0" size={24} />
                   <span className="text-gray-700">Award-winning coffee beans</span>
                 </div>
                 <div className="flex items-center space-x-3">
-                  <Coffee className="text-amber-600 flex-shrink-0" size={24} />
+                  <Coffee className="text-green-600 flex-shrink-0" size={24} />
                   <span className="text-gray-700">Expert roasting techniques</span>
                 </div>
                 <div className="flex items-center space-x-3">
-                  <Users className="text-amber-600 flex-shrink-0" size={24} />
+                  <Users className="text-green-600 flex-shrink-0" size={24} />
                   <span className="text-gray-700">Dedicated support team</span>
                 </div>
               </div>
