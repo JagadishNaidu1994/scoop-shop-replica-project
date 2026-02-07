@@ -373,7 +373,7 @@ We are the wholesale arm of Nastea Rituals, we provide matcha guidance to cafes,
                     onChange={handleInputChange}
                     className={`w-full px-4 py-3 bg-gray-700 rounded-lg border ${
                       errors.name ? 'border-red-500' : 'border-gray-600'
-                    } focus:border-amber-500 focus:outline-none text-white`}
+                    } focus:border-green-500 focus:outline-none text-white`}
                     placeholder="Your name"
                   />
                   {errors.name && (
@@ -391,7 +391,7 @@ We are the wholesale arm of Nastea Rituals, we provide matcha guidance to cafes,
                     onChange={handleInputChange}
                     className={`w-full px-4 py-3 bg-gray-700 rounded-lg border ${
                       errors.email ? 'border-red-500' : 'border-gray-600'
-                    } focus:border-amber-500 focus:outline-none text-white`}
+                    } focus:border-green-500 focus:outline-none text-white`}
                     placeholder="your@email.com"
                   />
                   {errors.email && (
@@ -409,7 +409,7 @@ We are the wholesale arm of Nastea Rituals, we provide matcha guidance to cafes,
                     onChange={handleInputChange}
                     className={`w-full px-4 py-3 bg-gray-700 rounded-lg border ${
                       errors.phone ? 'border-red-500' : 'border-gray-600'
-                    } focus:border-amber-500 focus:outline-none text-white`}
+                    } focus:border-green-500 focus:outline-none text-white`}
                     placeholder="+91 98765 43210"
                   />
                   {errors.phone && (
@@ -426,7 +426,7 @@ We are the wholesale arm of Nastea Rituals, we provide matcha guidance to cafes,
                     onChange={handleInputChange}
                     className={`w-full px-4 py-3 bg-gray-700 rounded-lg border ${
                       errors.businessType ? 'border-red-500' : 'border-gray-600'
-                    } focus:border-amber-500 focus:outline-none text-white`}
+                    } focus:border-green-500 focus:outline-none text-white`}
                   >
                     <option value="Café">Cafe</option>
                     <option value="Restaurant">Restaurant</option>
@@ -446,14 +446,14 @@ We are the wholesale arm of Nastea Rituals, we provide matcha guidance to cafes,
                     value={formData.message}
                     onChange={handleInputChange}
                     rows={4}
-                    className="w-full px-4 py-3 bg-gray-700 rounded-lg border border-gray-600 focus:border-amber-500 focus:outline-none text-white"
+                    className="w-full px-4 py-3 bg-gray-700 rounded-lg border border-gray-600 focus:border-green-500 focus:outline-none text-white"
                     placeholder="Tell us about your business and matcha needs..."
                   ></textarea>
                 </div>
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full bg-amber-600 text-white py-3 rounded-lg font-semibold hover:bg-amber-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {isSubmitting ? 'Sending...' : 'Send Message'}
                 </button>
@@ -466,46 +466,46 @@ We are the wholesale arm of Nastea Rituals, we provide matcha guidance to cafes,
                 <h3 className="text-xl font-bold mb-6">Contact Information</h3>
                 <div className="space-y-4">
                   <div className="flex items-center space-x-3">
-                    <Phone className="text-amber-400 flex-shrink-0" size={20} />
+                    <Phone className="text-green-400 flex-shrink-0" size={20} />
                     <span className="text-gray-300">(555) 123-4567</span>
                   </div>
                   <div className="flex items-center space-x-3">
-                    <Mail className="text-amber-400 flex-shrink-0" size={20} />
+                    <Mail className="text-green-400 flex-shrink-0" size={20} />
                     <span className="text-gray-300">wholesale@themissingbean.com</span>
                   </div>
                   <div className="flex items-center space-x-3">
-                    <MapPin className="text-amber-400 flex-shrink-0" size={20} />
+                    <MapPin className="text-green-400 flex-shrink-0" size={20} />
                     <span className="text-gray-300">Abingdon, Oxfordshire, UK</span>
                   </div>
                 </div>
               </div>
               
               <div>
-                <h4 className="text-lg font-bold mb-6 text-amber-400">Why Choose The Missing Bean?</h4>
+                <h4 className="text-lg font-bold mb-6 text-green-400">Why Choose The Missing Bean?</h4>
                 <div className="space-y-4">
                   <div className="flex items-start space-x-3">
-                    <Users className="text-amber-400 flex-shrink-0 mt-1" size={20} />
+                    <Users className="text-green-400 flex-shrink-0 mt-1" size={20} />
                     <div>
                       <span className="text-white font-medium block">Expert Support Team</span>
                       <span className="text-gray-400 text-sm">Dedicated professionals at your service</span>
                     </div>
                   </div>
                   <div className="flex items-start space-x-3">
-                    <Truck className="text-amber-400 flex-shrink-0 mt-1" size={20} />
+                    <Truck className="text-green-400 flex-shrink-0 mt-1" size={20} />
                     <div>
                       <span className="text-white font-medium block">Reliable Delivery</span>
                       <span className="text-gray-400 text-sm">Fresh coffee delivered on schedule</span>
                     </div>
                   </div>
                   <div className="flex items-start space-x-3">
-                    <Award className="text-amber-400 flex-shrink-0 mt-1" size={20} />
+                    <Award className="text-green-400 flex-shrink-0 mt-1" size={20} />
                     <div>
                       <span className="text-white font-medium block">Premium Quality</span>
                       <span className="text-gray-400 text-sm">Award-winning coffee beans</span>
                     </div>
                   </div>
                   <div className="flex items-start space-x-3">
-                    <Coffee className="text-amber-400 flex-shrink-0 mt-1" size={20} />
+                    <Coffee className="text-green-400 flex-shrink-0 mt-1" size={20} />
                     <div>
                       <span className="text-white font-medium block">Comprehensive Training</span>
                       <span className="text-gray-400 text-sm">Complete barista education programs</span>
