@@ -190,10 +190,9 @@ const OurStory = () => {
         <div className="max-w-[760px] mx-auto text-center">
           <div className="text-7xl text-gray-900 leading-none mb-4">"</div>
           <blockquote className="text-xl md:text-[22px] font-medium text-gray-900 leading-[1.6] mb-6">
-            Double-extracted for maximum absorption, our blends seamlessly integrate into daily life, offering a clean, effortless way to support well-being. Whether you're looking for sustained energy, sharper focus, inner balance, or long-term resilience, DIRTEA delivers nature's most intelligent superfoods in their purest form
-          </blockquote>
+“We started Nastea Rituals because we were tired of matcha that looked premium but drank mid. So we went back to the source in Japan, obsessed over quality, and built a matcha ritual that’s smooth, vibrant, and consistent enough for real daily life. NR is wellness with a personality - clean caffeine, zero boring, and a little main-character energy in every cup. Welcome to your new green flag.”          </blockquote>
           <p className="text-base text-gray-700">
-            Andrew Salter, Co-Founder
+            Founders, Nastea Rituals
           </p>
         </div>
       </section>
@@ -210,11 +209,10 @@ const OurStory = () => {
           </div>
           <div>
             <h2 className="text-5xl font-light text-gray-900 mb-6">
-              Health, Rooted in Nature
+              Wellness, Rooted in Ritual
             </h2>
             <p className="text-lg text-gray-700 leading-[1.6]">
-              The best answers to health have always been written in nature's design, an intelligence that has evolved over millions of years. Beneath every step, lies a vast mycelial network, an ancient system that connects and sustains life.
-            </p>
+The best habits aren’t forced - they’re repeated. Matcha has been a daily ritual for centuries, and when it’s done right, it’s the simplest upgrade: clean energy, calm focus, zero drama.            </p>
           </div>
         </div>
       </section>
@@ -224,10 +222,10 @@ const OurStory = () => {
         <div className="grid grid-cols-2 gap-12 items-center">
           <div>
             <h2 className="text-5xl font-light text-gray-900 mb-6">
-              Centuries of Wisdom, Designed for Today
+              Japanese Craft, Made for Today
             </h2>
             <p className="text-lg text-gray-700 leading-[1.6]">
-              Mushrooms have been trusted for centuries to fuel endurance, sharpen the mind, and strengthen the body. Now, modern science is catching up, revealing their ability to support energy, cognition, and resilience.
+Matcha comes from a deep tradition of patience and precision - shade-grown leaves, careful harvests, and slow stone-milling. We keep the craft intact, then bring it into modern life with premium standards and a little personality.
             </p>
           </div>
           <div className="h-[420px] overflow-hidden rounded-lg">
@@ -252,10 +250,10 @@ const OurStory = () => {
           </div>
           <div>
             <h2 className="text-5xl font-light text-gray-900 mb-6">
-              Ancient Power, Modern Innovation
+Pure Leaf, Loud Standards
             </h2>
             <p className="text-lg text-gray-700 leading-[1.6]">
-              At DIRTEA we harness this ancient wisdom through modern innovation, making nature's most powerful superfoods accessible, effective, and seamlessly integrated into modern life.
+We don’t do fillers, flavour tricks, or “green powder” cosplay. Just Japan-grown matcha selected for the things that matter in a cup: smooth taste, vivid colour, and consistency you can trust.
             </p>
           </div>
         </div>
@@ -266,13 +264,12 @@ const OurStory = () => {
         <div className="grid grid-cols-2 gap-12 items-center">
           <div>
             <h2 className="text-5xl font-light text-gray-900 mb-6">
-              Building the mushroom movement
+              Building the Matcha movement
             </h2>
             <p className="text-lg text-gray-700 leading-[1.6] mb-4">
-              Through education, innovation, and pure formulations, we're making functional mushrooms effortless to integrate into daily life - redefining what it means to fuel your body and mind. We've traveled the world sourcing the highest-quality mushrooms, perfecting extractions, and creating blends trusted by thousands.
-            </p>
+We’re here to make matcha the go-to daily ritual for India’s modern, style-led generation  through better sourcing, better education, and café partnerships that raise the bar.            </p>
             <p className="text-lg text-gray-700 leading-[1.6]">
-              By shifting to DIRTEA, you're choosing a cleaner, smarter approach - one rooted in nature, not short-term fixes. The future of well-being starts here.
+NR isn’t a quick fix. It’s choosing a cleaner, smarter way to sip and making “I’m a matcha person” your best personality trait.
             </p>
           </div>
           <div className="h-[380px] overflow-hidden rounded-lg">
