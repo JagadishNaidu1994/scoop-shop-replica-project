@@ -6,7 +6,7 @@ const ScienceHeroBanner = () => {
       {/* Background Image - Full Width */}
       <div className="absolute inset-0">
         <img 
-          src="https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=2000&h=800&fit=crop" 
+          src="https://images.unsplash.com/photo-1578662896442-48f60103fc96?w=2000&h=800&fit=crop" 
           alt="Mushroom science background"
           className="w-full h-full object-cover"
         />
@@ -22,8 +22,7 @@ const ScienceHeroBanner = () => {
             Our science
           </h1>
           <p className="text-lg md:text-xl lg:text-2xl text-gray-800 leading-relaxed">
-            At DIRTEA, we don't just sell mushrooms, we deliver the purest, most potent, and most effective functional mushroom extracts available.
-          </p>
+At Nastea Rituals, we’re not here to be another wellness brand. We’re here to set the matcha standard - clean, consistent, and barista-proof.          </p>
         </div>
       </div>
     </section>
