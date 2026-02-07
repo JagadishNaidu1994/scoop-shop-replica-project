@@ -275,85 +275,80 @@ const HeaderNavBar = () => {
             </div>
           </div>
 
-          {/* Mobile Navigation Menu */}
+          {/* Mobile Navigation Menu - Full Screen Overlay */}
           {isMenuOpen && (
-            <div className="md:hidden fixed inset-0 bg-white z-[60] overflow-y-auto">
-              <div className="flex flex-col min-h-full pt-24">
-                {/* Close button */}
-                <div className="flex justify-end p-4 bg-white sticky top-0 z-10 border-b border-gray-200">
+            <div className="md:hidden fixed inset-0 bg-white z-[100] overflow-y-auto">
+              <div className="flex flex-col min-h-full">
+                {/* Close button - Top Right */}
+                <div className="flex justify-between items-center p-6 border-b border-gray-200">
+                  <h2 className="text-2xl font-bold text-black">Menu</h2>
                   <button
                     onClick={() => setIsMenuOpen(false)}
                     className="text-black hover:text-gray-600 rounded-full p-2 hover:bg-gray-100"
+                    aria-label="Close menu"
                   >
-                    <X size={24} />
+                    <X size={28} />
                   </button>
                 </div>
 
-                {/* Menu items */}
-                <div className="flex-1 px-6 py-4 space-y-6 bg-white">
-                  <div className="space-y-4">
+                {/* Menu items - Centered and Spaced */}
+                <div className="flex-1 px-6 py-8">
+                  <nav className="space-y-6">
                     <Link 
                       to="/shop" 
-                      className="block text-lg font-medium text-black hover:text-gray-600 border-b border-gray-200 pb-2"
+                      className="block text-2xl font-semibold text-black hover:text-gray-600 border-b border-gray-200 pb-4"
                       onClick={() => setIsMenuOpen(false)}
                     >
                       SHOP NASTEA
                     </Link>
                     
-                    <div className="space-y-4">
-                      <Link 
-                        to="/recipes" 
-                        className="block text-lg font-medium text-black hover:text-gray-600 border-b border-gray-200 pb-2"
-                        onClick={() => setIsMenuOpen(false)}
-                      >
-                        RECIPES
-                      </Link>
-                      
-                      <Link 
-                        to="/journal" 
-                        className="block text-lg font-medium text-black hover:text-gray-600 border-b border-gray-200 pb-2"
-                        onClick={() => setIsMenuOpen(false)}
-                      >
-                        JOURNAL
-                      </Link>
-                                         
-                      <Link 
-                        to="/science" 
-                        className="block text-lg font-medium text-black hover:text-gray-600 border-b border-gray-200 pb-2"
-                        onClick={() => setIsMenuOpen(false)}
-                      >
-                        SCIENCE
-                      </Link>
-                      
-                      <Link 
-                        to="/our-story" 
-                        className="block text-lg font-medium text-black hover:text-gray-600 border-b border-gray-200 pb-2"
-                        onClick={() => setIsMenuOpen(false)}
-                      >
-                        OUR STORY
-                      </Link>
-                      
-                      <Link 
-                        to="/wholesale" 
-                        className="block text-lg font-medium text-black hover:text-gray-600 border-b border-gray-200 pb-2"
-                        onClick={() => setIsMenuOpen(false)}
-                      >
-                        WHOLESALE
-                      </Link>
-
-                      {/* Temporarily hidden - Refer a Friend in parking */}
-                      {/* <Link to="/refer-friend" className="block text-lg font-medium text-black hover:text-gray-600 border-b border-gray-200 pb-2">
-                        REFER A FRIEND
-                      </Link> */}
-                    </div>
+                    <Link 
+                      to="/recipes" 
+                      className="block text-2xl font-semibold text-black hover:text-gray-600 border-b border-gray-200 pb-4"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      RECIPES
+                    </Link>
+                    
+                    <Link 
+                      to="/journal" 
+                      className="block text-2xl font-semibold text-black hover:text-gray-600 border-b border-gray-200 pb-4"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      JOURNAL
+                    </Link>
+                                       
+                    <Link 
+                      to="/science" 
+                      className="block text-2xl font-semibold text-black hover:text-gray-600 border-b border-gray-200 pb-4"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      SCIENCE
+                    </Link>
+                    
+                    <Link 
+                      to="/our-story" 
+                      className="block text-2xl font-semibold text-black hover:text-gray-600 border-b border-gray-200 pb-4"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      OUR STORY
+                    </Link>
+                    
+                    <Link 
+                      to="/wholesale" 
+                      className="block text-2xl font-semibold text-black hover:text-gray-600 border-b border-gray-200 pb-4"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      WHOLESALE
+                    </Link>
 
                     {/* Bottom section */}
-                    <div className="mt-8 pt-8 border-t border-gray-200 space-y-4">
+                    <div className="pt-8 space-y-4 border-t border-gray-200">
                       {/* Admin Dashboard link for mobile */}
                       {isAdmin && (
                         <Link 
                           to="/admin/dashboard" 
-                          className="flex items-center gap-2 text-base text-gray-600 hover:text-black"
+                          className="flex items-center gap-2 text-lg text-gray-600 hover:text-black"
                           onClick={() => setIsMenuOpen(false)}
                         >
                           <Shield size={20} />
@@ -367,7 +362,7 @@ const HeaderNavBar = () => {
                             setIsAuthModalOpen(true);
                             setIsMenuOpen(false);
                           }}
-                          className="block text-base text-gray-600 hover:text-black"
+                          className="block text-lg text-gray-600 hover:text-black text-left"
                         >
                           Log in
                         </button>
@@ -375,7 +370,7 @@ const HeaderNavBar = () => {
                       
                       <Link 
                         to="/account" 
-                        className="block text-base text-gray-600 hover:text-black"
+                        className="block text-lg text-gray-600 hover:text-black"
                         onClick={() => setIsMenuOpen(false)}
                       >
                         Rewards
@@ -383,7 +378,7 @@ const HeaderNavBar = () => {
                       
                       <Link 
                         to="/faq" 
-                        className="block text-base text-gray-600 hover:text-black"
+                        className="block text-lg text-gray-600 hover:text-black"
                         onClick={() => setIsMenuOpen(false)}
                       >
                         FAQs
@@ -391,13 +386,13 @@ const HeaderNavBar = () => {
                       
                       <Link 
                         to="/contact" 
-                        className="block text-base text-gray-600 hover:text-black"
+                        className="block text-lg text-gray-600 hover:text-black"
                         onClick={() => setIsMenuOpen(false)}
                       >
                         Contact Us
                       </Link>
                     </div>
-                  </div>
+                  </nav>
                 </div>
               </div>
             </div>
