@@ -20,7 +20,7 @@ const OurStory = () => {
             Our mission
           </h1>
           <p className="text-white text-lg leading-[1.6]">
-            At DIRTEA our aim is to unlock the power of functional mushrooms for a new era of proactive health seekers.
+            To deliver premium, organic matcha that energises, empowers, and elevates the everyday lives of a new generation. Through bold flavors, cheeky vibes, we’re here to make a ritual that’s as fun as it is healthy.
           </p>
         </div>
       </section>
@@ -29,7 +29,8 @@ const OurStory = () => {
       <section className="py-24 px-3 bg-white">
         <div className="text-center">
           <p className="text-xl text-gray-800 leading-[1.6] max-w-[1100px] mx-auto">
-            We believe that true well-being starts with the power of nature's most intelligent superfoods. Functional mushrooms have fueled energy, focus, and resilience for centuries, working in harmony with the body to support long-term health. We focus on harnessing this ancient wisdom and refining it for modern life, creating effortless daily rituals that help you think clearer, feel stronger, and live with greater balance. This isn't about doing more - it's about choosing better. It's about a shift in how we fuel our bodies and minds. A smarter, more sustainable way to thrive.
+            We’re not here to “fix” you. We’re here to upgrade your ritual. Matcha has been a daily staple for generations — steady energy, intentional pace, proper craft. We take that heritage, source it properly from Japan, and bring it into your world: busy mornings, big ambitions, and aesthetic iced lattes. Less crash. More control. Still a vibe.
+
           </p>
         </div>
       </section>
@@ -37,10 +38,10 @@ const OurStory = () => {
       {/* The DIRTEA Story Section */}
       <section className="py-20 px-3 bg-gray-900">
         <h2 className="text-5xl font-light text-white text-center mb-8">
-          The DIRTEA story
+          The NASTEA story
         </h2>
         <p className="text-lg text-white text-center mb-8 max-w-3xl mx-auto">
-          In 2016, we discovered the power of functional mushrooms and experienced a transformation in our energy, focus, and resilience.
+          We discovered the power of matcha and experienced a transformation in our energy, focus, and resilience.
         </p>
         <div className="grid grid-cols-3 gap-6">
           <div className="h-[260px] overflow-hidden rounded-lg">
