@@ -17,7 +17,6 @@ const Science = () => {
       <ScienceHeroBanner />
       <ImageTextSplitSection />
       <WhyNasteaSection />
-      <ScienceOfficerSection />
       <IngredientsPreviewSection />
       <DictionaryCarousel />
       <FarmSection />
