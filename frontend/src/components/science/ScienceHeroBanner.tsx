@@ -6,8 +6,8 @@ const ScienceHeroBanner = () => {
       {/* Background Image - Full Width */}
       <div className="absolute inset-0">
         <img 
-          src="https://images.unsplash.com/photo-1578662896442-48f60103fc96?w=2000&h=800&fit=crop" 
-          alt="Mushroom science background"
+          src="/matcha-wide.png" 
+          alt="Matcha powder on wooden spoon"
           className="w-full h-full object-cover"
         />
       </div>
