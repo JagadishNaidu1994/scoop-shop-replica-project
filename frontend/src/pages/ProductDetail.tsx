@@ -835,13 +835,13 @@ const ProductDetail = () => {
                     a: 'Matcha is a single-ingredient tea leaf powder; always check your pack for facility handling statements.'
                   }, {
                     q: 'How and where is NR made?',
-                    a: 'Sourced from Japan; final packing is done to keep it fresh and café-ready (see product page/pack for the exact details per SKU).'
+                    a: 'Sourced from Japan; final packing is done to keep it fresh and cafe-ready (see product page/pack for the exact details per SKU).'
                   }, {
                     q: 'Can kids have matcha?',
                     a: 'Because it contains caffeine, we generally recommend avoiding it for children unless advised by a healthcare professional.'
                   }, {
                     q: 'Can I drink it every day?',
-                    a: 'Yes — many people do; just keep an eye on your total daily caffeine and how you feel.'
+                    a: 'Yes - many people do; just keep an eye on your total daily caffeine and how you feel.'
                   }].map((item, idx) => (
                     <Collapsible key={idx}>
                       <CollapsibleTrigger className="flex items-center justify-between w-full py-4 px-6 text-left font-semibold text-gray-900">
