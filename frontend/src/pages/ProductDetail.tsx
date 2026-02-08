@@ -14,6 +14,7 @@ import { Badge } from '@/components/ui/badge';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+
 interface Product {
   id: number;
   name: string;
@@ -24,6 +25,7 @@ interface Product {
   category: string;
   benefits: string[];
 }
+
 const ProductDetail = () => {
   const {
     id
@@ -393,26 +395,7 @@ const ProductDetail = () => {
                 </div>
               </div>
 
-              {/* Size Selection (UI only, logic untouched) */}
-              {/* <div className="space-y-2">
-                <p className="text-sm font-semibold text-gray-800">Size</p>
-                <div className="flex items-center gap-3">
-                  <button
-                    type="button"
-                    className={`px-4 py-2 rounded-full border text-sm font-semibold transition ${selectedSize === '60G' ? 'bg-gray-900 text-white border-gray-900' : 'bg-white text-gray-800 border-gray-300'}`}
-                    onClick={() => setSelectedSize('60G')}
-                  >
-                    60G
-                  </button>
-                  <button
-                    type="button"
-                    className={`px-4 py-2 rounded-full border text-sm font-semibold transition ${selectedSize === '240G' ? 'bg-gray-900 text-white border-gray-900' : 'bg-white text-gray-800 border-gray-300'}`}
-                    onClick={() => setSelectedSize('240G')}
-                  >
-                    240G
-                  </button>
-                </div>
-              </div> */}
+          
 
               {/* Purchase Options */}
               <div className="space-y-5 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
@@ -481,13 +464,6 @@ const ProductDetail = () => {
                     ADD TO CART - £{((subscriptionType === 'subscribe' ? subscriptionPrice : product.price) * quantity).toFixed(0)}
                   </Button>
                 </div>
-
-                {/* <Button className="w-full bg-[#5c2dd5] text-white hover:bg-[#4a20b4] py-2.5 text-base font-semibold rounded-xl transition-all duration-200">
-                  Buy with Shop
-                </Button>
-
-                <button className="mx-auto block text-sm text-gray-600 underline underline-offset-4">More payment options</button>
-              </div> */}
 
               {/* Benefits */}
               <div className="space-y-3">
@@ -711,32 +687,22 @@ const ProductDetail = () => {
                     <AdminImageUpload src="/lovable-uploads/65581248-fb35-4b2f-8b55-04877e634119.png" alt="The Focus Coffee" className="w-full h-full object-cover" imagePath="focus-coffee" />
                   </div>
                   <div className="p-8 flex flex-col justify-center space-y-4">
-                    <p className="text-sm font-medium text-gray-600">Founder's Super Blend Recipe</p>
-                    <h4 className="text-3xl font-serif font-bold text-gray-900">Nastea Coconut Cloud Matcha</h4>
-                    <p className="text-base text-gray-700">Light, tropical, and stupidly refreshing - calm clean energy with a smooth, airy finish.</p>
-                    <h5 className="text-lg font-bold text-gray-900 pt-4">Recipe:</h5>
+                    <h4 className="text-3xl font-serif font-bold text-gray-900">The Focus Coffee</h4>
                     <ul className="space-y-2 text-gray-700">
-                      <li>• Whisk Nastea matcha + milk until silky and frothy (no clumps, please).</li>
-                      <li>• Fill a glass with ice and pour in coconut water.</li>
-                      <li>• Gently pour matcha over the top for that clean green layer.</li>
-                      <li>• Taste - then decide if you want sweetener, lime, or a tiny pinch of salt.</li>
-                      <li>• Stir when you're ready. Or don't. Let it look expensive first.</li>
+                      <li>• Brew your coffee as usual.</li>
+                      <li>• Whisk 2g NASTEA with a splash of hot water.</li>
+                      <li>• Pour together for calm, steady energy.</li>
                     </ul>
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch bg-white/70 shadow-[0_14px_40px_rgba(0,0,0,0.06)] overflow-hidden">
                   <div className="p-8 flex flex-col justify-center space-y-4 order-2 lg:order-1">
-                    <p className="text-sm font-medium text-gray-600">The Everyday Classic</p>
-                    <h4 className="text-3xl font-serif font-bold text-gray-900">Iced Matcha Latte</h4>
-                    <p className="text-base text-gray-700">Creamy, smooth, and steady - your daily clean-caffeine ritual with zero jitters, all vibe.</p>
-                    <h5 className="text-lg font-bold text-gray-900 pt-4">Recipe:</h5>
+                    <h4 className="text-3xl font-serif font-bold text-gray-900">The Focus Smoothie</h4>
                     <ul className="space-y-2 text-gray-700">
-                      <li>• Add Nastea matcha + water until smooth and frothy.</li>
-                      <li>• Fill a glass with ice.</li>
-                      <li>• Pour in milk (and sweetener, if using).</li>
-                      <li>• Top with your whisked matcha - slow pour for the layered look.</li>
-                      <li>• Stir, sip, and pretend you're not impressed by how good it is.</li>
+                      <li>• Blend fruits, greens, and your choice of milk.</li>
+                      <li>• Add 2g NASTEA for cognitive support.</li>
+                      <li>• Enjoy chilled, creamy clarity.</li>
                     </ul>
                   </div>
                   <div className="relative order-1 lg:order-2">
