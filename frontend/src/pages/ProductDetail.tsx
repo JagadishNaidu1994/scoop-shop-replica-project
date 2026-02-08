@@ -501,6 +501,35 @@ const ProductDetail = () => {
                 </div>
               </div>
 
+              {/* One-time Purchase / Add to Cart Section */}
+              <div className="border border-gray-200 rounded-xl bg-white p-5">
+                <div className="flex items-center gap-3">
+                  <div className="inline-flex items-center border border-gray-300 rounded-lg overflow-hidden">
+                    <button 
+                      onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                      className="w-12 h-12 flex items-center justify-center hover:bg-gray-50 transition-colors border-r border-gray-300"
+                      disabled={quantity <= 1}
+                    >
+                      <Minus className="w-4 h-4" />
+                    </button>
+                    <span className="w-12 h-12 flex items-center justify-center font-medium">{quantity}</span>
+                    <button 
+                      onClick={() => setQuantity(quantity + 1)}
+                      className="w-12 h-12 flex items-center justify-center hover:bg-gray-50 transition-colors border-l border-gray-300"
+                    >
+                      <Plus className="w-4 h-4" />
+                    </button>
+                  </div>
+
+                  <button 
+                    onClick={handleAddToCart} 
+                    className="flex-1 h-12 bg-gray-900 text-white hover:bg-black rounded-lg font-semibold transition-all duration-200"
+                  >
+                    ADD TO CART - ₹{(onetimePrice * quantity).toFixed(0)}
+                  </button>
+                </div>
+              </div>
+
               {/* Benefits */}
               <div className="space-y-3">
                 <div className="flex items-center space-x-2">
