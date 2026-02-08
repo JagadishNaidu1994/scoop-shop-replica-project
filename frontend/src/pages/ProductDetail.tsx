@@ -371,26 +371,27 @@ const ProductDetail = () => {
                     <CheckCircle className="w-4 h-4 text-gray-900" />
                     <span>Manage subscription anytime</span>
                   </div> */}
-                  <div className="flex items-center gap-2">
-                    <CheckCircle className="w-4 h-4 text-gray-900" />
+                  <div className="flex items-center gap-2 text-gray-700">
+                    <Truck className="w-4 h-4" />
                     <span>Free delivery over ₹2500</span>
                   </div>
                 </div>
 
-                { <div className="flex flex-wrap gap-2">
-                  <Badge variant="outline" className="flex items-center gap-1 px-3 py-1 text-xs font-semibold rounded-full bg-white border-gray-200">
-                    <span>🎯</span>
-                    <span>Energy</span>
-                  </Badge>
-                  <Badge variant="outline" className="flex items-center gap-1 px-3 py-1 text-xs font-semibold rounded-full bg-white border-gray-200">
-                    <span>🧠</span>
-                    <span>Balance</span>
-                  </Badge>
-                  <Badge variant="outline" className="flex items-center gap-1 px-3 py-1 text-xs font-semibold rounded-full bg-white border-gray-200">
-                    <span>🛡️</span>
-                    <span>Focus</span>
-                  </Badge>
-                </div> }
+                {/* Benefit Badges */}
+                <div className="flex flex-wrap gap-2 mt-4">
+                  <div className="flex items-center gap-2 px-4 py-2 bg-[#F5F4F2] rounded-full">
+                    <span className="text-lg">🎯</span>
+                    <span className="text-sm font-medium text-gray-900">Energy</span>
+                  </div>
+                  <div className="flex items-center gap-2 px-4 py-2 bg-[#F5F4F2] rounded-full">
+                    <span className="text-lg">🧠</span>
+                    <span className="text-sm font-medium text-gray-900">Balance</span>
+                  </div>
+                  <div className="flex items-center gap-2 px-4 py-2 bg-[#F5F4F2] rounded-full">
+                    <span className="text-lg">🛡️</span>
+                    <span className="text-sm font-medium text-gray-900">Focus</span>
+                  </div>
+                </div>
               </div>
 
               {/* Size Selection (UI only, logic untouched) */}
