@@ -416,79 +416,133 @@ const ProductDetail = () => {
                 </div>
               </div> */}
 
-              {/* Purchase Options */}
-              <div className="space-y-5 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
-                {/* Subscription first (default) */}
-                <div className={`p-4 border-2 rounded-xl cursor-pointer transition-all duration-200 ${subscriptionType === 'subscribe' ? 'border-gray-900 bg-white' : 'border-gray-200 bg-white hover:border-gray-300'}`} onClick={() => setSubscriptionType('subscribe')}>
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="flex items-center space-x-3">
-                      <div className="relative">
-                        <input type="radio" checked={subscriptionType === 'subscribe'} readOnly className="w-5 h-5 text-gray-900 border-2 border-gray-300 focus:ring-gray-900" />
+              {/* Subscription & Purchase Options - Single Container */}
+              <div className="border border-gray-200 rounded-lg bg-white overflow-hidden">
+                {/* Subscription Option */}
+                <div className="relative">
+                  <div 
+                    className="flex items-start justify-between p-4 cursor-pointer hover:bg-gray-50"
+                    onClick={() => setPurchaseType('subscription')}
+                  >
+                    <div className="flex items-start gap-3">
+                      <div className="mt-1">
+                        {purchaseType === 'subscription' ? (
+                          <div className="w-5 h-5 rounded-full border-2 border-gray-900 flex items-center justify-center">
+                            <div className="w-3 h-3 rounded-full bg-gray-900"></div>
+                          </div>
+                        ) : (
+                          <div className="w-5 h-5 rounded-full border-2 border-gray-300"></div>
+                        )}
                       </div>
                       <div>
-                        <div className="flex items-center space-x-2">
-                          <span className="font-bold text-gray-900 uppercase text-sm">Every 4 weeks</span>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="text-right space-y-1">
-                      <div className="flex items-center justify-end gap-2">
-                        <div className="bg-gray-900 text-white text-xs font-black px-2 py-1 rounded-full">20% OFF</div>
-                        <div className="text-xl font-bold text-gray-900">£{subscriptionPrice.toFixed(0)}</div>
-                      </div>
-                      <div className="text-sm text-gray-600">£{(subscriptionPrice / 30).toFixed(2)} per serving</div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-2 text-sm text-gray-700">
-                  <CheckCircle className="w-4 h-4 text-gray-900" />
-                  <span>Manage your subscription anytime</span>
-                </div>
-
-                <div className="h-px bg-gray-200" />
-
-                {/* One-time Purchase */}
-                <div className={`p-4 border-2 rounded-xl cursor-pointer transition-all duration-200 ${subscriptionType === 'one-time' ? 'border-gray-900 bg-white' : 'border-gray-200 bg-white hover:border-gray-300'}`} onClick={() => setSubscriptionType('one-time')}>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-3">
-                      <div className="relative">
-                        <input type="radio" checked={subscriptionType === 'one-time'} readOnly className="w-5 h-5 text-gray-900 border-2 border-gray-300 focus:ring-gray-900" />
-                      </div>
-                      <div>
-                        <span className="font-semibold text-gray-900">One-time Purchase</span>
-                        <p className="text-sm text-gray-600">Free gifts NOT included</p>
+                        <div className="font-semibold text-gray-900">Every 4 weeks</div>
+                        {purchaseType === 'subscription' && (
+                          <div className="text-xs text-gray-600 mt-1">20% OFF</div>
+                        )}
                       </div>
                     </div>
                     <div className="text-right">
-                      <span className="text-xl font-bold text-gray-900">£{product.price.toFixed(2)}</span>
-                      <div className="text-sm text-gray-600">£{(product.price / 30).toFixed(2)} per serving</div>
+                      <div className="font-bold text-gray-900">₹{subscriptionPrice * quantity}</div>
+                      <div className="text-xs text-gray-600 mt-1">₹{Math.round((subscriptionPrice * quantity) / (product?.servings || 30))} per serving</div>
                     </div>
                   </div>
+                  
+                  {purchaseType === 'subscription' && (
+                    <div className="px-4 pb-4 space-y-4">
+                      {/* Quantity Selector */}
+                      <div className="flex justify-center">
+                        <div className="inline-flex items-center border border-gray-300 rounded-full">
+                          <button 
+                            onClick={(e) => { e.stopPropagation(); setQuantity(Math.max(1, quantity - 1)); }}
+                            className="px-4 py-2 hover:bg-gray-50 transition-colors"
+                          >
+                            <Minus className="w-4 h-4" />
+                          </button>
+                          <span className="px-6 font-medium">{quantity}</span>
+                          <button 
+                            onClick={(e) => { e.stopPropagation(); setQuantity(quantity + 1); }}
+                            className="px-4 py-2 hover:bg-gray-50 transition-colors"
+                          >
+                            <Plus className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </div>
+                      
+                      {/* Add to Cart Button */}
+                      <button 
+                        onClick={handleAddToCart}
+                        className="w-full bg-gray-900 text-white py-4 rounded-full font-semibold hover:bg-gray-800 transition-colors"
+                      >
+                        ADD TO CART · ₹{subscriptionPrice * quantity}
+                      </button>
+                      
+                      {/* Subscription Benefit */}
+                      <div className="flex items-center justify-center gap-2 text-sm text-gray-700">
+                        <CheckCircle className="w-4 h-4" />
+                        <span>Manage your subscription anytime</span>
+                      </div>
+                    </div>
+                  )}
                 </div>
 
-                {/* Quantity + Add to Cart */}
-                <div className="flex items-center gap-3 pt-2">
-                  <div className="flex items-center border border-gray-300 rounded-full">
-                    <button onClick={decrementQuantity} className="p-2 hover:bg-gray-100 transition-colors rounded-l-full" disabled={quantity <= 1}>
-                      <Minus className="w-4 h-4" />
-                    </button>
-                    <span className="px-4 py-2 font-medium min-w-[50px] text-center">{quantity}</span>
-                    <button onClick={incrementQuantity} className="p-2 hover:bg-gray-100 transition-colors rounded-r-full">
-                      <Plus className="w-4 h-4" />
-                    </button>
+                {/* Divider */}
+                <div className="border-t border-gray-200"></div>
+
+                {/* One-time Purchase Option */}
+                <div className="relative">
+                  <div 
+                    className="flex items-start justify-between p-4 cursor-pointer hover:bg-gray-50"
+                    onClick={() => setPurchaseType('onetime')}
+                  >
+                    <div className="flex items-start gap-3">
+                      <div className="mt-1">
+                        {purchaseType === 'onetime' ? (
+                          <div className="w-5 h-5 rounded-full border-2 border-gray-900 flex items-center justify-center">
+                            <div className="w-3 h-3 rounded-full bg-gray-900"></div>
+                          </div>
+                        ) : (
+                          <div className="w-5 h-5 rounded-full border-2 border-gray-300"></div>
+                        )}
+                      </div>
+                      <div className="font-semibold text-gray-900">One-time Purchase</div>
+                    </div>
+                    <div className="text-right">
+                      <div className="font-bold text-gray-900">₹{onetimePrice * quantity}</div>
+                      <div className="text-xs text-gray-600 mt-1">₹{Math.round((onetimePrice * quantity) / (product?.servings || 30))} per serving</div>
+                    </div>
                   </div>
-
-                  <Button onClick={handleAddToCart} className="flex-1 bg-gray-900 text-white hover:bg-black py-2.5 text-base font-semibold rounded-xl transition-all duration-200">
-                    ADD TO CART - £{((subscriptionType === 'subscribe' ? subscriptionPrice : product.price) * quantity).toFixed(0)}
-                  </Button>
+                  
+                  {purchaseType === 'onetime' && (
+                    <div className="px-4 pb-4 space-y-4">
+                      {/* Quantity Selector */}
+                      <div className="flex justify-center">
+                        <div className="inline-flex items-center border border-gray-300 rounded-full">
+                          <button 
+                            onClick={(e) => { e.stopPropagation(); setQuantity(Math.max(1, quantity - 1)); }}
+                            className="px-4 py-2 hover:bg-gray-50 transition-colors"
+                          >
+                            <Minus className="w-4 h-4" />
+                          </button>
+                          <span className="px-6 font-medium">{quantity}</span>
+                          <button 
+                            onClick={(e) => { e.stopPropagation(); setQuantity(quantity + 1); }}
+                            className="px-4 py-2 hover:bg-gray-50 transition-colors"
+                          >
+                            <Plus className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </div>
+                      
+                      {/* Add to Cart Button */}
+                      <button 
+                        onClick={handleAddToCart}
+                        className="w-full bg-gray-900 text-white py-4 rounded-full font-semibold hover:bg-gray-800 transition-colors"
+                      >
+                        ADD TO CART · ₹{onetimePrice * quantity}
+                      </button>
+                    </div>
+                  )}
                 </div>
-
-                <Button className="w-full bg-[#5c2dd5] text-white hover:bg-[#4a20b4] py-2.5 text-base font-semibold rounded-xl transition-all duration-200">
-                  Buy with Shop
-                </Button>
-
-                <button className="mx-auto block text-sm text-gray-600 underline underline-offset-4">More payment options</button>
               </div>
 
               {/* Benefits */}
