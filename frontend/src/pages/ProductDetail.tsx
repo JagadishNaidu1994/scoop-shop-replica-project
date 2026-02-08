@@ -14,7 +14,6 @@ import { Badge } from '@/components/ui/badge';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-
 interface Product {
   id: number;
   name: string;
@@ -25,7 +24,6 @@ interface Product {
   category: string;
   benefits: string[];
 }
-
 const ProductDetail = () => {
   const {
     id
@@ -395,7 +393,26 @@ const ProductDetail = () => {
                 </div>
               </div>
 
-          
+              {/* Size Selection (UI only, logic untouched) */}
+              {/* <div className="space-y-2">
+                <p className="text-sm font-semibold text-gray-800">Size</p>
+                <div className="flex items-center gap-3">
+                  <button
+                    type="button"
+                    className={`px-4 py-2 rounded-full border text-sm font-semibold transition ${selectedSize === '60G' ? 'bg-gray-900 text-white border-gray-900' : 'bg-white text-gray-800 border-gray-300'}`}
+                    onClick={() => setSelectedSize('60G')}
+                  >
+                    60G
+                  </button>
+                  <button
+                    type="button"
+                    className={`px-4 py-2 rounded-full border text-sm font-semibold transition ${selectedSize === '240G' ? 'bg-gray-900 text-white border-gray-900' : 'bg-white text-gray-800 border-gray-300'}`}
+                    onClick={() => setSelectedSize('240G')}
+                  >
+                    240G
+                  </button>
+                </div>
+              </div> */}
 
               {/* Purchase Options */}
               <div className="space-y-5 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
@@ -464,6 +481,13 @@ const ProductDetail = () => {
                     ADD TO CART - £{((subscriptionType === 'subscribe' ? subscriptionPrice : product.price) * quantity).toFixed(0)}
                   </Button>
                 </div>
+
+                {/* <Button className="w-full bg-[#5c2dd5] text-white hover:bg-[#4a20b4] py-2.5 text-base font-semibold rounded-xl transition-all duration-200">
+                  Buy with Shop
+                </Button>
+
+                <button className="mx-auto block text-sm text-gray-600 underline underline-offset-4">More payment options</button>
+              </div> */}
 
               {/* Benefits */}
               <div className="space-y-3">
