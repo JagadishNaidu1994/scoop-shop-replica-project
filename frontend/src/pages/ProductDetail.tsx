@@ -841,7 +841,6 @@ const ProductDetail = () => {
                       <CollapsibleContent className="px-6 pb-4 text-gray-700">{item.a}</CollapsibleContent>
                     </Collapsible>
                   ))}
-                  ))}
                 </div>
               </div>
             </section>
