@@ -847,7 +847,7 @@ const ProductDetail = () => {
           </div>
         </main>
       </div>
-      
+
       {/* Image Modal */}
       {showImageModal && (
         <div className="fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center p-4">
