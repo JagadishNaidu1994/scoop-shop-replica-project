@@ -418,132 +418,86 @@ const ProductDetail = () => {
                 </div>
               </div> */}
 
-              {/* Subscription & Purchase Options - Single Container */}
-              <div className="border border-gray-200 rounded-lg bg-white overflow-hidden">
-                {/* Subscription Option */}
-                <div className="relative">
-                  <div 
-                    className="flex items-start justify-between p-4 cursor-pointer hover:bg-gray-50"
-                    onClick={() => setPurchaseType('subscription')}
+              {/* Subscription Section - Redesigned */}
+              <div className="border border-gray-200 rounded-xl bg-white p-5 space-y-4">
+                {/* Frequency Selector Buttons */}
+                <div className="flex gap-3">
+                  <button
+                    onClick={() => setSubscriptionFrequency('4weeks')}
+                    className={`flex-1 p-4 border-2 rounded-lg transition-all ${
+                      subscriptionFrequency === '4weeks'
+                        ? 'border-gray-900 bg-gray-50'
+                        : 'border-gray-200 hover:border-gray-300'
+                    }`}
                   >
-                    <div className="flex items-start gap-3">
-                      <div className="mt-1">
-                        {purchaseType === 'subscription' ? (
-                          <div className="w-5 h-5 rounded-full border-2 border-gray-900 flex items-center justify-center">
-                            <div className="w-3 h-3 rounded-full bg-gray-900"></div>
-                          </div>
-                        ) : (
-                          <div className="w-5 h-5 rounded-full border-2 border-gray-300"></div>
+                    <div className="flex items-center gap-3">
+                      <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
+                        subscriptionFrequency === '4weeks'
+                          ? 'border-gray-900'
+                          : 'border-gray-300'
+                      }`}>
+                        {subscriptionFrequency === '4weeks' && (
+                          <div className="w-3 h-3 rounded-full bg-gray-900"></div>
                         )}
                       </div>
-                      <div>
+                      <div className="text-left flex-1">
                         <div className="font-semibold text-gray-900">Every 4 weeks</div>
-                        {purchaseType === 'subscription' && (
-                          <div className="text-xs text-gray-600 mt-1">20% OFF</div>
+                        <div className="text-xs text-gray-600 mt-0.5">20% OFF</div>
+                      </div>
+                    </div>
+                  </button>
+                  
+                  <button
+                    onClick={() => setSubscriptionFrequency('8weeks')}
+                    className={`flex-1 p-4 border-2 rounded-lg transition-all ${
+                      subscriptionFrequency === '8weeks'
+                        ? 'border-gray-900 bg-gray-50'
+                        : 'border-gray-200 hover:border-gray-300'
+                    }`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
+                        subscriptionFrequency === '8weeks'
+                          ? 'border-gray-900'
+                          : 'border-gray-300'
+                      }`}>
+                        {subscriptionFrequency === '8weeks' && (
+                          <div className="w-3 h-3 rounded-full bg-gray-900"></div>
                         )}
                       </div>
-                    </div>
-                    <div className="text-right">
-                      <div className="font-bold text-gray-900">₹{subscriptionPrice * quantity}</div>
-                      <div className="text-xs text-gray-600 mt-1">₹{Math.round((subscriptionPrice * quantity) / (product?.servings || 30))} per serving</div>
-                    </div>
-                  </div>
-                  
-                  {purchaseType === 'subscription' && (
-                    <div className="px-4 pb-4 space-y-4">
-                      {/* Quantity Selector + Add to Cart Button on same line */}
-                      <div className="flex items-center gap-3">
-                        <div className="inline-flex items-center border border-gray-300 rounded-full">
-                          <button 
-                            onClick={(e) => { e.stopPropagation(); setQuantity(Math.max(1, quantity - 1)); }}
-                            className="px-4 py-2 hover:bg-gray-50 transition-colors"
-                          >
-                            <Minus className="w-4 h-4" />
-                          </button>
-                          <span className="px-6 font-medium">{quantity}</span>
-                          <button 
-                            onClick={(e) => { e.stopPropagation(); setQuantity(quantity + 1); }}
-                            className="px-4 py-2 hover:bg-gray-50 transition-colors"
-                          >
-                            <Plus className="w-4 h-4" />
-                          </button>
-                        </div>
-                        
-                        {/* Add to Cart Button */}
-                        <button 
-                          onClick={handleAddToCart}
-                          className="flex-1 bg-gray-900 text-white py-4 rounded-full font-semibold hover:bg-gray-800 transition-colors"
-                        >
-                          ADD TO CART · ₹{subscriptionPrice * quantity}
-                        </button>
-                      </div>
-                      
-                      {/* Subscription Benefit */}
-                      <div className="flex items-center justify-center gap-2 text-sm text-gray-700">
-                        <CheckCircle className="w-4 h-4" />
-                        <span>Manage your subscription anytime</span>
+                      <div className="text-left flex-1">
+                        <div className="font-semibold text-gray-900">Every 8 weeks</div>
+                        <div className="text-xs text-gray-600 mt-0.5">15% OFF</div>
                       </div>
                     </div>
-                  )}
+                  </button>
                 </div>
 
-                {/* Divider */}
-                <div className="border-t border-gray-200"></div>
-
-                {/* One-time Purchase Option */}
-                <div className="relative">
-                  <div 
-                    className="flex items-start justify-between p-4 cursor-pointer hover:bg-gray-50"
-                    onClick={() => setPurchaseType('onetime')}
-                  >
-                    <div className="flex items-start gap-3">
-                      <div className="mt-1">
-                        {purchaseType === 'onetime' ? (
-                          <div className="w-5 h-5 rounded-full border-2 border-gray-900 flex items-center justify-center">
-                            <div className="w-3 h-3 rounded-full bg-gray-900"></div>
-                          </div>
-                        ) : (
-                          <div className="w-5 h-5 rounded-full border-2 border-gray-300"></div>
-                        )}
-                      </div>
-                      <div className="font-semibold text-gray-900">One-time Purchase</div>
-                    </div>
-                    <div className="text-right">
-                      <div className="font-bold text-gray-900">₹{onetimePrice * quantity}</div>
-                      <div className="text-xs text-gray-600 mt-1">₹{Math.round((onetimePrice * quantity) / (product?.servings || 30))} per serving</div>
-                    </div>
+                {/* Quantity Selector + Subscribe Button */}
+                <div className="flex items-center gap-3">
+                  <div className="inline-flex items-center border border-gray-300 rounded-lg overflow-hidden">
+                    <button 
+                      onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                      className="w-12 h-12 flex items-center justify-center hover:bg-gray-50 transition-colors border-r border-gray-300"
+                    >
+                      <Minus className="w-4 h-4" />
+                    </button>
+                    <span className="w-12 h-12 flex items-center justify-center font-medium">{quantity}</span>
+                    <button 
+                      onClick={() => setQuantity(quantity + 1)}
+                      className="w-12 h-12 flex items-center justify-center hover:bg-gray-50 transition-colors border-l border-gray-300"
+                    >
+                      <Plus className="w-4 h-4" />
+                    </button>
                   </div>
                   
-                  {purchaseType === 'onetime' && (
-                    <div className="px-4 pb-4 space-y-4">
-                      {/* Quantity Selector + Add to Cart Button on same line */}
-                      <div className="flex items-center gap-3">
-                        <div className="inline-flex items-center border border-gray-300 rounded-full">
-                          <button 
-                            onClick={(e) => { e.stopPropagation(); setQuantity(Math.max(1, quantity - 1)); }}
-                            className="px-4 py-2 hover:bg-gray-50 transition-colors"
-                          >
-                            <Minus className="w-4 h-4" />
-                          </button>
-                          <span className="px-6 font-medium">{quantity}</span>
-                          <button 
-                            onClick={(e) => { e.stopPropagation(); setQuantity(quantity + 1); }}
-                            className="px-4 py-2 hover:bg-gray-50 transition-colors"
-                          >
-                            <Plus className="w-4 h-4" />
-                          </button>
-                        </div>
-                        
-                        {/* Add to Cart Button */}
-                        <button 
-                          onClick={handleAddToCart}
-                          className="flex-1 bg-gray-900 text-white py-4 rounded-full font-semibold hover:bg-gray-800 transition-colors"
-                        >
-                          ADD TO CART · ₹{onetimePrice * quantity}
-                        </button>
-                      </div>
-                    </div>
-                  )}
+                  {/* Subscribe Button */}
+                  <button 
+                    onClick={handleAddToCart}
+                    className="flex-1 h-12 bg-gray-900 text-white rounded-lg font-semibold hover:bg-gray-800 transition-colors"
+                  >
+                    Subscribe & Save 20%
+                  </button>
                 </div>
               </div>
 
