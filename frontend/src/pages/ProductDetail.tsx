@@ -243,6 +243,8 @@ const ProductDetail = () => {
       </div>;
   }
   const subscriptionPrice = product.price * 0.8;
+  const onetimePrice = product.price;
+  
   return (
     <div className="min-h-screen bg-white">
       <div className="sticky top-0 z-50 bg-white shadow-sm">
