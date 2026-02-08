@@ -706,17 +706,27 @@ const ProductDetail = () => {
             {/* SECTION 7 — Recipe / Use-Case Cards */}
             <section className="w-full py-16">
               <div className="w-full space-y-10 px-0">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch bg-white/70 shadow-[0_14px_40px_rgba(0,0,0,0.06)] overflow-hidden">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch bg-[#f5f5f0] shadow-[0_14px_40px_rgba(0,0,0,0.06)] overflow-hidden">
                   <div className="relative">
-                    <AdminImageUpload src="/lovable-uploads/65581248-fb35-4b2f-8b55-04877e634119.png" alt="The Focus Coffee" className="w-full h-full object-cover" imagePath="focus-coffee" />
+                    <AdminImageUpload src="/lovable-uploads/65581248-fb35-4b2f-8b55-04877e634119.png" alt="Founder's Favourite Coconut Cloud Matcha" className="w-full h-full object-cover" imagePath="focus-coffee" />
                   </div>
-                  <div className="p-8 flex flex-col justify-center space-y-4">
-                    <h4 className="text-3xl font-serif font-bold text-gray-900">The Focus Coffee</h4>
-                    <ul className="space-y-2 text-gray-700">
-                      <li>• Brew your coffee as usual.</li>
-                      <li>• Whisk 2g NASTEA with a splash of hot water.</li>
-                      <li>• Pour together for calm, steady energy.</li>
-                    </ul>
+                  <div className="p-12 flex flex-col justify-center space-y-6">
+                    <div className="space-y-3">
+                      <p className="text-sm font-medium text-gray-600 tracking-wide">Founder's Favourite</p>
+                      <h4 className="text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">Nastea Coconut Cloud Matcha</h4>
+                      <p className="text-base text-gray-700 leading-relaxed">Light, tropical, and stupidly refreshing — calm clean energy with a smooth, airy finish.</p>
+                    </div>
+                    
+                    <div className="space-y-3">
+                      <h5 className="text-lg font-bold text-gray-900">Recipe:</h5>
+                      <ul className="space-y-2 text-gray-700 leading-relaxed">
+                        <li>• Whisk Nastea matcha + milk until silky and frothy (no clumps, please).</li>
+                        <li>• Fill a glass with ice and pour in coconut water.</li>
+                        <li>• Gently pour matcha over the top for that clean green layer.</li>
+                        <li>• Taste — then decide if you want sweetener, lime, or a tiny pinch of salt.</li>
+                        <li>• Stir when you're ready. Or don't. Let it look expensive first.</li>
+                      </ul>
+                    </div>
                   </div>
                 </div>
 
