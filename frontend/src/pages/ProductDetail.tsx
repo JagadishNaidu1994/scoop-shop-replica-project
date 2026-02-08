@@ -730,17 +730,27 @@ const ProductDetail = () => {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch bg-white/70 shadow-[0_14px_40px_rgba(0,0,0,0.06)] overflow-hidden">
-                  <div className="p-8 flex flex-col justify-center space-y-4 order-2 lg:order-1">
-                    <h4 className="text-3xl font-serif font-bold text-gray-900">The Focus Smoothie</h4>
-                    <ul className="space-y-2 text-gray-700">
-                      <li>• Blend fruits, greens, and your choice of milk.</li>
-                      <li>• Add 2g NASTEA for cognitive support.</li>
-                      <li>• Enjoy chilled, creamy clarity.</li>
-                    </ul>
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch bg-[#f5f5f0] shadow-[0_14px_40px_rgba(0,0,0,0.06)] overflow-hidden">
+                  <div className="p-12 flex flex-col justify-between min-h-[600px] order-2 lg:order-1">
+                    <div className="space-y-3">
+                      <p className="text-sm font-medium text-gray-600 tracking-wide">The Everyday Classic</p>
+                      <h4 className="text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">Iced Matcha Latte</h4>
+                      <p className="text-base text-gray-700 leading-relaxed">Creamy, smooth, and steady — your daily clean-caffeine ritual with zero jitters, all vibe.</p>
+                    </div>
+                    
+                    <div className="space-y-3 mt-auto">
+                      <h5 className="text-lg font-bold text-gray-900">Recipe:</h5>
+                      <ul className="space-y-1.5 text-sm text-gray-700 leading-relaxed">
+                        <li>• Add Nastea matcha + water until smooth and frothy.</li>
+                        <li>• Fill a glass with ice.</li>
+                        <li>• Pour in milk (and sweetener, if using).</li>
+                        <li>• Top with your whisked matcha — slow pour for the layered look.</li>
+                        <li>• Stir, sip, and pretend you&apos;re not impressed by how good it is.</li>
+                      </ul>
+                    </div>
                   </div>
                   <div className="relative order-1 lg:order-2">
-                    <AdminImageUpload src="/lovable-uploads/b9b609e5-82c9-4039-98a5-3da3b835c962.png" alt="The Focus Smoothie" className="w-full h-full object-cover" imagePath="focus-smoothie" />
+                    <AdminImageUpload src="/lovable-uploads/b9b609e5-82c9-4039-98a5-3da3b835c962.png" alt="Iced Matcha Latte" className="w-full h-full object-cover" imagePath="focus-smoothie" />
                   </div>
                 </div>
               </div>
