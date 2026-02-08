@@ -703,7 +703,7 @@ const ProductDetail = () => {
               </div>
             </section>
 
-            {/* SECTION 7 — Recipe / Use-Case Cards */}
+            {/* SECTION 7 - Recipe / Use-Case Cards */}
             <section className="w-full py-16">
               <div className="w-full space-y-10 px-0">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch bg-[#f5f5f0] shadow-[0_14px_40px_rgba(0,0,0,0.06)] overflow-hidden">
