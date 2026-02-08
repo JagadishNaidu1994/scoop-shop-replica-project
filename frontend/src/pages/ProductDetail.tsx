@@ -451,8 +451,8 @@ const ProductDetail = () => {
                   
                   {purchaseType === 'subscription' && (
                     <div className="px-4 pb-4 space-y-4">
-                      {/* Quantity Selector */}
-                      <div className="flex justify-center">
+                      {/* Quantity Selector + Add to Cart Button on same line */}
+                      <div className="flex items-center gap-3">
                         <div className="inline-flex items-center border border-gray-300 rounded-full">
                           <button 
                             onClick={(e) => { e.stopPropagation(); setQuantity(Math.max(1, quantity - 1)); }}
@@ -468,15 +468,15 @@ const ProductDetail = () => {
                             <Plus className="w-4 h-4" />
                           </button>
                         </div>
+                        
+                        {/* Add to Cart Button */}
+                        <button 
+                          onClick={handleAddToCart}
+                          className="flex-1 bg-gray-900 text-white py-4 rounded-full font-semibold hover:bg-gray-800 transition-colors"
+                        >
+                          ADD TO CART · ₹{subscriptionPrice * quantity}
+                        </button>
                       </div>
-                      
-                      {/* Add to Cart Button */}
-                      <button 
-                        onClick={handleAddToCart}
-                        className="w-full bg-gray-900 text-white py-4 rounded-full font-semibold hover:bg-gray-800 transition-colors"
-                      >
-                        ADD TO CART · ₹{subscriptionPrice * quantity}
-                      </button>
                       
                       {/* Subscription Benefit */}
                       <div className="flex items-center justify-center gap-2 text-sm text-gray-700">
@@ -516,8 +516,8 @@ const ProductDetail = () => {
                   
                   {purchaseType === 'onetime' && (
                     <div className="px-4 pb-4 space-y-4">
-                      {/* Quantity Selector */}
-                      <div className="flex justify-center">
+                      {/* Quantity Selector + Add to Cart Button on same line */}
+                      <div className="flex items-center gap-3">
                         <div className="inline-flex items-center border border-gray-300 rounded-full">
                           <button 
                             onClick={(e) => { e.stopPropagation(); setQuantity(Math.max(1, quantity - 1)); }}
@@ -533,15 +533,15 @@ const ProductDetail = () => {
                             <Plus className="w-4 h-4" />
                           </button>
                         </div>
+                        
+                        {/* Add to Cart Button */}
+                        <button 
+                          onClick={handleAddToCart}
+                          className="flex-1 bg-gray-900 text-white py-4 rounded-full font-semibold hover:bg-gray-800 transition-colors"
+                        >
+                          ADD TO CART · ₹{onetimePrice * quantity}
+                        </button>
                       </div>
-                      
-                      {/* Add to Cart Button */}
-                      <button 
-                        onClick={handleAddToCart}
-                        className="w-full bg-gray-900 text-white py-4 rounded-full font-semibold hover:bg-gray-800 transition-colors"
-                      >
-                        ADD TO CART · ₹{onetimePrice * quantity}
-                      </button>
                     </div>
                   )}
                 </div>
