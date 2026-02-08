@@ -40,7 +40,7 @@ const ProductDetail = () => {
   const [selectedSize, setSelectedSize] = useState<'60G' | '240G'>('60G');
   const [subscriptionType, setSubscriptionType] = useState<'one-time' | 'subscribe'>('subscribe');
   const [purchaseType, setPurchaseType] = useState<'subscription' | 'onetime'>('subscription');
-  const [subscriptionFrequency, setSubscriptionFrequency] = useState('Every 4 weeks');
+  const [subscriptionFrequency, setSubscriptionFrequency] = useState<'4weeks' | '8weeks'>('4weeks');
   const [currentIngredient, setCurrentIngredient] = useState(0);
   const [showImageModal, setShowImageModal] = useState(false);
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
