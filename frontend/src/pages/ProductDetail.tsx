@@ -535,27 +535,27 @@ const ProductDetail = () => {
                   <CollapsibleContent className="pt-2 pb-1 overflow-hidden transition-all duration-300 ease-in-out">
                     <div className="space-y-3 text-xs text-gray-700">
                       <p>
-                        Matcha comes from the Camellia sinensis plant (same as green tea), but it's made differently: the leaves are shade-grown, then finely milled into a powder. That means you're not just steeping tea and tossing the leaves — you're consuming the leaf itself. Result: a richer, more concentrated matcha experience in both taste and naturally occurring compounds.
+                        Matcha comes from the Camellia sinensis plant (same as green tea), but it's made differently: the leaves are shade-grown, then finely milled into a powder. That means you're not just steeping tea and tossing the leaves - you're consuming the leaf itself. Result: a richer, more concentrated matcha experience in both taste and naturally occurring compounds.
                       </p>
                       <p>
-                        Matcha's energy also tends to feel… more composed. That's because matcha naturally contains caffeine + L-theanine — a tea amino acid often linked to a calmer, more focused "alert" feel compared to caffeine drinks' spike-and-crash reputation. Translation: steady energy, cleaner headspace, fewer "why am I vibrating?" moments.
+                        Matcha's energy also tends to feel… more composed. That's because matcha naturally contains caffeine + L-theanine - a tea amino acid often linked to a calmer, more focused "alert" feel compared to caffeine drinks' spike-and-crash reputation. Translation: steady energy, cleaner headspace, fewer "why am I vibrating?" moments.
                       </p>
                       <p>
                         Depending on the product you're drinking, matcha also contains a mix of plant compounds that shape how it tastes and why it's been respected for centuries:
                       </p>
                       <ul className="list-disc list-inside space-y-1 ml-2">
                         <li>
-                          <strong>L-theanine</strong> — associated with calm-focus vibes (especially alongside caffeine)
+                          <strong>L-theanine</strong> - associated with calm-focus vibes (especially alongside caffeine)
                         </li>
                         <li>
-                          <strong>Catechins</strong> — the crisp, slightly bitter plant compounds in green tea (yes, the "real matcha" taste cue)
+                          <strong>Catechins</strong> - the crisp, slightly bitter plant compounds in green tea (yes, the "real matcha" taste cue)
                         </li>
                         <li>
-                          <strong>Chlorophyll</strong> — the pigment that makes matcha that vivid, neon-clean green (shade-growing helps)
+                          <strong>Chlorophyll</strong> - the pigment that makes matcha that vivid, neon-clean green (shade-growing helps)
                         </li>
                       </ul>
                       <p>
-                        If you're looking at functional blends that pair matcha with other ingredients (like mushrooms or vitamins), the goal is usually to build on matcha's natural "calm energy" profile — but the core is still the same: ceremonial matcha done properly, as a daily ritual that feels good and tastes even better.
+                        If you're looking at functional blends that pair matcha with other ingredients (like mushrooms or vitamins), the goal is usually to build on matcha's natural "calm energy" profile - but the core is still the same: ceremonial matcha done properly, as a daily ritual that feels good and tastes even better.
                       </p>
                     </div>
                   </CollapsibleContent>
@@ -580,7 +580,7 @@ const ProductDetail = () => {
           </div>
 
           <div className="bg-white">
-            {/* SECTION 1 — Pure ingredients, powerful benefits. */}
+            {/* SECTION 1 - Pure ingredients, powerful benefits. */}
             <section className="w-full py-16">
               <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center px-0">
                 <div className="space-y-6">
@@ -599,7 +599,7 @@ const ProductDetail = () => {
               </div>
             </section>
 
-            {/* SECTION 2 — Ingredient Texture + Benefit Explanation */}
+            {/* SECTION 2 - Ingredient Texture + Benefit Explanation */}
             <section className="w-full py-16">
               <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center px-0">
                 <div className="relative">
@@ -609,7 +609,7 @@ const ProductDetail = () => {
                 </div>
                 <div className="space-y-6">
                   <h3 className="text-3xl lg:text-4xl font-serif font-bold text-gray-900">Your everyday essential for sharper focus and improved productivity</h3>
-                  <p className="text-gray-700 text-lg leading-relaxed">Ceremonial-grade matcha paired with functional mushrooms for clean energy, calm clarity, and nourished skin—all in one ritual.</p>
+                  <p className="text-gray-700 text-lg leading-relaxed">Ceremonial-grade matcha paired with functional mushrooms for clean energy, calm clarity, and nourished skin-all in one ritual.</p>
                   <div className="space-y-3 text-gray-800">
                     <div className="flex items-center space-x-3">
                       <span className="w-2 h-2 rounded-full bg-gray-900 inline-block"></span>
@@ -628,7 +628,7 @@ const ProductDetail = () => {
               </div>
             </section>
 
-            {/* SECTION 3 — How to Use (Instructional) */}
+            {/* SECTION 3 - How to Use (Instructional) */}
             <section className="w-full py-16">
               <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center px-0">
                 <div className="space-y-4">
@@ -644,7 +644,7 @@ const ProductDetail = () => {
               </div>
             </section>
 
-            {/* SECTION 4 — Benefit Pills / Feature Highlights */}
+            {/* SECTION 4 - Benefit Pills / Feature Highlights */}
             <section className="w-full py-16">
               <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center px-0">
                 <div className="space-y-4">
@@ -660,7 +660,7 @@ const ProductDetail = () => {
               </div>
             </section>
 
-            {/* SECTION 5 — Comparison (“How it Compares”) */}
+            {/* SECTION 5 - Comparison (“How it Compares”) */}
             <section className="w-full py-16">
               <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center px-0">
                 <div className="relative overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.08)]">
@@ -696,7 +696,7 @@ const ProductDetail = () => {
               </div>
             </section>
 
-            {/* SECTION 6 — Social Proof Intro */}
+            {/* SECTION 6 - Social Proof Intro */}
             <section className="w-full py-10">
               <div className="w-full px-0 text-center">
                 <h3 className="text-3xl lg:text-4xl font-serif font-bold text-gray-900">Here’s what our customers say</h3>
@@ -756,7 +756,7 @@ const ProductDetail = () => {
               </div>
             </section>
 
-            {/* SECTION 8 — You may also like (Carousel/Grid) */}
+            {/* SECTION 8 - You may also like (Carousel/Grid) */}
             {false && (
               <section className="w-full py-16">
                 <div className="w-full px-0 space-y-8">
@@ -779,7 +779,7 @@ const ProductDetail = () => {
               </section>
             )}
 
-            {/* SECTION 9 — Brand Standards / FAQ (Accordion) */}
+            {/* SECTION 9 - Brand Standards / FAQ (Accordion) */}
             <section className="w-full py-16">
               <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-start px-0">
                 <div className="space-y-4">
@@ -790,34 +790,34 @@ const ProductDetail = () => {
                 <div className="bg-white/80 shadow-[0_14px_40px_rgba(0,0,0,0.06)] divide-y divide-gray-200">
                   {[{
                     q: 'How does NR matcha support steady energy and calm focus?',
-                    a: 'Matcha naturally contains caffeine plus L-theanine — a combo many people find feels smoother and steadier than coffee.'
+                    a: 'Matcha naturally contains caffeine plus L-theanine - a combo many people find feels smoother and steadier than coffee.'
                   }, {
                     q: 'How does NR matcha help the skin?',
-                    a: 'Matcha contains plant antioxidants (like catechins) and chlorophylls; skincare outcomes vary by person, diet, and routine — we keep it as a daily ritual, not a miracle claim.'
+                    a: 'Matcha contains plant antioxidants (like catechins) and chlorophylls; skincare outcomes vary by person, diet, and routine - we keep it as a daily ritual, not a miracle claim.'
                   }, {
                     q: 'What makes NR different from regular matcha?',
                     a: 'Japan-grown, shade-grown, stone-milled matcha chosen for what matters in-cup: smooth taste, vivid colour, and consistency (no “green powder” cosplay).'
                   }, {
                     q: 'What grades do you offer?',
-                    a: 'Imperial Ceremonial (straight sipping + premium cups), Organic Ceremonial (daily lattes + cafés), Japanese Classic (baking/recipes/R&D).'
+                    a: 'Imperial Ceremonial (straight sipping + premium cups), Organic Ceremonial (daily lattes + cafes), Japanese Classic (baking/recipes/R&D).'
                   }, {
                     q: 'When is the best time to drink matcha?',
-                    a: 'Morning or early afternoon is ideal for most people — especially if you’re caffeine-sensitive later in the day.'
+                    a: 'Morning or early afternoon is ideal for most people - especially if you’re caffeine-sensitive later in the day.'
                   }, {
                     q: 'Is NR matcha vegan?',
-                    a: 'Yes — it’s pure matcha (just tea leaf powder).'
+                    a: 'Yes - it’s pure matcha (just tea leaf powder).'
                   }, {
                     q: 'Is there any sugar in NR matcha?',
-                    a: 'No added sugar — any sweetness comes from what you add (milk, honey, syrup, etc.).'
+                    a: 'No added sugar - any sweetness comes from what you add (milk, honey, syrup, etc.).'
                   }, {
                     q: 'Is your matcha organic?',
-                    a: 'Yes — our matcha is organic (see product page/pack for certification details per SKU).'
+                    a: 'Yes - our matcha is organic (see product page/pack for certification details per SKU).'
                   }, {
                     q: 'Is it gluten-free?',
                     a: 'Matcha is naturally gluten-free; if you have severe sensitivities, check the pack for facility/allergen statements.'
                   }, {
                     q: 'Can I drink matcha if I’m pregnant or breastfeeding?',
-                    a: 'Caffeine guidelines vary — best to check with your clinician and factor in total daily caffeine from all sources.'
+                    a: 'Caffeine guidelines vary - best to check with your clinician and factor in total daily caffeine from all sources.'
                   }, {
                     q: 'How should I store matcha?',
                     a: 'Seal it tight, keep it cool and dry, away from heat/light and strong smells; refrigerate only if you can prevent moisture/odours.'
@@ -826,7 +826,7 @@ const ProductDetail = () => {
                     a: 'Start with 2–3g per serving and adjust to taste and caffeine tolerance.'
                   }, {
                     q: 'Does matcha have caffeine?',
-                    a: 'Yes — amount depends on grams used and the tea; matcha typically feels “cleaner” for many people because of L-theanine.'
+                    a: 'Yes - amount depends on grams used and the tea; matcha typically feels “cleaner” for many people because of L-theanine.'
                   }, {
                     q: 'Can I take matcha with other supplements?',
                     a: 'Generally yes, but if you’re on medication or sensitive to caffeine, check with a professional.'
