@@ -714,7 +714,7 @@ const ProductDetail = () => {
                     <div className="space-y-3">
                       <p className="text-sm font-medium text-gray-600 tracking-wide">Founder&apos;s Super Blend Recipe</p>
                       <h4 className="text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">Nastea Coconut Cloud Matcha</h4>
-                      <p className="text-base text-gray-700 leading-relaxed">Light, tropical, and stupidly refreshing — calm clean energy with a smooth, airy finish.</p>
+                      <p className="text-base text-gray-700 leading-relaxed">Light, tropical, and stupidly refreshing - calm clean energy with a smooth, airy finish.</p>
                     </div>
                     
                     <div className="space-y-3 mt-auto">
@@ -723,7 +723,7 @@ const ProductDetail = () => {
                         <li>• Whisk Nastea matcha + milk until silky and frothy (no clumps, please).</li>
                         <li>• Fill a glass with ice and pour in coconut water.</li>
                         <li>• Gently pour matcha over the top for that clean green layer.</li>
-                        <li>• Taste — then decide if you want sweetener, lime, or a tiny pinch of salt.</li>
+                        <li>• Taste - then decide if you want sweetener, lime, or a tiny pinch of salt.</li>
                         <li>• Stir when you&apos;re ready. Or don&apos;t. Let it look expensive first.</li>
                       </ul>
                     </div>
@@ -735,7 +735,7 @@ const ProductDetail = () => {
                     <div className="space-y-3">
                       <p className="text-sm font-medium text-gray-600 tracking-wide">The Everyday Classic</p>
                       <h4 className="text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">Iced Matcha Latte</h4>
-                      <p className="text-base text-gray-700 leading-relaxed">Creamy, smooth, and steady — your daily clean-caffeine ritual with zero jitters, all vibe.</p>
+                      <p className="text-base text-gray-700 leading-relaxed">Creamy, smooth, and steady - your daily clean-caffeine ritual with zero jitters, all vibe.</p>
                     </div>
                     
                     <div className="space-y-3 mt-auto">
@@ -744,7 +744,7 @@ const ProductDetail = () => {
                         <li>• Add Nastea matcha + water until smooth and frothy.</li>
                         <li>• Fill a glass with ice.</li>
                         <li>• Pour in milk (and sweetener, if using).</li>
-                        <li>• Top with your whisked matcha — slow pour for the layered look.</li>
+                        <li>• Top with your whisked matcha - slow pour for the layered look.</li>
                         <li>• Stir, sip, and pretend you&apos;re not impressed by how good it is.</li>
                       </ul>
                     </div>
