@@ -39,6 +39,7 @@ const ProductDetail = () => {
   const [selectedImage, setSelectedImage] = useState(0);
   const [selectedSize, setSelectedSize] = useState<'60G' | '240G'>('60G');
   const [subscriptionType, setSubscriptionType] = useState<'one-time' | 'subscribe'>('subscribe');
+  const [purchaseType, setPurchaseType] = useState<'subscription' | 'onetime'>('subscription');
   const [subscriptionFrequency, setSubscriptionFrequency] = useState('Every 4 weeks');
   const [currentIngredient, setCurrentIngredient] = useState(0);
   const [showImageModal, setShowImageModal] = useState(false);
@@ -380,15 +381,15 @@ const ProductDetail = () => {
                 {/* Benefit Badges */}
                 <div className="flex flex-wrap gap-2 mt-4">
                   <div className="flex items-center gap-2 px-4 py-2 bg-[#F5F4F2] rounded-full">
-                    <span className="text-lg">🎯</span>
+                    <Zap className="w-4 h-4 text-gray-900" />
                     <span className="text-sm font-medium text-gray-900">Energy</span>
                   </div>
                   <div className="flex items-center gap-2 px-4 py-2 bg-[#F5F4F2] rounded-full">
-                    <span className="text-lg">🧠</span>
+                    <Brain className="w-4 h-4 text-gray-900" />
                     <span className="text-sm font-medium text-gray-900">Balance</span>
                   </div>
                   <div className="flex items-center gap-2 px-4 py-2 bg-[#F5F4F2] rounded-full">
-                    <span className="text-lg">🛡️</span>
+                    <Shield className="w-4 h-4 text-gray-900" />
                     <span className="text-sm font-medium text-gray-900">Focus</span>
                   </div>
                 </div>
