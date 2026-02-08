@@ -358,7 +358,7 @@ const ProductDetail = () => {
                   Cert Organic | Calm Energy | No Additives
                 </p>
 
-                <div className="space-y-1 text-sm text-gray-800">
+                {/* <div className="space-y-1 text-sm text-gray-800">
                   <div className="flex items-center gap-2">
                     <CheckCircle className="w-4 h-4 text-gray-900" />
                     <span>30% off on first order</span>
@@ -375,7 +375,7 @@ const ProductDetail = () => {
                     <CheckCircle className="w-4 h-4 text-gray-900" />
                     <span>Free delivery over ₹2500</span>
                   </div>
-                </div>
+                </div> */}
 
                 {/* <div className="flex flex-wrap gap-2">
                   <Badge variant="outline" className="flex items-center gap-1 px-3 py-1 text-xs font-semibold rounded-full bg-white border-gray-200">
@@ -394,7 +394,7 @@ const ProductDetail = () => {
               </div>
 
               {/* Size Selection (UI only, logic untouched) */}
-              <div className="space-y-2">
+              {/* <div className="space-y-2">
                 <p className="text-sm font-semibold text-gray-800">Size</p>
                 <div className="flex items-center gap-3">
                   <button
@@ -412,7 +412,7 @@ const ProductDetail = () => {
                     240G
                   </button>
                 </div>
-              </div>
+              </div> */}
 
               {/* Purchase Options */}
               <div className="space-y-5 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
