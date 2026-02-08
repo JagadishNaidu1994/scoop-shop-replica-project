@@ -845,6 +845,7 @@ const ProductDetail = () => {
               </div>
             </section>
           </div>
+          {/* End of content sections */}
         </main>
       </div>
 
