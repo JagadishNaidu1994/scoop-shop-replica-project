@@ -372,7 +372,7 @@ const Checkout = () => {
           
           toast({
             title: "Order Placed Successfully!",
-            description: `Your order ${orderNumber} has been placed and will be shipped via Delhivery. Tracking: ${delhiveryResponse.packages[0]?.waybill || 'N/A}`,
+            description: `Your order ${orderNumber} has been placed and will be shipped via Delhivery. Tracking: ${delhiveryResponse.packages[0]?.waybill || 'N/A'}`,
           });
         } else {
           console.error('Delhivery shipment failed:', delhiveryResponse.error);
