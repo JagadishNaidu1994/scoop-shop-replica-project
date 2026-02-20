@@ -358,7 +358,7 @@ const AdminProducts = () => {
                       <h3 className="font-semibold text-lg">{product.name}</h3>
                       <p className="text-gray-600 text-sm">{product.description}</p>
                       <div className="flex items-center space-x-4 mt-2 text-sm text-gray-500">
-                        <span>Price: £{product.price}</span>
+                        <span>Price: ₹{product.price}</span>
                         <span>Category: {product.category || 'N/A'}</span>
                         <span>Status: {product.is_active ? 'Active' : 'Inactive'}</span>
                         <span>Stock: {product.in_stock ? 'In Stock' : 'Out of Stock'}</span>

@@ -5,13 +5,14 @@ import { useNavigate } from 'react-router-dom';
 interface Product {
   id: number;
   name: string;
-  price: string;
+  price: number;
   primaryImage: string;
+  hoverImage: string;
   benefits?: string[];
 }
 
 interface MobileProductCardProps {
-  product: Product;
+  product: Product; // Use the Product interface directly
 }
 
 const MobileProductCardComponent: React.FC<MobileProductCardProps> = ({ product }) => {

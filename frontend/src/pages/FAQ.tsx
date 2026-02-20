@@ -40,7 +40,7 @@ const FAQ = () => {
         },
         {
           q: 'Do you offer free shipping?',
-          a: 'Yes! We offer free standard shipping on orders over £50 within the UK. International shipping rates apply for orders outside the UK.'
+          a: 'Yes! We offer free standard shipping on orders over ₹50 within India. International shipping rates apply for orders outside of India.'
         },
         {
           q: 'Can I modify or cancel my order?',

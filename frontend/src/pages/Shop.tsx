@@ -4,6 +4,7 @@ import Footer from '@/components/Footer';
 import ProductGrid from '@/components/shop/ProductGrid';
 import MatchaLoadingAnimation from '@/components/MatchaLoadingAnimation';
 import { supabase } from '@/integrations/supabase/client';
+import { Truck } from 'lucide-react';
 
 interface Product {
   id: number;
@@ -93,6 +94,10 @@ const Shop = () => {
           <p className="responsive-text text-gray-600">
             Discover our premium collection of matcha and wellness products
           </p>
+          <div className="flex items-center space-x-2 text-xs text-gray-600">
+            <Truck className="w-4 h-4 text-green-600" />
+            <span>Free shipping over ₹50</span>
+          </div>
         </div>
 
         <ProductGrid products={products} />

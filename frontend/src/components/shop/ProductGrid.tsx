@@ -6,7 +6,7 @@ import MobileProductCard from './MobileProductCard';
 interface Product {
   id: number;
   name: string;
-  price: number;
+  price: string; 
   primary_image: string | null;
   hover_image: string | null;
   description: string | null;
@@ -15,7 +15,7 @@ interface Product {
 }
 
 interface ProductGridProps {
-  products: Product[];
+  products: (Product | null)[];
 }
 
 const ProductGridComponent: React.FC<ProductGridProps> = ({ products }) => {
@@ -48,7 +48,7 @@ const ProductGridComponent: React.FC<ProductGridProps> = ({ products }) => {
         const productData = {
           id: product.id,
           name: product.name,
-          price: `£${(product.price / 100).toFixed(2)}`,
+          price: `₹${product.price}`, // Remove toFixed since price is already a number
           primaryImage: product.primary_image || '/placeholder.svg',
           hoverImage: product.hover_image || '/placeholder.svg',
           benefits: product.benefits || []

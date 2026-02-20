@@ -18,11 +18,13 @@ interface Product {
   id: number;
   name: string;
   description: string;
-  price: number;
-  primary_image: string;
-  hover_image: string;
-  category: string;
-  benefits: string[];
+  price: string;
+  primary_image: string | null;
+  hover_image: string | null;
+  category: string | null;
+  benefits: string[] | null;
+  in_stock: boolean | null;
+  is_active: boolean | null;
 }
 const ProductDetail = () => {
   const {
@@ -103,22 +105,22 @@ const ProductDetail = () => {
   }];
   const relatedProducts = [{
     name: "focus gummies",
-    price: "£27",
+    price: "₹27",
     description: "Focus, memory, cognition",
     image: "/lovable-uploads/8edc40eb-3dfa-45fb-8cac-fc1a12ec6a3c.png"
   }, {
     name: "focus powder",
-    price: "£30",
+    price: "₹30",
     description: "Focus, cognition, immunity",
     image: "/lovable-uploads/8edc40eb-3dfa-45fb-8cac-fc1a12ec6a3c.png"
   }, {
     name: "immunity powder",
-    price: "£30",
+    price: "₹30",
     description: "Energy, defence, immunity",
     image: "/lovable-uploads/8edc40eb-3dfa-45fb-8cac-fc1a12ec6a3c.png"
   }, {
     name: "calm powder",
-    price: "£30",
+    price: "₹30",
     description: "Calm, relax, immunity",
     image: "/lovable-uploads/8edc40eb-3dfa-45fb-8cac-fc1a12ec6a3c.png"
   }];
@@ -548,9 +550,8 @@ const ProductDetail = () => {
 
               {/* Trust Indicators */}
               <div className="grid grid-cols-2 gap-3 pt-3 border-t border-gray-200">
-                <div className="flex items-center space-x-2 text-xs text-gray-600">
-                  <Truck className="w-4 h-4 text-green-600" />
-                  <span>Free shipping over £50</span>
+                <div className="flex items-center space-x-4 mt-2 text-sm text-gray-500">
+                  <span>Price: ₹{product.price}</span>
                 </div>
                 <div className="flex items-center space-x-2 text-xs text-gray-600">
                   <Shield className="w-4 h-4 text-blue-600" />

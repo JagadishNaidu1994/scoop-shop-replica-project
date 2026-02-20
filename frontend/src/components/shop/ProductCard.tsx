@@ -5,14 +5,21 @@ import { useNavigate } from 'react-router-dom';
 interface Product {
   id: number;
   name: string;
-  price: string;
+  price: number; // Changed from string to number
   primaryImage: string;
   hoverImage: string;
   benefits?: string[];
 }
 
 interface ProductCardProps {
-  product: Product;
+  product: {
+    id: number;
+    name: string;
+    price: string; // Revert to string to avoid type errors
+    primaryImage: string;
+    hoverImage: string;
+    benefits?: string[];
+  }
 }
 
 const ProductCardComponent: React.FC<ProductCardProps> = ({ product }) => {

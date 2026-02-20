@@ -1593,7 +1593,7 @@ const Account = () => {
                               {item.product_name}
                             </h3>
                             <p className="text-lg font-bold text-gray-900 mb-4">
-                              £{item.product_price.toFixed(2)}
+                              ₹{item.product_price.toFixed(2)}
                             </p>
                             <div className="flex gap-2">
                               <Button

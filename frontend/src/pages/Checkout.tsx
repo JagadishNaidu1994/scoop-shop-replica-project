@@ -17,6 +17,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { CreditCard, MapPin, User, Phone, Mail, Plus, RefreshCw } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { indianStatesAndCities } from '@/data/indianStatesAndCities';
+import Razorpay from 'razorpay';
 
 interface ShippingAddress {
   firstName: string;
@@ -50,6 +51,7 @@ const Checkout = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [isFormValid, setIsFormValid] = useState(false);
   const [savedAddresses, setSavedAddresses] = useState<SavedAddress[]>([]);
   const [selectedAddressId, setSelectedAddressId] = useState<string>('new');
   const [availableCities, setAvailableCities] = useState<string[]>([]);
@@ -66,8 +68,15 @@ const Checkout = () => {
     country: 'India'
   });
 
-  const shippingCost = 160;
+  const shippingCost = 0;
   const totalAmount = getTotalPrice() + shippingCost;
+
+  // Validate form whenever shipping address changes
+  useEffect(() => {
+    const required = ['firstName', 'lastName', 'address', 'city', 'state', 'postalCode', 'phone'];
+    const isValid = required.every(field => shippingAddress[field as keyof ShippingAddress]);
+    setIsFormValid(isValid);
+  }, [shippingAddress]);
 
   useEffect(() => {
     if (!user) {
@@ -164,6 +173,7 @@ const Checkout = () => {
     const required = ['firstName', 'lastName', 'address', 'city', 'state', 'postalCode', 'phone'];
     for (const field of required) {
       if (!shippingAddress[field as keyof ShippingAddress]) {
+        setIsFormValid(false);
         toast({
           title: "Missing Information",
           description: `Please fill in the ${field} field`,
@@ -182,6 +192,225 @@ const Checkout = () => {
       3: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=200&h=200&fit=crop",
     };
     return imageMap[productId] || "https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=200&h=200&fit=crop";
+  };
+
+  const handleRazorpayPayment = async () => {
+    try {
+      console.log('Starting Razorpay payment process...');
+      console.log('Total Amount:', totalAmount);
+      
+      // Create Razorpay order directly from frontend (for testing)
+      const options: any = {
+        key: "rzp_live_SIQxrqArP4XwxT", // Use 'key' instead of 'key_id'
+        amount: totalAmount, // Send in INR (no conversion to paise)
+        currency: "INR",
+        name: "NASTEA",
+        description: "Order Payment",
+        receipt: `order_${Date.now()}`,
+        handler: async function (response: any) {
+          console.log('Payment successful:', response);
+          
+          // Create order in database after successful payment
+          await createOrderAfterPayment(response);
+        },
+        prefill: {
+          name: `${shippingAddress.firstName} ${shippingAddress.lastName}`,
+          email: user?.email,
+        },
+        theme: {
+          color: "#000000",
+        },
+        // Enable UPI and other payment methods
+        config: {
+          display: {
+            blocks: {
+              upi: {
+                visible: true,
+                order: 1,
+                methods: ['upi']
+              },
+              banks: {
+                visible: true,
+                order: 2,
+                methods: ['upi']
+              },
+              card: {
+                visible: true,
+                order: 3,
+                methods: ['visa', 'mastercard', 'maestro']
+              },
+              netbanking: {
+                visible: true,
+                order: 4,
+                methods: ['imps', 'neft']
+              },
+              wallet: {
+                visible: true,
+                order: 5,
+                methods: ['paytm']
+              },
+              creditcard: {
+                visible: true,
+                order: 6,
+                methods: ['visa', 'mastercard', 'maestro']
+              }
+            },
+            sequence: ['block.upi', 'block.banks', 'block.card'],
+            preferences: {
+              show_default_blocks: true
+            }
+          }
+        }
+      };
+
+      // Load Razorpay script dynamically
+      const script = document.createElement('script');
+      script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+      script.async = true;
+      script.onload = function() {
+        const rzp = new (window as any).Razorpay(options);
+        rzp.open();
+      };
+      document.body.appendChild(script);
+    } catch (error) {
+      console.error("Payment error:", error);
+      toast({
+        title: "Payment Error",
+        description: error.message || "Failed to initiate payment. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const createOrderAfterPayment = async (paymentResponse: any) => {
+    try {
+      console.log('Creating order after payment:', paymentResponse);
+      
+      // Generate order number
+      const orderNumber = `order_${Date.now()}`;
+
+      // Check if any items are subscriptions
+      const hasSubscription = items.some(item => item.is_subscription);
+      const subscriptionItem = items.find(item => item.is_subscription);
+
+      // Create order in database
+      const orderData: any = {
+        user_id: user.id,
+        order_number: orderNumber,
+        total_amount: totalAmount,
+        shipping_cost: shippingCost,
+        status: 'paid',
+        payment_method: 'razorpay',
+        payment_status: 'paid',
+        razorpay_payment_id: paymentResponse.razorpay_payment_id,
+        razorpay_order_id: paymentResponse.razorpay_order_id,
+        razorpay_signature: paymentResponse.razorpay_signature,
+        shipping_address: shippingAddress as any,
+        billing_address: shippingAddress as any
+      };
+
+      // Only add subscription fields if they exist
+      if (hasSubscription) {
+        orderData.is_subscription = true;
+        orderData.subscription_frequency = subscriptionItem?.subscription_frequency || 'monthly';
+      }
+
+      const { data: order, error: orderError } = await supabase
+        .from('orders')
+        .insert(orderData)
+        .select()
+        .single();
+
+      if (orderError) {
+        console.error('Error creating order:', orderError);
+        throw orderError;
+      }
+
+      console.log('Order created successfully:', order);
+
+      // Create order items
+      for (const item of items) {
+        const { error: itemError } = await supabase
+          .from('order_items')
+          .insert({
+            order_id: order.id,
+            product_id: item.product_id,
+            quantity: item.quantity,
+            price: item.product_price,
+            is_subscription: item.is_subscription,
+            subscription_frequency: item.subscription_frequency
+          });
+
+        if (itemError) {
+          console.error('Error creating order item:', itemError);
+          throw itemError;
+        }
+      }
+
+      // Clear cart
+      clearCart();
+
+      // Show success message
+      toast({
+        title: "Payment Successful",
+        description: "Your order has been placed successfully!",
+      });
+
+      // Redirect to order confirmation
+      navigate(`/order-detail/${order.id}`);
+      
+    } catch (error) {
+      console.error("Error creating order after payment:", error);
+      toast({
+        title: "Order Creation Error",
+        description: "Payment was successful but failed to create order. Please contact support.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const verifyPayment = async (response: any) => {
+    try {
+      const verifyResponse = await fetch(
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/verify-razorpay-payment`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+          },
+          body: JSON.stringify({
+            razorpay_order_id: response.razorpay_order_id,
+            razorpay_payment_id: response.razorpay_payment_id,
+            razorpay_signature: response.razorpay_signature,
+          }),
+        }
+      );
+
+      const result = await verifyResponse.json();
+      
+      if (result.success) {
+        // Create order in database after successful payment
+        await handleSubmit();
+        toast({
+          title: "Payment Successful",
+          description: "Your order has been placed successfully!",
+        });
+      } else {
+        toast({
+          title: "Payment Failed",
+          description: "Payment verification failed. Please contact support.",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      console.error("Verification error:", error);
+      toast({
+        title: "Verification Error",
+        description: "Failed to verify payment. Please contact support.",
+        variant: "destructive",
+      });
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -727,11 +956,11 @@ const Checkout = () => {
                 </div>
 
                 <Button 
-                  onClick={handleSubmit}
-                  disabled={loading}
-                  className="w-full bg-black text-white hover:bg-gray-800 py-3"
+                  onClick={handleRazorpayPayment}
+                  disabled={loading || !isFormValid}
+                  className={`w-full bg-black text-white hover:bg-gray-800 py-3 ${!isFormValid ? 'opacity-50 cursor-not-allowed' : ''}`}
                 >
-                  {loading ? 'Processing...' : `Place Order - ₹${totalAmount.toFixed(2)}`}
+                  {loading ? 'Processing...' : `Pay with Razorpay - ₹${totalAmount.toFixed(2)}`}
                 </Button>
 
                 <p className="text-xs text-gray-500 text-center">
