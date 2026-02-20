@@ -5,6 +5,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useCart } from '@/contexts/CartContext';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { delhiveryService } from '@/services/delhivery';
 import HeaderNavBar from '@/components/HeaderNavBar';
 import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
@@ -345,6 +346,47 @@ const Checkout = () => {
           console.error('Error creating order item:', itemError);
           throw itemError;
         }
+      }
+
+      // Create Delhivery shipment
+      try {
+        console.log('Creating Delhivery shipment for order:', orderNumber);
+        const delhiveryData = delhiveryService.formatOrderData(orderData, shippingAddress, items);
+        const delhiveryResponse = await delhiveryService.createShipment(delhiveryData);
+        
+        if (delhiveryResponse.success) {
+          console.log('Delhivery shipment created successfully:', delhiveryResponse);
+          
+          // Update order with tracking information
+          if (delhiveryResponse.packages && delhiveryResponse.packages.length > 0) {
+            const trackingInfo = delhiveryResponse.packages[0];
+            await supabase
+              .from('orders')
+              .update({
+                tracking_number: trackingInfo.waybill,
+                shipping_provider: 'Delhivery',
+                tracking_url: trackingInfo.tracking_url
+              })
+              .eq('id', order.id);
+          }
+          
+          toast({
+            title: "Order Placed Successfully!",
+            description: `Your order ${orderNumber} has been placed and will be shipped via Delhivery. Tracking: ${delhiveryResponse.packages[0]?.waybill || 'N/A}`,
+          });
+        } else {
+          console.error('Delhivery shipment failed:', delhiveryResponse.error);
+          toast({
+            title: "Order Placed Successfully!",
+            description: `Your order ${orderNumber} has been placed. We'll process shipping separately.`,
+          });
+        }
+      } catch (delhiveryError) {
+        console.error('Delhivery integration error:', delhiveryError);
+        toast({
+          title: "Order Placed Successfully!",
+          description: `Your order ${orderNumber} has been placed. We'll process shipping separately.`,
+        });
       }
 
       // Clear cart
