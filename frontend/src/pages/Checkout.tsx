@@ -202,7 +202,7 @@ const Checkout = () => {
       
       // Create Razorpay order directly from frontend (for testing)
       const options: any = {
-        key: "rzp_live_SIQxrqArP4XwxT", // Use 'key' instead of 'key_id'
+        key: import.meta.env.VITE_RAZORPAY_KEY_ID, // Use environment variable
         amount: totalAmount, // Send in INR (no conversion to paise)
         currency: "INR",
         name: "NASTEA",
