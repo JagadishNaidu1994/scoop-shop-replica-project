@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { useAuth } from '@/contexts/AuthContext';
+import { useMockAuth } from '@/contexts/MockAuthContext';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import HeaderNavBar from '@/components/HeaderNavBar';
@@ -21,6 +22,7 @@ const Auth = () => {
   const [resetEmail, setResetEmail] = useState('');
   const [resetLoading, setResetLoading] = useState(false);
   const { signIn, signUp, user } = useAuth();
+  const { signIn: mockSignIn, signUp: mockSignUp, user: mockUser } = useMockAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -39,10 +41,20 @@ const Auth = () => {
 
     try {
       let result;
+      const useMockMode = true; // Same as App.tsx
+      
       if (isLogin) {
-        result = await signIn(email, password);
+        if (useMockMode) {
+          result = await mockSignIn(email, password);
+        } else {
+          result = await signIn(email, password);
+        }
       } else {
-        result = await signUp(email, password, fullName);
+        if (useMockMode) {
+          result = await mockSignUp(email, password, fullName);
+        } else {
+          result = await signUp(email, password, fullName);
+        }
       }
 
       if (result.error) {
