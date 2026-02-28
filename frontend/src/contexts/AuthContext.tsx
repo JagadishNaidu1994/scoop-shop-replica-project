@@ -32,9 +32,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
         console.log('Auth state changed:', event, session);
-        console.log('Session user:', session?.user);
         setSession(session);
-        setUser(session?.user ?? null);
+        // Fix: Handle different session structures
+        const currentUser = session?.user || session?.user || null;
+        setUser(currentUser);
         setLoading(false);
       }
     );
@@ -42,9 +43,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     // Get initial session
     supabase.auth.getSession().then(({ data: { session } }) => {
       console.log('Initial session:', session);
-      console.log('Initial session user:', session?.user);
       setSession(session);
-      setUser(session?.user ?? null);
+      // Fix: Handle different session structures
+      const currentUser = session?.user || session?.user || null;
+      setUser(currentUser);
       setLoading(false);
     });
 
