@@ -26,7 +26,9 @@ const Auth = () => {
 
   // Redirect if already logged in
   useEffect(() => {
+    console.log('Auth.tsx - user state changed:', user);
     if (user) {
+      console.log('Auth.tsx - redirecting to home page');
       navigate('/');
     }
   }, [user, navigate]);
