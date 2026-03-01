@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { sampleReviews, averageRating, totalReviewCount, type ProductReview } from '@/data/sampleReviews75';
+import ReviewsSection from '@/components/ReviewsSection';
 import HeaderNavBar from '@/components/HeaderNavBar';
 import Footer from '@/components/Footer';
 import AdminImageUpload from '@/components/AdminImageUpload';
@@ -338,15 +340,15 @@ const ProductDetail = () => {
                 <div className="flex items-center gap-1">
                   <div className="flex text-yellow-400">
                     {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="w-4 h-4 fill-current" />
+                      <Star key={i} className={`w-4 h-4 ${i < Math.round(averageRating) ? 'fill-current' : 'text-gray-300'}`} />
                     ))}
                   </div>
-                  {/* <span className="text-sm text-gray-700 font-semibold ml-1">4.9</span> */}
+                  <span className="text-sm text-gray-700 font-semibold ml-1">{averageRating}</span>
                 </div>
-                {/* <span className="text-gray-400">•</span> */}
-                {/* <span className="text-sm text-gray-600 font-medium">22,196 Reviews</span> */}
-                {/* <span className="text-gray-400">•</span> */}
-                {/* <span className="text-sm text-green-600 font-medium">✓ Verified</span> */}
+                <span className="text-gray-400">•</span>
+                <span className="text-sm text-gray-600 font-medium">{totalReviewCount} Reviews</span>
+                <span className="text-gray-400">•</span>
+                <span className="text-sm text-green-600 font-medium">✓ Verified</span>
               </div>
 
               {/* Product Title and Description */}
@@ -738,12 +740,8 @@ const ProductDetail = () => {
               </div>
             </section>
 
-            {/* SECTION 6 — Social Proof Intro */}
-            <section className="w-full py-10">
-              <div className="w-full px-0 text-center">
-                <h3 className="text-3xl lg:text-4xl font-serif font-bold text-gray-900">Here’s what our customers say</h3>
-              </div>
-            </section>
+            {/* SECTION 6 — Customer Reviews */}
+            <ReviewsSection />
 
             {/* SECTION 7 — Recipe / Use-Case Cards */}
             <section className="w-full py-16">

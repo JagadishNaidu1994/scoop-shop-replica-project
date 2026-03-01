@@ -41,20 +41,11 @@ const Auth = () => {
 
     try {
       let result;
-      const useMockMode = true; // Same as App.tsx
       
       if (isLogin) {
-        if (useMockMode) {
-          result = await mockSignIn(email, password);
-        } else {
-          result = await signIn(email, password);
-        }
+        result = await signIn(email, password);
       } else {
-        if (useMockMode) {
-          result = await mockSignUp(email, password, fullName);
-        } else {
-          result = await signUp(email, password, fullName);
-        }
+        result = await signUp(email, password, fullName);
       }
 
       if (result.error) {
