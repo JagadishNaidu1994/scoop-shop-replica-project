@@ -1,6 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
-const DELHIVERY_API_KEY = "4f2d9b317b5f3e808bbc435500d087c120ae48fe";
+const DELHIVERY_API_KEY = Deno.env.get("DELHIVERY_API_KEY") || "";
 const DELHIVERY_BASE_URL = "https://track.delhivery.com/api";
 
 const corsHeaders = {

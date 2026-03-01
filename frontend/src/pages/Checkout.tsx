@@ -197,10 +197,10 @@ const Checkout = () => {
 
   const handleRazorpayPayment = async () => {
     try {
-      console.log('Starting Razorpay payment process...');
-      console.log('Total Amount:', totalAmount);
-      console.log('Amount in paise:', totalAmount * 100);
-      console.log('Razorpay Key:', import.meta.env.VITE_RAZORPAY_KEY_ID);
+      if (import.meta.env.DEV) {
+        console.log('Starting Razorpay payment process...');
+        console.log('Total Amount:', totalAmount);
+      }
       
       // Create Razorpay order directly from frontend (for testing)
       const options: any = {
