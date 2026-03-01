@@ -199,11 +199,13 @@ const Checkout = () => {
     try {
       console.log('Starting Razorpay payment process...');
       console.log('Total Amount:', totalAmount);
+      console.log('Amount in paise:', totalAmount * 100);
+      console.log('Razorpay Key:', import.meta.env.VITE_RAZORPAY_KEY_ID);
       
       // Create Razorpay order directly from frontend (for testing)
       const options: any = {
         key: import.meta.env.VITE_RAZORPAY_KEY_ID, // Use environment variable
-        amount: totalAmount, // Send in INR (no conversion to paise)
+        amount: totalAmount * 100, // Convert INR to paise (Razorpay requires amount in paise)
         currency: "INR",
         name: "NASTEA",
         description: "Order Payment",
@@ -265,12 +267,23 @@ const Checkout = () => {
       };
 
       // Load Razorpay script dynamically
+      console.log('Loading Razorpay script...');
       const script = document.createElement('script');
       script.src = 'https://checkout.razorpay.com/v1/checkout.js';
       script.async = true;
       script.onload = function() {
+        console.log('Razorpay script loaded successfully');
+        console.log('Initializing Razorpay with options:', options);
         const rzp = new (window as any).Razorpay(options);
         rzp.open();
+      };
+      script.onerror = function() {
+        console.error('Failed to load Razorpay script');
+        toast({
+          title: "Payment Error",
+          description: "Failed to load payment gateway. Please try again.",
+          variant: "destructive",
+        });
       };
       document.body.appendChild(script);
     } catch (error) {

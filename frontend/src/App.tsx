@@ -4,7 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
-import { MockAuthProvider, useMockAuth } from "@/contexts/MockAuthContext";
+import { MockAuthProvider } from "@/contexts/MockAuthContext";
 import { CartProvider } from "@/contexts/CartContext";
 import { WishlistProvider } from "@/contexts/WishlistContext";
 import { AdminEditProvider } from "@/contexts/AdminEditContext";
@@ -40,7 +40,7 @@ const queryClient = new QueryClient();
 const App = () => {
   // Use mock auth when Supabase is down
   const useMockMode = true; // Set to true when Supabase is having issues
-  
+
   return (
     <QueryClientProvider client={queryClient}>
       {useMockMode ? (
@@ -64,9 +64,11 @@ const App = () => {
                         <Route path="/account" element={<Account />} />
                         <Route path="/orders/:id" element={<OrderDetail />} />
                         <Route path="/admin" element={<AdminDashboard />} />
+                        <Route path="/admin/dashboard" element={<AdminDashboard />} />
+                        <Route path="/admindashboard" element={<AdminDashboard />} />
                         <Route path="/auth" element={<Auth />} />
-                        <Route path="/journals" element={<Journal />} />
-                        <Route path="/journals/:id" element={<JournalDetail />} />
+                        <Route path="/journal" element={<Journal />} />
+                        <Route path="/journal/:id" element={<JournalDetail />} />
                         <Route path="/blog" element={<Blog />} />
                         <Route path="/faq" element={<FAQ />} />
                         <Route path="/science" element={<Science />} />
@@ -108,9 +110,11 @@ const App = () => {
                         <Route path="/account" element={<Account />} />
                         <Route path="/orders/:id" element={<OrderDetail />} />
                         <Route path="/admin" element={<AdminDashboard />} />
+                        <Route path="/admin/dashboard" element={<AdminDashboard />} />
+                        <Route path="/admindashboard" element={<AdminDashboard />} />
                         <Route path="/auth" element={<Auth />} />
-                        <Route path="/journals" element={<Journal />} />
-                        <Route path="/journals/:id" element={<JournalDetail />} />
+                        <Route path="/journal" element={<Journal />} />
+                        <Route path="/journal/:id" element={<JournalDetail />} />
                         <Route path="/blog" element={<Blog />} />
                         <Route path="/faq" element={<FAQ />} />
                         <Route path="/science" element={<Science />} />

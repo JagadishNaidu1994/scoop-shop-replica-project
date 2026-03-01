@@ -16,14 +16,29 @@ serve(async (req: Request) => {
   try {
     const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = await req.json();
     
-    // Verify signature
-    const key_secret = Deno.env.get("RAZORPAY_KEY_SECRET")!;
+    console.log("Received payment verification request:", { razorpay_order_id, razorpay_payment_id });
+    
+    // Check if Razorpay secret key is configured
+    const key_secret = Deno.env.get("RAZORPAY_KEY_SECRET");
+    if (!key_secret) {
+      console.error("RAZORPAY_KEY_SECRET environment variable is not set");
+      return new Response(
+        JSON.stringify({ success: false, error: "Razorpay secret key not configured" }),
+        { 
+          status: 500,
+          headers: { ...corsHeaders, "Content-Type": "application/json" } 
+        }
+      );
+    }
+    
+    console.log("Verifying signature with secret key");
     const body = `${razorpay_order_id}|${razorpay_payment_id}`;
     const expectedSignature = createHmac("sha256", key_secret)
       .encode(body)
       .toString();
 
     const isValid = expectedSignature === razorpay_signature;
+    console.log("Signature verification result:", isValid);
 
     if (isValid) {
       // Update order status in database
