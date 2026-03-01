@@ -4,7 +4,6 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
-import { MockAuthProvider } from "@/contexts/MockAuthContext";
 import { CartProvider } from "@/contexts/CartContext";
 import { WishlistProvider } from "@/contexts/WishlistContext";
 import { AdminEditProvider } from "@/contexts/AdminEditContext";
@@ -41,7 +40,6 @@ const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <MockAuthProvider>
           <CartProvider>
             <WishlistProvider>
               <AdminEditProvider>
@@ -85,7 +83,6 @@ const App = () => {
               </AdminEditProvider>
             </WishlistProvider>
           </CartProvider>
-        </MockAuthProvider>
       </AuthProvider>
     </QueryClientProvider>
   );
