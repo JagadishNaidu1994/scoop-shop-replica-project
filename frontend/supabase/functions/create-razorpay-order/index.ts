@@ -1,4 +1,5 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import Razorpay from "https://esm.sh/razorpay@2.9.0";
 
 const corsHeaders = {
@@ -8,39 +9,64 @@ const corsHeaders = {
 };
 
 serve(async (req: Request) => {
-  // Handle CORS preflight
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders });
   }
 
   try {
-    // Skip auth validation for now - create a public endpoint
-    console.log("Request received, processing...");
-    
+    // Authenticate the user
+    const authHeader = req.headers.get("Authorization");
+    if (!authHeader) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 401,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    const supabaseClient = createClient(
+      Deno.env.get("SUPABASE_URL")!,
+      Deno.env.get("SUPABASE_ANON_KEY")!,
+      { global: { headers: { Authorization: authHeader } } }
+    );
+
+    const { data: { user }, error: authError } = await supabaseClient.auth.getUser();
+    if (authError || !user) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 401,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
     const { amount, currency = "INR", receipt } = await req.json();
-    
-    console.log("Creating order with amount:", amount, "currency:", currency, "receipt:", receipt);
-    
-    // Use hardcoded credentials for Razorpay
+
+    const razorpayKeyId = Deno.env.get("RAZORPAY_KEY_ID");
+    const razorpayKeySecret = Deno.env.get("RAZORPAY_KEY_SECRET");
+
+    if (!razorpayKeyId || !razorpayKeySecret) {
+      console.error("Razorpay credentials not configured");
+      return new Response(JSON.stringify({ error: "Payment service not configured" }), {
+        status: 500,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
     const razorpay = new Razorpay({
-      key_id: "rzp_live_SIQxrqArP4XwxT",
-      key_secret: "sCJFYsVU4Q5KxpVhNqkAkAl3",
+      key_id: razorpayKeyId,
+      key_secret: razorpayKeySecret,
     });
 
     const order = await razorpay.orders.create({
-      amount: amount * 100, // Convert to paise
+      amount: amount * 100,
       currency,
       receipt,
     });
-
-    console.log("Order created successfully:", order);
 
     return new Response(JSON.stringify(order), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   } catch (error: any) {
     console.error("Error creating order:", error);
-    return new Response(JSON.stringify({ error: error.message }), {
+    return new Response(JSON.stringify({ error: "Failed to create order" }), {
       status: 400,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
