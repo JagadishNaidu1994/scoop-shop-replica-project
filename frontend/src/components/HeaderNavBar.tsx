@@ -127,28 +127,22 @@ const HeaderNavBar = () => {
         isHeaderVisible ? 'translate-y-0' : '-translate-y-full'
       }`}>
         {/* Top promotional banner */}
-        <div className="bg-gray-100 text-center py-2 text-sm font-medium text-black overflow-hidden group" aria-label="Promotional announcements">
-          <div className="whitespace-nowrap animate-[scroll-seamless_6s_linear_infinite] sm:animate-[scroll-seamless_8s_linear_infinite] lg:animate-[scroll-seamless_8s_linear_infinite] hover:[animation-play-state:paused] inline-flex">
-            <span className="inline-block mx-8">15% OFF EVERY SUBSCRIPTION</span>
-            <span className="inline-block mx-2">•</span>
-            <span className="inline-block mx-8">20% OFF FIRST ORDER</span>
-            <span className="inline-block mx-2">•</span>
-            <span className="inline-block mx-8">FREE SHIPPING ON ORDERS ABOVE INR 1000</span>
-            <span className="inline-block mx-2">•</span>
-            <span className="inline-block mx-8">REFER A FRIEND & GET 150 OFF</span>
-            <span className="inline-block mx-2">•</span>
-            <span className="inline-block mx-8">HYDERABAD'S FIRST MATCHA BRAND</span>
-            <span className="inline-block mx-2">•</span>
-            <span className="inline-block mx-8">15% OFF EVERY SUBSCRIPTION</span>
-            <span className="inline-block mx-2">•</span>
-            <span className="inline-block mx-8">20% OFF FIRST ORDER</span>
-            <span className="inline-block mx-2">•</span>
-            <span className="inline-block mx-8">FREE SHIPPING ON ORDERS ABOVE INR 1000</span>
-            <span className="inline-block mx-2">•</span>
-            <span className="inline-block mx-8">REFER A FRIEND & GET 150 OFF</span>
-            <span className="inline-block mx-2">•</span>
-            <span className="inline-block mx-8">HYDERABAD'S FIRST MATCHA BRAND</span>
-            <span className="inline-block mx-2">•</span>
+        <div className="bg-gray-100 py-2 text-sm font-medium text-black overflow-hidden" aria-label="Promotional announcements">
+          <div className="whitespace-nowrap inline-flex hover:[animation-play-state:paused]" style={{ animation: 'scroll-seamless 20s linear infinite' }}>
+            {[0, 1].map((setIndex) => (
+              <div key={setIndex} className="inline-flex items-center">
+                <span className="inline-block mx-6 sm:mx-8">15% OFF EVERY SUBSCRIPTION</span>
+                <span className="inline-block mx-2 text-gray-400">•</span>
+                <span className="inline-block mx-6 sm:mx-8">20% OFF FIRST ORDER</span>
+                <span className="inline-block mx-2 text-gray-400">•</span>
+                <span className="inline-block mx-6 sm:mx-8">FREE SHIPPING ON ORDERS ABOVE INR 1000</span>
+                <span className="inline-block mx-2 text-gray-400">•</span>
+                <span className="inline-block mx-6 sm:mx-8">REFER A FRIEND & GET ₹150 OFF</span>
+                <span className="inline-block mx-2 text-gray-400">•</span>
+                <span className="inline-block mx-6 sm:mx-8">HYDERABAD'S FIRST MATCHA BRAND</span>
+                <span className="inline-block mx-2 text-gray-400">•</span>
+              </div>
+            ))}
           </div>
         </div>
         
