@@ -12,7 +12,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
 import { CheckCircle, Package, MapPin, CreditCard, ArrowLeft, FileText, RefreshCw, Calendar } from 'lucide-react';
-import { generateInvoice } from '@/utils/invoiceGenerator';
+import { generateInvoice, generateInvoiceNumber } from '@/utils/invoiceGenerator';
 
 interface OrderItem {
   id: string;
@@ -104,23 +104,34 @@ const OrderDetail = () => {
     if (!order || !user) return;
 
     const subtotal = order.total_amount - order.shipping_cost;
+    const invoiceNumber = generateInvoiceNumber(order.order_number);
 
     generateInvoice({
+      invoiceNumber,
       orderNumber: order.order_number,
       orderDate: order.created_at,
+      paymentMethod: 'Online',
       customerName: `${order.shipping_address.firstName} ${order.shipping_address.lastName}`,
       customerEmail: user.email || '',
-      shippingAddress: order.shipping_address,
+      customerPhone: order.shipping_address.phone,
+      shippingAddress: {
+        ...order.shipping_address,
+        addressLine2: order.shipping_address.addressLine2 || '',
+        state: order.shipping_address.state || '',
+      },
       items: order.order_items.map(item => ({
         product_name: item.product_name,
         quantity: item.quantity,
-        product_price: item.product_price
+        product_price: item.product_price,
+        tax_percent: 0,
       })),
-      subtotal: subtotal,
+      subtotal,
+      totalTax: 0,
       shippingCost: order.shipping_cost,
+      discount: 0,
       totalAmount: order.total_amount,
       isSubscription: order.is_subscription,
-      subscriptionFrequency: order.subscription_frequency
+      subscriptionFrequency: order.subscription_frequency,
     });
 
     toast({
