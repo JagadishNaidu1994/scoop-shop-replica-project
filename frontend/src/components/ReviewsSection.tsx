@@ -31,7 +31,7 @@ const ReviewsSection = () => {
 
   const ratingDistribution = useMemo(() => {
     const dist = [0, 0, 0, 0, 0];
-    sampleReviews.forEach(r => dist[r.rating - 1]++);
+    sampleReviews.forEach(r => dist[Math.round(r.rating) - 1]++);
     return dist.reverse(); // 5-star first
   }, []);
 
