@@ -1,7 +1,7 @@
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import { useMockAuth } from './MockAuthContext';
+import { useAuth } from './AuthContext';
 import { useToast } from '@/hooks/use-toast';
 
 interface CartItem {
@@ -39,7 +39,7 @@ export const useCart = () => {
 export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [items, setItems] = useState<CartItem[]>([]);
   const [loading, setLoading] = useState(true);
-  const { user } = useMockAuth();
+  const { user } = useAuth();
   const { toast } = useToast();
 
   useEffect(() => {
