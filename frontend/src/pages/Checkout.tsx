@@ -222,8 +222,8 @@ const Checkout = () => {
         name: 'NASTEA',
         description: 'Order Payment',
         order_id: orderData.razorpay_order_id,
-        handler: async (response: any) => {
-          await handlePaymentSuccess(response);
+        handler: function (response: any) {
+          handlePaymentSuccess(response);
         },
         prefill: {
           name: `${shippingAddress.firstName} ${shippingAddress.lastName}`,
