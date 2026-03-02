@@ -31,7 +31,7 @@ const Index = () => {
         <HeroSection />
         <SubHeroBanner />
         <ProductShowcaseGrid />
-        <ResultsStats />
+        {/* <ResultsStats /> */}
         <NasteaStandard />
         {/* <PressFeatures /> */}
         <TestimonialsCarousel />
