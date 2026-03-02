@@ -17,12 +17,12 @@ const ProductShowcaseGrid = () => {
     mainImage: "/lovable-uploads/18fa3a22-212e-489f-bdee-5bb2266db6a4.png"
   }];
   const nextImage = () => {
-    setSelectedImage(prev => (prev + 1) % products.length);
+    setSelectedImage((prev) => (prev + 1) % products.length);
   };
   const prevImage = () => {
-    setSelectedImage(prev => (prev - 1 + products.length) % products.length);
+    setSelectedImage((prev) => (prev - 1 + products.length) % products.length);
   };
-  return <section className="py-20 bg-gray-50 w-full">
+  return <section className="bg-gray-50 w-full py-[17px]">
       <div className="w-full px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           {/* Left Half - Images on top, Content on bottom */}
