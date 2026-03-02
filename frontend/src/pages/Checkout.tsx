@@ -5,7 +5,6 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useCart } from '@/contexts/CartContext';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
-import { delhiveryService } from '@/services/delhivery';
 import HeaderNavBar from '@/components/HeaderNavBar';
 import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
@@ -18,7 +17,6 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { CreditCard, MapPin, User, Phone, Mail, Plus, RefreshCw } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { indianStatesAndCities } from '@/data/indianStatesAndCities';
-import Razorpay from 'razorpay';
 
 interface ShippingAddress {
   firstName: string;
@@ -131,7 +129,6 @@ const Checkout = () => {
       country: 'India'
     });
 
-    // Set available cities for the state
     if (address.state && indianStatesAndCities[address.state]) {
       setAvailableCities(indianStatesAndCities[address.state]);
     }
@@ -195,515 +192,163 @@ const Checkout = () => {
     return imageMap[productId] || "https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=200&h=200&fit=crop";
   };
 
+  // ── Secure Razorpay Payment Flow ──────────────────────────────
+
   const handleRazorpayPayment = async () => {
+    if (!validateForm() || !user) return;
+    setLoading(true);
+
     try {
-      if (import.meta.env.DEV) {
-        console.log('Starting Razorpay payment process...');
-        console.log('Total Amount:', totalAmount);
-      }
-      
-      // Create Razorpay order directly from frontend (for testing)
-      const options: any = {
-        key: import.meta.env.VITE_RAZORPAY_KEY_ID, // Use environment variable
-        amount: totalAmount * 100, // Convert INR to paise (Razorpay requires amount in paise)
-        currency: "INR",
-        name: "NASTEA",
-        description: "Order Payment",
-        receipt: `order_${Date.now()}`,
-        handler: async function (response: any) {
-          console.log('Payment successful:', response);
-          
-          // Create order in database after successful payment
-          await createOrderAfterPayment(response);
-        },
-        prefill: {
-          name: `${shippingAddress.firstName} ${shippingAddress.lastName}`,
-          email: user?.email,
-        },
-        theme: {
-          color: "#000000",
-        },
-        // Enable UPI and other payment methods
-        config: {
-          display: {
-            blocks: {
-              upi: {
-                visible: true,
-                order: 1,
-                methods: ['upi']
-              },
-              banks: {
-                visible: true,
-                order: 2,
-                methods: ['upi']
-              },
-              card: {
-                visible: true,
-                order: 3,
-                methods: ['visa', 'mastercard', 'maestro']
-              },
-              netbanking: {
-                visible: true,
-                order: 4,
-                methods: ['imps', 'neft']
-              },
-              wallet: {
-                visible: true,
-                order: 5,
-                methods: ['paytm']
-              },
-              creditcard: {
-                visible: true,
-                order: 6,
-                methods: ['visa', 'mastercard', 'maestro']
-              }
-            },
-            sequence: ['block.upi', 'block.banks', 'block.card'],
-            preferences: {
-              show_default_blocks: true
-            }
-          }
-        }
-      };
-
-      // Load Razorpay script dynamically
-      console.log('Loading Razorpay script...');
-      const script = document.createElement('script');
-      script.src = 'https://checkout.razorpay.com/v1/checkout.js';
-      script.async = true;
-      script.onload = function() {
-        console.log('Razorpay script loaded successfully');
-        console.log('Initializing Razorpay with options:', options);
-        const rzp = new (window as any).Razorpay(options);
-        rzp.open();
-      };
-      script.onerror = function() {
-        console.error('Failed to load Razorpay script');
-        toast({
-          title: "Payment Error",
-          description: "Failed to load payment gateway. Please try again.",
-          variant: "destructive",
-        });
-      };
-      document.body.appendChild(script);
-    } catch (error) {
-      console.error("Payment error:", error);
-      toast({
-        title: "Payment Error",
-        description: error.message || "Failed to initiate payment. Please try again.",
-        variant: "destructive",
-      });
-    }
-  };
-
-  const createOrderAfterPayment = async (paymentResponse: any) => {
-    try {
-      console.log('Creating order after payment:', paymentResponse);
-      
-      // Generate order number
-      const orderNumber = `order_${Date.now()}`;
-
-      // Check if any items are subscriptions
-      const hasSubscription = items.some(item => item.is_subscription);
-      const subscriptionItem = items.find(item => item.is_subscription);
-
-      // Create order in database
-      const orderData: any = {
-        user_id: user.id,
-        order_number: orderNumber,
-        total_amount: totalAmount,
-        shipping_cost: shippingCost,
-        status: 'paid',
-        payment_method: 'razorpay',
-        payment_status: 'paid',
-        razorpay_payment_id: paymentResponse.razorpay_payment_id,
-        razorpay_order_id: paymentResponse.razorpay_order_id,
-        razorpay_signature: paymentResponse.razorpay_signature,
-        shipping_address: shippingAddress as any,
-        billing_address: shippingAddress as any
-      };
-
-      // Only add subscription fields if they exist
-      if (hasSubscription) {
-        orderData.is_subscription = true;
-        orderData.subscription_frequency = subscriptionItem?.subscription_frequency || 'monthly';
-      }
-
-      const { data: order, error: orderError } = await supabase
-        .from('orders')
-        .insert(orderData)
-        .select()
-        .single();
-
-      if (orderError) {
-        console.error('Error creating order:', orderError);
-        throw orderError;
-      }
-
-      console.log('Order created successfully:', order);
-
-      // Create order items
-      for (const item of items) {
-        const { error: itemError } = await supabase
-          .from('order_items')
-          .insert({
-            order_id: order.id,
-            product_id: item.product_id,
-            quantity: item.quantity,
-            price: item.product_price,
-            is_subscription: item.is_subscription,
-            subscription_frequency: item.subscription_frequency
-          });
-
-        if (itemError) {
-          console.error('Error creating order item:', itemError);
-          throw itemError;
-        }
-      }
-
-      // Create Delhivery shipment
-      try {
-        console.log('Creating Delhivery shipment for order:', orderNumber);
-        const delhiveryData = delhiveryService.formatOrderData(orderData, shippingAddress, items);
-        const delhiveryResponse = await delhiveryService.createShipment(delhiveryData);
-        
-        if (delhiveryResponse.success) {
-          console.log('Delhivery shipment created successfully:', delhiveryResponse);
-          
-          // Update order with tracking information
-          if (delhiveryResponse.packages && delhiveryResponse.packages.length > 0) {
-            const trackingInfo = delhiveryResponse.packages[0];
-            await supabase
-              .from('orders')
-              .update({
-                tracking_number: trackingInfo.waybill,
-                shipping_provider: 'Delhivery',
-                tracking_url: trackingInfo.tracking_url
-              })
-              .eq('id', order.id);
-          }
-          
-          toast({
-            title: "Order Placed Successfully!",
-            description: `Your order ${orderNumber} has been placed and will be shipped via Delhivery. Tracking: ${delhiveryResponse.packages[0]?.waybill || 'N/A'}`,
-          });
-        } else {
-          console.error('Delhivery shipment failed:', delhiveryResponse.error);
-          toast({
-            title: "Order Placed Successfully!",
-            description: `Your order ${orderNumber} has been placed. We'll process shipping separately.`,
-          });
-        }
-      } catch (delhiveryError) {
-        console.error('Delhivery integration error:', delhiveryError);
-        toast({
-          title: "Order Placed Successfully!",
-          description: `Your order ${orderNumber} has been placed. We'll process shipping separately.`,
-        });
-      }
-
-      // Clear cart
-      clearCart();
-
-      // Show success message
-      toast({
-        title: "Payment Successful",
-        description: "Your order has been placed successfully!",
-      });
-
-      // Redirect to order confirmation
-      navigate(`/order-detail/${order.id}`);
-      
-    } catch (error) {
-      console.error("Error creating order after payment:", error);
-      toast({
-        title: "Order Creation Error",
-        description: "Payment was successful but failed to create order. Please contact support.",
-        variant: "destructive",
-      });
-    }
-  };
-
-  const verifyPayment = async (response: any) => {
-    try {
-      const verifyResponse = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/verify-razorpay-payment`,
+      // Step 1: Create Razorpay order server-side (amount validated from DB)
+      const { data: orderData, error: orderError } = await supabase.functions.invoke(
+        'create-razorpay-order',
         {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+          body: {
+            shipping_address: shippingAddress,
+            shipping_cost: shippingCost,
           },
-          body: JSON.stringify({
-            razorpay_order_id: response.razorpay_order_id,
-            razorpay_payment_id: response.razorpay_payment_id,
-            razorpay_signature: response.razorpay_signature,
-          }),
         }
       );
 
-      const result = await verifyResponse.json();
-      
-      if (result.success) {
-        // Create order in database after successful payment
-        await handleSubmit();
-        toast({
-          title: "Payment Successful",
-          description: "Your order has been placed successfully!",
-        });
-      } else {
-        toast({
-          title: "Payment Failed",
-          description: "Payment verification failed. Please contact support.",
-          variant: "destructive",
-        });
+      if (orderError || !orderData?.razorpay_order_id) {
+        throw new Error(orderData?.error || orderError?.message || 'Failed to create payment order');
       }
-    } catch (error) {
-      console.error("Verification error:", error);
+
+      // Step 2: Open Razorpay checkout with server-returned order_id
+      const options = {
+        key: orderData.key_id,
+        amount: orderData.amount,
+        currency: orderData.currency,
+        name: 'NASTEA',
+        description: 'Order Payment',
+        order_id: orderData.razorpay_order_id,
+        handler: async (response: any) => {
+          await handlePaymentSuccess(response);
+        },
+        prefill: {
+          name: `${shippingAddress.firstName} ${shippingAddress.lastName}`,
+          email: user.email,
+          contact: shippingAddress.phone,
+        },
+        theme: { color: '#000000' },
+        modal: {
+          ondismiss: () => {
+            setLoading(false);
+            toast({
+              title: 'Payment Cancelled',
+              description: 'You cancelled the payment. Your cart is intact.',
+            });
+          },
+        },
+      };
+
+      const rzp = new (window as any).Razorpay(options);
+      rzp.on('payment.failed', (resp: any) => {
+        setLoading(false);
+        console.error('Payment failed:', resp.error);
+        toast({
+          title: 'Payment Failed',
+          description: resp.error?.description || 'Payment could not be completed. Please try again.',
+          variant: 'destructive',
+        });
+      });
+      rzp.open();
+    } catch (error: any) {
+      setLoading(false);
+      console.error('Payment initiation error:', error);
       toast({
-        title: "Verification Error",
-        description: "Failed to verify payment. Please contact support.",
-        variant: "destructive",
+        title: 'Payment Error',
+        description: error.message || 'Failed to initiate payment. Please try again.',
+        variant: 'destructive',
       });
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (!validateForm() || !user) return;
-
-    setLoading(true);
-    
+  // Step 3: Verify payment server-side, create order atomically
+  const handlePaymentSuccess = async (response: any) => {
     try {
-      console.log('Starting order creation process...');
-      console.log('Cart items:', items);
-      
-      // Generate order number
-      const orderNumber = `order_${Date.now()}`;
-
-      // Check if any items are subscriptions
       const hasSubscription = items.some(item => item.is_subscription);
       const subscriptionItem = items.find(item => item.is_subscription);
 
-      // Create order - using proper type casting for JSON fields
-      // Note: is_subscription and subscription_frequency fields will be added after migration
-      const orderData: any = {
-        user_id: user.id,
-        order_number: orderNumber,
-        total_amount: totalAmount,
-        shipping_cost: shippingCost,
-        status: 'pending',
-        payment_method: 'card',
-        shipping_address: shippingAddress as any,
-        billing_address: shippingAddress as any
-      };
+      const { data: verifyData, error: verifyError } = await supabase.functions.invoke(
+        'verify-razorpay-payment',
+        {
+          body: {
+            razorpay_order_id: response.razorpay_order_id,
+            razorpay_payment_id: response.razorpay_payment_id,
+            razorpay_signature: response.razorpay_signature,
+            shipping_address: shippingAddress,
+            shipping_cost: shippingCost,
+            is_subscription: hasSubscription,
+            subscription_frequency: subscriptionItem?.subscription_frequency || null,
+          },
+        }
+      );
 
-      // Only add subscription fields if they exist (after migration is applied)
-      if (hasSubscription) {
-        orderData.is_subscription = true;
-        orderData.subscription_frequency = subscriptionItem?.subscription_frequency || 'monthly';
+      if (verifyError || !verifyData?.success) {
+        throw new Error(verifyData?.error || verifyError?.message || 'Payment verification failed');
       }
 
-      const { data: order, error: orderError } = await supabase
-        .from('orders')
-        .insert(orderData)
-        .select()
-        .single();
-
-      if (orderError) {
-        console.error('Error creating order:', orderError);
-        throw orderError;
-      }
-
-      console.log('Order created successfully:', order);
-
-      // Insert order items with proper error handling and product images
-      if (order && order.id) {
-        const orderItems = items.map(item => ({
-          order_id: order.id,
-          product_id: item.product_id,
-          product_name: item.product_name,
-          product_price: item.product_price,
-          quantity: item.quantity
-        }));
-
-        console.log('Inserting order items:', orderItems);
-
-        const { error: itemsError } = await supabase
-          .from('order_items')
-          .insert(orderItems);
-
-        if (itemsError) {
-          console.error('Error creating order items:', itemsError);
-          throw itemsError;
-        }
-
-        console.log('Order items created successfully');
-
-        // Deduct stock quantities for purchased items
-        console.log('Deducting stock quantities...');
-        for (const item of items) {
-          try {
-            // Get current stock quantity
-            const { data: product, error: productError } = await supabase
-              .from('products')
-              .select('stock_quantity')
-              .eq('id', item.product_id)
-              .single();
-
-            if (productError) {
-              console.error(`Error fetching product ${item.product_id}:`, productError);
-              continue; // Skip this item but continue with others
-            }
-
-            if (product) {
-              const newQuantity = Math.max(0, product.stock_quantity - item.quantity);
-
-              // Update stock quantity
-              const { error: updateError } = await supabase
-                .from('products')
-                .update({ stock_quantity: newQuantity })
-                .eq('id', item.product_id);
-
-              if (updateError) {
-                console.error(`Error updating stock for product ${item.product_id}:`, updateError);
-              } else {
-                // Log inventory change
-                await supabase
-                  .from('inventory_history')
-                  .insert({
-                    product_id: item.product_id,
-                    quantity_change: -item.quantity,
-                    new_quantity: newQuantity,
-                    reason: 'sale',
-                    notes: `Sold via order ${orderNumber}`,
-                    user_id: user.id
-                  });
-
-                console.log(`Stock deducted for product ${item.product_id}: -${item.quantity} (new: ${newQuantity})`);
-              }
-            }
-          } catch (stockError) {
-            console.error(`Failed to deduct stock for product ${item.product_id}:`, stockError);
-            // Continue processing other items even if one fails
-          }
-        }
-        console.log('Stock deduction completed');
-
-        // Send order confirmation email
-        try {
-          console.log('Sending order confirmation email...');
-          const emailResponse = await supabase.functions.invoke('send-order-confirmation', {
-            body: {
-              orderId: order.id,
-              customerEmail: user.email,
-              customerName: `${shippingAddress.firstName} ${shippingAddress.lastName}`,
-              orderNumber: order.order_number,
-              totalAmount: totalAmount,
-              shippingAddress: shippingAddress,
-              items: items.map(item => ({
-                product_name: item.product_name,
-                quantity: item.quantity,
-                product_price: item.product_price
-              }))
-            }
-          });
-
-          if (emailResponse.error) {
-            console.warn('Email sending warning:', emailResponse.error);
-            // Don't fail the order if email fails
-          } else {
-            console.log('Order confirmation email sent successfully');
-          }
-        } catch (emailError) {
-          console.warn('Failed to send confirmation email (non-critical):', emailError);
-          // Continue with order completion even if email fails
-        }
-
-        // Save shipping address to saved addresses if it's a new address
-        if (selectedAddressId === 'new') {
-          try {
-            console.log('Saving new address to saved addresses...');
-
-            // Check if address already exists
-            const { data: existingAddresses, error: checkError } = await supabase
-              .from('addresses')
-              .select('id')
-              .eq('user_id', user.id)
-              .eq('address_line1', shippingAddress.address)
-              .eq('city', shippingAddress.city)
-              .eq('state', shippingAddress.state)
-              .eq('pincode', shippingAddress.postalCode);
-
-            if (checkError) {
-              console.error('Error checking existing addresses:', checkError);
-            }
-
-            // Only save if address doesn't already exist
-            if (!existingAddresses || existingAddresses.length === 0) {
-              // Check if this is the user's first address
-              const { data: userAddresses, error: countError } = await supabase
-                .from('addresses')
-                .select('id')
-                .eq('user_id', user.id);
-
-              if (countError) {
-                console.error('Error counting addresses:', countError);
-              }
-
-              const isFirstAddress = !userAddresses || userAddresses.length === 0;
-
-              // Save the new address
-              const { error: saveError } = await supabase
-                .from('addresses')
-                .insert({
-                  user_id: user.id,
-                  full_name: `${shippingAddress.firstName} ${shippingAddress.lastName}`,
-                  phone: shippingAddress.phone,
-                  address_line1: shippingAddress.address,
-                  address_line2: shippingAddress.addressLine2 || null,
-                  landmark: shippingAddress.landmark || null,
-                  city: shippingAddress.city,
-                  state: shippingAddress.state,
-                  pincode: shippingAddress.postalCode,
-                  is_default: isFirstAddress // Set as default if it's the first address
-                });
-
-              if (saveError) {
-                console.error('Error saving address (non-critical):', saveError);
-                // Don't fail the order if address saving fails
-              } else {
-                console.log('Address saved successfully to saved addresses');
-              }
-            } else {
-              console.log('Address already exists in saved addresses, skipping save');
-            }
-          } catch (addressError) {
-            console.warn('Failed to save address (non-critical):', addressError);
-            // Continue with order completion even if address saving fails
-          }
-        }
+      // Save new address if applicable
+      if (selectedAddressId === 'new') {
+        await saveNewAddress();
       }
 
       // Clear cart
       await clearCart();
 
       toast({
-        title: "Order Placed Successfully!",
-        description: `Your order #${order.order_number.slice(-4).padStart(4, '0')} has been placed. Check your email for confirmation.`
+        title: 'Order Placed Successfully!',
+        description: `Your order #${verifyData.order_number} has been placed. Check your email for confirmation.`,
       });
 
-      navigate(`/orders/${order.id}`);
-    } catch (error) {
-      console.error('Error placing order:', error);
+      navigate(`/orders/${verifyData.order_id}`);
+    } catch (error: any) {
+      console.error('Payment verification error:', error);
       toast({
-        title: "Error",
-        description: "Failed to place order. Please try again.",
-        variant: "destructive"
+        title: 'Verification Error',
+        description: error.message || 'Payment was received but verification failed. Please contact support.',
+        variant: 'destructive',
       });
     } finally {
       setLoading(false);
+    }
+  };
+
+  const saveNewAddress = async () => {
+    if (!user) return;
+    try {
+      const { data: existingAddresses } = await supabase
+        .from('addresses')
+        .select('id')
+        .eq('user_id', user.id)
+        .eq('address_line1', shippingAddress.address)
+        .eq('city', shippingAddress.city)
+        .eq('pincode', shippingAddress.postalCode);
+
+      if (existingAddresses && existingAddresses.length > 0) return;
+
+      const { data: userAddresses } = await supabase
+        .from('addresses')
+        .select('id')
+        .eq('user_id', user.id);
+
+      const isFirstAddress = !userAddresses || userAddresses.length === 0;
+
+      await supabase.from('addresses').insert({
+        user_id: user.id,
+        full_name: `${shippingAddress.firstName} ${shippingAddress.lastName}`,
+        phone: shippingAddress.phone,
+        address_line1: shippingAddress.address,
+        address_line2: shippingAddress.addressLine2 || null,
+        landmark: shippingAddress.landmark || null,
+        city: shippingAddress.city,
+        state: shippingAddress.state,
+        pincode: shippingAddress.postalCode,
+        is_default: isFirstAddress,
+      });
+    } catch (err) {
+      console.warn('Failed to save address (non-critical):', err);
     }
   };
 
@@ -732,7 +377,7 @@ const Checkout = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <form onSubmit={handleSubmit} className="space-y-4">
+                <div className="space-y-4">
                   {/* Saved Addresses Selection */}
                   {savedAddresses.length > 0 && (
                     <div className="space-y-3 pb-4 border-b">
@@ -773,7 +418,7 @@ const Checkout = () => {
                     </div>
                   )}
 
-                  {/* Address Form - Only show when "Add New Address" is selected or no saved addresses */}
+                  {/* Address Form */}
                   {(selectedAddressId === 'new' || savedAddresses.length === 0) && (
                   <div className="space-y-4">
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -926,7 +571,7 @@ const Checkout = () => {
                     </div>
                   </div>
                   )}
-                </form>
+                </div>
               </CardContent>
             </Card>
 
