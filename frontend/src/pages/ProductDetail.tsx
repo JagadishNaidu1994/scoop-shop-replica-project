@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { sampleReviews, averageRating, totalReviewCount } from '@/data/sampleReviews75';
+import { sampleReviews, averageRating, totalReviewCount, type ProductReview } from '@/data/sampleReviews75';
 import ReviewsSection from '@/components/ReviewsSection';
 import HeaderNavBar from '@/components/HeaderNavBar';
 import Footer from '@/components/Footer';
@@ -10,19 +10,17 @@ import { supabase } from '@/integrations/supabase/client';
 import { useCart } from '@/contexts/CartContext';
 import { useWishlist } from '@/contexts/WishlistContext';
 import { Button } from '@/components/ui/button';
-import {
-  Star, Plus, Minus, ChevronLeft, ChevronRight, Heart, Share2,
-  Truck, Shield, RefreshCw, Award, CheckCircle, X, Zap, Brain,
-  Coffee, Check
-} from 'lucide-react';
+import { Star, Plus, Minus, ChevronDown, Heart, Share2, Truck, Shield, RefreshCw, Award, CheckCircle, X, Microscope, Leaf, Users, Globe, Zap, Brain, Sparkles, TrendingUp, Camera, Play, ChevronLeft, ChevronRight, Coffee } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
+import { Badge } from '@/components/ui/badge';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
-
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 interface Product {
   id: number;
   name: string;
   description: string;
-  price: number;
+  price: string;
   primary_image: string | null;
   hover_image: string | null;
   category: string | null;
@@ -30,463 +28,659 @@ interface Product {
   in_stock: boolean | null;
   is_active: boolean | null;
 }
-
 const ProductDetail = () => {
-  const { id } = useParams();
+  const {
+    id
+  } = useParams();
   const navigate = useNavigate();
-  const { addToCart } = useCart();
+  const {
+    addToCart
+  } = useCart();
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(1);
   const [selectedImage, setSelectedImage] = useState(0);
   const [selectedSize, setSelectedSize] = useState<'60G' | '240G'>('60G');
+  const [subscriptionType, setSubscriptionType] = useState<'one-time' | 'subscribe'>('subscribe');
   const [purchaseType, setPurchaseType] = useState<'subscription' | 'onetime'>('subscription');
   const [subscriptionFrequency, setSubscriptionFrequency] = useState<'4weeks' | '8weeks'>('4weeks');
+  const [currentIngredient, setCurrentIngredient] = useState(0);
   const [showImageModal, setShowImageModal] = useState(false);
+  const [currentTestimonial, setCurrentTestimonial] = useState(0);
   const [whyChooseOpen, setWhyChooseOpen] = useState(false);
   const [ingredientsOpen, setIngredientsOpen] = useState(false);
   const [scienceOpen, setScienceOpen] = useState(false);
   const [howToUseOpen, setHowToUseOpen] = useState(false);
-
-  const productImages = [
-    '/lovable-uploads/8edc40eb-3dfa-45fb-8cac-fc1a12ec6a3c.png',
-    '/lovable-uploads/8edc40eb-3dfa-45fb-8cac-fc1a12ec6a3c.png',
-    '/lovable-uploads/8edc40eb-3dfa-45fb-8cac-fc1a12ec6a3c.png',
-    '/lovable-uploads/8edc40eb-3dfa-45fb-8cac-fc1a12ec6a3c.png',
-    '/lovable-uploads/8edc40eb-3dfa-45fb-8cac-fc1a12ec6a3c.png',
-    '/lovable-uploads/8edc40eb-3dfa-45fb-8cac-fc1a12ec6a3c.png',
-  ];
-
-  const testimonials = [
-    { name: "Cliff W.", image: "/lovable-uploads/8edc40eb-3dfa-45fb-8cac-fc1a12ec6a3c.png", review: "Most of all my memory is improving it's more that I remember rather than forget...", rating: 5 },
-  ];
-
+  const ingredients = [{
+    name: 'Vitamin B9',
+    amount: '12% RI per serving',
+    icon: '🟡',
+    description: 'Essential for DNA synthesis and repair',
+    percentage: 12
+  }, {
+    name: 'Lion\'s Mane',
+    amount: '500mg per serving',
+    icon: '🍄',
+    description: 'Supports cognitive function and focus',
+    percentage: 85
+  }, {
+    name: 'Tremella',
+    amount: '300mg per serving',
+    icon: '🤍',
+    description: 'Natural beauty and hydration support',
+    percentage: 60
+  }, {
+    name: 'Essential B Vitamins',
+    amount: '5 vitamins',
+    icon: '💊',
+    description: 'Energy metabolism support',
+    percentage: 95
+  }, {
+    name: 'Ceremonial Grade Matcha',
+    amount: '2g per serving',
+    icon: '🍵',
+    description: 'Premium quality for sustained energy',
+    percentage: 100
+  }];
+  const productImages = ['/lovable-uploads/8edc40eb-3dfa-45fb-8cac-fc1a12ec6a3c.png', '/lovable-uploads/8edc40eb-3dfa-45fb-8cac-fc1a12ec6a3c.png', '/lovable-uploads/8edc40eb-3dfa-45fb-8cac-fc1a12ec6a3c.png', '/lovable-uploads/8edc40eb-3dfa-45fb-8cac-fc1a12ec6a3c.png', '/lovable-uploads/8edc40eb-3dfa-45fb-8cac-fc1a12ec6a3c.png', '/lovable-uploads/8edc40eb-3dfa-45fb-8cac-fc1a12ec6a3c.png'];
+  const testimonials = [{
+    name: "Ellie F.",
+    image: "/lovable-uploads/8edc40eb-3dfa-45fb-8cac-fc1a12ec6a3c.png",
+    review: "I have been obsessed with the brand for over 2 years. Reishi changed my life for sleep and now I...",
+    rating: 5
+  }, {
+    name: "Atlanta R.",
+    image: "/lovable-uploads/8edc40eb-3dfa-45fb-8cac-fc1a12ec6a3c.png",
+    review: "Very yummy to have hot or cold!",
+    rating: 5
+  }, {
+    name: "Sharon S.",
+    image: "/lovable-uploads/8edc40eb-3dfa-45fb-8cac-fc1a12ec6a3c.png",
+    review: "My life, my skin and my energy level has changed since my very first cup of Nastea matcha. I look...",
+    rating: 5
+  }, {
+    name: "Julia B.",
+    image: "/lovable-uploads/8edc40eb-3dfa-45fb-8cac-fc1a12ec6a3c.png",
+    review: "Just love it!",
+    rating: 5
+  }];
+  const relatedProducts = [{
+    name: "focus gummies",
+    price: "₹27",
+    description: "Focus, memory, cognition",
+    image: "/lovable-uploads/8edc40eb-3dfa-45fb-8cac-fc1a12ec6a3c.png"
+  }, {
+    name: "focus powder",
+    price: "₹30",
+    description: "Focus, cognition, immunity",
+    image: "/lovable-uploads/8edc40eb-3dfa-45fb-8cac-fc1a12ec6a3c.png"
+  }, {
+    name: "immunity powder",
+    price: "₹30",
+    description: "Energy, defence, immunity",
+    image: "/lovable-uploads/8edc40eb-3dfa-45fb-8cac-fc1a12ec6a3c.png"
+  }, {
+    name: "calm powder",
+    price: "₹30",
+    description: "Calm, relax, immunity",
+    image: "/lovable-uploads/8edc40eb-3dfa-45fb-8cac-fc1a12ec6a3c.png"
+  }];
   useEffect(() => {
-    if (id) fetchProduct();
+    const interval = setInterval(() => {
+      setCurrentIngredient((prev) => (prev + 1) % ingredients.length);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, []);
+  useEffect(() => {
+    if (id) {
+      fetchProduct();
+    }
   }, [id]);
-
   const fetchProduct = async () => {
     try {
       const productId = parseInt(id as string);
-      if (isNaN(productId)) { navigate('/shop'); return; }
-      const { data, error } = await supabase.from('products').select('*').eq('id', productId).eq('is_active', true).single();
-      if (error) { navigate('/shop'); return; }
+      if (isNaN(productId)) {
+        navigate('/shop');
+        return;
+      }
+      const {
+        data,
+        error
+      } = await supabase.from('products').select('*').eq('id', productId).eq('is_active', true).single();
+      if (error) {
+        console.error('Error fetching product:', error);
+        navigate('/shop');
+        return;
+      }
       setProduct(data);
-    } catch { navigate('/shop'); } finally { setLoading(false); }
+    } catch (error) {
+      console.error('Error fetching product:', error);
+      navigate('/shop');
+    } finally {
+      setLoading(false);
+    }
   };
-
-  const getDiscountMultiplier = () => {
-    if (purchaseType === 'onetime') return 1;
-    return subscriptionFrequency === '4weeks' ? 0.8 : 0.85;
-  };
-
-  const getDiscountLabel = () => subscriptionFrequency === '4weeks' ? '20%' : '15%';
-
-  const currentPrice = product ? product.price * getDiscountMultiplier() : 0;
-  const pricePerServing = product ? (currentPrice / 30).toFixed(2) : '0';
-
   const handleAddToCart = () => {
     if (!product) return;
-    const frequencyMap: Record<string, string> = { '4weeks': 'monthly', '8weeks': 'quarterly' };
+
+    // Map subscription frequency text to database format
+    const frequencyMap: {[key: string]: string;} = {
+      'Every 4 weeks (Bestseller)': 'monthly',
+      'Every 4 weeks': 'monthly',
+      'Every 6 weeks': 'biweekly',
+      'Every 8 weeks': 'quarterly'
+    };
+
     addToCart({
       product_id: product.id,
       product_name: product.name,
-      product_price: currentPrice,
-      quantity,
+      product_price: subscriptionType === 'subscribe' ? product.price * 0.8 : product.price,
+      quantity: quantity,
       product_image: product.primary_image,
-      is_subscription: purchaseType === 'subscription',
-      subscription_frequency: purchaseType === 'subscription' ? frequencyMap[subscriptionFrequency] : undefined,
+      is_subscription: subscriptionType === 'subscribe',
+      subscription_frequency: subscriptionType === 'subscribe' ? frequencyMap[subscriptionFrequency] || 'monthly' : undefined
     });
     toast({
-      title: purchaseType === 'subscription' ? "Subscription added to cart!" : "Added to cart!",
-      description: `${quantity}x ${product.name} added to your cart.`,
+      title: subscriptionType === 'subscribe' ? "Subscription added to cart!" : "Added to cart!",
+      description: subscriptionType === 'subscribe' ?
+      `${quantity}x ${product.name} subscription (${subscriptionFrequency}) added to your cart with 20% discount.` :
+      `${quantity}x ${product.name} added to your cart.`
     });
   };
-
   const handleWishlist = async () => {
     if (!product) return;
-    if (isInWishlist(product.id)) { await removeFromWishlist(product.id); }
-    else { await addToWishlist({ product_id: product.id, product_name: product.name, product_price: product.price, product_image: product.primary_image }); }
-  };
 
+    const isCurrentlyWishlisted = isInWishlist(product.id);
+
+    if (isCurrentlyWishlisted) {
+      await removeFromWishlist(product.id);
+    } else {
+      await addToWishlist({
+        product_id: product.id,
+        product_name: product.name,
+        product_price: product.price,
+        product_image: product.primary_image
+      });
+    }
+  };
   const handleShare = () => {
-    if (navigator.share) { navigator.share({ title: product?.name, text: product?.description, url: window.location.href }); }
-    else { navigator.clipboard.writeText(window.location.href); toast({ title: "Link copied!", description: "Product link copied to clipboard" }); }
+    if (navigator.share) {
+      navigator.share({
+        title: product?.name,
+        text: product?.description,
+        url: window.location.href
+      });
+    } else {
+      navigator.clipboard.writeText(window.location.href);
+      toast({
+        title: "Link copied!",
+        description: "Product link copied to clipboard"
+      });
+    }
   };
-
-  const nextImage = () => setSelectedImage(prev => (prev + 1) % productImages.length);
-  const prevImage = () => setSelectedImage(prev => (prev - 1 + productImages.length) % productImages.length);
-
+  const incrementQuantity = () => setQuantity((prev) => prev + 1);
+  const decrementQuantity = () => setQuantity((prev) => Math.max(1, prev - 1));
+  const nextImage = () => {
+    setSelectedImage((prev) => (prev + 1) % productImages.length);
+  };
+  const prevImage = () => {
+    setSelectedImage((prev) => (prev - 1 + productImages.length) % productImages.length);
+  };
   if (loading) {
-    return <div className="min-h-screen bg-white"><HeaderNavBar /><MatchaLoadingAnimation message="Loading product details..." /><Footer /></div>;
+    return <div className="min-h-screen bg-white">
+        <HeaderNavBar />
+        <MatchaLoadingAnimation message="Loading product details..." />
+        <Footer />
+      </div>;
   }
   if (!product) {
-    return <div className="min-h-screen bg-white"><HeaderNavBar /><div className="w-full px-5 py-16"><div className="text-center"><h1 className="text-2xl font-bold mb-4" style={{ color: '#0D1B2A' }}>Product Not Found</h1><Button onClick={() => navigate('/shop')}>Back to Shop</Button></div></div><Footer /></div>;
+    return <div className="min-h-screen bg-white">
+        <HeaderNavBar />
+        <div className="w-full px-5 py-16">
+          <div className="text-center">
+            <h1 className="text-2xl font-bold text-gray-900 mb-4">Product Not Found</h1>
+            <Button onClick={() => navigate('/shop')}>Back to Shop</Button>
+          </div>
+        </div>
+        <Footer />
+      </div>;
   }
+  const subscriptionPrice = product.price * 0.8;
+  const onetimePrice = product.price;
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: '#FFFFFF' }}>
+    <div className="min-h-screen bg-white">
       <div className="sticky top-0 z-50 bg-white shadow-sm">
         <HeaderNavBar />
       </div>
 
-      <div className="w-full px-[10px]">
+      <div className="w-full px-5">
         {/* Breadcrumb */}
-        <nav className="flex text-sm py-4" style={{ color: '#6B7280' }}>
-          <span className="hover:opacity-70 cursor-pointer" onClick={() => navigate('/')}>Home</span>
-          <span className="mx-2">/</span>
-          <span className="hover:opacity-70 cursor-pointer" onClick={() => navigate('/shop')}>Shop</span>
-          <span className="mx-2">/</span>
-          <span style={{ color: '#0D1B2A' }}>{product.name}</span>
-        </nav>
+        <div className="w-full px-0 py-3">
+          <nav className="flex text-sm text-gray-500 font-medium">
+            <span className="hover:text-gray-700 cursor-pointer" onClick={() => navigate('/')}>Home</span>
+            <span className="mx-2">/</span>
+            <span className="hover:text-gray-700 cursor-pointer" onClick={() => navigate('/shop')}>Shop</span>
+            <span className="mx-2">/</span>
+            <span className="text-gray-900">{product.name}</span>
+          </nav>
+        </div>
 
-        <main className="pb-16">
-          {/* ===== PRODUCT SECTION: 55% / 45% ===== */}
-          <div className="grid grid-cols-1 lg:grid-cols-[55%_45%] gap-12 items-start mb-20">
-
-            {/* ===== LEFT SIDE – IMAGE GALLERY ===== */}
-            <div className="lg:sticky lg:top-24 lg:h-fit space-y-3">
-              {/* Main Image */}
+        <main className="w-full px-0 pb-16">
+          {/* Product Section with Sticky Layout */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-20">
+            {/* Left Side - Image Gallery (Sticky) */}
+            <div className="lg:sticky lg:top-6 lg:h-fit space-y-3">
+              {/* Main Image with Controls */}
               <div className="relative group">
-                <div
-                  className="aspect-square rounded-lg overflow-hidden cursor-zoom-in relative"
-                  style={{ background: 'linear-gradient(135deg, #F9FAFB, #F3F0EB)' }}
-                  onClick={() => setShowImageModal(true)}
-                >
-                  <AdminImageUpload
-                    src={productImages[selectedImage]}
-                    alt={product.name}
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                    imagePath="product-detail-main"
-                  />
+                <Badge className="absolute top-4 left-4 z-10 bg-gradient-to-r from-purple-600 to-pink-600 text-white text-xs font-semibold px-2 py-1 rounded-full">
+                  BEST SELLER
+                </Badge>
 
-                  {/* Navigation Arrows – bottom right */}
-                  <div className="absolute bottom-4 right-4 flex gap-2">
-                    <button
-                      onClick={e => { e.stopPropagation(); prevImage(); }}
-                      className="w-9 h-9 rounded-full flex items-center justify-center text-white"
-                      style={{ backgroundColor: '#0D1B2A' }}
-                    >
-                      <ChevronLeft className="w-4 h-4" />
-                    </button>
-                    <button
-                      onClick={e => { e.stopPropagation(); nextImage(); }}
-                      className="w-9 h-9 rounded-full flex items-center justify-center text-white"
-                      style={{ backgroundColor: '#0D1B2A' }}
-                    >
-                      <ChevronRight className="w-4 h-4" />
-                    </button>
-                  </div>
+                <div className="aspect-square bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl overflow-hidden cursor-zoom-in relative" onClick={() => setShowImageModal(true)}>
+                  <AdminImageUpload src={productImages[selectedImage]} alt={product.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" imagePath="product-detail-main" />
+
+                  {/* Navigation Arrows */}
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      prevImage();
+                    }}
+                    className="absolute left-3 top-1/2 -translate-y-1/2 p-2 rounded-full bg-white/80 backdrop-blur-md text-gray-800 hover:bg-white hover:shadow-lg transition-all duration-200 opacity-0 group-hover:opacity-100">
+                    
+                    <ChevronLeft className="w-4 h-4" />
+                  </button>
+
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      nextImage();
+                    }}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 p-2 rounded-full bg-white/80 backdrop-blur-md text-gray-800 hover:bg-white hover:shadow-lg transition-all duration-200 opacity-0 group-hover:opacity-100">
+                    
+                    <ChevronRight className="w-4 h-4" />
+                  </button>
                 </div>
 
-                {/* Floating Actions */}
-                <div className="absolute top-4 right-4 flex flex-col gap-2">
-                  <button onClick={handleWishlist} className={`p-2 rounded-full backdrop-blur-md transition-all ${product && isInWishlist(product.id) ? 'bg-red-500 text-white' : 'bg-white/80 text-gray-600 hover:bg-white hover:shadow-lg'}`}>
+                {/* Floating Action Buttons */}
+                <div className="absolute top-4 right-4 flex flex-col space-y-2">
+                  <button onClick={handleWishlist} className={`p-2 rounded-full backdrop-blur-md transition-all duration-200 ${product && isInWishlist(product.id) ? 'bg-red-500 text-white shadow-lg' : 'bg-white/80 text-gray-600 hover:bg-white hover:shadow-lg'}`}>
                     <Heart className={`w-4 h-4 ${product && isInWishlist(product.id) ? 'fill-current' : ''}`} />
                   </button>
-                  <button onClick={handleShare} className="p-2 rounded-full bg-white/80 backdrop-blur-md text-gray-600 hover:bg-white hover:shadow-lg transition-all">
+                  <button onClick={handleShare} className="p-2 rounded-full bg-white/80 backdrop-blur-md text-gray-600 hover:bg-white hover:shadow-lg transition-all duration-200">
                     <Share2 className="w-4 h-4" />
                   </button>
                 </div>
               </div>
 
-              {/* Thumbnail Slider */}
-              <div className="flex gap-3 overflow-x-auto pb-1">
-                {productImages.map((image, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setSelectedImage(index)}
-                    className="w-20 h-20 flex-shrink-0 rounded-md overflow-hidden transition-all"
-                    style={{
-                      border: selectedImage === index ? '2px solid #0D1B2A' : '2px solid #E5E7EB',
-                    }}
-                  >
+              {/* Thumbnail Grid */}
+              <div className="grid grid-cols-6 gap-2">
+                {productImages.map((image, index) =>
+                <button
+                  key={index}
+                  onClick={() => setSelectedImage(index)}
+                  className={`aspect-square rounded-lg overflow-hidden border-2 transition-all duration-200 ${selectedImage === index ? 'border-black shadow-lg scale-105' : 'border-gray-200 hover:border-gray-300 hover:shadow-md'}`}>
+                  
                     <AdminImageUpload src={image} alt={`${product.name} ${index + 1}`} className="w-full h-full object-cover" imagePath={`product-detail-thumbnail-${index + 1}`} />
                   </button>
-                ))}
+                )}
+              </div>
+
+              {/* Image Counter */}
+              <div className="text-center text-xs text-gray-500">
+                {selectedImage + 1} / {productImages.length}
               </div>
             </div>
 
-            {/* ===== RIGHT SIDE – PRODUCT INFO ===== */}
-            <div className="space-y-5">
-
-              {/* 3.1 Review Row */}
-              <div className="flex items-center gap-2">
-                <div className="flex">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-current" style={{ color: '#0D1B2A' }} />
-                  ))}
+            {/* Right Side - Product Info (Scrollable) */}
+            <div className="w-full space-y-6 lg:max-h-screen lg:overflow-y-auto lg:pr-2">
+              {/* Rating and Reviews */}
+              <div className="flex items-center gap-2 text-sm">
+                <div className="flex items-center gap-1">
+                  <div className="flex text-yellow-400">
+                    {[...Array(5)].map((_, i) =>
+                    <Star key={i} className={`w-4 h-4 ${i < Math.round(averageRating) ? 'fill-current' : 'text-gray-300'}`} />
+                    )}
+                  </div>
+                  <span className="text-sm text-gray-700 font-semibold ml-1">{averageRating}</span>
                 </div>
-                <span className="text-sm" style={{ color: '#6B7280' }}>22,344 Reviews</span>
+                <span className="text-gray-400">•</span>
+                <span className="text-sm text-gray-600 font-medium">{totalReviewCount} Reviews</span>
+                <span className="text-gray-400">•</span>
+                <span className="text-sm text-green-600 font-medium">✓ Verified</span>
               </div>
 
-              {/* 3.2 Product Title */}
-              <h1 className="text-4xl font-bold leading-tight" style={{ color: '#0D1B2A', fontFamily: 'Inter, sans-serif' }}>
-                {product.name}
-              </h1>
+              {/* Product Title and Description */}
+              <div className="space-y-3">
+                <h1 className="text-3xl font-serif font-bold text-gray-900 leading-tight">Organic Ceremonial Matcha</h1>
 
-              {/* 3.3 Subtitle */}
-              <div className="flex items-center gap-2 text-sm" style={{ color: '#6B7280' }}>
-                <Coffee className="w-4 h-4" />
-                <span>30 servings / 60g</span>
-              </div>
+                {/* Servings Info */}
+                
 
-              {/* 3.4 Description */}
-              <p className="text-[15px] leading-relaxed" style={{ color: '#6B7280' }}>
-                {product.description || 'Pure and organic Lion\'s Mane mushroom extract powder with organic zinc.'}
-              </p>
 
-              {/* 3.5 Benefit Tags */}
-              <div className="flex flex-wrap gap-[10px]">
-                {[
-                  { icon: <Zap className="w-4 h-4" />, label: 'Focus' },
-                  { icon: <Brain className="w-4 h-4" />, label: 'Cognition' },
-                  { icon: <Shield className="w-4 h-4" />, label: 'Immunity' },
-                ].map(tag => (
-                  <span
-                    key={tag.label}
-                    className="flex items-center gap-2 px-[14px] py-[6px] rounded-full text-sm"
-                    style={{ backgroundColor: '#F9FAFB', color: '#0D1B2A' }}
-                  >
-                    {tag.icon}
-                    {tag.label}
-                  </span>
-                ))}
-              </div>
+                
 
-              {/* 4. Size Selector */}
-              <div className="space-y-2">
-                <p className="text-sm font-medium" style={{ color: '#0D1B2A' }}>Size</p>
-                <div className="flex gap-[10px]">
-                  {(['60G', '240G'] as const).map(size => (
-                    <button
-                      key={size}
-                      onClick={() => setSelectedSize(size)}
-                      className="px-[18px] py-[10px] rounded-full text-sm font-medium transition-all"
-                      style={{
-                        backgroundColor: selectedSize === size ? '#0D1B2A' : '#FFFFFF',
-                        color: selectedSize === size ? '#FFFFFF' : '#6B7280',
-                        border: selectedSize === size ? '1px solid #0D1B2A' : '1px solid #E5E7EB',
-                      }}
-                    >
-                      {size}
-                    </button>
-                  ))}
+                <p className="text-sm leading-relaxed text-gray-800 max-w-prose">
+                  Cert Organic | Calm Energy | No Additives
+                </p>
+
+                <div className="space-y-1 text-sm text-gray-800">
+                  <div className="flex items-center gap-2">
+                    <CheckCircle className="w-4 h-4 text-gray-900" />
+                    <span>30% off on first order</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <CheckCircle className="w-4 h-4 text-gray-900" />
+                    <span>20% off on second & third orders</span>
+                  </div>
+                  {/* <div className="flex items-center gap-2">
+                     <CheckCircle className="w-4 h-4 text-gray-900" />
+                     <span>Manage subscription anytime</span>
+                    </div> */}
+                  <div className="flex items-center gap-2 text-gray-700">
+                    <Truck className="w-4 h-4" />
+                    <span>Free delivery over ₹2500</span>
+                  </div>
+                </div>
+
+                {/* Benefit Badges */}
+                <div className="flex flex-wrap gap-2 mt-4">
+                  <div className="flex items-center gap-2 px-4 py-2 bg-[#F5F4F2] rounded-full">
+                    <Zap className="w-4 h-4 text-gray-900" />
+                    <span className="text-sm font-medium text-gray-900">Energy</span>
+                  </div>
+                  <div className="flex items-center gap-2 px-4 py-2 bg-[#F5F4F2] rounded-full">
+                    <Brain className="w-4 h-4 text-gray-900" />
+                    <span className="text-sm font-medium text-gray-900">Balance</span>
+                  </div>
+                  <div className="flex items-center gap-2 px-4 py-2 bg-[#F5F4F2] rounded-full">
+                    <Shield className="w-4 h-4 text-gray-900" />
+                    <span className="text-sm font-medium text-gray-900">Focus</span>
+                  </div>
                 </div>
               </div>
 
-              {/* ===== 5. SUBSCRIPTION PURCHASE BOX ===== */}
-              <div className="rounded-2xl p-5 space-y-4" style={{ border: '1px solid #E5E7EB' }}>
+              {/* Size Selection (UI only, logic untouched) */}
+              {/* <div className="space-y-2">
+                 <p className="text-sm font-semibold text-gray-800">Size</p>
+                 <div className="flex items-center gap-3">
+                   <button
+                     type="button"
+                     className={`px-4 py-2 rounded-full border text-sm font-semibold transition ${selectedSize === '60G' ? 'bg-gray-900 text-white border-gray-900' : 'bg-white text-gray-800 border-gray-300'}`}
+                     onClick={() => setSelectedSize('60G')}
+                   >
+                     60G
+                   </button>
+                   <button
+                     type="button"
+                     className={`px-4 py-2 rounded-full border text-sm font-semibold transition ${selectedSize === '240G' ? 'bg-gray-900 text-white border-gray-900' : 'bg-white text-gray-800 border-gray-300'}`}
+                     onClick={() => setSelectedSize('240G')}
+                   >
+                     240G
+                   </button>
+                 </div>
+                </div> */}
 
-                {/* 5.1 Subscription Option */}
-                <button
-                  onClick={() => setPurchaseType('subscription')}
-                  className="w-full text-left"
-                >
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      {/* Radio */}
-                      <div className="w-5 h-5 rounded-full border-2 flex items-center justify-center" style={{ borderColor: purchaseType === 'subscription' ? '#0D1B2A' : '#E5E7EB' }}>
-                        {purchaseType === 'subscription' && <div className="w-3 h-3 rounded-full" style={{ backgroundColor: '#0D1B2A' }} />}
-                      </div>
-                      <span className="text-sm font-medium uppercase tracking-wide" style={{ color: '#0D1B2A' }}>
-                        Every {subscriptionFrequency === '4weeks' ? '4' : '8'} weeks
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <span className="text-xs font-semibold text-white px-2 py-0.5 rounded" style={{ backgroundColor: '#0D1B2A' }}>
-                        {getDiscountLabel()} OFF
-                      </span>
-                      <span className="text-lg font-bold" style={{ color: '#0D1B2A' }}>₹{currentPrice.toFixed(0)}</span>
-                    </div>
-                  </div>
-                  <p className="text-xs mt-1 ml-8" style={{ color: '#6B7280' }}>₹{pricePerServing} per serving</p>
-                </button>
-
-                {/* Subscription frequency pills (only when subscription selected) */}
-                {purchaseType === 'subscription' && (
-                  <div className="flex gap-3 ml-8">
-                    <button
-                      onClick={() => setSubscriptionFrequency('4weeks')}
-                      className="px-4 py-2 rounded-full text-xs font-medium transition-all"
-                      style={{
-                        backgroundColor: subscriptionFrequency === '4weeks' ? '#0D1B2A' : '#FFFFFF',
-                        color: subscriptionFrequency === '4weeks' ? '#FFFFFF' : '#6B7280',
-                        border: '1px solid ' + (subscriptionFrequency === '4weeks' ? '#0D1B2A' : '#E5E7EB'),
-                      }}
-                    >
-                      Every 4 weeks
-                    </button>
-                    <button
-                      onClick={() => setSubscriptionFrequency('8weeks')}
-                      className="px-4 py-2 rounded-full text-xs font-medium transition-all"
-                      style={{
-                        backgroundColor: subscriptionFrequency === '8weeks' ? '#0D1B2A' : '#FFFFFF',
-                        color: subscriptionFrequency === '8weeks' ? '#FFFFFF' : '#6B7280',
-                        border: '1px solid ' + (subscriptionFrequency === '8weeks' ? '#0D1B2A' : '#E5E7EB'),
-                      }}
-                    >
-                      Every 8 weeks
-                    </button>
-                  </div>
-                )}
-
-                {/* 5.2 Quantity + Add to Cart */}
-                <div className="flex items-center gap-3">
-                  {/* Quantity Stepper */}
-                  <div className="inline-flex items-center rounded-full overflow-hidden" style={{ border: '1px solid #E5E7EB' }}>
-                    <button onClick={() => setQuantity(Math.max(1, quantity - 1))} className="w-12 h-[52px] flex items-center justify-center hover:bg-gray-50 transition-colors">
-                      <Minus className="w-4 h-4" style={{ color: '#0D1B2A' }} />
-                    </button>
-                    <span className="w-10 h-[52px] flex items-center justify-center font-medium text-sm" style={{ color: '#0D1B2A' }}>{quantity}</span>
-                    <button onClick={() => setQuantity(quantity + 1)} className="w-12 h-[52px] flex items-center justify-center hover:bg-gray-50 transition-colors">
-                      <Plus className="w-4 h-4" style={{ color: '#0D1B2A' }} />
-                    </button>
-                  </div>
-
-                  {/* Primary CTA */}
+              {/* Subscription Section - Redesigned */}
+              <div className="border border-gray-200 rounded-xl bg-white p-5 space-y-4">
+                {/* Frequency Selector Buttons */}
+                <div className="flex gap-3">
                   <button
-                    onClick={handleAddToCart}
-                    className="flex-1 h-[52px] rounded-full font-semibold text-sm transition-all hover:opacity-90"
-                    style={{ backgroundColor: '#0D1B2A', color: '#FFFFFF' }}
-                  >
-                    ADD TO CART – ₹{(currentPrice * quantity).toFixed(0)}
+                    onClick={() => setSubscriptionFrequency('4weeks')}
+                    className={`flex-1 p-4 border-2 rounded-lg transition-all ${
+                    subscriptionFrequency === '4weeks' ?
+                    'border-gray-900 bg-gray-50' :
+                    'border-gray-200 hover:border-gray-300'}`
+                    }>
+                    
+                    <div className="flex items-center gap-3">
+                      <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
+                      subscriptionFrequency === '4weeks' ?
+                      'border-gray-900' :
+                      'border-gray-300'}`
+                      }>
+                        {subscriptionFrequency === '4weeks' &&
+                        <div className="w-3 h-3 rounded-full bg-gray-900"></div>
+                        }
+                      </div>
+                      <div className="text-left flex-1">
+                        <div className="font-semibold text-gray-900">Every 4 weeks</div>
+                        <div className="text-xs text-gray-600 mt-0.5">20% OFF</div>
+                      </div>
+                    </div>
+                  </button>
+                  
+                  <button
+                    onClick={() => setSubscriptionFrequency('8weeks')}
+                    className={`flex-1 p-4 border-2 rounded-lg transition-all ${
+                    subscriptionFrequency === '8weeks' ?
+                    'border-gray-900 bg-gray-50' :
+                    'border-gray-200 hover:border-gray-300'}`
+                    }>
+                    
+                    <div className="flex items-center gap-3">
+                      <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
+                      subscriptionFrequency === '8weeks' ?
+                      'border-gray-900' :
+                      'border-gray-300'}`
+                      }>
+                        {subscriptionFrequency === '8weeks' &&
+                        <div className="w-3 h-3 rounded-full bg-gray-900"></div>
+                        }
+                      </div>
+                      <div className="text-left flex-1">
+                        <div className="font-semibold text-gray-900">Every 8 weeks</div>
+                        <div className="text-xs text-gray-600 mt-0.5">15% OFF</div>
+                      </div>
+                    </div>
                   </button>
                 </div>
 
-                {/* 5.3 Shop Pay Button */}
-                <button
-                  className="w-full h-12 rounded-full text-white font-semibold text-sm transition-all hover:opacity-90"
-                  style={{ background: 'linear-gradient(135deg, #6D28D9, #7C3AED)' }}
-                >
-                  Buy with Shop Pay
-                </button>
-
-                {/* 5.4 More payment options */}
-                <p className="text-center text-[13px]" style={{ color: '#6B7280' }}>
-                  More payment options
-                </p>
-
-                {/* 5.5 Subscription Note */}
-                <div className="flex items-center gap-2">
-                  <Check className="w-4 h-4" style={{ color: '#0D1B2A' }} />
-                  <span className="text-[13px]" style={{ color: '#6B7280' }}>Manage your subscription anytime</span>
+                {/* Quantity Selector + Subscribe Button */}
+                <div className="flex items-center gap-3">
+                  <div className="inline-flex items-center border border-gray-300 rounded-lg overflow-hidden">
+                    <button
+                      onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                      className="w-12 h-12 flex items-center justify-center hover:bg-gray-50 transition-colors border-r border-gray-300">
+                      
+                      <Minus className="w-4 h-4" />
+                    </button>
+                    <span className="w-12 h-12 flex items-center justify-center font-medium">{quantity}</span>
+                    <button
+                      onClick={() => setQuantity(quantity + 1)}
+                      className="w-12 h-12 flex items-center justify-center hover:bg-gray-50 transition-colors border-l border-gray-300">
+                      
+                      <Plus className="w-4 h-4" />
+                    </button>
+                  </div>
+                  
+                  {/* Subscribe Button */}
+                  <button
+                    onClick={handleAddToCart}
+                    className="flex-1 h-12 bg-gray-900 text-white rounded-lg font-semibold hover:bg-gray-800 transition-colors">
+                    
+                    Subscribe & Save 20%
+                  </button>
                 </div>
               </div>
 
-              {/* ===== 6. ONE-TIME PURCHASE ===== */}
-              <button
-                onClick={() => setPurchaseType('onetime')}
-                className="w-full text-left rounded-2xl p-5"
-                style={{ border: '1px solid ' + (purchaseType === 'onetime' ? '#0D1B2A' : '#E5E7EB') }}
-              >
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="w-5 h-5 rounded-full border-2 flex items-center justify-center" style={{ borderColor: purchaseType === 'onetime' ? '#0D1B2A' : '#E5E7EB' }}>
-                      {purchaseType === 'onetime' && <div className="w-3 h-3 rounded-full" style={{ backgroundColor: '#0D1B2A' }} />}
+              {/* One-time Purchase / Add to Cart Section */}
+              <div className="border border-gray-200 rounded-xl bg-white p-5">
+                <div className="flex items-center gap-3">
+                  <div className="inline-flex items-center border border-gray-300 rounded-lg overflow-hidden">
+                    <button
+                      onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                      className="w-12 h-12 flex items-center justify-center hover:bg-gray-50 transition-colors border-r border-gray-300"
+                      disabled={quantity <= 1}>
+                      
+                      <Minus className="w-4 h-4" />
+                    </button>
+                    <span className="w-12 h-12 flex items-center justify-center font-medium">{quantity}</span>
+                    <button
+                      onClick={() => setQuantity(quantity + 1)}
+                      className="w-12 h-12 flex items-center justify-center hover:bg-gray-50 transition-colors border-l border-gray-300">
+                      
+                      <Plus className="w-4 h-4" />
+                    </button>
+                  </div>
+
+                  <button
+                    onClick={handleAddToCart}
+                    className="flex-1 h-12 bg-gray-900 text-white hover:bg-black rounded-lg font-semibold transition-all duration-200">
+                    
+                    ADD TO CART - ₹{(onetimePrice * quantity).toFixed(0)}
+                  </button>
+                </div>
+              </div>
+
+              {/* Benefits */}
+              <div className="space-y-3">
+                <div className="flex items-center space-x-2">
+                  <div className="w-6 h-6 bg-gray-900 rounded-full flex items-center justify-center">
+                    <CheckCircle className="w-4 h-4 text-white" />
+                  </div>
+                  <span className="text-sm text-gray-700">Skip or cancel anytime</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <div className="w-6 h-6 bg-gray-900 rounded-full flex items-center justify-center">
+                    <CheckCircle className="w-4 h-4 text-white" />
+                  </div>
+                  <span className="text-sm text-gray-700">20% off every subscription order</span>
+                </div>
+              </div>
+
+              {/* Trust Indicators */}
+              <div className="grid grid-cols-2 gap-3 pt-3 border-t border-gray-200">
+                <div className="flex items-center space-x-4 mt-2 text-sm text-gray-500">
+                  <span>Price: ₹{product.price}</span>
+                </div>
+                <div className="flex items-center space-x-2 text-xs text-gray-600">
+                  <Shield className="w-4 h-4 text-blue-600" />
+                  <span>30-day money back</span>
+                </div>
+                <div className="flex items-center space-x-2 text-xs text-gray-600">
+                  <RefreshCw className="w-4 h-4 text-purple-600" />
+                  <span>Skip or cancel anytime</span>
+                </div>
+                <div className="flex items-center space-x-2 text-xs text-gray-600">
+                  <Award className="w-4 h-4 text-orange-600" />
+                  <span>Award-winning quality</span>
+                </div>
+              </div>
+
+              {/* Accordions */}
+              <div className="space-y-4 pt-4 border-t border-gray-200">
+                <Collapsible open={scienceOpen} onOpenChange={setScienceOpen}>
+                  <CollapsibleTrigger className="flex items-center justify-between w-full py-2 border-b border-gray-200 hover:bg-gray-50/50 transition-colors">
+                    <h3 className="text-sm font-semibold text-gray-900">The Science</h3>
+                    {scienceOpen ? <Minus className="w-4 h-4 text-gray-500 transition-transform" /> : <Plus className="w-4 h-4 text-gray-500 transition-transform" />}
+                  </CollapsibleTrigger>
+                  <CollapsibleContent className="pt-2 pb-1 overflow-hidden transition-all duration-300 ease-in-out">
+                    <div className="space-y-3 text-xs text-gray-700">
+                      <p>
+                        Matcha comes from the Camellia sinensis plant (same as green tea), but it's made differently: the leaves are shade-grown, then finely milled into a powder. That means you're not just steeping tea and tossing the leaves — you're consuming the leaf itself. Result: a richer, more concentrated matcha experience in both taste and naturally occurring compounds.
+                      </p>
+                      <p>
+                        Matcha's energy also tends to feel… more composed. That's because matcha naturally contains caffeine + L-theanine — a tea amino acid often linked to a calmer, more focused "alert" feel compared to caffeine drinks' spike-and-crash reputation. Translation: steady energy, cleaner headspace, fewer "why am I vibrating?" moments.
+                      </p>
+                      <p>
+                        Depending on the product you're drinking, matcha also contains a mix of plant compounds that shape how it tastes and why it's been respected for centuries:
+                      </p>
+                      <ul className="list-disc list-inside space-y-1 ml-2">
+                        <li>
+                          <strong>L-theanine</strong> — associated with calm-focus vibes (especially alongside caffeine)
+                        </li>
+                        <li>
+                          <strong>Catechins</strong> — the crisp, slightly bitter plant compounds in green tea (yes, the "real matcha" taste cue)
+                        </li>
+                        <li>
+                          <strong>Chlorophyll</strong> — the pigment that makes matcha that vivid, neon-clean green (shade-growing helps)
+                        </li>
+                      </ul>
+                      <p>
+                        If you're looking at functional blends that pair matcha with other ingredients (like mushrooms or vitamins), the goal is usually to build on matcha's natural "calm energy" profile — but the core is still the same: ceremonial matcha done properly, as a daily ritual that feels good and tastes even better.
+                      </p>
                     </div>
-                    <span className="text-sm font-medium" style={{ color: '#0D1B2A' }}>One-time Purchase</span>
-                  </div>
-                  <span className="text-lg font-bold" style={{ color: '#0D1B2A' }}>₹{product.price}</span>
-                </div>
-                <div className="ml-8 mt-1 space-y-0.5">
-                  <p className="text-xs" style={{ color: '#6B7280' }}>Free gifts NOT included</p>
-                  <p className="text-xs" style={{ color: '#6B7280' }}>₹{(product.price / 30).toFixed(2)} per serving</p>
-                </div>
-              </button>
+                  </CollapsibleContent>
+                </Collapsible>
 
-              {/* ===== 7. ACCORDION SECTIONS ===== */}
-              <div className="space-y-0">
-                {[
-                  { label: 'Why choose NASTEA', open: whyChooseOpen, setOpen: setWhyChooseOpen, content: 'Japan-sourced, shade-grown, stone-milled ceremonial matcha. Organic, lab-tested, no fillers. Clean energy meets calm focus — the way matcha was meant to be.' },
-                  { label: 'Ingredients', open: ingredientsOpen, setOpen: setIngredientsOpen, content: 'Organic ceremonial grade matcha (Camellia sinensis), organic Lion\'s Mane extract, organic Tremella extract, organic zinc, B-vitamin complex.' },
-                  { label: 'The Science', open: scienceOpen, setOpen: setScienceOpen, content: 'Matcha naturally contains caffeine + L-theanine — a combo linked to calmer, more focused alertness. You consume the whole leaf, getting a richer concentration of plant compounds.' },
-                  { label: 'How to Use', open: howToUseOpen, setOpen: setHowToUseOpen, content: '1. Whisk 2-3g with a splash of warm water until smooth. 2. Add ice (or keep hot). 3. Pour in milk of choice. 4. Stir and enjoy.' },
-                ].map((item, idx) => (
-                  <Collapsible key={idx} open={item.open} onOpenChange={item.setOpen}>
-                    <CollapsibleTrigger className="flex items-center justify-between w-full py-4 text-left" style={{ borderTop: '1px solid #E5E7EB' }}>
-                      <span className="text-sm font-semibold" style={{ color: '#0D1B2A' }}>{item.label}</span>
-                      <Plus className="w-4 h-4" style={{ color: '#6B7280' }} />
-                    </CollapsibleTrigger>
-                    <CollapsibleContent className="pb-4">
-                      <p className="text-sm leading-relaxed" style={{ color: '#6B7280' }}>{item.content}</p>
-                    </CollapsibleContent>
-                  </Collapsible>
-                ))}
-              </div>
-
-              {/* ===== 8. REVIEW PREVIEW CARD ===== */}
-              <div className="rounded-[10px] p-4 flex gap-4" style={{ backgroundColor: '#F9FAFB' }}>
-                <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0 bg-gray-300">
-                  <img src={testimonials[0].image} alt={testimonials[0].name} className="w-full h-full object-cover" />
-                </div>
-                <div className="space-y-1">
-                  <p className="text-sm font-semibold" style={{ color: '#0D1B2A' }}>{testimonials[0].name}</p>
-                  <div className="flex">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="w-3 h-3 fill-current" style={{ color: '#0D1B2A' }} />
-                    ))}
-                  </div>
-                  <p className="text-[13px] leading-relaxed" style={{ color: '#6B7280' }}>
-                    "{testimonials[0].review}"
-                  </p>
-                </div>
+                <Collapsible open={howToUseOpen} onOpenChange={setHowToUseOpen}>
+                  <CollapsibleTrigger className="flex items-center justify-between w-full py-2 border-b border-gray-200 hover:bg-gray-50/50 transition-colors">
+                    <h3 className="text-sm font-semibold text-gray-900">How to NASTEA</h3>
+                    {howToUseOpen ? <Minus className="w-4 h-4 text-gray-500 transition-transform" /> : <Plus className="w-4 h-4 text-gray-500 transition-transform" />}
+                  </CollapsibleTrigger>
+                  <CollapsibleContent className="pt-2 pb-1 overflow-hidden transition-all duration-300 ease-in-out">
+                    <div className="space-y-1 text-xs text-gray-700">
+                      <p>1. Whisk 3g NR Matcha with a splash of warm water until smooth + frothy.</p>
+                      <p>2. Fill a glass with ice (skip ice if you want it hot).</p>
+                      <p>3. Pour in milk of choice (almond/oat milk is elite).</p>
+                      <p>4. Top with the whisked matcha, stir, sip like you've got plans.</p>
+                    </div>
+                  </CollapsibleContent>
+                </Collapsible>
               </div>
             </div>
           </div>
 
-          {/* ===== BELOW-FOLD SECTIONS (kept from original) ===== */}
           <div className="bg-white">
-            {/* Pure ingredients section */}
+            {/* SECTION 1 — Pure ingredients, powerful benefits. */}
             <section className="w-full py-16">
-              <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+              <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center px-0">
                 <div className="space-y-6">
-                  <p className="text-sm uppercase tracking-[0.2em]" style={{ color: '#6B7280' }}>Mushroom Matcha</p>
-                  <h2 className="text-4xl lg:text-5xl font-serif font-bold leading-tight" style={{ color: '#0D1B2A' }}>
-                    Pure ingredients,<br />powerful benefits.
+                  <p className="text-sm uppercase tracking-[0.2em] text-gray-500">Mushroom Matcha</p>
+                  <h2 className="text-4xl lg:text-5xl font-serif font-bold text-gray-900 leading-tight">
+                    Pure ingredients,
+                    <br />
+                    powerful benefits.
                   </h2>
                 </div>
                 <div className="relative">
-                  <div className="relative overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.08)]">
+                  <div className="relative overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.08)] lg:translate-x-6">
                     <AdminImageUpload src="/lovable-uploads/b4c48a6c-d28c-480e-b907-ec5d22258308.png" alt="Pure ingredients macro" className="w-full h-full object-cover" imagePath="pure-ingredients-hero" />
                   </div>
                 </div>
               </div>
             </section>
 
-            {/* Ingredient Texture */}
+            {/* SECTION 2 — Ingredient Texture + Benefit Explanation */}
             <section className="w-full py-16">
-              <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+              <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center px-0">
                 <div className="relative">
                   <div className="overflow-hidden shadow-[0_16px_40px_rgba(0,0,0,0.06)]">
                     <AdminImageUpload src="/lovable-uploads/b9b609e5-82c9-4039-98a5-3da3b835c962.png" alt="Ingredient texture" className="w-full h-full object-cover" imagePath="texture-shot" />
                   </div>
                 </div>
                 <div className="space-y-6">
-                  <h3 className="text-3xl lg:text-4xl font-serif font-bold" style={{ color: '#0D1B2A' }}>Your everyday essential for sharper focus and improved productivity</h3>
-                  <p className="text-lg leading-relaxed" style={{ color: '#6B7280' }}>Ceremonial-grade matcha paired with functional mushrooms for clean energy, calm clarity, and nourished skin—all in one ritual.</p>
-                  <div className="space-y-3">
-                    {['Focus', 'Mental clarity', 'Cognitive performance'].map(label => (
-                      <div key={label} className="flex items-center gap-3">
-                        <span className="w-2 h-2 rounded-full inline-block" style={{ backgroundColor: '#0D1B2A' }} />
-                        <p className="font-medium" style={{ color: '#0D1B2A' }}>{label}</p>
-                      </div>
-                    ))}
+                  <h3 className="text-3xl lg:text-4xl font-serif font-bold text-gray-900">Your everyday essential for sharper focus and improved productivity</h3>
+                  <p className="text-gray-700 text-lg leading-relaxed">Ceremonial-grade matcha paired with functional mushrooms for clean energy, calm clarity, and nourished skin—all in one ritual.</p>
+                  <div className="space-y-3 text-gray-800">
+                    <div className="flex items-center space-x-3">
+                      <span className="w-2 h-2 rounded-full bg-gray-900 inline-block"></span>
+                      <p className="font-medium">Focus</p>
+                    </div>
+                    <div className="flex items-center space-x-3">
+                      <span className="w-2 h-2 rounded-full bg-gray-900 inline-block"></span>
+                      <p className="font-medium">Mental clarity</p>
+                    </div>
+                    <div className="flex items-center space-x-3">
+                      <span className="w-2 h-2 rounded-full bg-gray-900 inline-block"></span>
+                      <p className="font-medium">Cognitive performance</p>
+                    </div>
                   </div>
                 </div>
               </div>
             </section>
 
-            {/* How to use */}
+            {/* SECTION 3 — How to Use (Instructional) */}
             <section className="w-full py-16">
-              <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+              <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center px-0">
                 <div className="space-y-4">
                   <div className="w-48 overflow-hidden shadow-[0_12px_30px_rgba(0,0,0,0.08)]">
                     <AdminImageUpload src="/lovable-uploads/8edc40eb-3dfa-45fb-8cac-fc1a12ec6a3c.png" alt="Product container" className="w-full h-full object-cover" imagePath="how-to-thumb" />
                   </div>
-                  <h3 className="text-3xl font-serif font-bold" style={{ color: '#0D1B2A' }}>How to NASTEA</h3>
-                  <p className="text-lg leading-relaxed" style={{ color: '#6B7280' }}>Just add 2g of pure Lion's Mane powder to hot water or add 2g to your daily coffee or workout smoothie.</p>
+                  <h3 className="text-3xl font-serif font-bold text-gray-900">How to NASTEA</h3>
+                  <p className="text-gray-700 text-lg leading-relaxed">Just add 2g of pure Lion’s Mane powder to hot water or add 2g to your daily coffee or workout smoothie.</p>
                 </div>
                 <div className="relative overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.08)]">
                   <AdminImageUpload src="/lovable-uploads/65581248-fb35-4b2f-8b55-04877e634119.png" alt="Stirring powder into a drink" className="w-full h-full object-cover" imagePath="how-to-lifestyle" />
@@ -494,15 +688,15 @@ const ProductDetail = () => {
               </div>
             </section>
 
-            {/* Benefit pills */}
+            {/* SECTION 4 — Benefit Pills / Feature Highlights */}
             <section className="w-full py-16">
-              <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+              <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center px-0">
                 <div className="space-y-4">
-                  {['Mental clarity', 'Cognitive function', 'Immune support'].map(label => (
-                    <div key={label} className="px-6 py-4 bg-white/70 shadow-[0_12px_30px_rgba(0,0,0,0.06)] text-xl font-semibold w-fit" style={{ color: '#0D1B2A' }}>
+                  {['Mental clarity', 'Cognitive function', 'Immune support'].map((label) =>
+                  <div key={label} className="px-6 py-4 bg-white/70 shadow-[0_12px_30px_rgba(0,0,0,0.06)] text-xl font-semibold text-gray-900 w-fit">
                       {label}
                     </div>
-                  ))}
+                  )}
                 </div>
                 <div className="relative overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.08)]">
                   <AdminImageUpload src="/lovable-uploads/e3cb3dde-3127-4252-8b46-ab17c78f4ad8.png" alt="Wellness lifestyle" className="w-full h-full object-cover" imagePath="benefit-lifestyle" />
@@ -510,65 +704,79 @@ const ProductDetail = () => {
               </div>
             </section>
 
-            {/* Comparison */}
+            {/* SECTION 5 — Comparison (“How it Compares”) */}
             <section className="w-full py-16">
-              <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+              <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center px-0">
                 <div className="relative overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.08)]">
                   <AdminImageUpload src="/lovable-uploads/45a06faf-330b-4d76-a34b-4c50248900a2.png" alt="Hand holding beverage" className="w-full h-full object-cover" imagePath="compare-hand" />
                 </div>
                 <div className="space-y-6">
-                  <h3 className="text-3xl lg:text-4xl font-serif font-bold" style={{ color: '#0D1B2A' }}>How it Compares</h3>
-                  <div className="space-y-4">
+                  <h3 className="text-3xl lg:text-4xl font-serif font-bold text-gray-900">How it Compares</h3>
+                  <div className="space-y-4 text-gray-800">
                     <div className="space-y-2">
-                      <p className="text-lg font-semibold" style={{ color: '#0D1B2A' }}>NASTEA vs Coffee</p>
-                      <div className="flex items-start gap-3"><CheckCircle className="w-5 h-5 mt-0.5" style={{ color: '#0D1B2A' }} /><p style={{ color: '#6B7280' }}>Calm, sustained energy without jitters.</p></div>
-                      <div className="flex items-start gap-3"><CheckCircle className="w-5 h-5 mt-0.5" style={{ color: '#0D1B2A' }} /><p style={{ color: '#6B7280' }}>Adaptogens to support focus and immunity.</p></div>
+                      <p className="text-lg font-semibold">NASTEA vs Coffee</p>
+                      <div className="flex items-start space-x-3">
+                        <CheckCircle className="w-5 h-5 text-gray-800 mt-1" />
+                        <p>Calm, sustained energy without jitters.</p>
+                      </div>
+                      <div className="flex items-start space-x-3">
+                        <CheckCircle className="w-5 h-5 text-gray-800 mt-1" />
+                        <p>Adaptogens to support focus and immunity.</p>
+                      </div>
                     </div>
                     <div className="space-y-2">
-                      <p className="text-lg font-semibold" style={{ color: '#0D1B2A' }}>NASTEA vs Synthetic Nootropics</p>
-                      <div className="flex items-start gap-3"><CheckCircle className="w-5 h-5 mt-0.5" style={{ color: '#0D1B2A' }} /><p style={{ color: '#6B7280' }}>Natural ingredients, lab-tested for purity.</p></div>
-                      <div className="flex items-start gap-3"><CheckCircle className="w-5 h-5 mt-0.5" style={{ color: '#0D1B2A' }} /><p style={{ color: '#6B7280' }}>No crash, no artificial stimulants.</p></div>
+                      <p className="text-lg font-semibold">NASTEA vs Synthetic Nootropics</p>
+                      <div className="flex items-start space-x-3">
+                        <CheckCircle className="w-5 h-5 text-gray-800 mt-1" />
+                        <p>Natural ingredients, lab-tested for purity.</p>
+                      </div>
+                      <div className="flex items-start space-x-3">
+                        <CheckCircle className="w-5 h-5 text-gray-800 mt-1" />
+                        <p>No crash, no artificial stimulants.</p>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </section>
 
-            {/* Reviews */}
+            {/* SECTION 6 — Customer Reviews */}
             <ReviewsSection />
 
-            {/* Recipe Cards */}
+            {/* SECTION 7 — Recipe / Use-Case Cards */}
             <section className="w-full py-16">
-              <div className="w-full space-y-10">
+              <div className="w-full space-y-10 px-0">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch bg-white/70 shadow-[0_14px_40px_rgba(0,0,0,0.06)] overflow-hidden">
                   <div className="relative">
                     <AdminImageUpload src="/lovable-uploads/65581248-fb35-4b2f-8b55-04877e634119.png" alt="The Focus Coffee" className="w-full h-full object-cover" imagePath="focus-coffee" />
                   </div>
                   <div className="p-8 flex flex-col justify-center space-y-4">
-                    <p className="text-sm font-medium" style={{ color: '#6B7280' }}>Founder's Super Blend Recipe</p>
-                    <h4 className="text-3xl font-serif font-bold" style={{ color: '#0D1B2A' }}>Nastea Coconut Cloud Matcha</h4>
-                    <p className="text-base" style={{ color: '#6B7280' }}>Light, tropical, and stupidly refreshing.</p>
-                    <h5 className="text-lg font-bold pt-4" style={{ color: '#0D1B2A' }}>Recipe:</h5>
-                    <ul className="space-y-2" style={{ color: '#6B7280' }}>
-                      <li>• Whisk Nastea matcha + milk until silky and frothy.</li>
+                    <p className="text-sm font-medium text-gray-600">Founder's Super Blend Recipe</p>
+                    <h4 className="text-3xl font-serif font-bold text-gray-900">Nastea Coconut Cloud Matcha</h4>
+                    <p className="text-base text-gray-700">Light, tropical, and stupidly refreshing - calm clean energy with a smooth, airy finish.</p>
+                    <h5 className="text-lg font-bold text-gray-900 pt-4">Recipe:</h5>
+                    <ul className="space-y-2 text-gray-700">
+                      <li>• Whisk Nastea matcha + milk until silky and frothy (no clumps, please).</li>
                       <li>• Fill a glass with ice and pour in coconut water.</li>
-                      <li>• Gently pour matcha over the top.</li>
-                      <li>• Add sweetener, lime, or a pinch of salt to taste.</li>
+                      <li>• Gently pour matcha over the top for that clean green layer.</li>
+                      <li>• Taste - then decide if you want sweetener, lime, or a tiny pinch of salt.</li>
+                      <li>• Stir when you're ready. Or don't. Let it look expensive first.</li>
                     </ul>
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch bg-white/70 shadow-[0_14px_40px_rgba(0,0,0,0.06)] overflow-hidden">
                   <div className="p-8 flex flex-col justify-center space-y-4 order-2 lg:order-1">
-                    <p className="text-sm font-medium" style={{ color: '#6B7280' }}>The Everyday Classic</p>
-                    <h4 className="text-3xl font-serif font-bold" style={{ color: '#0D1B2A' }}>Iced Matcha Latte</h4>
-                    <p className="text-base" style={{ color: '#6B7280' }}>Creamy, smooth, and steady.</p>
-                    <h5 className="text-lg font-bold pt-4" style={{ color: '#0D1B2A' }}>Recipe:</h5>
-                    <ul className="space-y-2" style={{ color: '#6B7280' }}>
-                      <li>• Add Nastea matcha + water until smooth.</li>
+                    <p className="text-sm font-medium text-gray-600">The Everyday Classic</p>
+                    <h4 className="text-3xl font-serif font-bold text-gray-900">Iced Matcha Latte</h4>
+                    <p className="text-base text-gray-700">Creamy, smooth, and steady - your daily clean-caffeine ritual with zero jitters, all vibe.</p>
+                    <h5 className="text-lg font-bold text-gray-900 pt-4">Recipe:</h5>
+                    <ul className="space-y-2 text-gray-700">
+                      <li>• Add Nastea matcha + water until smooth and frothy.</li>
                       <li>• Fill a glass with ice.</li>
                       <li>• Pour in milk (and sweetener, if using).</li>
-                      <li>• Top with whisked matcha for the layered look.</li>
+                      <li>• Top with your whisked matcha - slow pour for the layered look.</li>
+                      <li>• Stir, sip, and pretend you're not impressed by how good it is.</li>
                     </ul>
                   </div>
                   <div className="relative order-1 lg:order-2">
@@ -578,30 +786,101 @@ const ProductDetail = () => {
               </div>
             </section>
 
-            {/* FAQ */}
+            {/* SECTION 8 — You may also like (Carousel/Grid) */}
+            {false &&
             <section className="w-full py-16">
-              <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
-                <div className="space-y-4">
-                  <p className="text-sm uppercase tracking-[0.2em]" style={{ color: '#6B7280' }}>Quality Promise</p>
-                  <h4 className="text-3xl lg:text-4xl font-serif font-bold" style={{ color: '#0D1B2A' }}>The NASTEA Standard</h4>
-                  <p className="leading-relaxed" style={{ color: '#6B7280' }}>Crafted with organic ingredients, rigorously tested, and designed for daily rituals that elevate body and mind.</p>
+                <div className="w-full px-0 space-y-8">
+                  <h4 className="text-2xl font-serif font-bold text-gray-900">You may also like</h4>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    {relatedProducts.map((item, index) =>
+                  <div key={index} className="bg-white/80 shadow-[0_12px_30px_rgba(0,0,0,0.05)] overflow-hidden">
+                        <div className="aspect-square overflow-hidden">
+                          <AdminImageUpload src={item.image} alt={item.name} className="w-full h-full object-cover" imagePath={`related-${index}`} />
+                        </div>
+                        <div className="p-4 space-y-1">
+                          <p className="text-sm uppercase tracking-wide text-gray-500">{item.description}</p>
+                          <p className="text-lg font-semibold text-gray-900">{item.name}</p>
+                          <p className="text-gray-700 text-sm">{item.price}</p>
+                        </div>
+                      </div>
+                  )}
+                  </div>
                 </div>
-                <div className="bg-white/80 shadow-[0_14px_40px_rgba(0,0,0,0.06)] divide-y" style={{ borderColor: '#E5E7EB' }}>
-                  {[
-                    { q: 'How does NR matcha support steady energy and calm focus?', a: 'Matcha naturally contains caffeine plus L-theanine — a combo many people find feels smoother and steadier than coffee.' },
-                    { q: 'What makes NR different from regular matcha?', a: 'Japan-grown, shade-grown, stone-milled matcha chosen for smooth taste, vivid colour, and consistency.' },
-                    { q: 'What grades do you offer?', a: 'Imperial Ceremonial, Organic Ceremonial, and Japanese Classic.' },
-                    { q: 'Is NR matcha organic?', a: 'Yes — our matcha is certified organic.' },
-                    { q: 'Does matcha have caffeine?', a: 'Yes — matcha typically feels "cleaner" for many people because of L-theanine.' },
-                  ].map((item, idx) => (
-                    <Collapsible key={idx}>
-                      <CollapsibleTrigger className="flex items-center justify-between w-full py-4 px-6 text-left text-sm font-semibold" style={{ color: '#0D1B2A' }}>
+              </section>
+            }
+
+            {/* SECTION 9 — Brand Standards / FAQ (Accordion) */}
+            <section className="w-full py-16">
+              <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-start px-0">
+                <div className="space-y-4">
+                  <p className="text-sm uppercase tracking-[0.2em] text-gray-500">Quality Promise</p>
+                  <h4 className="text-3xl lg:text-4xl font-serif font-bold text-gray-900">The NASTEA Standard</h4>
+                  <p className="text-gray-700 leading-relaxed">Crafted with organic ingredients, rigorously tested, and designed for daily rituals that elevate body and mind.</p>
+                </div>
+                <div className="bg-white/80 shadow-[0_14px_40px_rgba(0,0,0,0.06)] divide-y divide-gray-200">
+                  {[{
+                    q: 'How does NR matcha support steady energy and calm focus?',
+                    a: 'Matcha naturally contains caffeine plus L-theanine — a combo many people find feels smoother and steadier than coffee.'
+                  }, {
+                    q: 'How does NR matcha help the skin?',
+                    a: 'Matcha contains plant antioxidants (like catechins) and chlorophylls; skincare outcomes vary by person, diet, and routine — we keep it as a daily ritual, not a miracle claim.'
+                  }, {
+                    q: 'What makes NR different from regular matcha?',
+                    a: 'Japan-grown, shade-grown, stone-milled matcha chosen for what matters in-cup: smooth taste, vivid colour, and consistency (no “green powder” cosplay).'
+                  }, {
+                    q: 'What grades do you offer?',
+                    a: 'Imperial Ceremonial (straight sipping + premium cups), Organic Ceremonial (daily lattes + cafés), Japanese Classic (baking/recipes/R&D).'
+                  }, {
+                    q: 'When is the best time to drink matcha?',
+                    a: 'Morning or early afternoon is ideal for most people — especially if you’re caffeine-sensitive later in the day.'
+                  }, {
+                    q: 'Is NR matcha vegan?',
+                    a: 'Yes — it’s pure matcha (just tea leaf powder).'
+                  }, {
+                    q: 'Is there any sugar in NR matcha?',
+                    a: 'No added sugar — any sweetness comes from what you add (milk, honey, syrup, etc.).'
+                  }, {
+                    q: 'Is your matcha organic?',
+                    a: 'Yes — our matcha is organic (see product page/pack for certification details per SKU).'
+                  }, {
+                    q: 'Is it gluten-free?',
+                    a: 'Matcha is naturally gluten-free; if you have severe sensitivities, check the pack for facility/allergen statements.'
+                  }, {
+                    q: 'Can I drink matcha if I’m pregnant or breastfeeding?',
+                    a: 'Caffeine guidelines vary — best to check with your clinician and factor in total daily caffeine from all sources.'
+                  }, {
+                    q: 'How should I store matcha?',
+                    a: 'Seal it tight, keep it cool and dry, away from heat/light and strong smells; refrigerate only if you can prevent moisture/odours.'
+                  }, {
+                    q: 'How much matcha should I use per drink?',
+                    a: 'Start with 2–3g per serving and adjust to taste and caffeine tolerance.'
+                  }, {
+                    q: 'Does matcha have caffeine?',
+                    a: 'Yes — amount depends on grams used and the tea; matcha typically feels “cleaner” for many people because of L-theanine.'
+                  }, {
+                    q: 'Can I take matcha with other supplements?',
+                    a: 'Generally yes, but if you’re on medication or sensitive to caffeine, check with a professional.'
+                  }, {
+                    q: 'Are there any allergens?',
+                    a: 'Matcha is a single-ingredient tea leaf powder; always check your pack for facility handling statements.'
+                  }, {
+                    q: 'How and where is NR made?',
+                    a: 'Sourced from Japan; final packing is done to keep it fresh and café-ready (see product page/pack for the exact details per SKU).'
+                  }, {
+                    q: 'Can kids have matcha?',
+                    a: 'Because it contains caffeine, we generally recommend avoiding it for children unless advised by a healthcare professional.'
+                  }, {
+                    q: 'Can I drink it every day?',
+                    a: 'Yes — many people do; just keep an eye on your total daily caffeine and how you feel.'
+                  }].map((item, idx) =>
+                  <Collapsible key={idx}>
+                      <CollapsibleTrigger className="flex items-center justify-between w-full py-4 px-6 text-left font-semibold text-gray-900">
                         {item.q}
-                        <ChevronRight className="w-4 h-4 flex-shrink-0" style={{ color: '#6B7280' }} />
+                        <ChevronRight className="w-5 h-5 text-gray-500" />
                       </CollapsibleTrigger>
-                      <CollapsibleContent className="px-6 pb-4 text-sm" style={{ color: '#6B7280' }}>{item.a}</CollapsibleContent>
+                      <CollapsibleContent className="px-6 pb-4 text-gray-700">{item.a}</CollapsibleContent>
                     </Collapsible>
-                  ))}
+                  )}
                 </div>
               </div>
             </section>
@@ -610,8 +889,8 @@ const ProductDetail = () => {
       </div>
 
       {/* Image Modal */}
-      {showImageModal && (
-        <div className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4">
+      {showImageModal &&
+      <div className="fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center p-4">
           <div className="relative max-w-4xl max-h-full">
             <button onClick={() => setShowImageModal(false)} className="absolute top-4 right-4 text-white hover:text-gray-300 z-10">
               <X className="w-8 h-8" />
@@ -619,11 +898,10 @@ const ProductDetail = () => {
             <img src={productImages[selectedImage]} alt={product.name} className="max-w-full max-h-full object-contain" />
           </div>
         </div>
-      )}
+      }
 
       <Footer />
-    </div>
-  );
-};
+    </div>);
 
+};
 export default ProductDetail;
