@@ -28,15 +28,15 @@ serve(async (req: Request) => {
       { global: { headers: { Authorization: authHeader } } }
     );
 
-    const token = authHeader.replace("Bearer ", "");
-    const { data: claimsData, error: claimsError } = await supabase.auth.getClaims(token);
-    if (claimsError || !claimsData?.claims) {
+    const { data: { user }, error: userError } = await supabase.auth.getUser();
+    if (userError || !user) {
+      console.error("Auth error:", userError);
       return new Response(JSON.stringify({ error: "Unauthorized" }), {
         status: 401,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
-    const userId = claimsData.claims.sub;
+    const userId = user.id;
 
     const { shipping_cost = 0 } = await req.json();
 
@@ -47,6 +47,7 @@ serve(async (req: Request) => {
       .eq("user_id", userId);
 
     if (cartError || !cartItems || cartItems.length === 0) {
+      console.error("Cart error:", cartError);
       return new Response(
         JSON.stringify({ error: "Cart is empty or could not be loaded" }),
         { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
@@ -89,7 +90,6 @@ serve(async (req: Request) => {
           { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
         );
       }
-      // Use DB price, apply 20% subscription discount if applicable
       let unitPrice = product.price;
       if (item.is_subscription) {
         unitPrice = unitPrice * 0.8;

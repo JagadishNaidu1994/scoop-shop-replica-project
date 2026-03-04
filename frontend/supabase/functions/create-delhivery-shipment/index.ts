@@ -1,11 +1,12 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
 const DELHIVERY_API_KEY = Deno.env.get("DELHIVERY_API_KEY") || "";
-const DELHIVERY_BASE_URL = "https://track.delhivery.com/api";
+const DELHIVERY_BASE_URL = "https://track.delhivery.com/api/cmu/create.json";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Allow-Headers":
+    "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
   "Access-Control-Allow-Methods": "POST, OPTIONS",
 };
 
@@ -21,6 +22,7 @@ interface ShippingAddress {
   lastName: string;
   address: string;
   addressLine2?: string;
+  landmark?: string;
   city: string;
   state: string;
   postalCode: string;
@@ -38,112 +40,114 @@ interface OrderData {
   shipping_address: ShippingAddress;
 }
 
-interface DelhiveryOrder {
-  name: string;
-  company_name?: string;
-  address: string;
-  address_line2?: string;
-  city: string;
-  state: string;
-  pincode: string;
-  country: string;
-  phone: string;
-  email?: string;
-  order_type: string;
-  payment_mode: string;
-  order_amount: number;
-  order_date: string;
-  waybill?: string;
-  shipping_charges: number;
-  cod_charges?: number;
-  discount?: number;
-  total_amount: number;
-  product_details: {
-    sku: string;
-    name: string;
-    quantity: number;
-    price: number;
-  }[];
-  seller_name?: string;
-  seller_address?: string;
-  seller_city?: string;
-  seller_state?: string;
-  seller_pincode?: string;
-  seller_country?: string;
-}
+function buildDelhiveryPayload(orderData: OrderData) {
+  const productDesc = orderData.items
+    .map((i) => `${i.product_name} x${i.quantity}`)
+    .join(", ");
 
-function formatOrderData(orderData: OrderData): DelhiveryOrder {
-  const productDetails = orderData.items.map(item => ({
-    sku: `product_${item.product_id}`,
-    name: item.product_name,
-    quantity: item.quantity,
-    price: item.product_price
-  }));
+  const totalQty = orderData.items.reduce((sum, i) => sum + i.quantity, 0);
 
   return {
-    name: `${orderData.shipping_address.firstName} ${orderData.shipping_address.lastName}`,
-    company_name: "NASTEA",
-    address: orderData.shipping_address.address,
-    address_line2: orderData.shipping_address.addressLine2 || "",
-    city: orderData.shipping_address.city,
-    state: orderData.shipping_address.state,
-    pincode: orderData.shipping_address.postalCode,
-    country: orderData.shipping_address.country || "India",
-    phone: orderData.shipping_address.phone,
-    email: orderData.user_email || "",
-    order_type: "delivery",
-    payment_mode: orderData.payment_method === "card" ? "Prepaid" : "COD",
-    order_amount: orderData.total_amount,
-    order_date: new Date().toISOString().split("T")[0],
-    waybill: "",
-    shipping_charges: orderData.shipping_cost || 0,
-    cod_charges: 0,
-    discount: 0,
-    total_amount: orderData.total_amount,
-    product_details: productDetails,
-    seller_name: "NASTEA",
-    seller_address: "Your Business Address, Sector 1",
-    seller_city: "Gurugram",
-    seller_state: "Haryana",
-    seller_pincode: "122001",
-    seller_country: "India"
+    shipments: [
+      {
+        name: `${orderData.shipping_address.firstName} ${orderData.shipping_address.lastName}`,
+        add: orderData.shipping_address.address,
+        add2: orderData.shipping_address.addressLine2 || "",
+        pin: orderData.shipping_address.postalCode,
+        city: orderData.shipping_address.city,
+        state: orderData.shipping_address.state,
+        country: orderData.shipping_address.country || "India",
+        phone: orderData.shipping_address.phone,
+        order: orderData.order_number,
+        payment_mode: orderData.payment_method === "COD" ? "COD" : "Prepaid",
+        return_pin: "",
+        return_city: "",
+        return_phone: "",
+        return_add: "",
+        return_state: "",
+        return_country: "",
+        products_desc: productDesc,
+        hsn_code: "",
+        cod_amount: orderData.payment_method === "COD" ? orderData.total_amount.toString() : "0",
+        order_date: new Date().toISOString().split("T")[0],
+        total_amount: orderData.total_amount.toString(),
+        seller_add: "",
+        seller_name: "NASTEA",
+        seller_inv: "",
+        quantity: totalQty.toString(),
+        waybill: "",
+        shipment_width: "",
+        shipment_height: "",
+        weight: "",
+        seller_gst_tin: "",
+        shipping_mode: "Surface",
+        address_type: "",
+      },
+    ],
+    pickup_location: {
+      name: "NASTEA Warehouse",
+    },
   };
 }
 
 async function createDelhiveryShipment(orderData: OrderData) {
   try {
     console.log("Creating Delhivery shipment for order:", orderData.order_number);
-    
-    const delhiveryOrder = formatOrderData(orderData);
-    
-    const response = await fetch(`${DELHIVERY_BASE_URL}/c/create-invoice`, {
+
+    if (!DELHIVERY_API_KEY) {
+      console.error("DELHIVERY_API_KEY not set");
+      return {
+        success: false,
+        error: "Delhivery API key not configured",
+        packages: [],
+      };
+    }
+
+    const payload = buildDelhiveryPayload(orderData);
+    const bodyStr = `format=json&data=${JSON.stringify(payload)}`;
+
+    console.log("Delhivery request body:", bodyStr);
+
+    const response = await fetch(DELHIVERY_BASE_URL, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Token ${DELHIVERY_API_KEY}`,
+        "Content-Type": "application/x-www-form-urlencoded",
+        Authorization: `Token ${DELHIVERY_API_KEY}`,
+        Accept: "application/json",
       },
-      body: JSON.stringify({
-        format: "json",
-        data: {
-          shipments: [delhiveryOrder]
-        }
-      }),
+      body: bodyStr,
     });
 
-    const result = await response.json();
-    console.log("Delhivery response:", result);
+    const responseText = await response.text();
+    console.log("Delhivery raw response:", responseText);
 
-    if (result.success) {
+    let result;
+    try {
+      result = JSON.parse(responseText);
+    } catch {
+      console.error("Failed to parse Delhivery response as JSON");
+      return {
+        success: false,
+        error: `Non-JSON response: ${responseText.slice(0, 200)}`,
+        packages: [],
+      };
+    }
+
+    console.log("Delhivery parsed response:", JSON.stringify(result));
+
+    // Delhivery returns { success: true, packages: [...] } on success
+    if (result.success || result.packages?.length > 0) {
       return {
         success: true,
         packages: result.packages || [],
-        message: "Shipment created successfully"
+        message: "Shipment created successfully",
       };
     } else {
       return {
         success: false,
-        error: result.error || "Failed to create shipment",
-        message: "Failed to create Delhivery shipment"
+        error: result.rmk || result.error || JSON.stringify(result),
+        packages: result.packages || [],
+        message: "Failed to create Delhivery shipment",
       };
     }
   } catch (error) {
@@ -151,17 +155,15 @@ async function createDelhiveryShipment(orderData: OrderData) {
     return {
       success: false,
       error: (error as Error).message || "Network error",
-      message: "Failed to connect to Delhivery service"
+      packages: [],
+      message: "Failed to connect to Delhivery service",
     };
   }
 }
 
 serve(async (req: Request) => {
-  // Handle CORS preflight requests
   if (req.method === "OPTIONS") {
-    return new Response(null, {
-      headers: corsHeaders,
-    });
+    return new Response(null, { headers: corsHeaders });
   }
 
   try {
@@ -176,7 +178,7 @@ serve(async (req: Request) => {
     }
 
     const { orderData } = await req.json();
-    
+
     if (!orderData) {
       return new Response(
         JSON.stringify({ error: "Order data is required" }),
@@ -189,20 +191,17 @@ serve(async (req: Request) => {
 
     const result = await createDelhiveryShipment(orderData);
 
-    return new Response(
-      JSON.stringify(result),
-      {
-        status: result.success ? 200 : 400,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      }
-    );
+    return new Response(JSON.stringify(result), {
+      status: result.success ? 200 : 400,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
   } catch (error) {
     console.error("Edge function error:", error);
     return new Response(
-      JSON.stringify({ 
-        success: false, 
+      JSON.stringify({
+        success: false,
         error: "Internal server error",
-        message: "Failed to process shipment request"
+        message: "Failed to process shipment request",
       }),
       {
         status: 500,
