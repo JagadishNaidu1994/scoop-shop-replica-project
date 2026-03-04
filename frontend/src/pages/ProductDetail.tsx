@@ -131,7 +131,7 @@ const ProductDetail = () => {
         <HeaderNavBar />
       </div>
 
-      <div className="max-w-[1280px] mx-auto px-5">
+      <div className="w-full px-[10px]">
         {/* Breadcrumb */}
         <nav className="flex text-sm py-4" style={{ color: '#6B7280' }}>
           <span className="hover:opacity-70 cursor-pointer" onClick={() => navigate('/')}>Home</span>
