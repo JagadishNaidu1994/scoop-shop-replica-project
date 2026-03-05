@@ -508,98 +508,6 @@ const Checkout = () => {
                   </div>
                 )}
               </div>
-
-              {/* ── Coupons Section ─────────────────────── */}
-              <div className="bg-background rounded-2xl border border-border p-6 shadow-sm">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                    <Tag className="h-5 w-5 text-primary" />
-                  </div>
-                  <div>
-                    <h2 className="text-lg font-semibold text-foreground">Apply Coupon</h2>
-                    <p className="text-sm text-muted-foreground">Have a promo code? Apply it below.</p>
-                  </div>
-                </div>
-
-                {appliedCoupon ? (
-                  <div className="flex items-center justify-between p-4 rounded-xl bg-green-50 border-2 border-green-200">
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center">
-                        <Check className="h-4 w-4 text-green-600" />
-                      </div>
-                      <div>
-                        <div className="flex items-center gap-2">
-                          <code className="font-mono font-bold text-green-800">{appliedCoupon.code}</code>
-                          <Badge className="bg-green-100 text-green-700 text-[10px] border-0">
-                            {appliedCoupon.discount_type === 'percentage' ? `${appliedCoupon.discount_value}% OFF` : `₹${appliedCoupon.discount_value} OFF`}
-                          </Badge>
-                        </div>
-                        <p className="text-sm text-green-600 mt-0.5">You're saving ₹{discount.toFixed(0)} on this order!</p>
-                      </div>
-                    </div>
-                    <Button variant="ghost" size="sm" onClick={removeCoupon} className="text-red-500 hover:text-red-700 hover:bg-red-50">
-                      <X className="h-4 w-4" />
-                    </Button>
-                  </div>
-                ) : (
-                  <div className="space-y-4">
-                    <div className="flex gap-2">
-                      <Input
-                        value={couponCode}
-                        onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
-                        placeholder="Enter coupon code"
-                        className="rounded-lg font-mono uppercase tracking-wider"
-                        onKeyDown={(e) => e.key === 'Enter' && applyCoupon(couponCode)}
-                      />
-                      <Button
-                        onClick={() => applyCoupon(couponCode)}
-                        disabled={couponLoading || !couponCode.trim()}
-                        className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-lg px-6 whitespace-nowrap"
-                      >
-                        {couponLoading ? 'Checking...' : 'Apply'}
-                      </Button>
-                    </div>
-
-                    {availableCoupons.length > 0 && (
-                      <div>
-                        <button
-                          onClick={() => setShowCoupons(!showCoupons)}
-                          className="text-sm font-medium text-primary hover:underline flex items-center gap-1"
-                        >
-                          <Percent className="h-3.5 w-3.5" />
-                          {showCoupons ? 'Hide' : 'View'} available coupons ({availableCoupons.length})
-                        </button>
-
-                        {showCoupons && (
-                          <div className="mt-3 space-y-2 max-h-60 overflow-y-auto">
-                            {availableCoupons.map((coupon) => (
-                              <div
-                                key={coupon.id}
-                                className="flex items-center justify-between p-3 rounded-xl border border-dashed border-primary/30 hover:border-primary/60 hover:bg-primary/5 transition-all cursor-pointer"
-                                onClick={() => { setCouponCode(coupon.code); applyCoupon(coupon.code); }}
-                              >
-                                <div className="flex items-center gap-3">
-                                  <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
-                                    <Tag className="h-4 w-4 text-primary" />
-                                  </div>
-                                  <div>
-                                    <code className="font-mono font-bold text-sm text-foreground">{coupon.code}</code>
-                                    <p className="text-xs text-muted-foreground mt-0.5">
-                                      {coupon.discount_type === 'percentage' ? `${coupon.discount_value}% off` : `₹${coupon.discount_value} off`}
-                                      {coupon.minimum_order_amount > 0 && ` • Min ₹${coupon.minimum_order_amount}`}
-                                    </p>
-                                  </div>
-                                </div>
-                                <span className="text-xs font-medium text-primary">TAP TO APPLY</span>
-                              </div>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-                    )}
-                  </div>
-                )}
-              </div>
             </div>
 
             {/* Right Column - Order Summary */}
@@ -635,7 +543,86 @@ const Checkout = () => {
 
                 <Separator className="my-4" />
 
-                {/* Totals */}
+                {/* Coupon Section */}
+                <div className="mb-4">
+                  {appliedCoupon ? (
+                    <div className="flex items-center justify-between p-3 rounded-lg bg-green-50 border border-green-200">
+                      <div className="flex items-center gap-2 min-w-0">
+                        <Check className="h-4 w-4 text-green-600 flex-shrink-0" />
+                        <div className="min-w-0">
+                          <div className="flex items-center gap-1.5">
+                            <code className="font-mono font-bold text-xs text-green-800">{appliedCoupon.code}</code>
+                            <Badge className="bg-green-100 text-green-700 text-[10px] border-0">
+                              {appliedCoupon.discount_type === 'percentage' ? `${appliedCoupon.discount_value}% OFF` : `₹${appliedCoupon.discount_value} OFF`}
+                            </Badge>
+                          </div>
+                          <p className="text-[11px] text-green-600">Saving ₹{discount.toFixed(0)}</p>
+                        </div>
+                      </div>
+                      <Button variant="ghost" size="sm" onClick={removeCoupon} className="text-destructive hover:text-destructive hover:bg-destructive/10 h-7 w-7 p-0">
+                        <X className="h-3.5 w-3.5" />
+                      </Button>
+                    </div>
+                  ) : (
+                    <div className="space-y-3">
+                      <div className="flex gap-2">
+                        <Input
+                          value={couponCode}
+                          onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
+                          placeholder="Coupon code"
+                          className="rounded-lg font-mono uppercase tracking-wider text-sm h-9"
+                          onKeyDown={(e) => e.key === 'Enter' && applyCoupon(couponCode)}
+                        />
+                        <Button
+                          onClick={() => applyCoupon(couponCode)}
+                          disabled={couponLoading || !couponCode.trim()}
+                          variant="outline"
+                          className="rounded-lg px-4 h-9 text-sm whitespace-nowrap"
+                        >
+                          {couponLoading ? '...' : 'Apply'}
+                        </Button>
+                      </div>
+
+                      {availableCoupons.length > 0 && (
+                        <div>
+                          <button
+                            onClick={() => setShowCoupons(!showCoupons)}
+                            className="text-xs font-medium text-primary hover:underline flex items-center gap-1"
+                          >
+                            <Percent className="h-3 w-3" />
+                            {showCoupons ? 'Hide' : 'View'} {availableCoupons.length} available coupon{availableCoupons.length > 1 ? 's' : ''}
+                          </button>
+
+                          {showCoupons && (
+                            <div className="mt-2 space-y-1.5 max-h-44 overflow-y-auto">
+                              {availableCoupons.map((coupon) => (
+                                <div
+                                  key={coupon.id}
+                                  className="flex items-center justify-between p-2.5 rounded-lg border border-dashed border-primary/30 hover:border-primary/60 hover:bg-primary/5 transition-all cursor-pointer"
+                                  onClick={() => { setCouponCode(coupon.code); applyCoupon(coupon.code); }}
+                                >
+                                  <div className="flex items-center gap-2">
+                                    <Tag className="h-3.5 w-3.5 text-primary flex-shrink-0" />
+                                    <div>
+                                      <code className="font-mono font-bold text-xs text-foreground">{coupon.code}</code>
+                                      <p className="text-[10px] text-muted-foreground">
+                                        {coupon.discount_type === 'percentage' ? `${coupon.discount_value}% off` : `₹${coupon.discount_value} off`}
+                                        {coupon.minimum_order_amount > 0 && ` • Min ₹${coupon.minimum_order_amount}`}
+                                      </p>
+                                    </div>
+                                  </div>
+                                  <span className="text-[10px] font-medium text-primary">APPLY</span>
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+
+                <Separator className="mb-4" />
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between text-muted-foreground">
                     <span>Subtotal</span>
