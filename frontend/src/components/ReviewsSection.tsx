@@ -6,6 +6,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from '@/hooks/use-toast';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
+import { sampleProductReviews } from '@/data/sampleProductReviews';
 
 type SortOption = 'latest' | 'highest' | 'lowest';
 
@@ -35,8 +36,8 @@ const ReviewsSection = ({ productId }: ReviewsSectionProps) => {
   const [newComment, setNewComment] = useState('');
   const reviewsPerPage = 10;
 
-  // Fetch approved reviews for this product
-  const { data: reviews = [] } = useQuery({
+  // Fetch approved reviews for this product (visible to everyone)
+  const { data: dbReviews = [] } = useQuery({
     queryKey: ['product-reviews', productId],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -49,10 +50,24 @@ const ReviewsSection = ({ productId }: ReviewsSectionProps) => {
       if (error) throw error;
       return data as ProductReview[];
     },
-    enabled: !!user,
   });
 
-  // Fetch user's existing reviews for this product
+  // Use sample reviews as fallback when no DB reviews exist
+  const reviews = useMemo(() => {
+    if (dbReviews.length > 0) return dbReviews;
+    return sampleProductReviews.map(r => ({
+      id: r.id,
+      product_id: productId,
+      user_id: '',
+      order_id: '',
+      rating: r.rating,
+      comment: r.comment,
+      is_approved: true,
+      created_at: r.created_at,
+    }));
+  }, [dbReviews, productId]);
+
+  // Fetch user's existing reviews for this product (only when logged in)
   const { data: userReviews = [] } = useQuery({
     queryKey: ['user-product-reviews', productId, user?.id],
     queryFn: async () => {
@@ -67,7 +82,7 @@ const ReviewsSection = ({ productId }: ReviewsSectionProps) => {
     enabled: !!user,
   });
 
-  // Fetch orders that contain this product (delivered only)
+  // Fetch orders that contain this product (delivered only, logged in)
   const { data: eligibleOrders = [] } = useQuery({
     queryKey: ['eligible-review-orders', productId, user?.id],
     queryFn: async () => {
@@ -144,19 +159,7 @@ const ReviewsSection = ({ productId }: ReviewsSectionProps) => {
     return dist.reverse();
   }, [reviews]);
 
-  // Gate: only logged-in users see reviews
-  if (!user) {
-    return (
-      <section className="w-full py-16">
-        <div className="text-center">
-          <h3 className="text-3xl lg:text-4xl font-serif font-bold text-foreground mb-4">Customer Reviews</h3>
-          <p className="text-muted-foreground">Please log in to view and write reviews.</p>
-        </div>
-      </section>
-    );
-  }
-
-  const canWriteReview = eligibleOrders.length > 0;
+  const canWriteReview = !!user && eligibleOrders.length > 0;
 
   return (
     <section className="w-full py-16">
@@ -176,11 +179,19 @@ const ReviewsSection = ({ productId }: ReviewsSectionProps) => {
           )}
         </div>
 
+        {/* Write review button - only for logged-in users with eligible orders */}
         {canWriteReview && (
           <div className="text-center mb-8">
             <Button onClick={() => setShowForm(!showForm)} variant="outline" className="border-foreground text-foreground hover:bg-foreground hover:text-background">
               {showForm ? 'Cancel' : 'Write a Review'}
             </Button>
+          </div>
+        )}
+
+        {/* Login prompt for non-logged-in users */}
+        {!user && (
+          <div className="text-center mb-8">
+            <p className="text-sm text-muted-foreground">Log in to write a review</p>
           </div>
         )}
 
