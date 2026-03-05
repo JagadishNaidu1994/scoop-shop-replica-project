@@ -198,7 +198,7 @@ const HeaderNavBar = () => {
                 
                 {/* Hide greeting on tablet, show on large screens only */}
                 {user && firstName && !isAccountPage && (
-                  <span className="text-black font-medium hidden lg:inline text-sm">
+                  <span className="text-black font-medium hidden xl:inline text-sm">
                     Hi, {firstName}
                   </span>
                 )}
