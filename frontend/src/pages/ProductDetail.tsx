@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { sampleReviews, averageRating, totalReviewCount } from '@/data/sampleReviews75';
+
 import ReviewsSection from '@/components/ReviewsSection';
 import HeaderNavBar from '@/components/HeaderNavBar';
 import Footer from '@/components/Footer';
@@ -515,7 +515,7 @@ const ProductDetail = () => {
             </section>
 
             {/* Reviews */}
-            <ReviewsSection />
+            <ReviewsSection productId={product.id} />
 
             {/* Recipe Cards */}
             <section className="w-full py-16">
