@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
@@ -75,7 +74,6 @@ const Checkout = () => {
     city: '', state: '', postalCode: '', phone: '', email: user?.email || '', country: 'India', description: ''
   });
 
-  // Coupon state
   const [couponCode, setCouponCode] = useState('');
   const [appliedCoupon, setAppliedCoupon] = useState<Coupon | null>(null);
   const [couponLoading, setCouponLoading] = useState(false);
@@ -297,39 +295,39 @@ const Checkout = () => {
         <div className="max-w-[1200px] mx-auto px-4 sm:px-6 py-6 lg:py-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10">
 
-            {/* ═══════════ LEFT COLUMN ═══════════ */}
+            {/* LEFT COLUMN */}
             <div className="lg:col-span-7 space-y-6">
 
-              {/* Breadcrumb */}
+              {/* Breadcrumb - no card, just text */}
               <nav className="flex items-center gap-2 text-sm">
-                <Link to="/shop" className="text-primary hover:underline font-medium">Cart</Link>
+                <Link to="/shop" className="text-foreground hover:underline font-medium">Cart</Link>
                 <ChevronRight className="h-3.5 w-3.5 text-muted-foreground" />
                 <span className="font-semibold text-foreground">Shipping</span>
                 <ChevronRight className="h-3.5 w-3.5 text-muted-foreground" />
                 <span className="text-muted-foreground">Payment</span>
               </nav>
 
-              {/* Saved Addresses */}
+              {/* Saved Addresses - clean card, no inner borders */}
               {savedAddresses.length > 0 && (
-                <div className="bg-white rounded-lg border border-border p-5">
-                  <h2 className="text-base font-semibold text-foreground mb-3">Saved Addresses</h2>
-                  <RadioGroup value={selectedAddressId} onValueChange={handleAddressSelection} className="space-y-2">
+                <div className="bg-white rounded-lg p-6 sm:p-8">
+                  <h2 className="text-lg font-semibold text-foreground mb-4">Saved Addresses</h2>
+                  <RadioGroup value={selectedAddressId} onValueChange={handleAddressSelection} className="space-y-3">
                     {savedAddresses.map((address) => (
                       <label
                         key={address.id}
                         htmlFor={`addr-${address.id}`}
-                        className={`flex items-start gap-3 p-3 rounded-lg border cursor-pointer transition-all ${
+                        className={`flex items-start gap-3 p-4 rounded-md cursor-pointer transition-all ${
                           selectedAddressId === address.id
-                            ? 'border-foreground bg-muted/30'
-                            : 'border-border hover:border-muted-foreground/40'
+                            ? 'bg-muted/40 ring-2 ring-foreground'
+                            : 'bg-muted/20 hover:bg-muted/30'
                         }`}
                       >
                         <RadioGroupItem value={address.id} id={`addr-${address.id}`} className="mt-0.5" />
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 mb-0.5">
-                            <span className="font-medium text-sm">{address.full_name}</span>
+                            <span className="font-medium text-sm text-foreground">{address.full_name}</span>
                             {address.is_default && (
-                              <span className="text-[10px] font-medium px-1.5 py-0.5 rounded bg-foreground/10 text-foreground">DEFAULT</span>
+                              <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded bg-foreground text-white uppercase tracking-wide">Default</span>
                             )}
                           </div>
                           <p className="text-xs text-muted-foreground leading-relaxed">
@@ -340,94 +338,85 @@ const Checkout = () => {
                     ))}
                     <label
                       htmlFor="addr-new"
-                      className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-all ${
+                      className={`flex items-center gap-3 p-4 rounded-md cursor-pointer transition-all border border-dashed ${
                         selectedAddressId === 'new'
                           ? 'border-foreground bg-muted/30'
-                          : 'border-dashed border-muted-foreground/30 hover:border-foreground/40'
+                          : 'border-muted-foreground/30 hover:border-foreground/40'
                       }`}
                     >
                       <RadioGroupItem value="new" id="addr-new" />
-                      <span className="text-sm font-medium">+ Add new address</span>
+                      <span className="text-sm font-medium text-foreground">+ Add new address</span>
                     </label>
                   </RadioGroup>
                 </div>
               )}
 
-              {/* Shipping Address Form */}
+              {/* Shipping Address Form - clean white card */}
               {(selectedAddressId === 'new' || savedAddresses.length === 0) && (
-                <div className="bg-white rounded-lg border border-border p-5 sm:p-7">
-                  <h2 className="text-lg font-semibold text-foreground mb-5">Shipping Address</h2>
+                <div className="bg-white rounded-lg p-6 sm:p-8">
+                  <h2 className="text-lg font-semibold text-foreground mb-6">Shipping Address</h2>
 
-                  <div className="space-y-4">
-                    {/* First Name / Last Name */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="space-y-5">
+                    {/* First / Last Name */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                       <div>
-                        <Label className="text-sm font-medium text-foreground">First Name*</Label>
+                        <Label className="text-xs font-medium text-foreground">First Name*</Label>
                         <Input
                           value={shippingAddress.firstName}
                           onChange={(e) => handleInputChange('firstName', e.target.value)}
-                          className="mt-1.5 h-11 bg-white border-border rounded-md text-sm"
+                          className="mt-1.5 h-12 bg-white rounded-md text-sm"
                           placeholder="Divyansh"
                         />
                       </div>
                       <div>
-                        <Label className="text-sm font-medium text-foreground">Last Name*</Label>
+                        <Label className="text-xs font-medium text-foreground">Last Name*</Label>
                         <Input
                           value={shippingAddress.lastName}
                           onChange={(e) => handleInputChange('lastName', e.target.value)}
-                          className="mt-1.5 h-11 bg-white border-border rounded-md text-sm"
+                          className="mt-1.5 h-12 bg-white rounded-md text-sm"
                           placeholder="Agarwal"
                         />
                       </div>
                     </div>
 
                     {/* Email / Phone */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                       <div>
-                        <Label className="text-sm font-medium text-foreground">Email*</Label>
+                        <Label className="text-xs font-medium text-foreground">Email*</Label>
                         <Input
                           type="email"
                           value={shippingAddress.email}
                           onChange={(e) => handleInputChange('email', e.target.value)}
-                          className="mt-1.5 h-11 bg-white border-border rounded-md text-sm"
+                          className="mt-1.5 h-12 bg-white rounded-md text-sm"
                           placeholder="you@email.com"
                         />
                       </div>
                       <div>
-                        <Label className="text-sm font-medium text-foreground">Phone number*</Label>
+                        <Label className="text-xs font-medium text-foreground">Phone number*</Label>
                         <div className="flex mt-1.5">
-                          <div className="flex items-center px-3 h-11 bg-muted/50 border border-r-0 border-border rounded-l-md text-sm text-muted-foreground">
-                            IND +91
+                          <div className="flex items-center gap-1 px-3 h-12 bg-muted/40 border border-r-0 border-input rounded-l-md text-sm text-muted-foreground select-none">
+                            <span className="text-xs">IND</span>
+                            <ChevronRight className="h-3 w-3 rotate-90" />
+                            <span>+91</span>
                           </div>
                           <Input
                             type="tel"
                             value={shippingAddress.phone}
                             onChange={(e) => handleInputChange('phone', e.target.value)}
-                            className="h-11 bg-white border-border rounded-l-none rounded-r-md text-sm"
+                            className="h-12 bg-white rounded-l-none rounded-r-md text-sm"
                             placeholder="9876543210"
                           />
                         </div>
                       </div>
                     </div>
 
-                    {/* Address */}
-                    <div>
-                      <Label className="text-sm font-medium text-foreground">Address*</Label>
-                      <Input
-                        value={shippingAddress.address}
-                        onChange={(e) => handleInputChange('address', e.target.value)}
-                        className="mt-1.5 h-11 bg-white border-border rounded-md text-sm"
-                        placeholder="House / Flat no., Building, Street"
-                      />
-                    </div>
-
                     {/* City / State / Zip */}
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
                       <div>
-                        <Label className="text-sm font-medium text-foreground">City*</Label>
+                        <Label className="text-xs font-medium text-foreground">City*</Label>
                         {availableCities.length > 0 ? (
                           <Select value={shippingAddress.city} onValueChange={(v) => handleInputChange('city', v)}>
-                            <SelectTrigger className="mt-1.5 h-11 bg-white border-border text-sm">
+                            <SelectTrigger className="mt-1.5 h-12 bg-white text-sm">
                               <SelectValue placeholder="Select city" />
                             </SelectTrigger>
                             <SelectContent>{availableCities.map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}</SelectContent>
@@ -436,26 +425,26 @@ const Checkout = () => {
                           <Input
                             value={shippingAddress.city}
                             onChange={(e) => handleInputChange('city', e.target.value)}
-                            className="mt-1.5 h-11 bg-white border-border rounded-md text-sm"
+                            className="mt-1.5 h-12 bg-white rounded-md text-sm"
                             placeholder="Bangalore"
                           />
                         )}
                       </div>
                       <div>
-                        <Label className="text-sm font-medium text-foreground">State*</Label>
+                        <Label className="text-xs font-medium text-foreground">State*</Label>
                         <Select value={shippingAddress.state} onValueChange={handleStateChange}>
-                          <SelectTrigger className="mt-1.5 h-11 bg-white border-border text-sm">
+                          <SelectTrigger className="mt-1.5 h-12 bg-white text-sm">
                             <SelectValue placeholder="Select state" />
                           </SelectTrigger>
                           <SelectContent>{states.map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}</SelectContent>
                         </Select>
                       </div>
                       <div>
-                        <Label className="text-sm font-medium text-foreground">Zip Code*</Label>
+                        <Label className="text-xs font-medium text-foreground">Zip Code*</Label>
                         <Input
                           value={shippingAddress.postalCode}
                           onChange={(e) => handleInputChange('postalCode', e.target.value)}
-                          className="mt-1.5 h-11 bg-white border-border rounded-md text-sm"
+                          className="mt-1.5 h-12 bg-white rounded-md text-sm"
                           placeholder="560021"
                         />
                       </div>
@@ -463,11 +452,11 @@ const Checkout = () => {
 
                     {/* Description */}
                     <div>
-                      <Label className="text-sm font-medium text-foreground">Description</Label>
+                      <Label className="text-xs font-medium text-foreground">Description</Label>
                       <Textarea
                         value={shippingAddress.description || ''}
                         onChange={(e) => handleInputChange('description', e.target.value)}
-                        className="mt-1.5 bg-white border-border rounded-md text-sm min-h-[100px] resize-none"
+                        className="mt-1.5 bg-white rounded-md text-sm min-h-[100px] resize-none"
                         placeholder="Enter a description..."
                       />
                     </div>
@@ -475,82 +464,82 @@ const Checkout = () => {
                 </div>
               )}
 
-              {/* Shipping Method */}
-              <div className="bg-white rounded-lg border border-border p-5 sm:p-7">
+              {/* Shipping Method - clean card */}
+              <div className="bg-white rounded-lg p-6 sm:p-8">
                 <h2 className="text-lg font-semibold text-foreground mb-4">Shipping Method</h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <button
                     onClick={() => setSelectedShipping('free')}
-                    className={`flex items-center justify-between p-4 rounded-lg border-2 transition-all text-left ${
+                    className={`flex items-center justify-between p-4 rounded-md transition-all text-left ${
                       selectedShipping === 'free'
-                        ? 'border-foreground'
-                        : 'border-border hover:border-muted-foreground/40'
+                        ? 'ring-2 ring-foreground bg-muted/20'
+                        : 'bg-muted/10 hover:bg-muted/20'
                     }`}
                   >
                     <div className="flex items-center gap-3">
-                      <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${
+                      <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
                         selectedShipping === 'free' ? 'border-foreground' : 'border-muted-foreground/40'
                       }`}>
-                        {selectedShipping === 'free' && <div className="w-2 h-2 rounded-full bg-foreground" />}
+                        {selectedShipping === 'free' && <div className="w-2.5 h-2.5 rounded-full bg-foreground" />}
                       </div>
                       <div>
                         <p className="font-semibold text-sm text-foreground">Free Shipping</p>
                         <p className="text-xs text-muted-foreground">7-20 Days</p>
                       </div>
                     </div>
-                    <span className="font-bold text-foreground">₹0</span>
+                    <span className="font-bold text-foreground text-lg">₹0</span>
                   </button>
 
                   <button
                     onClick={() => setSelectedShipping('express')}
-                    className={`flex items-center justify-between p-4 rounded-lg border-2 transition-all text-left ${
+                    className={`flex items-center justify-between p-4 rounded-md transition-all text-left ${
                       selectedShipping === 'express'
-                        ? 'border-foreground'
-                        : 'border-border hover:border-muted-foreground/40'
+                        ? 'ring-2 ring-foreground bg-muted/20'
+                        : 'bg-muted/10 hover:bg-muted/20'
                     }`}
                   >
                     <div className="flex items-center gap-3">
-                      <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${
+                      <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
                         selectedShipping === 'express' ? 'border-foreground' : 'border-muted-foreground/40'
                       }`}>
-                        {selectedShipping === 'express' && <div className="w-2 h-2 rounded-full bg-foreground" />}
+                        {selectedShipping === 'express' && <div className="w-2.5 h-2.5 rounded-full bg-foreground" />}
                       </div>
                       <div>
                         <p className="font-semibold text-sm text-foreground">Express Shipping</p>
                         <p className="text-xs text-muted-foreground">1-3 Days</p>
                       </div>
                     </div>
-                    <span className="font-bold text-foreground">₹99</span>
+                    <span className="font-bold text-foreground text-lg">₹99</span>
                   </button>
                 </div>
               </div>
             </div>
 
-            {/* ═══════════ RIGHT COLUMN: Your Cart ═══════════ */}
+            {/* RIGHT COLUMN: Your Cart */}
             <div className="lg:col-span-5">
-              <div className="bg-white rounded-lg border border-border sticky top-28 overflow-hidden">
-                <div className="p-5 sm:p-6">
-                  <h2 className="text-lg font-semibold text-foreground mb-5">Your Cart</h2>
+              <div className="bg-white rounded-lg sticky top-28">
+                <div className="p-6 sm:p-8">
+                  <h2 className="text-xl font-bold text-foreground mb-6">Your Cart</h2>
 
                   {/* Cart Items */}
-                  <div className="space-y-4 max-h-[280px] overflow-y-auto pr-1">
+                  <div className="space-y-5 max-h-[280px] overflow-y-auto">
                     {items.map((item) => (
                       <div key={`${item.product_id}-co`} className="flex items-center gap-4">
-                        <div className="relative w-16 h-16 bg-muted rounded-lg overflow-hidden flex-shrink-0">
+                        <div className="relative w-[72px] h-[72px] bg-muted/30 rounded-lg overflow-hidden flex-shrink-0">
                           <img
                             src={item.product_image || '/placeholder.svg'}
                             alt={item.product_name}
                             className="w-full h-full object-cover"
                           />
-                          <span className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-foreground text-white text-[10px] font-bold flex items-center justify-center">
+                          <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-foreground text-white text-[10px] font-bold flex items-center justify-center">
                             {item.quantity}
                           </span>
                         </div>
                         <div className="flex-1 min-w-0">
-                          <h4 className="text-sm font-medium text-foreground truncate">{item.product_name}</h4>
+                          <h4 className="text-sm font-medium text-foreground leading-snug">{item.product_name}</h4>
                           {item.is_subscription && (
-                            <span className="text-[10px] text-muted-foreground flex items-center gap-0.5 mt-0.5">
-                              <RefreshCw className="h-2.5 w-2.5" /> Subscription
+                            <span className="text-[11px] text-muted-foreground flex items-center gap-1 mt-1">
+                              <RefreshCw className="h-3 w-3" /> Subscription
                             </span>
                           )}
                         </div>
@@ -561,12 +550,12 @@ const Checkout = () => {
                     ))}
                   </div>
 
-                  {/* Divider */}
-                  <div className="border-t border-border my-5" />
+                  {/* Thin separator */}
+                  <div className="h-px bg-border my-6" />
 
-                  {/* Discount Code */}
+                  {/* Discount Code Input */}
                   {appliedCoupon ? (
-                    <div className="flex items-center justify-between p-3 rounded-lg border border-green-200 bg-green-50 mb-4">
+                    <div className="flex items-center justify-between p-3 rounded-md bg-green-50 mb-5">
                       <div className="flex items-center gap-2 min-w-0">
                         <Check className="h-4 w-4 text-green-600 flex-shrink-0" />
                         <div className="min-w-0">
@@ -585,8 +574,8 @@ const Checkout = () => {
                         <Input
                           value={couponCode}
                           onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
-                          placeholder="Discount code"
-                          className="h-11 pl-10 bg-white border-border rounded-md text-sm font-mono uppercase tracking-wider"
+                          placeholder="DISCOUNT CODE"
+                          className="h-12 pl-10 bg-white rounded-md text-sm font-mono uppercase tracking-widest placeholder:tracking-widest placeholder:text-muted-foreground/60"
                           onKeyDown={(e) => e.key === 'Enter' && applyCoupon(couponCode)}
                         />
                       </div>
@@ -594,31 +583,31 @@ const Checkout = () => {
                         onClick={() => applyCoupon(couponCode)}
                         disabled={couponLoading || !couponCode.trim()}
                         variant="outline"
-                        className="h-11 px-5 text-sm font-semibold border-border hover:bg-muted/50"
+                        className="h-12 px-5 text-sm font-medium"
                       >
                         {couponLoading ? '...' : 'Apply'}
                       </Button>
                     </div>
                   )}
 
-                  {/* View Coupons Button */}
+                  {/* View Coupons link */}
                   {!appliedCoupon && availableCoupons.length > 0 && (
                     <button
                       onClick={() => setShowCouponPopup(true)}
-                      className="w-full flex items-center justify-between py-2 px-1 text-left group mb-4"
+                      className="w-full flex items-center justify-between py-2 text-left group mb-5"
                     >
-                      <span className="flex items-center gap-2 text-xs font-medium text-primary group-hover:underline">
+                      <span className="flex items-center gap-2 text-xs font-medium text-foreground/70 group-hover:text-foreground transition-colors">
                         <Gift className="h-3.5 w-3.5" />
                         View {availableCoupons.length} available coupon{availableCoupons.length > 1 ? 's' : ''}
                       </span>
-                      <ChevronRight className="h-3.5 w-3.5 text-primary" />
+                      <ChevronRight className="h-3.5 w-3.5 text-muted-foreground group-hover:text-foreground transition-colors" />
                     </button>
                   )}
 
                   {/* Totals */}
-                  <div className="space-y-2.5 text-sm">
+                  <div className="space-y-3 text-sm">
                     <div className="flex justify-between">
-                      <span className="text-muted-foreground">Subtotal</span>
+                      <span className="text-foreground/70">Subtotal</span>
                       <span className="font-medium text-foreground">₹{subtotal.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
                     </div>
                     {discount > 0 && (
@@ -628,22 +617,25 @@ const Checkout = () => {
                       </div>
                     )}
                     <div className="flex justify-between">
-                      <span className="text-muted-foreground">Shipping</span>
+                      <span className="text-foreground/70">Shipping</span>
                       <span className="font-medium text-foreground">{shippingCost === 0 ? 'Free' : `₹${shippingCost}`}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-muted-foreground flex items-center gap-1">
+                      <span className="text-foreground/70 flex items-center gap-1">
                         Estimated taxes
-                        <span className="inline-block w-3.5 h-3.5 rounded-full border border-muted-foreground/40 text-[9px] text-muted-foreground flex items-center justify-center leading-none">?</span>
+                        <span className="inline-flex w-4 h-4 rounded-full border border-muted-foreground/30 text-[9px] text-muted-foreground items-center justify-center leading-none">?</span>
                       </span>
                       <span className="font-medium text-foreground">₹{estimatedTax.toFixed(2)}</span>
                     </div>
                   </div>
 
+                  {/* Separator before total */}
+                  <div className="h-px bg-border my-4" />
+
                   {/* Total */}
-                  <div className="flex justify-between items-center mt-4 pt-4 border-t border-border">
+                  <div className="flex justify-between items-center">
                     <span className="text-base font-semibold text-foreground">Total</span>
-                    <span className="text-xl font-bold text-foreground">₹{totalAmount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
+                    <span className="text-2xl font-bold text-foreground">₹{totalAmount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
                   </div>
 
                   {discount > 0 && (
@@ -656,7 +648,7 @@ const Checkout = () => {
                   <Button
                     onClick={handleRazorpayPayment}
                     disabled={loading || !isFormValid}
-                    className="w-full mt-5 bg-foreground text-white hover:bg-foreground/90 rounded-lg h-12 text-sm font-semibold tracking-wide"
+                    className="w-full mt-6 bg-foreground text-white hover:bg-foreground/90 rounded-md h-14 text-sm font-semibold tracking-wide"
                   >
                     {loading ? (
                       <span className="flex items-center gap-2"><RefreshCw className="h-4 w-4 animate-spin" /> Processing…</span>
@@ -671,21 +663,20 @@ const Checkout = () => {
         </div>
       </div>
 
-      {/* ═══════════ Coupon Popup Dialog ═══════════ */}
+      {/* Coupon Popup Dialog */}
       <Dialog open={showCouponPopup} onOpenChange={setShowCouponPopup}>
         <DialogContent className="sm:max-w-lg max-h-[85vh] overflow-hidden flex flex-col">
-          <DialogHeader className="pb-3 border-b border-border">
+          <DialogHeader className="pb-3">
             <DialogTitle className="flex items-center gap-2 text-lg">
-              <Gift className="h-5 w-5 text-primary" />
+              <Gift className="h-5 w-5" />
               Available Coupons
             </DialogTitle>
           </DialogHeader>
 
           <div className="flex-1 overflow-y-auto py-3 space-y-5">
-            {/* Account-Specific Coupons */}
             {personalCoupons.length > 0 && (
               <div>
-                <h3 className="text-xs font-semibold text-primary uppercase tracking-wider mb-2.5 flex items-center gap-1.5">
+                <h3 className="text-xs font-semibold text-foreground uppercase tracking-wider mb-3 flex items-center gap-1.5">
                   <Gift className="h-3.5 w-3.5" /> For Your Account
                 </h3>
                 <div className="space-y-2.5">
@@ -696,10 +687,9 @@ const Checkout = () => {
               </div>
             )}
 
-            {/* Global Coupons */}
             {globalCoupons.length > 0 && (
               <div>
-                <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2.5 flex items-center gap-1.5">
+                <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3 flex items-center gap-1.5">
                   <Tag className="h-3.5 w-3.5" /> Available for Everyone
                 </h3>
                 <div className="space-y-2.5">
@@ -726,7 +716,7 @@ const Checkout = () => {
   );
 };
 
-/* ── Coupon Card Sub-component ── */
+/* Coupon Card Sub-component */
 const CouponCard = ({
   coupon, subtotal, onApply, loading, formatExpiry, isPersonal
 }: {
@@ -739,14 +729,14 @@ const CouponCard = ({
     : Math.min(coupon.discount_value, subtotal);
 
   return (
-    <div className={`rounded-lg border overflow-hidden transition-all ${
-      isEligible ? 'border-border hover:border-foreground/30' : 'border-border opacity-60'
+    <div className={`rounded-md overflow-hidden transition-all ${
+      isEligible ? 'bg-muted/20 hover:bg-muted/40' : 'bg-muted/10 opacity-60'
     }`}>
-      <div className={`px-4 py-2.5 flex items-center justify-between ${isPersonal ? 'bg-primary/5' : 'bg-muted/30'}`}>
+      <div className={`px-4 py-3 flex items-center justify-between ${isPersonal ? 'bg-primary/5' : ''}`}>
         <div className="flex items-center gap-2">
           <code className="font-mono font-bold text-sm text-foreground tracking-wider">{coupon.code}</code>
           {isPersonal && (
-            <span className="text-[9px] font-semibold px-1.5 py-0.5 rounded bg-primary/10 text-primary uppercase">For You</span>
+            <span className="text-[9px] font-semibold px-1.5 py-0.5 rounded bg-foreground text-white uppercase">For You</span>
           )}
         </div>
         <span className="text-sm font-bold text-foreground">
