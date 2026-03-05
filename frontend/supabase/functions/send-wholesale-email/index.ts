@@ -65,7 +65,7 @@ const handler = async (req: Request): Promise<Response> => {
       },
       to: [
         {
-          email: "jagadish.bondada@gmail.com",
+          email: "partnerships@nastearituals.com",
           name: "NASTEA Team"
         }
       ],
