@@ -155,7 +155,7 @@ const FaqItem = ({ q, a }: { q: string; a: string }) => {
 
         <main className="pb-16">
           {/* ===== PRODUCT SECTION: 55% / 45% ===== */}
-          <div className="grid grid-cols-1 lg:grid-cols-[55%_45%] gap-12 items-start mb-20">
+          <div className="grid grid-cols-1 lg:grid-cols-[55%_45%] gap-8 items-start mb-20">
 
             {/* ===== LEFT SIDE – IMAGE GALLERY ===== */}
             <div className="lg:sticky lg:top-24 lg:h-fit space-y-3">
@@ -432,7 +432,7 @@ const FaqItem = ({ q, a }: { q: string; a: string }) => {
           <div className="bg-white">
             {/* Pure ingredients section */}
             <section className="w-full py-16">
-              <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+              <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
                 <div className="space-y-6">
                   <p className="text-sm uppercase tracking-[0.2em]" style={{ color: '#6B7280' }}>Mushroom Matcha</p>
                   <h2 className="text-4xl lg:text-5xl font-serif font-bold leading-tight" style={{ color: '#0D1B2A' }}>
@@ -449,7 +449,7 @@ const FaqItem = ({ q, a }: { q: string; a: string }) => {
 
             {/* Ingredient Texture */}
             <section className="w-full py-16">
-              <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+              <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
                 <div className="relative">
                   <div className="overflow-hidden shadow-[0_16px_40px_rgba(0,0,0,0.06)]">
                     <AdminImageUpload src="/lovable-uploads/b9b609e5-82c9-4039-98a5-3da3b835c962.png" alt="Ingredient texture" className="w-full h-full object-cover" imagePath="texture-shot" />
@@ -472,7 +472,7 @@ const FaqItem = ({ q, a }: { q: string; a: string }) => {
 
             {/* How to use */}
             <section className="w-full py-16">
-              <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+              <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
                 <div className="space-y-4">
                   <div className="w-48 overflow-hidden shadow-[0_12px_30px_rgba(0,0,0,0.08)]">
                     <AdminImageUpload src="/lovable-uploads/8edc40eb-3dfa-45fb-8cac-fc1a12ec6a3c.png" alt="Product container" className="w-full h-full object-cover" imagePath="how-to-thumb" />
@@ -488,7 +488,7 @@ const FaqItem = ({ q, a }: { q: string; a: string }) => {
 
             {/* Benefit pills */}
             <section className="w-full py-16">
-              <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+              <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
                 <div className="space-y-4">
                   {['Mental clarity', 'Cognitive function', 'Immune support'].map((label) =>
                   <div key={label} className="px-6 py-4 bg-white/70 shadow-[0_12px_30px_rgba(0,0,0,0.06)] text-xl font-semibold w-fit" style={{ color: '#0D1B2A' }}>
@@ -504,7 +504,7 @@ const FaqItem = ({ q, a }: { q: string; a: string }) => {
 
             {/* Comparison */}
             <section className="w-full py-16">
-              <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+              <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
                 <div className="relative overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.08)]">
                   <AdminImageUpload src="/lovable-uploads/45a06faf-330b-4d76-a34b-4c50248900a2.png" alt="Hand holding beverage" className="w-full h-full object-cover" imagePath="compare-hand" />
                 </div>
@@ -572,7 +572,7 @@ const FaqItem = ({ q, a }: { q: string; a: string }) => {
 
             {/* FAQ */}
             <section className="w-full py-16">
-              <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+              <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
                 <div className="space-y-4">
                   <p className="text-sm uppercase tracking-[0.2em]" style={{ color: '#6B7280' }}>Quality Promise</p>
                   <h4 className="text-3xl lg:text-4xl font-serif font-bold" style={{ color: '#0D1B2A' }}>The NASTEA Standard</h4>
