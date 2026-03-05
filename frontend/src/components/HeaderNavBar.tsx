@@ -149,7 +149,7 @@ const HeaderNavBar = () => {
         {/* Main header */}
         <header className="bg-white shadow-sm border-b border-gray-100">
         <div className="w-full px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
+          <div className="flex justify-between items-center h-14 lg:h-16">
             {/* Mobile menu button - Left */}
             <div className="md:hidden">
               <button
@@ -168,41 +168,37 @@ const HeaderNavBar = () => {
             </div>
 
             {/* Desktop Navigation - Center */}
-            <nav className="hidden md:flex space-x-8">
-              <Link to="/recipes" className="text-black hover:text-gray-600 transition-colors font-medium">
+            <nav className="hidden md:flex md:space-x-3 lg:space-x-6 xl:space-x-8">
+              <Link to="/recipes" className="text-black hover:text-gray-600 transition-colors font-medium md:text-xs lg:text-sm xl:text-base whitespace-nowrap">
                 RECIPES
               </Link>
-              <Link to="/journal" className="text-black hover:text-gray-600 transition-colors font-medium">
+              <Link to="/journal" className="text-black hover:text-gray-600 transition-colors font-medium md:text-xs lg:text-sm xl:text-base whitespace-nowrap">
                 JOURNAL
               </Link>
-              <Link to="/science" className="text-black hover:text-gray-600 transition-colors font-medium">
+              <Link to="/science" className="text-black hover:text-gray-600 transition-colors font-medium md:text-xs lg:text-sm xl:text-base whitespace-nowrap">
                 SCIENCE
               </Link>
-              <Link to="/our-story" className="text-black hover:text-gray-600 transition-colors font-medium">
+              <Link to="/our-story" className="text-black hover:text-gray-600 transition-colors font-medium md:text-xs lg:text-sm xl:text-base whitespace-nowrap">
                 OUR STORY
               </Link>
-              <Link to="/wholesale" className="text-black hover:text-gray-600 transition-colors font-medium">
+              <Link to="/wholesale" className="text-black hover:text-gray-600 transition-colors font-medium md:text-xs lg:text-sm xl:text-base whitespace-nowrap">
                 WHOLESALE
               </Link>
-              {/* Temporarily hidden - Refer a Friend in parking */}
-              {/* <Link to="/refer-friend" className="text-black hover:text-gray-600 transition-colors font-medium">
-                REFER A FRIEND
-              </Link> */}
             </nav>
 
             {/* Right side icons */}
-            <div className="flex items-center space-x-4 md:order-last order-3">
+            <div className="flex items-center space-x-2 lg:space-x-4 md:order-last order-3">
               {/* Desktop actions */}
-              <div className="hidden md:flex items-center space-x-4">
+              <div className="hidden md:flex items-center md:space-x-2 lg:space-x-3">
                 <Link to="/shop">
-                  <button className="bg-black text-white px-6 py-2 rounded-full font-medium hover:bg-gray-800 transition-colors">
+                  <button className="bg-black text-white md:px-4 md:py-1.5 md:text-xs lg:px-6 lg:py-2 lg:text-sm rounded-full font-medium hover:bg-gray-800 transition-colors whitespace-nowrap">
                     SHOP NASTEA
                   </button>
                 </Link>
                 
-                {/* Hide greeting on account page */}
+                {/* Hide greeting on tablet, show on large screens only */}
                 {user && firstName && !isAccountPage && (
-                  <span className="text-black font-medium">
+                  <span className="text-black font-medium hidden lg:inline text-sm">
                     Hi, {firstName}
                   </span>
                 )}
@@ -211,26 +207,25 @@ const HeaderNavBar = () => {
                 {isAdmin && (
                   <Link 
                     to="/admin/dashboard" 
-                    className="text-black hover:text-gray-600 transition-colors rounded-full p-2 hover:bg-gray-100"
+                    className="text-black hover:text-gray-600 transition-colors rounded-full p-1.5 lg:p-2 hover:bg-gray-100"
                     title="Admin Dashboard"
                   >
-                    <Shield size={24} />
+                    <Shield size={20} className="lg:w-6 lg:h-6" />
                   </Link>
                 )}
                 
                 {/* Account Icon */}
                 <button 
                   onClick={handleAuthClick}
-                  className="text-black hover:text-gray-600 transition-colors rounded-full p-2 hover:bg-gray-100"
+                  className="text-black hover:text-gray-600 transition-colors rounded-full p-1.5 lg:p-2 hover:bg-gray-100"
                   title={user ? "Account" : "Sign In"}
                 >
-                  <User size={24} />
+                  <User size={20} className="lg:w-6 lg:h-6" />
                 </button>
               </div>
 
               {/* Mobile account and admin icons */}
               <div className="md:hidden flex items-center space-x-2">
-                {/* Admin Icon for mobile */}
                 {isAdmin && (
                   <Link 
                     to="/admin/dashboard" 
@@ -241,7 +236,6 @@ const HeaderNavBar = () => {
                   </Link>
                 )}
                 
-                {/* Account Icon for mobile */}
                 <button 
                   onClick={handleAuthClick}
                   className="text-black hover:text-gray-600 transition-colors rounded-full p-2 hover:bg-gray-100"
@@ -253,11 +247,11 @@ const HeaderNavBar = () => {
               {/* Cart with dropdown */}
               <div className="relative">
                 <button 
-                  className="text-black hover:text-gray-600 transition-colors flex items-center space-x-1 rounded-full p-2 hover:bg-gray-100"
+                  className="text-black hover:text-gray-600 transition-colors flex items-center space-x-1 rounded-full p-1.5 lg:p-2 hover:bg-gray-100"
                   onClick={handleCartClick}
                   title="Shopping Cart"
                 >
-                  <ShoppingCart size={24} />
+                  <ShoppingCart size={20} className="lg:w-6 lg:h-6" />
                   {getTotalItems() > 0 && (
                     <span className="bg-black text-white text-xs rounded-full w-5 h-5 flex items-center justify-center absolute -top-1 -right-1">
                       {getTotalItems()}
