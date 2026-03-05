@@ -59,8 +59,10 @@ const Recipes = () => {
             Recipes & Rituals
           </h1>
           <p className="text-xl text-gray-600 max-w-4xl mx-auto">
-            Discover delicious ways to incorporate our functional mushrooms and matcha into your daily routine.{' '}
-            From energizing morning lattes to calming evening elixirs.
+            Explore delicious ways to make matcha your daily thing—from iced lattes and coconut clouds to tonics that feel like a personality upgrade.
+          </p>
+          <p className="text-lg text-gray-500 max-w-3xl mx-auto mt-4">
+            Discover matcha recipes with Nastea Rituals—signature drinks, café-level tips, and easy rituals for clean energy and smooth focus.
           </p>
         </div>
 
