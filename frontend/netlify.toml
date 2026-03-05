@@ -5,8 +5,8 @@
   # Publish directory - where the build outputs (dist at root level)
   publish = "dist"
 
-  # No base directory needed since project is at root level
-  # base = ""
+  # No base directory - project is at root level (overrides UI settings)
+  base = "."
 
 # Node version (optional but recommended for consistency)
 [build.environment]
