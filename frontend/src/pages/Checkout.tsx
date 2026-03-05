@@ -6,14 +6,15 @@ import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import HeaderNavBar from '@/components/HeaderNavBar';
 import Footer from '@/components/Footer';
+import ShippingForm from '@/components/checkout/ShippingForm';
+import ShippingMethods from '@/components/checkout/ShippingMethods';
+import CartItem from '@/components/checkout/CartItem';
+import CouponAccordion from '@/components/checkout/CouponAccordion';
+import PriceSummary from '@/components/checkout/PriceSummary';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Textarea } from '@/components/ui/textarea';
-import { RefreshCw, Tag, Check, X, ChevronRight, Gift, Clock, Ticket } from 'lucide-react';
+import { ChevronRight, RefreshCw, Check, X, Ticket } from 'lucide-react';
 import { indianStatesAndCities } from '@/data/indianStatesAndCities';
 
 interface ShippingAddress {
@@ -78,7 +79,6 @@ const Checkout = () => {
   const [appliedCoupon, setAppliedCoupon] = useState<Coupon | null>(null);
   const [couponLoading, setCouponLoading] = useState(false);
   const [availableCoupons, setAvailableCoupons] = useState<Coupon[]>([]);
-  const [showCouponPopup, setShowCouponPopup] = useState(false);
 
   const shippingCost = selectedShipping === 'express' ? 99 : 0;
   const subtotal = getTotalPrice();
@@ -155,7 +155,6 @@ const Checkout = () => {
       }
       setAppliedCoupon(data);
       setCouponCode(data.code);
-      setShowCouponPopup(false);
       toast({ title: 'Coupon Applied!', description: `You saved ${data.discount_type === 'percentage' ? `${data.discount_value}%` : `₹${data.discount_value}`}` });
     } catch (error) { toast({ title: 'Error', description: 'Failed to apply coupon.', variant: 'destructive' }); }
     finally { setCouponLoading(false); }
@@ -279,47 +278,39 @@ const Checkout = () => {
     "Lakshadweep", "Puducherry"
   ];
 
-  const formatExpiry = (date: string | null) => {
-    if (!date) return null;
-    return new Date(date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
-  };
-
-  const globalCoupons = availableCoupons.filter(c => !c.assigned_users);
-  const personalCoupons = availableCoupons.filter(c => !!c.assigned_users);
-
   return (
     <>
       <HeaderNavBar />
 
-      <div className="min-h-screen bg-[#f5f5f5]">
-        <div className="max-w-[1200px] mx-auto px-4 sm:px-6 py-6 lg:py-10">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10">
+      <div className="min-h-screen" style={{ background: '#F9FAFB' }}>
+        <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-10 py-6 lg:py-10">
+          <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-6 lg:gap-10">
 
             {/* LEFT COLUMN */}
-            <div className="lg:col-span-7 space-y-6">
+            <div className="space-y-6 order-2 lg:order-1">
 
-              {/* Breadcrumb - no card, just text */}
+              {/* Breadcrumb */}
               <nav className="flex items-center gap-2 text-sm">
-                <Link to="/shop" className="text-foreground hover:underline font-medium">Cart</Link>
-                <ChevronRight className="h-3.5 w-3.5 text-muted-foreground" />
+                <Link to="/shop" className="text-[#6B7280] hover:text-foreground transition-colors">Cart</Link>
+                <ChevronRight className="h-3.5 w-3.5 text-[#6B7280]" />
                 <span className="font-semibold text-foreground">Shipping</span>
-                <ChevronRight className="h-3.5 w-3.5 text-muted-foreground" />
-                <span className="text-muted-foreground">Payment</span>
+                <ChevronRight className="h-3.5 w-3.5 text-[#6B7280]" />
+                <span className="text-[#6B7280]">Payment</span>
               </nav>
 
-              {/* Saved Addresses - clean card, no inner borders */}
+              {/* Saved Addresses */}
               {savedAddresses.length > 0 && (
-                <div className="bg-white rounded-lg p-6 sm:p-8">
-                  <h2 className="text-lg font-semibold text-foreground mb-4">Saved Addresses</h2>
+                <div className="bg-white rounded-xl p-6 sm:p-8 border border-[#E5E7EB]">
+                  <h2 className="text-2xl font-semibold text-foreground mb-6">Saved Addresses</h2>
                   <RadioGroup value={selectedAddressId} onValueChange={handleAddressSelection} className="space-y-3">
                     {savedAddresses.map((address) => (
                       <label
                         key={address.id}
                         htmlFor={`addr-${address.id}`}
-                        className={`flex items-start gap-3 p-4 rounded-md cursor-pointer transition-all ${
+                        className={`flex items-start gap-3 p-4 rounded-lg cursor-pointer transition-all ${
                           selectedAddressId === address.id
-                            ? 'bg-muted/40 ring-2 ring-foreground'
-                            : 'bg-muted/20 hover:bg-muted/30'
+                            ? 'border-2 border-foreground bg-[#F9FAFB]'
+                            : 'border border-[#E5E7EB] hover:border-[#9CA3AF]'
                         }`}
                       >
                         <RadioGroupItem value={address.id} id={`addr-${address.id}`} className="mt-0.5" />
@@ -330,7 +321,7 @@ const Checkout = () => {
                               <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded bg-foreground text-white uppercase tracking-wide">Default</span>
                             )}
                           </div>
-                          <p className="text-xs text-muted-foreground leading-relaxed">
+                          <p className="text-xs text-[#6B7280] leading-relaxed">
                             {address.address_line1}{address.address_line2 && `, ${address.address_line2}`}, {address.city}, {address.state} – {address.pincode} · {address.phone}
                           </p>
                         </div>
@@ -338,10 +329,10 @@ const Checkout = () => {
                     ))}
                     <label
                       htmlFor="addr-new"
-                      className={`flex items-center gap-3 p-4 rounded-md cursor-pointer transition-all border border-dashed ${
+                      className={`flex items-center gap-3 p-4 rounded-lg cursor-pointer transition-all border border-dashed ${
                         selectedAddressId === 'new'
-                          ? 'border-foreground bg-muted/30'
-                          : 'border-muted-foreground/30 hover:border-foreground/40'
+                          ? 'border-foreground bg-[#F9FAFB]'
+                          : 'border-[#D1D5DB] hover:border-foreground'
                       }`}
                     >
                       <RadioGroupItem value="new" id="addr-new" />
@@ -351,304 +342,111 @@ const Checkout = () => {
                 </div>
               )}
 
-              {/* Shipping Address Form - clean white card */}
+              {/* Shipping Form */}
               {(selectedAddressId === 'new' || savedAddresses.length === 0) && (
-                <div className="bg-white rounded-lg p-6 sm:p-8">
-                  <h2 className="text-lg font-semibold text-foreground mb-6">Shipping Address</h2>
-
-                  <div className="space-y-5">
-                    {/* First / Last Name */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                      <div>
-                        <Label className="text-xs font-medium text-foreground">First Name*</Label>
-                        <Input
-                          value={shippingAddress.firstName}
-                          onChange={(e) => handleInputChange('firstName', e.target.value)}
-                          className="mt-1.5 h-12 bg-white rounded-md text-sm"
-                          placeholder="Divyansh"
-                        />
-                      </div>
-                      <div>
-                        <Label className="text-xs font-medium text-foreground">Last Name*</Label>
-                        <Input
-                          value={shippingAddress.lastName}
-                          onChange={(e) => handleInputChange('lastName', e.target.value)}
-                          className="mt-1.5 h-12 bg-white rounded-md text-sm"
-                          placeholder="Agarwal"
-                        />
-                      </div>
-                    </div>
-
-                    {/* Email / Phone */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                      <div>
-                        <Label className="text-xs font-medium text-foreground">Email*</Label>
-                        <Input
-                          type="email"
-                          value={shippingAddress.email}
-                          onChange={(e) => handleInputChange('email', e.target.value)}
-                          className="mt-1.5 h-12 bg-white rounded-md text-sm"
-                          placeholder="you@email.com"
-                        />
-                      </div>
-                      <div>
-                        <Label className="text-xs font-medium text-foreground">Phone number*</Label>
-                        <div className="flex mt-1.5">
-                          <div className="flex items-center gap-1 px-3 h-12 bg-muted/40 border border-r-0 border-input rounded-l-md text-sm text-muted-foreground select-none">
-                            <span className="text-xs">IND</span>
-                            <ChevronRight className="h-3 w-3 rotate-90" />
-                            <span>+91</span>
-                          </div>
-                          <Input
-                            type="tel"
-                            value={shippingAddress.phone}
-                            onChange={(e) => handleInputChange('phone', e.target.value)}
-                            className="h-12 bg-white rounded-l-none rounded-r-md text-sm"
-                            placeholder="9876543210"
-                          />
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* City / State / Zip */}
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
-                      <div>
-                        <Label className="text-xs font-medium text-foreground">City*</Label>
-                        {availableCities.length > 0 ? (
-                          <Select value={shippingAddress.city} onValueChange={(v) => handleInputChange('city', v)}>
-                            <SelectTrigger className="mt-1.5 h-12 bg-white text-sm">
-                              <SelectValue placeholder="Select city" />
-                            </SelectTrigger>
-                            <SelectContent>{availableCities.map((c) => <SelectItem key={c} value={c}>{c}</SelectItem>)}</SelectContent>
-                          </Select>
-                        ) : (
-                          <Input
-                            value={shippingAddress.city}
-                            onChange={(e) => handleInputChange('city', e.target.value)}
-                            className="mt-1.5 h-12 bg-white rounded-md text-sm"
-                            placeholder="Bangalore"
-                          />
-                        )}
-                      </div>
-                      <div>
-                        <Label className="text-xs font-medium text-foreground">State*</Label>
-                        <Select value={shippingAddress.state} onValueChange={handleStateChange}>
-                          <SelectTrigger className="mt-1.5 h-12 bg-white text-sm">
-                            <SelectValue placeholder="Select state" />
-                          </SelectTrigger>
-                          <SelectContent>{states.map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}</SelectContent>
-                        </Select>
-                      </div>
-                      <div>
-                        <Label className="text-xs font-medium text-foreground">Zip Code*</Label>
-                        <Input
-                          value={shippingAddress.postalCode}
-                          onChange={(e) => handleInputChange('postalCode', e.target.value)}
-                          className="mt-1.5 h-12 bg-white rounded-md text-sm"
-                          placeholder="560021"
-                        />
-                      </div>
-                    </div>
-
-                    {/* Description */}
-                    <div>
-                      <Label className="text-xs font-medium text-foreground">Description</Label>
-                      <Textarea
-                        value={shippingAddress.description || ''}
-                        onChange={(e) => handleInputChange('description', e.target.value)}
-                        className="mt-1.5 bg-white rounded-md text-sm min-h-[100px] resize-none"
-                        placeholder="Enter a description..."
-                      />
-                    </div>
-                  </div>
-                </div>
+                <ShippingForm
+                  shippingAddress={shippingAddress}
+                  onInputChange={handleInputChange}
+                  onStateChange={handleStateChange}
+                  states={states}
+                  availableCities={availableCities}
+                />
               )}
 
-              {/* Shipping Method - clean card */}
-              <div className="bg-white rounded-lg p-6 sm:p-8">
-                <h2 className="text-lg font-semibold text-foreground mb-4">Shipping Method</h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <button
-                    onClick={() => setSelectedShipping('free')}
-                    className={`flex items-center justify-between p-4 rounded-md transition-all text-left ${
-                      selectedShipping === 'free'
-                        ? 'ring-2 ring-foreground bg-muted/20'
-                        : 'bg-muted/10 hover:bg-muted/20'
-                    }`}
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                        selectedShipping === 'free' ? 'border-foreground' : 'border-muted-foreground/40'
-                      }`}>
-                        {selectedShipping === 'free' && <div className="w-2.5 h-2.5 rounded-full bg-foreground" />}
-                      </div>
-                      <div>
-                        <p className="font-semibold text-sm text-foreground">Free Shipping</p>
-                        <p className="text-xs text-muted-foreground">7-20 Days</p>
-                      </div>
-                    </div>
-                    <span className="font-bold text-foreground text-lg">₹0</span>
-                  </button>
-
-                  <button
-                    onClick={() => setSelectedShipping('express')}
-                    className={`flex items-center justify-between p-4 rounded-md transition-all text-left ${
-                      selectedShipping === 'express'
-                        ? 'ring-2 ring-foreground bg-muted/20'
-                        : 'bg-muted/10 hover:bg-muted/20'
-                    }`}
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                        selectedShipping === 'express' ? 'border-foreground' : 'border-muted-foreground/40'
-                      }`}>
-                        {selectedShipping === 'express' && <div className="w-2.5 h-2.5 rounded-full bg-foreground" />}
-                      </div>
-                      <div>
-                        <p className="font-semibold text-sm text-foreground">Express Shipping</p>
-                        <p className="text-xs text-muted-foreground">1-3 Days</p>
-                      </div>
-                    </div>
-                    <span className="font-bold text-foreground text-lg">₹99</span>
-                  </button>
-                </div>
-              </div>
+              {/* Shipping Methods */}
+              <ShippingMethods
+                selectedShipping={selectedShipping}
+                onSelect={setSelectedShipping}
+              />
             </div>
 
-            {/* RIGHT COLUMN: Your Cart */}
-            <div className="lg:col-span-5">
-              <div className="bg-white rounded-lg sticky top-28">
-                <div className="p-6 sm:p-8">
-                  <h2 className="text-xl font-bold text-foreground mb-6">Your Cart</h2>
+            {/* RIGHT COLUMN — Cart Summary */}
+            <div className="order-1 lg:order-2">
+              <div className="bg-white rounded-xl border border-[#E5E7EB] sticky top-10">
+                <div className="p-6">
+                  <h2 className="text-xl font-semibold text-foreground mb-4">Your Cart</h2>
 
                   {/* Cart Items */}
-                  <div className="space-y-5 max-h-[280px] overflow-y-auto">
+                  <div className="max-h-[280px] overflow-y-auto">
                     {items.map((item) => (
-                      <div key={`${item.product_id}-co`} className="flex items-center gap-4">
-                        <div className="relative w-[72px] h-[72px] bg-muted/30 rounded-lg overflow-hidden flex-shrink-0">
-                          <img
-                            src={item.product_image || '/placeholder.svg'}
-                            alt={item.product_name}
-                            className="w-full h-full object-cover"
-                          />
-                          <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-foreground text-white text-[10px] font-bold flex items-center justify-center">
-                            {item.quantity}
-                          </span>
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <h4 className="text-sm font-medium text-foreground leading-snug">{item.product_name}</h4>
-                          {item.is_subscription && (
-                            <span className="text-[11px] text-muted-foreground flex items-center gap-1 mt-1">
-                              <RefreshCw className="h-3 w-3" /> Subscription
-                            </span>
-                          )}
-                        </div>
-                        <span className="text-sm font-semibold text-foreground whitespace-nowrap">
-                          ₹{(item.product_price * item.quantity).toLocaleString('en-IN', { minimumFractionDigits: 2 })}
-                        </span>
-                      </div>
+                      <CartItem
+                        key={`${item.product_id}-co`}
+                        productName={item.product_name}
+                        productImage={item.product_image}
+                        productPrice={item.product_price}
+                        quantity={item.quantity}
+                        isSubscription={item.is_subscription}
+                      />
                     ))}
                   </div>
 
-                  {/* Thin separator */}
-                  <div className="h-px bg-border my-6" />
+                  {/* Divider */}
+                  <div className="border-t border-[#E5E7EB] my-4" />
 
                   {/* Discount Code Input */}
                   {appliedCoupon ? (
-                    <div className="flex items-center justify-between p-3 rounded-md bg-green-50 mb-5">
+                    <div className="flex items-center justify-between p-3 rounded-lg bg-green-50 mb-4">
                       <div className="flex items-center gap-2 min-w-0">
-                        <Check className="h-4 w-4 text-green-600 flex-shrink-0" />
+                        <Check className="h-4 w-4 text-green-600 shrink-0" />
                         <div className="min-w-0">
                           <code className="font-mono font-bold text-xs text-green-800">{appliedCoupon.code}</code>
                           <p className="text-[11px] text-green-600">−₹{discount.toFixed(0)} saved</p>
                         </div>
                       </div>
-                      <button onClick={removeCoupon} className="text-muted-foreground hover:text-destructive p-1 transition-colors">
+                      <button onClick={removeCoupon} className="text-[#9CA3AF] hover:text-destructive p-1 transition-colors">
                         <X className="h-4 w-4" />
                       </button>
                     </div>
                   ) : (
-                    <div className="flex items-center gap-2 mb-2">
+                    <div className="flex items-center gap-2 mb-3">
                       <div className="flex-1 relative">
-                        <Ticket className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                        <Ticket className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#9CA3AF]" />
                         <Input
                           value={couponCode}
                           onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
-                          placeholder="DISCOUNT CODE"
-                          className="h-12 pl-10 bg-white rounded-md text-sm font-mono uppercase tracking-widest placeholder:tracking-widest placeholder:text-muted-foreground/60"
+                          placeholder="Discount code"
+                          className="h-12 pl-10 bg-[#F9FAFB] border-[#E5E7EB] rounded-lg text-sm font-mono uppercase tracking-wider placeholder:tracking-normal placeholder:font-sans placeholder:normal-case placeholder:text-[#9CA3AF] focus:border-foreground focus-visible:ring-0 focus-visible:ring-offset-0"
                           onKeyDown={(e) => e.key === 'Enter' && applyCoupon(couponCode)}
                         />
                       </div>
                       <Button
                         onClick={() => applyCoupon(couponCode)}
                         disabled={couponLoading || !couponCode.trim()}
-                        variant="outline"
-                        className="h-12 px-5 text-sm font-medium"
+                        className="h-12 px-5 text-sm font-medium bg-foreground text-white hover:bg-foreground/90 rounded-lg"
                       >
                         {couponLoading ? '...' : 'Apply'}
                       </Button>
                     </div>
                   )}
 
-                  {/* View Coupons link */}
-                  {!appliedCoupon && availableCoupons.length > 0 && (
-                    <button
-                      onClick={() => setShowCouponPopup(true)}
-                      className="w-full flex items-center justify-between py-2 text-left group mb-5"
-                    >
-                      <span className="flex items-center gap-2 text-xs font-medium text-foreground/70 group-hover:text-foreground transition-colors">
-                        <Gift className="h-3.5 w-3.5" />
-                        View {availableCoupons.length} available coupon{availableCoupons.length > 1 ? 's' : ''}
-                      </span>
-                      <ChevronRight className="h-3.5 w-3.5 text-muted-foreground group-hover:text-foreground transition-colors" />
-                    </button>
+                  {/* Expandable Coupon Accordion */}
+                  {!appliedCoupon && (
+                    <CouponAccordion
+                      availableCoupons={availableCoupons}
+                      subtotal={subtotal}
+                      onApply={applyCoupon}
+                      loading={couponLoading}
+                      userEmail={user?.email || undefined}
+                    />
                   )}
 
-                  {/* Totals */}
-                  <div className="space-y-3 text-sm">
-                    <div className="flex justify-between">
-                      <span className="text-foreground/70">Subtotal</span>
-                      <span className="font-medium text-foreground">₹{subtotal.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
-                    </div>
-                    {discount > 0 && (
-                      <div className="flex justify-between text-green-600">
-                        <span>Discount</span>
-                        <span className="font-medium">−₹{discount.toFixed(2)}</span>
-                      </div>
-                    )}
-                    <div className="flex justify-between">
-                      <span className="text-foreground/70">Shipping</span>
-                      <span className="font-medium text-foreground">{shippingCost === 0 ? 'Free' : `₹${shippingCost}`}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-foreground/70 flex items-center gap-1">
-                        Estimated taxes
-                        <span className="inline-flex w-4 h-4 rounded-full border border-muted-foreground/30 text-[9px] text-muted-foreground items-center justify-center leading-none">?</span>
-                      </span>
-                      <span className="font-medium text-foreground">₹{estimatedTax.toFixed(2)}</span>
-                    </div>
-                  </div>
+                  {/* Divider */}
+                  <div className="border-t border-[#E5E7EB] my-4" />
 
-                  {/* Separator before total */}
-                  <div className="h-px bg-border my-4" />
-
-                  {/* Total */}
-                  <div className="flex justify-between items-center">
-                    <span className="text-base font-semibold text-foreground">Total</span>
-                    <span className="text-2xl font-bold text-foreground">₹{totalAmount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
-                  </div>
-
-                  {discount > 0 && (
-                    <p className="text-center text-[11px] font-medium text-green-600 mt-2">
-                      🎉 You're saving ₹{discount.toFixed(0)} on this order
-                    </p>
-                  )}
+                  {/* Price Summary */}
+                  <PriceSummary
+                    subtotal={subtotal}
+                    discount={discount}
+                    shippingCost={shippingCost}
+                    estimatedTax={estimatedTax}
+                    total={totalAmount}
+                  />
 
                   {/* CTA */}
                   <Button
                     onClick={handleRazorpayPayment}
                     disabled={loading || !isFormValid}
-                    className="w-full mt-6 bg-foreground text-white hover:bg-foreground/90 rounded-md h-14 text-sm font-semibold tracking-wide"
+                    className="w-full mt-4 bg-foreground text-white hover:bg-[#111] rounded-[10px] h-[52px] text-sm font-semibold"
                   >
                     {loading ? (
                       <span className="flex items-center gap-2"><RefreshCw className="h-4 w-4 animate-spin" /> Processing…</span>
@@ -663,101 +461,8 @@ const Checkout = () => {
         </div>
       </div>
 
-      {/* Coupon Popup Dialog */}
-      <Dialog open={showCouponPopup} onOpenChange={setShowCouponPopup}>
-        <DialogContent className="sm:max-w-lg max-h-[85vh] overflow-hidden flex flex-col">
-          <DialogHeader className="pb-3">
-            <DialogTitle className="flex items-center gap-2 text-lg">
-              <Gift className="h-5 w-5" />
-              Available Coupons
-            </DialogTitle>
-          </DialogHeader>
-
-          <div className="flex-1 overflow-y-auto py-3 space-y-5">
-            {personalCoupons.length > 0 && (
-              <div>
-                <h3 className="text-xs font-semibold text-foreground uppercase tracking-wider mb-3 flex items-center gap-1.5">
-                  <Gift className="h-3.5 w-3.5" /> For Your Account
-                </h3>
-                <div className="space-y-2.5">
-                  {personalCoupons.map((coupon) => (
-                    <CouponCard key={coupon.id} coupon={coupon} subtotal={subtotal} onApply={applyCoupon} loading={couponLoading} formatExpiry={formatExpiry} isPersonal />
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {globalCoupons.length > 0 && (
-              <div>
-                <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3 flex items-center gap-1.5">
-                  <Tag className="h-3.5 w-3.5" /> Available for Everyone
-                </h3>
-                <div className="space-y-2.5">
-                  {globalCoupons.map((coupon) => (
-                    <CouponCard key={coupon.id} coupon={coupon} subtotal={subtotal} onApply={applyCoupon} loading={couponLoading} formatExpiry={formatExpiry} />
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {availableCoupons.length === 0 && (
-              <div className="text-center py-10">
-                <Tag className="h-10 w-10 text-muted-foreground mx-auto mb-3" />
-                <p className="text-sm font-medium text-muted-foreground">No coupons available</p>
-                <p className="text-xs text-muted-foreground mt-1">Check back later for deals!</p>
-              </div>
-            )}
-          </div>
-        </DialogContent>
-      </Dialog>
-
       <Footer />
     </>
-  );
-};
-
-/* Coupon Card Sub-component */
-const CouponCard = ({
-  coupon, subtotal, onApply, loading, formatExpiry, isPersonal
-}: {
-  coupon: Coupon; subtotal: number; onApply: (code: string) => void; loading: boolean;
-  formatExpiry: (d: string | null) => string | null; isPersonal?: boolean;
-}) => {
-  const isEligible = subtotal >= coupon.minimum_order_amount;
-  const savings = coupon.discount_type === 'percentage'
-    ? Math.min(subtotal * (coupon.discount_value / 100), subtotal)
-    : Math.min(coupon.discount_value, subtotal);
-
-  return (
-    <div className={`rounded-md overflow-hidden transition-all ${
-      isEligible ? 'bg-muted/20 hover:bg-muted/40' : 'bg-muted/10 opacity-60'
-    }`}>
-      <div className={`px-4 py-3 flex items-center justify-between ${isPersonal ? 'bg-primary/5' : ''}`}>
-        <div className="flex items-center gap-2">
-          <code className="font-mono font-bold text-sm text-foreground tracking-wider">{coupon.code}</code>
-          {isPersonal && (
-            <span className="text-[9px] font-semibold px-1.5 py-0.5 rounded bg-foreground text-white uppercase">For You</span>
-          )}
-        </div>
-        <span className="text-sm font-bold text-foreground">
-          {coupon.discount_type === 'percentage' ? `${coupon.discount_value}%` : `₹${coupon.discount_value}`} OFF
-        </span>
-      </div>
-      <div className="px-4 py-3 space-y-2">
-        {coupon.description && <p className="text-xs text-muted-foreground">{coupon.description}</p>}
-        <div className="flex items-center gap-3 text-[11px] text-muted-foreground">
-          {coupon.minimum_order_amount > 0 && <span>Min order: ₹{coupon.minimum_order_amount}</span>}
-          {coupon.expires_at && (
-            <span className="flex items-center gap-0.5"><Clock className="h-3 w-3" /> {formatExpiry(coupon.expires_at)}</span>
-          )}
-        </div>
-        {isEligible && <p className="text-[11px] font-medium text-green-600">You'll save ₹{savings.toFixed(0)}</p>}
-        {!isEligible && <p className="text-[11px] text-destructive">Add ₹{(coupon.minimum_order_amount - subtotal).toFixed(0)} more</p>}
-        <Button size="sm" className="w-full h-8 text-xs mt-1 bg-foreground text-white hover:bg-foreground/90" disabled={!isEligible || loading} onClick={() => onApply(coupon.code)}>
-          {loading ? '...' : 'Apply Coupon'}
-        </Button>
-      </div>
-    </div>
   );
 };
 
