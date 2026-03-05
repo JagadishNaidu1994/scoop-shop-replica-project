@@ -26,13 +26,13 @@ const Wholesale = () => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       [name]: value
     }));
     // Clear error when user starts typing
     if (errors[name as keyof typeof errors]) {
-      setErrors(prev => ({
+      setErrors((prev) => ({
         ...prev,
         [name]: ''
       }));
@@ -128,15 +128,15 @@ const Wholesale = () => {
               <p className="text-xl text-gray-700 mb-8">
 Premium Japanese matcha, barista training, menu support, flexible bulk packs, and a team you can actually rely on.              </p>
               <div className="flex flex-col sm:flex-row gap-4">
-                <button 
+                <button
                   onClick={() => {
                     const contactSection = document.querySelector('#contact-form');
                     if (contactSection) {
                       contactSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
                     }
                   }}
-                  className="bg-green-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors"
-                >
+                  className="bg-green-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors">
+                  
                   Get in touch
                 </button>
               </div>
@@ -146,8 +146,8 @@ Premium Japanese matcha, barista training, menu support, flexible bulk packs, an
                 src="https://images.unsplash.com/photo-1559056199-641a0ac8b55e?w=600&h=400&fit=crop"
                 alt="Professional coffee setup"
                 className="rounded-2xl shadow-2xl"
-                imagePath="wholesale-hero"
-              />
+                imagePath="wholesale-hero" />
+              
             </div>
           </div>
         </div>
@@ -170,8 +170,8 @@ We are the wholesale arm of Nastea Rituals, we provide matcha guidance to cafes,
                 src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=600&h=500&fit=crop"
                 alt="Coffee beans being roasted"
                 className="rounded-2xl shadow-lg w-full"
-                imagePath="wholesale-coffee-excellence"
-              />
+                imagePath="wholesale-coffee-excellence" />
+              
             </div>
             <div className="space-y-6">
               <h2 className="text-3xl font-bold text-gray-900">Coffee Excellence</h2>
@@ -212,8 +212,8 @@ We are the wholesale arm of Nastea Rituals, we provide matcha guidance to cafes,
                 src="https://images.unsplash.com/photo-1564890369478-c89ca6d9cde9?w=500&h=300&fit=crop"
                 alt="Matcha powder grades"
                 className="w-full h-64 object-cover"
-                imagePath="wholesale-products-grades"
-              />
+                imagePath="wholesale-products-grades" />
+              
               <div className="p-8">
                 <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
                   <Package className="text-green-600" size={24} />
@@ -245,8 +245,8 @@ We are the wholesale arm of Nastea Rituals, we provide matcha guidance to cafes,
                 src="https://images.unsplash.com/photo-1554224311-beee460c201f?w=500&h=300&fit=crop"
                 alt="Business pricing and packages"
                 className="w-full h-64 object-cover"
-                imagePath="wholesale-pricing-moqs"
-              />
+                imagePath="wholesale-pricing-moqs" />
+              
               <div className="p-8">
                 <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
                   <IndianRupee className="text-green-600" size={24} />
@@ -278,8 +278,8 @@ We are the wholesale arm of Nastea Rituals, we provide matcha guidance to cafes,
                 src="https://images.unsplash.com/photo-1566576721346-d4a3b4eaeb55?w=500&h=300&fit=crop"
                 alt="Delivery and logistics"
                 className="w-full h-64 object-cover"
-                imagePath="wholesale-supply-delivery"
-              />
+                imagePath="wholesale-supply-delivery" />
+              
               <div className="p-8">
                 <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
                   <Truck className="text-green-600" size={24} />
@@ -311,8 +311,8 @@ We are the wholesale arm of Nastea Rituals, we provide matcha guidance to cafes,
                 src="https://images.unsplash.com/photo-1556910103-1c02745aae4d?w=500&h=300&fit=crop"
                 alt="Barista training and support"
                 className="w-full h-64 object-cover"
-                imagePath="wholesale-training-support"
-              />
+                imagePath="wholesale-training-support" />
+              
               <div className="p-8">
                 <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
                   <GraduationCap className="text-green-600" size={24} />
@@ -372,13 +372,13 @@ We are the wholesale arm of Nastea Rituals, we provide matcha guidance to cafes,
                     value={formData.name}
                     onChange={handleInputChange}
                     className={`w-full px-4 py-3 bg-gray-700 rounded-lg border ${
-                      errors.name ? 'border-red-500' : 'border-gray-600'
-                    } focus:border-green-500 focus:outline-none text-white`}
-                    placeholder="Your name"
-                  />
-                  {errors.name && (
-                    <p className="text-red-400 text-sm mt-1">{errors.name}</p>
-                  )}
+                    errors.name ? 'border-red-500' : 'border-gray-600'} focus:border-green-500 focus:outline-none text-white`
+                    }
+                    placeholder="Your name" />
+                  
+                  {errors.name &&
+                  <p className="text-red-400 text-sm mt-1">{errors.name}</p>
+                  }
                 </div>
                 <div>
                   <label className="block text-sm font-medium mb-2 text-gray-300">
@@ -390,13 +390,13 @@ We are the wholesale arm of Nastea Rituals, we provide matcha guidance to cafes,
                     value={formData.email}
                     onChange={handleInputChange}
                     className={`w-full px-4 py-3 bg-gray-700 rounded-lg border ${
-                      errors.email ? 'border-red-500' : 'border-gray-600'
-                    } focus:border-green-500 focus:outline-none text-white`}
-                    placeholder="your@email.com"
-                  />
-                  {errors.email && (
-                    <p className="text-red-400 text-sm mt-1">{errors.email}</p>
-                  )}
+                    errors.email ? 'border-red-500' : 'border-gray-600'} focus:border-green-500 focus:outline-none text-white`
+                    }
+                    placeholder="your@email.com" />
+                  
+                  {errors.email &&
+                  <p className="text-red-400 text-sm mt-1">{errors.email}</p>
+                  }
                 </div>
                 <div>
                   <label className="block text-sm font-medium mb-2 text-gray-300">
@@ -408,13 +408,13 @@ We are the wholesale arm of Nastea Rituals, we provide matcha guidance to cafes,
                     value={formData.phone}
                     onChange={handleInputChange}
                     className={`w-full px-4 py-3 bg-gray-700 rounded-lg border ${
-                      errors.phone ? 'border-red-500' : 'border-gray-600'
-                    } focus:border-green-500 focus:outline-none text-white`}
-                    placeholder="+91 98765 43210"
-                  />
-                  {errors.phone && (
-                    <p className="text-red-400 text-sm mt-1">{errors.phone}</p>
-                  )}
+                    errors.phone ? 'border-red-500' : 'border-gray-600'} focus:border-green-500 focus:outline-none text-white`
+                    }
+                    placeholder="+91 98765 43210" />
+                  
+                  {errors.phone &&
+                  <p className="text-red-400 text-sm mt-1">{errors.phone}</p>
+                  }
                 </div>
                 <div>
                   <label className="block text-sm font-medium mb-2 text-gray-300">
@@ -425,9 +425,9 @@ We are the wholesale arm of Nastea Rituals, we provide matcha guidance to cafes,
                     value={formData.businessType}
                     onChange={handleInputChange}
                     className={`w-full px-4 py-3 bg-gray-700 rounded-lg border ${
-                      errors.businessType ? 'border-red-500' : 'border-gray-600'
-                    } focus:border-green-500 focus:outline-none text-white`}
-                  >
+                    errors.businessType ? 'border-red-500' : 'border-gray-600'} focus:border-green-500 focus:outline-none text-white`
+                    }>
+                    
                     <option value="Café">Cafe</option>
                     <option value="Restaurant">Restaurant</option>
                     <option value="Office">Office</option>
@@ -435,9 +435,9 @@ We are the wholesale arm of Nastea Rituals, we provide matcha guidance to cafes,
                     <option value="Bakery">Bakery</option>
                     <option value="Other">Other</option>
                   </select>
-                  {errors.businessType && (
-                    <p className="text-red-400 text-sm mt-1">{errors.businessType}</p>
-                  )}
+                  {errors.businessType &&
+                  <p className="text-red-400 text-sm mt-1">{errors.businessType}</p>
+                  }
                 </div>
                 <div>
                   <label className="block text-sm font-medium mb-2 text-gray-300">Message (Optional)</label>
@@ -447,14 +447,14 @@ We are the wholesale arm of Nastea Rituals, we provide matcha guidance to cafes,
                     onChange={handleInputChange}
                     rows={4}
                     className="w-full px-4 py-3 bg-gray-700 rounded-lg border border-gray-600 focus:border-green-500 focus:outline-none text-white"
-                    placeholder="Tell us about your business and matcha needs..."
-                  ></textarea>
+                    placeholder="Tell us about your business and matcha needs...">
+                  </textarea>
                 </div>
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                >
+                  className="w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                  
                   {isSubmitting ? 'Sending...' : 'Send Message'}
                 </button>
               </form>
@@ -471,7 +471,8 @@ We are the wholesale arm of Nastea Rituals, we provide matcha guidance to cafes,
                   </div>
                   <div className="flex items-center space-x-3">
                     <Mail className="text-green-400 flex-shrink-0" size={20} />
-                    <span className="text-gray-300">wholesale@themissingbean.com</span>
+                    <span className="text-gray-300">
+</span>
                   </div>
                   <div className="flex items-center space-x-3">
                     <MapPin className="text-green-400 flex-shrink-0" size={20} />
@@ -519,8 +520,7 @@ We are the wholesale arm of Nastea Rituals, we provide matcha guidance to cafes,
       </section>
 
       <Footer />
-    </div>
-  );
+    </div>);
 };
 
 export default Wholesale;
