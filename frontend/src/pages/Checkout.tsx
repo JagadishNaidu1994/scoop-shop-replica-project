@@ -284,19 +284,20 @@ const Checkout = () => {
 
       <div className="min-h-screen" style={{ background: '#F9FAFB' }}>
         <div className="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-10 py-6 lg:py-10">
+
+          {/* Breadcrumb — outside grid so columns align */}
+          <nav className="flex items-center gap-2 text-sm mb-6">
+            <Link to="/shop" className="text-[#6B7280] hover:text-foreground transition-colors">Cart</Link>
+            <ChevronRight className="h-3.5 w-3.5 text-[#6B7280]" />
+            <span className="font-semibold text-foreground">Shipping</span>
+            <ChevronRight className="h-3.5 w-3.5 text-[#6B7280]" />
+            <span className="text-[#6B7280]">Payment</span>
+          </nav>
+
           <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-6 lg:gap-10">
 
             {/* LEFT COLUMN */}
             <div className="space-y-6 order-2 lg:order-1">
-
-              {/* Breadcrumb */}
-              <nav className="flex items-center gap-2 text-sm">
-                <Link to="/shop" className="text-[#6B7280] hover:text-foreground transition-colors">Cart</Link>
-                <ChevronRight className="h-3.5 w-3.5 text-[#6B7280]" />
-                <span className="font-semibold text-foreground">Shipping</span>
-                <ChevronRight className="h-3.5 w-3.5 text-[#6B7280]" />
-                <span className="text-[#6B7280]">Payment</span>
-              </nav>
 
               {/* Saved Addresses */}
               {savedAddresses.length > 0 && (
