@@ -416,23 +416,7 @@ const ProductDetail = () => {
                 )}
               </div>
 
-              {/* ===== 8. REVIEW PREVIEW CARD ===== */}
-              <div className="rounded-[10px] p-4 flex gap-4" style={{ backgroundColor: '#F9FAFB' }}>
-                <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0 bg-gray-300">
-                  <img src={testimonials[0].image} alt={testimonials[0].name} className="w-full h-full object-cover" />
-                </div>
-                <div className="space-y-1">
-                  <p className="text-sm font-semibold" style={{ color: '#0D1B2A' }}>{testimonials[0].name}</p>
-                  <div className="flex">
-                    {[...Array(5)].map((_, i) =>
-                    <Star key={i} className="w-3 h-3 fill-current" style={{ color: '#0D1B2A' }} />
-                    )}
-                  </div>
-                  <p className="text-[13px] leading-relaxed" style={{ color: '#6B7280' }}>
-                    "{testimonials[0].review}"
-                  </p>
-                </div>
-              </div>
+
             </div>
           </div>
 
