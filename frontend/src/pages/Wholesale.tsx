@@ -467,16 +467,15 @@ We are the wholesale arm of Nastea Rituals, we provide matcha guidance to cafes,
                 <div className="space-y-4">
                   <div className="flex items-center space-x-3">
                     <Phone className="text-green-400 flex-shrink-0" size={20} />
-                    <span className="text-gray-300">(555) 123-4567</span>
+                    <span className="text-gray-300">+91 9849520428</span>
                   </div>
                   <div className="flex items-center space-x-3">
                     <Mail className="text-green-400 flex-shrink-0" size={20} />
-                    <span className="text-gray-300">
-</span>
+                    <span className="text-gray-300">partnerships@nastearituals.com</span>
                   </div>
                   <div className="flex items-center space-x-3">
                     <MapPin className="text-green-400 flex-shrink-0" size={20} />
-                    <span className="text-gray-300">Abingdon, Oxfordshire, UK</span>
+                    <span className="text-gray-300">Hyderabad, Telangana, India.</span>
                   </div>
                 </div>
               </div>
