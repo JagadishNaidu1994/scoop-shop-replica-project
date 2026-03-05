@@ -356,12 +356,12 @@ const ProductDetail = () => {
                 </div>
 
                 {/* 5.3 Shop Pay Button */}
-                <button
-                  className="w-full h-12 rounded-full text-white font-semibold text-sm transition-all hover:opacity-90"
-                  style={{ background: 'linear-gradient(135deg, #6D28D9, #7C3AED)' }}>
-                  
-                  Buy with Shop Pay
-                </button>
+                
+
+
+
+
+                
 
                 {/* 5.4 More payment options */}
                 
