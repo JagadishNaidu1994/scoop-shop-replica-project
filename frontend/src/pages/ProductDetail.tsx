@@ -155,7 +155,7 @@ const FaqItem = ({ q, a }: { q: string; a: string }) => {
 
         <main className="pb-16">
           {/* ===== PRODUCT SECTION: 55% / 45% ===== */}
-          <div className="grid grid-cols-1 lg:grid-cols-[55%_45%] gap-8 items-start mb-20">
+          <div className="grid grid-cols-1 lg:grid-cols-[54%_1fr] gap-6 items-start mb-20">
 
             {/* ===== LEFT SIDE – IMAGE GALLERY ===== */}
             <div className="lg:sticky lg:top-24 lg:h-fit space-y-3">
