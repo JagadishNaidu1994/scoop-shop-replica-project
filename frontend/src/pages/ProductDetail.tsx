@@ -301,7 +301,7 @@ const ProductDetail = () => {
                       <span className="text-lg font-bold" style={{ color: '#0D1B2A' }}>₹{currentPrice.toFixed(0)}</span>
                     </div>
                   </div>
-                  <p className="text-xs mt-1 ml-8" style={{ color: '#6B7280' }}>₹{pricePerServing} per serving</p>
+                  
                 </button>
 
                 {/* Subscription frequency pills (only when subscription selected) */}
