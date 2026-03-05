@@ -252,9 +252,9 @@ const ProductDetail = () => {
               {/* 3.5 Benefit Tags */}
               <div className="flex flex-wrap gap-[10px]">
                 {[
-                { icon: <Zap className="w-4 h-4" />, label: 'Focus' },
-                { icon: <Brain className="w-4 h-4" />, label: 'Cognition' },
-                { icon: <Shield className="w-4 h-4" />, label: 'Immunity' }].
+                { icon: <Zap className="w-4 h-4" />, label: 'Cert Organic' },
+                { icon: <Brain className="w-4 h-4" />, label: 'Calm Energy' },
+                { icon: <Shield className="w-4 h-4" />, label: 'No Additives' }].
                 map((tag) =>
                 <span
                   key={tag.label}
