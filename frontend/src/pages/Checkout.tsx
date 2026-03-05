@@ -73,7 +73,7 @@ const Checkout = () => {
   // Validate form whenever shipping address changes
   useEffect(() => {
     const required = ['firstName', 'lastName', 'address', 'city', 'state', 'postalCode', 'phone'];
-    const isValid = required.every(field => shippingAddress[field as keyof ShippingAddress]);
+    const isValid = required.every((field) => shippingAddress[field as keyof ShippingAddress]);
     setIsFormValid(isValid);
   }, [shippingAddress]);
 
@@ -93,18 +93,18 @@ const Checkout = () => {
     if (!user) return;
 
     try {
-      const { data, error } = await supabase
-        .from('addresses')
-        .select('*')
-        .eq('user_id', user.id)
-        .order('is_default', { ascending: false });
+      const { data, error } = await supabase.
+      from('addresses').
+      select('*').
+      eq('user_id', user.id).
+      order('is_default', { ascending: false });
 
       if (error) throw error;
 
       setSavedAddresses(data || []);
 
       // Auto-select default address if exists
-      const defaultAddress = data?.find(addr => addr.is_default);
+      const defaultAddress = data?.find((addr) => addr.is_default);
       if (defaultAddress) {
         setSelectedAddressId(defaultAddress.id);
         loadAddress(defaultAddress);
@@ -151,7 +151,7 @@ const Checkout = () => {
       });
       setAvailableCities([]);
     } else {
-      const selectedAddress = savedAddresses.find(addr => addr.id === addressId);
+      const selectedAddress = savedAddresses.find((addr) => addr.id === addressId);
       if (selectedAddress) {
         loadAddress(selectedAddress);
       }
@@ -159,12 +159,12 @@ const Checkout = () => {
   };
 
   const handleStateChange = (value: string) => {
-    setShippingAddress(prev => ({ ...prev, state: value, city: '' }));
+    setShippingAddress((prev) => ({ ...prev, state: value, city: '' }));
     setAvailableCities(indianStatesAndCities[value] || []);
   };
 
   const handleInputChange = (field: keyof ShippingAddress, value: string) => {
-    setShippingAddress(prev => ({ ...prev, [field]: value }));
+    setShippingAddress((prev) => ({ ...prev, [field]: value }));
   };
 
   const validateForm = () => {
@@ -184,10 +184,10 @@ const Checkout = () => {
   };
 
   const getProductImage = (productId: number) => {
-    const imageMap: { [key: number]: string } = {
+    const imageMap: {[key: number]: string;} = {
       1: "https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=200&h=200&fit=crop",
       2: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=200&h=200&fit=crop",
-      3: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=200&h=200&fit=crop",
+      3: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=200&h=200&fit=crop"
     };
     return imageMap[productId] || "https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=200&h=200&fit=crop";
   };
@@ -205,8 +205,8 @@ const Checkout = () => {
         {
           body: {
             shipping_address: shippingAddress,
-            shipping_cost: shippingCost,
-          },
+            shipping_cost: shippingCost
+          }
         }
       );
 
@@ -228,7 +228,7 @@ const Checkout = () => {
         prefill: {
           name: `${shippingAddress.firstName} ${shippingAddress.lastName}`,
           email: user.email,
-          contact: shippingAddress.phone,
+          contact: shippingAddress.phone
         },
         theme: { color: '#000000' },
         modal: {
@@ -236,10 +236,10 @@ const Checkout = () => {
             setLoading(false);
             toast({
               title: 'Payment Cancelled',
-              description: 'You cancelled the payment. Your cart is intact.',
+              description: 'You cancelled the payment. Your cart is intact.'
             });
-          },
-        },
+          }
+        }
       };
 
       const rzp = new (window as any).Razorpay(options);
@@ -249,7 +249,7 @@ const Checkout = () => {
         toast({
           title: 'Payment Failed',
           description: resp.error?.description || 'Payment could not be completed. Please try again.',
-          variant: 'destructive',
+          variant: 'destructive'
         });
       });
       rzp.open();
@@ -259,7 +259,7 @@ const Checkout = () => {
       toast({
         title: 'Payment Error',
         description: error.message || 'Failed to initiate payment. Please try again.',
-        variant: 'destructive',
+        variant: 'destructive'
       });
     }
   };
@@ -267,8 +267,8 @@ const Checkout = () => {
   // Step 3: Verify payment server-side, create order atomically
   const handlePaymentSuccess = async (response: any) => {
     try {
-      const hasSubscription = items.some(item => item.is_subscription);
-      const subscriptionItem = items.find(item => item.is_subscription);
+      const hasSubscription = items.some((item) => item.is_subscription);
+      const subscriptionItem = items.find((item) => item.is_subscription);
 
       const { data: verifyData, error: verifyError } = await supabase.functions.invoke(
         'verify-razorpay-payment',
@@ -280,8 +280,8 @@ const Checkout = () => {
             shipping_address: shippingAddress,
             shipping_cost: shippingCost,
             is_subscription: hasSubscription,
-            subscription_frequency: subscriptionItem?.subscription_frequency || null,
-          },
+            subscription_frequency: subscriptionItem?.subscription_frequency || null
+          }
         }
       );
 
@@ -299,7 +299,7 @@ const Checkout = () => {
 
       toast({
         title: 'Order Placed Successfully!',
-        description: `Your order #${verifyData.order_number} has been placed. Check your email for confirmation.`,
+        description: `Your order #${verifyData.order_number} has been placed. Check your email for confirmation.`
       });
 
       navigate(`/orders/${verifyData.order_id}`);
@@ -308,7 +308,7 @@ const Checkout = () => {
       toast({
         title: 'Verification Error',
         description: error.message || 'Payment was received but verification failed. Please contact support.',
-        variant: 'destructive',
+        variant: 'destructive'
       });
     } finally {
       setLoading(false);
@@ -318,20 +318,20 @@ const Checkout = () => {
   const saveNewAddress = async () => {
     if (!user) return;
     try {
-      const { data: existingAddresses } = await supabase
-        .from('addresses')
-        .select('id')
-        .eq('user_id', user.id)
-        .eq('address_line1', shippingAddress.address)
-        .eq('city', shippingAddress.city)
-        .eq('pincode', shippingAddress.postalCode);
+      const { data: existingAddresses } = await supabase.
+      from('addresses').
+      select('id').
+      eq('user_id', user.id).
+      eq('address_line1', shippingAddress.address).
+      eq('city', shippingAddress.city).
+      eq('pincode', shippingAddress.postalCode);
 
       if (existingAddresses && existingAddresses.length > 0) return;
 
-      const { data: userAddresses } = await supabase
-        .from('addresses')
-        .select('id')
-        .eq('user_id', user.id);
+      const { data: userAddresses } = await supabase.
+      from('addresses').
+      select('id').
+      eq('user_id', user.id);
 
       const isFirstAddress = !userAddresses || userAddresses.length === 0;
 
@@ -345,7 +345,7 @@ const Checkout = () => {
         city: shippingAddress.city,
         state: shippingAddress.state,
         pincode: shippingAddress.postalCode,
-        is_default: isFirstAddress,
+        is_default: isFirstAddress
       });
     } catch (err) {
       console.warn('Failed to save address (non-critical):', err);
@@ -379,12 +379,12 @@ const Checkout = () => {
               <CardContent>
                 <div className="space-y-4">
                   {/* Saved Addresses Selection */}
-                  {savedAddresses.length > 0 && (
-                    <div className="space-y-3 pb-4 border-b">
+                  {savedAddresses.length > 0 &&
+                  <div className="space-y-3 pb-4 border-b">
                       <Label>Select Address</Label>
                       <RadioGroup value={selectedAddressId} onValueChange={handleAddressSelection}>
-                        {savedAddresses.map((address) => (
-                          <div key={address.id} className="flex items-start space-x-2 border rounded-lg p-3 hover:bg-gray-50">
+                        {savedAddresses.map((address) =>
+                      <div key={address.id} className="flex items-start space-x-2 border rounded-lg p-3 hover:bg-gray-50">
                             <RadioGroupItem value={address.id} id={address.id} className="mt-1" />
                             <Label htmlFor={address.id} className="flex-1 cursor-pointer">
                               <div className="font-semibold">{address.full_name}</div>
@@ -392,21 +392,21 @@ const Checkout = () => {
                                 {address.address_line1}
                                 {address.address_line2 && `, ${address.address_line2}`}
                               </div>
-                              {address.landmark && (
-                                <div className="text-sm text-gray-600">Landmark: {address.landmark}</div>
-                              )}
+                              {address.landmark &&
+                          <div className="text-sm text-gray-600">Landmark: {address.landmark}</div>
+                          }
                               <div className="text-sm text-gray-600">
                                 {address.city}, {address.state} - {address.pincode}
                               </div>
                               <div className="text-sm text-gray-600">{address.phone}</div>
-                              {address.is_default && (
-                                <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full mt-1 inline-block">
+                              {address.is_default &&
+                          <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full mt-1 inline-block">
                                   Default
                                 </span>
-                              )}
+                          }
                             </Label>
                           </div>
-                        ))}
+                      )}
                         <div className="flex items-center space-x-2 border rounded-lg p-3 hover:bg-gray-50">
                           <RadioGroupItem value="new" id="new" />
                           <Label htmlFor="new" className="flex items-center gap-2 cursor-pointer">
@@ -416,10 +416,10 @@ const Checkout = () => {
                         </div>
                       </RadioGroup>
                     </div>
-                  )}
+                  }
 
                   {/* Address Form */}
-                  {(selectedAddressId === 'new' || savedAddresses.length === 0) && (
+                  {(selectedAddressId === 'new' || savedAddresses.length === 0) &&
                   <div className="space-y-4">
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
@@ -429,8 +429,8 @@ const Checkout = () => {
                           value={shippingAddress.firstName}
                           onChange={(e) => handleInputChange('firstName', e.target.value)}
                           required
-                          className="mt-1"
-                        />
+                          className="mt-1" />
+                        
                       </div>
                       <div>
                         <Label htmlFor="lastName">Last Name *</Label>
@@ -439,8 +439,8 @@ const Checkout = () => {
                           value={shippingAddress.lastName}
                           onChange={(e) => handleInputChange('lastName', e.target.value)}
                           required
-                          className="mt-1"
-                        />
+                          className="mt-1" />
+                        
                       </div>
                     </div>
 
@@ -452,8 +452,8 @@ const Checkout = () => {
                         value={shippingAddress.phone}
                         onChange={(e) => handleInputChange('phone', e.target.value)}
                         required
-                        className="mt-1"
-                      />
+                        className="mt-1" />
+                      
                     </div>
 
                     <div>
@@ -463,8 +463,8 @@ const Checkout = () => {
                         value={shippingAddress.address}
                         onChange={(e) => handleInputChange('address', e.target.value)}
                         required
-                        className="mt-1"
-                      />
+                        className="mt-1" />
+                      
                     </div>
 
                     <div>
@@ -473,8 +473,8 @@ const Checkout = () => {
                         id="addressLine2"
                         value={shippingAddress.addressLine2}
                         onChange={(e) => handleInputChange('addressLine2', e.target.value)}
-                        className="mt-1"
-                      />
+                        className="mt-1" />
+                      
                     </div>
 
                     <div>
@@ -484,8 +484,8 @@ const Checkout = () => {
                         value={shippingAddress.landmark}
                         onChange={(e) => handleInputChange('landmark', e.target.value)}
                         className="mt-1"
-                        placeholder="e.g., Near Metro Station"
-                      />
+                        placeholder="e.g., Near Metro Station" />
+                      
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -493,8 +493,8 @@ const Checkout = () => {
                         <Label htmlFor="state">State *</Label>
                         <Select
                           value={shippingAddress.state}
-                          onValueChange={handleStateChange}
-                        >
+                          onValueChange={handleStateChange}>
+                          
                           <SelectTrigger className="mt-1">
                             <SelectValue placeholder="Select State" />
                           </SelectTrigger>
@@ -543,17 +543,17 @@ const Checkout = () => {
                         <Select
                           value={shippingAddress.city}
                           onValueChange={(value) => handleInputChange('city', value)}
-                          disabled={!shippingAddress.state}
-                        >
+                          disabled={!shippingAddress.state}>
+                          
                           <SelectTrigger className="mt-1">
                             <SelectValue placeholder={shippingAddress.state ? "Select City" : "Select State First"} />
                           </SelectTrigger>
                           <SelectContent>
-                            {availableCities.map((city) => (
-                              <SelectItem key={city} value={city}>
+                            {availableCities.map((city) =>
+                            <SelectItem key={city} value={city}>
                                 {city}
                               </SelectItem>
-                            ))}
+                            )}
                           </SelectContent>
                         </Select>
                       </div>
@@ -566,11 +566,11 @@ const Checkout = () => {
                         value={shippingAddress.postalCode}
                         onChange={(e) => handleInputChange('postalCode', e.target.value)}
                         required
-                        className="mt-1"
-                      />
+                        className="mt-1" />
+                      
                     </div>
                   </div>
-                  )}
+                  }
                 </div>
               </CardContent>
             </Card>
@@ -584,11 +584,11 @@ const Checkout = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="flex items-center gap-3 p-3 border rounded-lg bg-gray-50">
-                  <CreditCard className="h-5 w-5 text-gray-600" />
-                  <span className="font-medium">Credit/Debit Card</span>
-                  <span className="ml-auto text-sm text-gray-500">Secure payment</span>
-                </div>
+                
+
+
+
+                
               </CardContent>
             </Card>
           </div>
@@ -602,38 +602,38 @@ const Checkout = () => {
               <CardContent className="space-y-4">
                 {/* Cart Items */}
                 <div className="space-y-3">
-                  {items.map((item) => (
-                    <div key={`${item.product_id}-checkout`} className="flex items-center space-x-3">
+                  {items.map((item) =>
+                  <div key={`${item.product_id}-checkout`} className="flex items-center space-x-3">
                       <div className="flex-shrink-0 w-12 h-12 bg-gray-100 rounded-md overflow-hidden">
-                        <img 
-                          src={item.product_image || getProductImage(item.product_id)}
-                          alt={item.product_name}
-                          className="w-full h-full object-cover"
-                        />
+                        <img
+                        src={item.product_image || getProductImage(item.product_id)}
+                        alt={item.product_name}
+                        className="w-full h-full object-cover" />
+                      
                       </div>
                       <div className="flex-1">
                         <div className="flex items-center gap-2">
                           <h4 className="font-medium text-sm">{item.product_name}</h4>
-                          {item.is_subscription && (
-                            <Badge className="bg-purple-100 text-purple-800 rounded-full text-xs px-1.5 py-0 flex items-center gap-0.5">
+                          {item.is_subscription &&
+                        <Badge className="bg-purple-100 text-purple-800 rounded-full text-xs px-1.5 py-0 flex items-center gap-0.5">
                               <RefreshCw className="h-2.5 w-2.5" />
                               <span className="text-[10px]">Sub</span>
                             </Badge>
-                          )}
+                        }
                         </div>
                         <p className="text-sm text-gray-600">
                           Qty: {item.quantity}
                           {item.is_subscription && <span className="text-green-600 ml-1">(20% off)</span>}
                         </p>
-                        {item.is_subscription && item.subscription_frequency && (
-                          <p className="text-xs text-purple-600 capitalize">{item.subscription_frequency}</p>
-                        )}
+                        {item.is_subscription && item.subscription_frequency &&
+                      <p className="text-xs text-purple-600 capitalize">{item.subscription_frequency}</p>
+                      }
                       </div>
                       <div className="text-right">
                         <p className="font-medium">₹{(item.product_price * item.quantity).toFixed(2)}</p>
                       </div>
                     </div>
-                  ))}
+                  )}
                 </div>
 
                 <Separator />
@@ -655,11 +655,11 @@ const Checkout = () => {
                   </div>
                 </div>
 
-                <Button 
+                <Button
                   onClick={handleRazorpayPayment}
                   disabled={loading || !isFormValid}
-                  className={`w-full bg-black text-white hover:bg-gray-800 py-3 ${!isFormValid ? 'opacity-50 cursor-not-allowed' : ''}`}
-                >
+                  className={`w-full bg-black text-white hover:bg-gray-800 py-3 ${!isFormValid ? 'opacity-50 cursor-not-allowed' : ''}`}>
+                  
                   {loading ? 'Processing...' : `Pay with Razorpay - ₹${totalAmount.toFixed(2)}`}
                 </Button>
 
@@ -673,8 +673,8 @@ const Checkout = () => {
       </div>
 
       <Footer />
-    </>
-  );
+    </>);
+
 };
 
 export default Checkout;
