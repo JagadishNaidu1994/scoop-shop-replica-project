@@ -34,6 +34,7 @@ const ReviewsSection = ({ productId }: ReviewsSectionProps) => {
   const [selectedOrderId, setSelectedOrderId] = useState('');
   const [newRating, setNewRating] = useState(5);
   const [newComment, setNewComment] = useState('');
+  const [isExpanded, setIsExpanded] = useState(false);
   const reviewsPerPage = 10;
 
   // Fetch approved reviews for this product (visible to everyone)
@@ -147,7 +148,9 @@ const ReviewsSection = ({ productId }: ReviewsSectionProps) => {
   }, [sortBy, reviews]);
 
   const totalPages = Math.ceil(sortedReviews.length / reviewsPerPage);
-  const paginatedReviews = sortedReviews.slice((currentPage - 1) * reviewsPerPage, currentPage * reviewsPerPage);
+  const displayedReviews = isExpanded
+    ? sortedReviews.slice((currentPage - 1) * reviewsPerPage, currentPage * reviewsPerPage)
+    : sortedReviews.slice(0, 2);
 
   const averageRating = reviews.length > 0
     ? +(reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length).toFixed(1)
@@ -256,7 +259,7 @@ const ReviewsSection = ({ productId }: ReviewsSectionProps) => {
             </div>
 
             <div className="space-y-4">
-              {paginatedReviews.map((review) => (
+              {displayedReviews.map((review) => (
                 <div key={review.id} className="border border-border rounded-xl p-5 bg-card">
                   <div className="flex items-start justify-between mb-2">
                     <div className="flex items-center gap-3">
@@ -280,7 +283,21 @@ const ReviewsSection = ({ productId }: ReviewsSectionProps) => {
               ))}
             </div>
 
-            {totalPages > 1 && (
+            {/* Expand / Collapse toggle */}
+            {sortedReviews.length > 2 && (
+              <div className="text-center mt-6">
+                <Button
+                  variant="outline"
+                  onClick={() => { setIsExpanded(!isExpanded); setCurrentPage(1); }}
+                  className="border-foreground text-foreground hover:bg-foreground hover:text-background"
+                >
+                  {isExpanded ? 'Show Less Reviews' : `View All ${sortedReviews.length} Reviews`}
+                </Button>
+              </div>
+            )}
+
+            {/* Pagination - only when expanded */}
+            {isExpanded && totalPages > 1 && (
               <div className="flex items-center justify-center gap-2 mt-8">
                 <button onClick={() => setCurrentPage(p => Math.max(1, p - 1))} disabled={currentPage === 1} className="p-2 rounded-lg border border-border disabled:opacity-40 hover:bg-muted transition-colors">
                   <ChevronLeft className="w-4 h-4" />
