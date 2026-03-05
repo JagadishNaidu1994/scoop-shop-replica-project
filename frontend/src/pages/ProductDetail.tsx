@@ -568,11 +568,24 @@ const ProductDetail = () => {
                 </div>
                 <div className="bg-white/80 shadow-[0_14px_40px_rgba(0,0,0,0.06)] divide-y" style={{ borderColor: '#E5E7EB' }}>
                   {[
-                  { q: 'How does NR matcha support steady energy and calm focus?', a: 'Matcha naturally contains caffeine plus L-theanine — a combo many people find feels smoother and steadier than coffee.' },
-                  { q: 'What makes NR different from regular matcha?', a: 'Japan-grown, shade-grown, stone-milled matcha chosen for smooth taste, vivid colour, and consistency.' },
-                  { q: 'What grades do you offer?', a: 'Imperial Ceremonial, Organic Ceremonial, and Japanese Classic.' },
-                  { q: 'Is NR matcha organic?', a: 'Yes — our matcha is certified organic.' },
-                  { q: 'Does matcha have caffeine?', a: 'Yes — matcha typically feels "cleaner" for many people because of L-theanine.' }].
+                  { q: 'How does NR matcha support steady energy and calm focus?', a: 'Matcha naturally contains caffeine plus L-theanine - a combo many people find feels smoother and steadier than coffee.' },
+                  { q: 'How does NR matcha help the skin?', a: 'Matcha contains plant antioxidants (like catechins) and chlorophylls; skincare outcomes vary by person, diet, and routine - we keep it as a daily ritual, not a miracle claim.' },
+                  { q: 'What makes NR different from regular matcha?', a: 'Japan-grown, shade-grown, stone-milled matcha chosen for what matters in-cup: smooth taste, vivid colour, and consistency (no "green powder" cosplay).' },
+                  { q: 'What grades do you offer?', a: 'Imperial Ceremonial (straight sipping + premium cups), Organic Ceremonial (daily lattes + cafés), Japanese Classic (baking/recipes/R&D).' },
+                  { q: 'When is the best time to drink matcha?', a: 'Morning or early afternoon is ideal for most people - especially if you\'re caffeine-sensitive later in the day.' },
+                  { q: 'Is NR matcha vegan?', a: 'Yes - it\'s pure matcha (just tea leaf powder).' },
+                  { q: 'Is there any sugar in NR matcha?', a: 'No added sugar - any sweetness comes from what you add (milk, honey, syrup, etc.).' },
+                  { q: 'Is your matcha organic?', a: 'Yes - our matcha is organic (see product page/pack for certification details per SKU).' },
+                  { q: 'Is it gluten-free?', a: 'Matcha is naturally gluten-free; if you have severe sensitivities, check the pack for facility/allergen statements.' },
+                  { q: 'Can I drink matcha if I\'m pregnant or breastfeeding?', a: 'Caffeine guidelines vary - best to check with your clinician and factor in total daily caffeine from all sources.' },
+                  { q: 'How should I store matcha?', a: 'Seal it tight, keep it cool and dry, away from heat/light and strong smells; refrigerate only if you can prevent moisture/odours.' },
+                  { q: 'How much matcha should I use per drink?', a: 'Start with 2–3g per serving and adjust to taste and caffeine tolerance.' },
+                  { q: 'Does matcha have caffeine?', a: 'Yes - amount depends on grams used and the tea; matcha typically feels "cleaner" for many people because of L-theanine.' },
+                  { q: 'Can I take matcha with other supplements?', a: 'Generally yes, but if you\'re on medication or sensitive to caffeine, check with a professional.' },
+                  { q: 'Are there any allergens?', a: 'Matcha is a single-ingredient tea leaf powder; always check your pack for facility handling statements.' },
+                  { q: 'How and where is NR made?', a: 'Sourced from Japan; final packing is done to keep it fresh and café-ready (see product page/pack for the exact details per SKU).' },
+                  { q: 'Can kids have matcha?', a: 'Because it contains caffeine, we generally recommend avoiding it for children unless advised by a healthcare professional.' },
+                  { q: 'Can I drink it every day?', a: 'Yes - many people do; just keep an eye on your total daily caffeine and how you feel.' }].
                   map((item, idx) =>
                   <Collapsible key={idx}>
                       <CollapsibleTrigger className="flex items-center justify-between w-full py-4 px-6 text-left text-sm font-semibold" style={{ color: '#0D1B2A' }}>
