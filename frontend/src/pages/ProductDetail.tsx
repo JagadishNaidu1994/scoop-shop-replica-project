@@ -13,8 +13,8 @@ import { Button } from '@/components/ui/button';
 import {
   Star, Plus, Minus, ChevronLeft, ChevronRight, Heart, Share2,
   Truck, Shield, RefreshCw, Award, CheckCircle, X, Zap, Brain,
-  Coffee, Check
-} from 'lucide-react';
+  Coffee, Check } from
+'lucide-react';
 import { toast } from '@/hooks/use-toast';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 
@@ -50,17 +50,17 @@ const ProductDetail = () => {
   const [howToUseOpen, setHowToUseOpen] = useState(false);
 
   const productImages = [
-    '/lovable-uploads/8edc40eb-3dfa-45fb-8cac-fc1a12ec6a3c.png',
-    '/lovable-uploads/8edc40eb-3dfa-45fb-8cac-fc1a12ec6a3c.png',
-    '/lovable-uploads/8edc40eb-3dfa-45fb-8cac-fc1a12ec6a3c.png',
-    '/lovable-uploads/8edc40eb-3dfa-45fb-8cac-fc1a12ec6a3c.png',
-    '/lovable-uploads/8edc40eb-3dfa-45fb-8cac-fc1a12ec6a3c.png',
-    '/lovable-uploads/8edc40eb-3dfa-45fb-8cac-fc1a12ec6a3c.png',
-  ];
+  '/lovable-uploads/8edc40eb-3dfa-45fb-8cac-fc1a12ec6a3c.png',
+  '/lovable-uploads/8edc40eb-3dfa-45fb-8cac-fc1a12ec6a3c.png',
+  '/lovable-uploads/8edc40eb-3dfa-45fb-8cac-fc1a12ec6a3c.png',
+  '/lovable-uploads/8edc40eb-3dfa-45fb-8cac-fc1a12ec6a3c.png',
+  '/lovable-uploads/8edc40eb-3dfa-45fb-8cac-fc1a12ec6a3c.png',
+  '/lovable-uploads/8edc40eb-3dfa-45fb-8cac-fc1a12ec6a3c.png'];
+
 
   const testimonials = [
-    { name: "Cliff W.", image: "/lovable-uploads/8edc40eb-3dfa-45fb-8cac-fc1a12ec6a3c.png", review: "Most of all my memory is improving it's more that I remember rather than forget...", rating: 5 },
-  ];
+  { name: "Cliff W.", image: "/lovable-uploads/8edc40eb-3dfa-45fb-8cac-fc1a12ec6a3c.png", review: "Most of all my memory is improving it's more that I remember rather than forget...", rating: 5 }];
+
 
   useEffect(() => {
     if (id) fetchProduct();
@@ -69,11 +69,11 @@ const ProductDetail = () => {
   const fetchProduct = async () => {
     try {
       const productId = parseInt(id as string);
-      if (isNaN(productId)) { navigate('/shop'); return; }
+      if (isNaN(productId)) {navigate('/shop');return;}
       const { data, error } = await supabase.from('products').select('*').eq('id', productId).eq('is_active', true).single();
-      if (error) { navigate('/shop'); return; }
+      if (error) {navigate('/shop');return;}
       setProduct(data);
-    } catch { navigate('/shop'); } finally { setLoading(false); }
+    } catch {navigate('/shop');} finally {setLoading(false);}
   };
 
   const getDiscountMultiplier = () => {
@@ -96,27 +96,27 @@ const ProductDetail = () => {
       quantity,
       product_image: product.primary_image,
       is_subscription: purchaseType === 'subscription',
-      subscription_frequency: purchaseType === 'subscription' ? frequencyMap[subscriptionFrequency] : undefined,
+      subscription_frequency: purchaseType === 'subscription' ? frequencyMap[subscriptionFrequency] : undefined
     });
     toast({
       title: purchaseType === 'subscription' ? "Subscription added to cart!" : "Added to cart!",
-      description: `${quantity}x ${product.name} added to your cart.`,
+      description: `${quantity}x ${product.name} added to your cart.`
     });
   };
 
   const handleWishlist = async () => {
     if (!product) return;
-    if (isInWishlist(product.id)) { await removeFromWishlist(product.id); }
-    else { await addToWishlist({ product_id: product.id, product_name: product.name, product_price: product.price, product_image: product.primary_image }); }
+    if (isInWishlist(product.id)) {await removeFromWishlist(product.id);} else
+    {await addToWishlist({ product_id: product.id, product_name: product.name, product_price: product.price, product_image: product.primary_image });}
   };
 
   const handleShare = () => {
-    if (navigator.share) { navigator.share({ title: product?.name, text: product?.description, url: window.location.href }); }
-    else { navigator.clipboard.writeText(window.location.href); toast({ title: "Link copied!", description: "Product link copied to clipboard" }); }
+    if (navigator.share) {navigator.share({ title: product?.name, text: product?.description, url: window.location.href });} else
+    {navigator.clipboard.writeText(window.location.href);toast({ title: "Link copied!", description: "Product link copied to clipboard" });}
   };
 
-  const nextImage = () => setSelectedImage(prev => (prev + 1) % productImages.length);
-  const prevImage = () => setSelectedImage(prev => (prev - 1 + productImages.length) % productImages.length);
+  const nextImage = () => setSelectedImage((prev) => (prev + 1) % productImages.length);
+  const prevImage = () => setSelectedImage((prev) => (prev - 1 + productImages.length) % productImages.length);
 
   if (loading) {
     return <div className="min-h-screen bg-white"><HeaderNavBar /><MatchaLoadingAnimation message="Loading product details..." /><Footer /></div>;
@@ -152,29 +152,29 @@ const ProductDetail = () => {
                 <div
                   className="aspect-square rounded-lg overflow-hidden cursor-zoom-in relative"
                   style={{ background: 'linear-gradient(135deg, #F9FAFB, #F3F0EB)' }}
-                  onClick={() => setShowImageModal(true)}
-                >
+                  onClick={() => setShowImageModal(true)}>
+                  
                   <AdminImageUpload
                     src={productImages[selectedImage]}
                     alt={product.name}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                    imagePath="product-detail-main"
-                  />
+                    imagePath="product-detail-main" />
+                  
 
                   {/* Navigation Arrows – bottom right */}
                   <div className="absolute bottom-4 right-4 flex gap-2">
                     <button
-                      onClick={e => { e.stopPropagation(); prevImage(); }}
+                      onClick={(e) => {e.stopPropagation();prevImage();}}
                       className="w-9 h-9 rounded-full flex items-center justify-center text-white"
-                      style={{ backgroundColor: '#0D1B2A' }}
-                    >
+                      style={{ backgroundColor: '#0D1B2A' }}>
+                      
                       <ChevronLeft className="w-4 h-4" />
                     </button>
                     <button
-                      onClick={e => { e.stopPropagation(); nextImage(); }}
+                      onClick={(e) => {e.stopPropagation();nextImage();}}
                       className="w-9 h-9 rounded-full flex items-center justify-center text-white"
-                      style={{ backgroundColor: '#0D1B2A' }}
-                    >
+                      style={{ backgroundColor: '#0D1B2A' }}>
+                      
                       <ChevronRight className="w-4 h-4" />
                     </button>
                   </div>
@@ -193,18 +193,18 @@ const ProductDetail = () => {
 
               {/* Thumbnail Slider */}
               <div className="flex gap-3 overflow-x-auto pb-1">
-                {productImages.map((image, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setSelectedImage(index)}
-                    className="w-20 h-20 flex-shrink-0 rounded-md overflow-hidden transition-all"
-                    style={{
-                      border: selectedImage === index ? '2px solid #0D1B2A' : '2px solid #E5E7EB',
-                    }}
-                  >
+                {productImages.map((image, index) =>
+                <button
+                  key={index}
+                  onClick={() => setSelectedImage(index)}
+                  className="w-20 h-20 flex-shrink-0 rounded-md overflow-hidden transition-all"
+                  style={{
+                    border: selectedImage === index ? '2px solid #0D1B2A' : '2px solid #E5E7EB'
+                  }}>
+                  
                     <AdminImageUpload src={image} alt={`${product.name} ${index + 1}`} className="w-full h-full object-cover" imagePath={`product-detail-thumbnail-${index + 1}`} />
                   </button>
-                ))}
+                )}
               </div>
             </div>
 
@@ -214,9 +214,9 @@ const ProductDetail = () => {
               {/* 3.1 Review Row */}
               <div className="flex items-center gap-2">
                 <div className="flex">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-current" style={{ color: '#0D1B2A' }} />
-                  ))}
+                  {[...Array(5)].map((_, i) =>
+                  <Star key={i} className="w-4 h-4 fill-current" style={{ color: '#0D1B2A' }} />
+                  )}
                 </div>
                 <span className="text-sm" style={{ color: '#6B7280' }}>22,344 Reviews</span>
               </div>
@@ -240,41 +240,41 @@ const ProductDetail = () => {
               {/* 3.5 Benefit Tags */}
               <div className="flex flex-wrap gap-[10px]">
                 {[
-                  { icon: <Zap className="w-4 h-4" />, label: 'Focus' },
-                  { icon: <Brain className="w-4 h-4" />, label: 'Cognition' },
-                  { icon: <Shield className="w-4 h-4" />, label: 'Immunity' },
-                ].map(tag => (
-                  <span
-                    key={tag.label}
-                    className="flex items-center gap-2 px-[14px] py-[6px] rounded-full text-sm"
-                    style={{ backgroundColor: '#F9FAFB', color: '#0D1B2A' }}
-                  >
+                { icon: <Zap className="w-4 h-4" />, label: 'Focus' },
+                { icon: <Brain className="w-4 h-4" />, label: 'Cognition' },
+                { icon: <Shield className="w-4 h-4" />, label: 'Immunity' }].
+                map((tag) =>
+                <span
+                  key={tag.label}
+                  className="flex items-center gap-2 px-[14px] py-[6px] rounded-full text-sm"
+                  style={{ backgroundColor: '#F9FAFB', color: '#0D1B2A' }}>
+                  
                     {tag.icon}
                     {tag.label}
                   </span>
-                ))}
+                )}
               </div>
 
               {/* 4. Size Selector */}
-              <div className="space-y-2">
-                <p className="text-sm font-medium" style={{ color: '#0D1B2A' }}>Size</p>
-                <div className="flex gap-[10px]">
-                  {(['60G', '240G'] as const).map(size => (
-                    <button
-                      key={size}
-                      onClick={() => setSelectedSize(size)}
-                      className="px-[18px] py-[10px] rounded-full text-sm font-medium transition-all"
-                      style={{
-                        backgroundColor: selectedSize === size ? '#0D1B2A' : '#FFFFFF',
-                        color: selectedSize === size ? '#FFFFFF' : '#6B7280',
-                        border: selectedSize === size ? '1px solid #0D1B2A' : '1px solid #E5E7EB',
-                      }}
-                    >
-                      {size}
-                    </button>
-                  ))}
-                </div>
-              </div>
+              
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+              
 
               {/* ===== 5. SUBSCRIPTION PURCHASE BOX ===== */}
               <div className="rounded-2xl p-5 space-y-4" style={{ border: '1px solid #E5E7EB' }}>
@@ -282,8 +282,8 @@ const ProductDetail = () => {
                 {/* 5.1 Subscription Option */}
                 <button
                   onClick={() => setPurchaseType('subscription')}
-                  className="w-full text-left"
-                >
+                  className="w-full text-left">
+                  
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                       {/* Radio */}
@@ -305,32 +305,32 @@ const ProductDetail = () => {
                 </button>
 
                 {/* Subscription frequency pills (only when subscription selected) */}
-                {purchaseType === 'subscription' && (
-                  <div className="flex gap-3 ml-8">
+                {purchaseType === 'subscription' &&
+                <div className="flex gap-3 ml-8">
                     <button
-                      onClick={() => setSubscriptionFrequency('4weeks')}
-                      className="px-4 py-2 rounded-full text-xs font-medium transition-all"
-                      style={{
-                        backgroundColor: subscriptionFrequency === '4weeks' ? '#0D1B2A' : '#FFFFFF',
-                        color: subscriptionFrequency === '4weeks' ? '#FFFFFF' : '#6B7280',
-                        border: '1px solid ' + (subscriptionFrequency === '4weeks' ? '#0D1B2A' : '#E5E7EB'),
-                      }}
-                    >
+                    onClick={() => setSubscriptionFrequency('4weeks')}
+                    className="px-4 py-2 rounded-full text-xs font-medium transition-all"
+                    style={{
+                      backgroundColor: subscriptionFrequency === '4weeks' ? '#0D1B2A' : '#FFFFFF',
+                      color: subscriptionFrequency === '4weeks' ? '#FFFFFF' : '#6B7280',
+                      border: '1px solid ' + (subscriptionFrequency === '4weeks' ? '#0D1B2A' : '#E5E7EB')
+                    }}>
+                    
                       Every 4 weeks
                     </button>
                     <button
-                      onClick={() => setSubscriptionFrequency('8weeks')}
-                      className="px-4 py-2 rounded-full text-xs font-medium transition-all"
-                      style={{
-                        backgroundColor: subscriptionFrequency === '8weeks' ? '#0D1B2A' : '#FFFFFF',
-                        color: subscriptionFrequency === '8weeks' ? '#FFFFFF' : '#6B7280',
-                        border: '1px solid ' + (subscriptionFrequency === '8weeks' ? '#0D1B2A' : '#E5E7EB'),
-                      }}
-                    >
+                    onClick={() => setSubscriptionFrequency('8weeks')}
+                    className="px-4 py-2 rounded-full text-xs font-medium transition-all"
+                    style={{
+                      backgroundColor: subscriptionFrequency === '8weeks' ? '#0D1B2A' : '#FFFFFF',
+                      color: subscriptionFrequency === '8weeks' ? '#FFFFFF' : '#6B7280',
+                      border: '1px solid ' + (subscriptionFrequency === '8weeks' ? '#0D1B2A' : '#E5E7EB')
+                    }}>
+                    
                       Every 8 weeks
                     </button>
                   </div>
-                )}
+                }
 
                 {/* 5.2 Quantity + Add to Cart */}
                 <div className="flex items-center gap-3">
@@ -349,8 +349,8 @@ const ProductDetail = () => {
                   <button
                     onClick={handleAddToCart}
                     className="flex-1 h-[52px] rounded-full font-semibold text-sm transition-all hover:opacity-90"
-                    style={{ backgroundColor: '#0D1B2A', color: '#FFFFFF' }}
-                  >
+                    style={{ backgroundColor: '#0D1B2A', color: '#FFFFFF' }}>
+                    
                     ADD TO CART – ₹{(currentPrice * quantity).toFixed(0)}
                   </button>
                 </div>
@@ -358,8 +358,8 @@ const ProductDetail = () => {
                 {/* 5.3 Shop Pay Button */}
                 <button
                   className="w-full h-12 rounded-full text-white font-semibold text-sm transition-all hover:opacity-90"
-                  style={{ background: 'linear-gradient(135deg, #6D28D9, #7C3AED)' }}
-                >
+                  style={{ background: 'linear-gradient(135deg, #6D28D9, #7C3AED)' }}>
+                  
                   Buy with Shop Pay
                 </button>
 
@@ -379,8 +379,8 @@ const ProductDetail = () => {
               <button
                 onClick={() => setPurchaseType('onetime')}
                 className="w-full text-left rounded-2xl p-5"
-                style={{ border: '1px solid ' + (purchaseType === 'onetime' ? '#0D1B2A' : '#E5E7EB') }}
-              >
+                style={{ border: '1px solid ' + (purchaseType === 'onetime' ? '#0D1B2A' : '#E5E7EB') }}>
+                
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <div className="w-5 h-5 rounded-full border-2 flex items-center justify-center" style={{ borderColor: purchaseType === 'onetime' ? '#0D1B2A' : '#E5E7EB' }}>
@@ -399,12 +399,12 @@ const ProductDetail = () => {
               {/* ===== 7. ACCORDION SECTIONS ===== */}
               <div className="space-y-0">
                 {[
-                  { label: 'Why choose NASTEA', open: whyChooseOpen, setOpen: setWhyChooseOpen, content: 'Japan-sourced, shade-grown, stone-milled ceremonial matcha. Organic, lab-tested, no fillers. Clean energy meets calm focus — the way matcha was meant to be.' },
-                  { label: 'Ingredients', open: ingredientsOpen, setOpen: setIngredientsOpen, content: 'Organic ceremonial grade matcha (Camellia sinensis), organic Lion\'s Mane extract, organic Tremella extract, organic zinc, B-vitamin complex.' },
-                  { label: 'The Science', open: scienceOpen, setOpen: setScienceOpen, content: 'Matcha naturally contains caffeine + L-theanine — a combo linked to calmer, more focused alertness. You consume the whole leaf, getting a richer concentration of plant compounds.' },
-                  { label: 'How to Use', open: howToUseOpen, setOpen: setHowToUseOpen, content: '1. Whisk 2-3g with a splash of warm water until smooth. 2. Add ice (or keep hot). 3. Pour in milk of choice. 4. Stir and enjoy.' },
-                ].map((item, idx) => (
-                  <Collapsible key={idx} open={item.open} onOpenChange={item.setOpen}>
+                { label: 'Why choose NASTEA', open: whyChooseOpen, setOpen: setWhyChooseOpen, content: 'Japan-sourced, shade-grown, stone-milled ceremonial matcha. Organic, lab-tested, no fillers. Clean energy meets calm focus — the way matcha was meant to be.' },
+                { label: 'Ingredients', open: ingredientsOpen, setOpen: setIngredientsOpen, content: 'Organic ceremonial grade matcha (Camellia sinensis), organic Lion\'s Mane extract, organic Tremella extract, organic zinc, B-vitamin complex.' },
+                { label: 'The Science', open: scienceOpen, setOpen: setScienceOpen, content: 'Matcha naturally contains caffeine + L-theanine — a combo linked to calmer, more focused alertness. You consume the whole leaf, getting a richer concentration of plant compounds.' },
+                { label: 'How to Use', open: howToUseOpen, setOpen: setHowToUseOpen, content: '1. Whisk 2-3g with a splash of warm water until smooth. 2. Add ice (or keep hot). 3. Pour in milk of choice. 4. Stir and enjoy.' }].
+                map((item, idx) =>
+                <Collapsible key={idx} open={item.open} onOpenChange={item.setOpen}>
                     <CollapsibleTrigger className="flex items-center justify-between w-full py-4 text-left" style={{ borderTop: '1px solid #E5E7EB' }}>
                       <span className="text-sm font-semibold" style={{ color: '#0D1B2A' }}>{item.label}</span>
                       <Plus className="w-4 h-4" style={{ color: '#6B7280' }} />
@@ -413,7 +413,7 @@ const ProductDetail = () => {
                       <p className="text-sm leading-relaxed" style={{ color: '#6B7280' }}>{item.content}</p>
                     </CollapsibleContent>
                   </Collapsible>
-                ))}
+                )}
               </div>
 
               {/* ===== 8. REVIEW PREVIEW CARD ===== */}
@@ -424,9 +424,9 @@ const ProductDetail = () => {
                 <div className="space-y-1">
                   <p className="text-sm font-semibold" style={{ color: '#0D1B2A' }}>{testimonials[0].name}</p>
                   <div className="flex">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="w-3 h-3 fill-current" style={{ color: '#0D1B2A' }} />
-                    ))}
+                    {[...Array(5)].map((_, i) =>
+                    <Star key={i} className="w-3 h-3 fill-current" style={{ color: '#0D1B2A' }} />
+                    )}
                   </div>
                   <p className="text-[13px] leading-relaxed" style={{ color: '#6B7280' }}>
                     "{testimonials[0].review}"
@@ -467,12 +467,12 @@ const ProductDetail = () => {
                   <h3 className="text-3xl lg:text-4xl font-serif font-bold" style={{ color: '#0D1B2A' }}>Your everyday essential for sharper focus and improved productivity</h3>
                   <p className="text-lg leading-relaxed" style={{ color: '#6B7280' }}>Ceremonial-grade matcha paired with functional mushrooms for clean energy, calm clarity, and nourished skin—all in one ritual.</p>
                   <div className="space-y-3">
-                    {['Focus', 'Mental clarity', 'Cognitive performance'].map(label => (
-                      <div key={label} className="flex items-center gap-3">
+                    {['Focus', 'Mental clarity', 'Cognitive performance'].map((label) =>
+                    <div key={label} className="flex items-center gap-3">
                         <span className="w-2 h-2 rounded-full inline-block" style={{ backgroundColor: '#0D1B2A' }} />
                         <p className="font-medium" style={{ color: '#0D1B2A' }}>{label}</p>
                       </div>
-                    ))}
+                    )}
                   </div>
                 </div>
               </div>
@@ -498,11 +498,11 @@ const ProductDetail = () => {
             <section className="w-full py-16">
               <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                 <div className="space-y-4">
-                  {['Mental clarity', 'Cognitive function', 'Immune support'].map(label => (
-                    <div key={label} className="px-6 py-4 bg-white/70 shadow-[0_12px_30px_rgba(0,0,0,0.06)] text-xl font-semibold w-fit" style={{ color: '#0D1B2A' }}>
+                  {['Mental clarity', 'Cognitive function', 'Immune support'].map((label) =>
+                  <div key={label} className="px-6 py-4 bg-white/70 shadow-[0_12px_30px_rgba(0,0,0,0.06)] text-xl font-semibold w-fit" style={{ color: '#0D1B2A' }}>
                       {label}
                     </div>
-                  ))}
+                  )}
                 </div>
                 <div className="relative overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.08)]">
                   <AdminImageUpload src="/lovable-uploads/e3cb3dde-3127-4252-8b46-ab17c78f4ad8.png" alt="Wellness lifestyle" className="w-full h-full object-cover" imagePath="benefit-lifestyle" />
@@ -588,20 +588,20 @@ const ProductDetail = () => {
                 </div>
                 <div className="bg-white/80 shadow-[0_14px_40px_rgba(0,0,0,0.06)] divide-y" style={{ borderColor: '#E5E7EB' }}>
                   {[
-                    { q: 'How does NR matcha support steady energy and calm focus?', a: 'Matcha naturally contains caffeine plus L-theanine — a combo many people find feels smoother and steadier than coffee.' },
-                    { q: 'What makes NR different from regular matcha?', a: 'Japan-grown, shade-grown, stone-milled matcha chosen for smooth taste, vivid colour, and consistency.' },
-                    { q: 'What grades do you offer?', a: 'Imperial Ceremonial, Organic Ceremonial, and Japanese Classic.' },
-                    { q: 'Is NR matcha organic?', a: 'Yes — our matcha is certified organic.' },
-                    { q: 'Does matcha have caffeine?', a: 'Yes — matcha typically feels "cleaner" for many people because of L-theanine.' },
-                  ].map((item, idx) => (
-                    <Collapsible key={idx}>
+                  { q: 'How does NR matcha support steady energy and calm focus?', a: 'Matcha naturally contains caffeine plus L-theanine — a combo many people find feels smoother and steadier than coffee.' },
+                  { q: 'What makes NR different from regular matcha?', a: 'Japan-grown, shade-grown, stone-milled matcha chosen for smooth taste, vivid colour, and consistency.' },
+                  { q: 'What grades do you offer?', a: 'Imperial Ceremonial, Organic Ceremonial, and Japanese Classic.' },
+                  { q: 'Is NR matcha organic?', a: 'Yes — our matcha is certified organic.' },
+                  { q: 'Does matcha have caffeine?', a: 'Yes — matcha typically feels "cleaner" for many people because of L-theanine.' }].
+                  map((item, idx) =>
+                  <Collapsible key={idx}>
                       <CollapsibleTrigger className="flex items-center justify-between w-full py-4 px-6 text-left text-sm font-semibold" style={{ color: '#0D1B2A' }}>
                         {item.q}
                         <ChevronRight className="w-4 h-4 flex-shrink-0" style={{ color: '#6B7280' }} />
                       </CollapsibleTrigger>
                       <CollapsibleContent className="px-6 pb-4 text-sm" style={{ color: '#6B7280' }}>{item.a}</CollapsibleContent>
                     </Collapsible>
-                  ))}
+                  )}
                 </div>
               </div>
             </section>
@@ -610,8 +610,8 @@ const ProductDetail = () => {
       </div>
 
       {/* Image Modal */}
-      {showImageModal && (
-        <div className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4">
+      {showImageModal &&
+      <div className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4">
           <div className="relative max-w-4xl max-h-full">
             <button onClick={() => setShowImageModal(false)} className="absolute top-4 right-4 text-white hover:text-gray-300 z-10">
               <X className="w-8 h-8" />
@@ -619,11 +619,11 @@ const ProductDetail = () => {
             <img src={productImages[selectedImage]} alt={product.name} className="max-w-full max-h-full object-contain" />
           </div>
         </div>
-      )}
+      }
 
       <Footer />
-    </div>
-  );
+    </div>);
+
 };
 
 export default ProductDetail;
