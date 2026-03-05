@@ -604,9 +604,6 @@ const FaqItem = ({ q, a }: { q: string; a: string }) => {
                 </div>
               </div>
             </section>
-                </div>
-              </div>
-            </section>
           </div>
         </main>
       </div>
