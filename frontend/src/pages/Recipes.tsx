@@ -59,7 +59,7 @@ const Recipes = () => {
             Recipes & Rituals
           </h1>
           <p className="text-xl text-gray-600 max-w-4xl mx-auto">
-            Discover delicious ways to incorporate our functional mushrooms and matcha into your daily routine. 
+            Discover delicious ways to incorporate our functional mushrooms and matcha into your daily routine.{' '}
             From energizing morning lattes to calming evening elixirs.
           </p>
         </div>
