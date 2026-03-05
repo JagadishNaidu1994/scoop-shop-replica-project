@@ -212,14 +212,14 @@ const ProductDetail = () => {
             <div className="space-y-5">
 
               {/* 3.1 Review Row */}
-              <div className="flex items-center gap-2">
-                <div className="flex">
-                  {[...Array(5)].map((_, i) =>
-                  <Star key={i} className="w-4 h-4 fill-current" style={{ color: '#0D1B2A' }} />
-                  )}
-                </div>
-                <span className="text-sm" style={{ color: '#6B7280' }}>22,344 Reviews</span>
-              </div>
+              
+
+
+
+
+
+
+              
 
               {/* 3.2 Product Title */}
               <h1 className="text-4xl font-bold leading-tight" style={{ color: '#0D1B2A', fontFamily: 'Inter, sans-serif' }}>
