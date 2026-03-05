@@ -617,6 +617,69 @@ export type Database = {
           },
         ]
       }
+      product_reviews: {
+        Row: {
+          admin_reply: string | null
+          admin_reply_date: string | null
+          comment: string
+          created_at: string
+          id: string
+          is_approved: boolean
+          is_archived: boolean
+          is_important: boolean
+          order_id: string
+          product_id: number
+          rating: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          admin_reply?: string | null
+          admin_reply_date?: string | null
+          comment: string
+          created_at?: string
+          id?: string
+          is_approved?: boolean
+          is_archived?: boolean
+          is_important?: boolean
+          order_id: string
+          product_id: number
+          rating: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          admin_reply?: string | null
+          admin_reply_date?: string | null
+          comment?: string
+          created_at?: string
+          id?: string
+          is_approved?: boolean
+          is_archived?: boolean
+          is_important?: boolean
+          order_id?: string
+          product_id?: number
+          rating?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_reviews_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "product_reviews_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       products: {
         Row: {
           benefits: string[] | null
