@@ -57,6 +57,18 @@ const ProductDetail = () => {
   '/lovable-uploads/8edc40eb-3dfa-45fb-8cac-fc1a12ec6a3c.png',
   '/lovable-uploads/8edc40eb-3dfa-45fb-8cac-fc1a12ec6a3c.png'];
 
+const FaqItem = ({ q, a }: { q: string; a: string }) => {
+  const [open, setOpen] = useState(false);
+  return (
+    <Collapsible open={open} onOpenChange={setOpen}>
+      <CollapsibleTrigger className="flex items-center justify-between w-full py-4 px-6 text-left text-sm font-semibold" style={{ color: '#0D1B2A' }}>
+        {q}
+        <ChevronRight className={`w-4 h-4 flex-shrink-0 transition-transform duration-200 ${open ? 'rotate-90' : ''}`} style={{ color: '#6B7280' }} />
+      </CollapsibleTrigger>
+      <CollapsibleContent className="px-6 pb-4 text-sm" style={{ color: '#6B7280' }}>{a}</CollapsibleContent>
+    </Collapsible>
+  );
+};
 
   const testimonials = [
   { name: "Cliff W.", image: "/lovable-uploads/8edc40eb-3dfa-45fb-8cac-fc1a12ec6a3c.png", review: "Most of all my memory is improving it's more that I remember rather than forget...", rating: 5 }];
@@ -586,15 +598,12 @@ const ProductDetail = () => {
                   { q: 'How and where is NR made?', a: 'Sourced from Japan; final packing is done to keep it fresh and café-ready (see product page/pack for the exact details per SKU).' },
                   { q: 'Can kids have matcha?', a: 'Because it contains caffeine, we generally recommend avoiding it for children unless advised by a healthcare professional.' },
                   { q: 'Can I drink it every day?', a: 'Yes - many people do; just keep an eye on your total daily caffeine and how you feel.' }].
-                  map((item, idx) =>
-                  <Collapsible key={idx}>
-                      <CollapsibleTrigger className="flex items-center justify-between w-full py-4 px-6 text-left text-sm font-semibold" style={{ color: '#0D1B2A' }}>
-                        {item.q}
-                        <ChevronRight className="w-4 h-4 flex-shrink-0" style={{ color: '#6B7280' }} />
-                      </CollapsibleTrigger>
-                      <CollapsibleContent className="px-6 pb-4 text-sm" style={{ color: '#6B7280' }}>{item.a}</CollapsibleContent>
-                    </Collapsible>
-                  )}
+                  map((item, idx) => (
+                    <FaqItem key={idx} q={item.q} a={item.a} />
+                  ))}
+                </div>
+              </div>
+            </section>
                 </div>
               </div>
             </section>
