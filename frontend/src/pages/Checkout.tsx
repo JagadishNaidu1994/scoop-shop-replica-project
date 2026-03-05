@@ -383,7 +383,7 @@ const Checkout = () => {
                   {/* Divider */}
                   <div className="border-t border-[#E5E7EB] my-4" />
 
-                  {/* Discount Code Input */}
+                  {/* Coupon Section */}
                   {appliedCoupon ? (
                     <div className="flex items-center justify-between p-3 rounded-lg bg-green-50 mb-4">
                       <div className="flex items-center gap-2 min-w-0">
@@ -398,36 +398,37 @@ const Checkout = () => {
                       </button>
                     </div>
                   ) : (
-                    <div className="flex items-center gap-2 mb-3">
-                      <div className="flex-1 relative">
-                        <Ticket className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#9CA3AF]" />
-                        <Input
-                          value={couponCode}
-                          onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
-                          placeholder="Discount code"
-                          className="h-12 pl-10 bg-[#F9FAFB] border-[#E5E7EB] rounded-lg text-sm font-mono uppercase tracking-wider placeholder:tracking-normal placeholder:font-sans placeholder:normal-case placeholder:text-[#9CA3AF] focus:border-foreground focus-visible:ring-0 focus-visible:ring-offset-0"
-                          onKeyDown={(e) => e.key === 'Enter' && applyCoupon(couponCode)}
-                        />
+                    <div className="space-y-3">
+                      {/* Coupon Input */}
+                      <div className="flex items-center gap-2">
+                        <div className="flex-1 relative">
+                          <Ticket className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#9CA3AF]" />
+                          <Input
+                            value={couponCode}
+                            onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
+                            placeholder="Discount code"
+                            className="h-12 pl-10 bg-[#F9FAFB] border-[#E5E7EB] rounded-lg text-sm font-mono uppercase tracking-wider placeholder:tracking-normal placeholder:font-sans placeholder:normal-case placeholder:text-[#9CA3AF] focus:border-foreground focus-visible:ring-0 focus-visible:ring-offset-0"
+                            onKeyDown={(e) => e.key === 'Enter' && applyCoupon(couponCode)}
+                          />
+                        </div>
+                        <Button
+                          onClick={() => applyCoupon(couponCode)}
+                          disabled={couponLoading || !couponCode.trim()}
+                          className="h-12 px-5 text-sm font-medium bg-foreground text-white hover:bg-foreground/90 rounded-lg"
+                        >
+                          {couponLoading ? '...' : 'Apply'}
+                        </Button>
                       </div>
-                      <Button
-                        onClick={() => applyCoupon(couponCode)}
-                        disabled={couponLoading || !couponCode.trim()}
-                        className="h-12 px-5 text-sm font-medium bg-foreground text-white hover:bg-foreground/90 rounded-lg"
-                      >
-                        {couponLoading ? '...' : 'Apply'}
-                      </Button>
-                    </div>
-                  )}
 
-                  {/* Expandable Coupon Accordion */}
-                  {!appliedCoupon && (
-                    <CouponAccordion
-                      availableCoupons={availableCoupons}
-                      subtotal={subtotal}
-                      onApply={applyCoupon}
-                      loading={couponLoading}
-                      userEmail={user?.email || undefined}
-                    />
+                      {/* Expandable Available Coupons */}
+                      <CouponAccordion
+                        availableCoupons={availableCoupons}
+                        subtotal={subtotal}
+                        onApply={applyCoupon}
+                        loading={couponLoading}
+                        userEmail={user?.email || undefined}
+                      />
+                    </div>
                   )}
 
                   {/* Divider */}
