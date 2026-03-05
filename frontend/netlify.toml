@@ -10,7 +10,7 @@
 
 # Node version (optional but recommended for consistency)
 [build.environment]
-  NODE_VERSION = "18"
+  NODE_VERSION = "20"
 
 # Redirect rules for SPA (single page application)
 # This ensures all routes work correctly with React Router
