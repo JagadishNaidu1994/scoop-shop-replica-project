@@ -402,7 +402,7 @@ const ProductDetail = () => {
                 { label: 'Why choose NASTEA', open: whyChooseOpen, setOpen: setWhyChooseOpen, content: 'Japan-sourced, shade-grown, stone-milled ceremonial matcha. Organic, lab-tested, no fillers. Clean energy meets calm focus — the way matcha was meant to be.' },
                 { label: 'Ingredients', open: ingredientsOpen, setOpen: setIngredientsOpen, content: 'Organic ceremonial grade matcha (Camellia sinensis), organic Lion\'s Mane extract, organic Tremella extract, organic zinc, B-vitamin complex.' },
                 { label: 'The Science', open: scienceOpen, setOpen: setScienceOpen, content: 'Matcha naturally contains caffeine + L-theanine — a combo linked to calmer, more focused alertness. You consume the whole leaf, getting a richer concentration of plant compounds.' },
-                { label: 'How to Use', open: howToUseOpen, setOpen: setHowToUseOpen, content: '1. Whisk 2-3g with a splash of warm water until smooth. 2. Add ice (or keep hot). 3. Pour in milk of choice. 4. Stir and enjoy.' }].
+                { label: 'How to Use', open: howToUseOpen, setOpen: setHowToUseOpen, content: '1. Whisk 2-3g with a splash of warm water until smooth.\n2. Add ice (or keep hot).\n3. Pour in milk of choice.\n4. Stir and enjoy.' }].
                 map((item, idx) =>
                 <Collapsible key={idx} open={item.open} onOpenChange={item.setOpen}>
                     <CollapsibleTrigger className="flex items-center justify-between w-full py-4 text-left" style={{ borderTop: '1px solid #E5E7EB' }}>
@@ -410,7 +410,7 @@ const ProductDetail = () => {
                       <Plus className="w-4 h-4" style={{ color: '#6B7280' }} />
                     </CollapsibleTrigger>
                     <CollapsibleContent className="pb-4">
-                      <p className="text-sm leading-relaxed" style={{ color: '#6B7280' }}>{item.content}</p>
+                      <p className="text-sm leading-relaxed whitespace-pre-line" style={{ color: '#6B7280' }}>{item.content}</p>
                     </CollapsibleContent>
                   </Collapsible>
                 )}
