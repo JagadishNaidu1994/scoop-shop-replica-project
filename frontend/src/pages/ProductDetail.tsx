@@ -364,9 +364,9 @@ const ProductDetail = () => {
                 </button>
 
                 {/* 5.4 More payment options */}
-                <p className="text-center text-[13px]" style={{ color: '#6B7280' }}>
-                  More payment options
-                </p>
+                
+
+                
 
                 {/* 5.5 Subscription Note */}
                 <div className="flex items-center gap-2">
