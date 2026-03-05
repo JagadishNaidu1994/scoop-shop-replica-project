@@ -6,6 +6,7 @@ import HeaderNavBar from '@/components/HeaderNavBar';
 import Footer from '@/components/Footer';
 import AdminImageUpload from '@/components/AdminImageUpload';
 import MatchaLoadingAnimation from '@/components/MatchaLoadingAnimation';
+import HowToSection from '@/components/HowToSection';
 import { supabase } from '@/integrations/supabase/client';
 import { useCart } from '@/contexts/CartContext';
 import { useWishlist } from '@/contexts/WishlistContext';
@@ -477,20 +478,7 @@ const ProductDetail = () => {
             </section>
 
             {/* How to use */}
-            <section className="w-full py-16">
-              <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-                <div className="space-y-4">
-                  <div className="w-48 overflow-hidden shadow-[0_12px_30px_rgba(0,0,0,0.08)]">
-                    <AdminImageUpload src="/lovable-uploads/8edc40eb-3dfa-45fb-8cac-fc1a12ec6a3c.png" alt="Product container" className="w-full h-full object-cover" imagePath="how-to-thumb" />
-                  </div>
-                  <h3 className="text-3xl font-serif font-bold" style={{ color: '#0D1B2A' }}>How to NASTEA</h3>
-                  <p className="text-lg leading-relaxed" style={{ color: '#6B7280' }}>Just add 2g of pure Lion's Mane powder to hot water or add 2g to your daily coffee or workout smoothie.</p>
-                </div>
-                <div className="relative overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.08)]">
-                  <AdminImageUpload src="/lovable-uploads/65581248-fb35-4b2f-8b55-04877e634119.png" alt="Stirring powder into a drink" className="w-full h-full object-cover" imagePath="how-to-lifestyle" />
-                </div>
-              </div>
-            </section>
+            <HowToSection />
 
             {/* Benefit pills */}
             <section className="w-full py-16">
