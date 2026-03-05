@@ -137,8 +137,6 @@ const HeaderNavBar = () => {
                 <span className="inline-block mx-2 text-gray-400">•</span>
                 <span className="inline-block mx-6 sm:mx-8">FREE SHIPPING ON ORDERS ABOVE INR 1000</span>
                 <span className="inline-block mx-2 text-gray-400">•</span>
-                <span className="inline-block mx-6 sm:mx-8">REFER A FRIEND & GET ₹150 OFF</span>
-                <span className="inline-block mx-2 text-gray-400">•</span>
                 <span className="inline-block mx-6 sm:mx-8">HYDERABAD'S FIRST MATCHA BRAND</span>
                 <span className="inline-block mx-2 text-gray-400">•</span>
               </div>
