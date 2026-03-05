@@ -33,8 +33,6 @@ const CouponAccordion: React.FC<CouponAccordionProps> = ({
     return new Date(date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
   };
 
-  if (availableCoupons.length === 0) return null;
-
   return (
     <div>
       <button
@@ -45,7 +43,9 @@ const CouponAccordion: React.FC<CouponAccordionProps> = ({
       >
         <span className="flex items-center gap-2 text-sm font-medium text-foreground">
           <Tag className="h-4 w-4" />
-          View available coupons ({availableCoupons.length})
+          {availableCoupons.length > 0
+            ? `View available coupons (${availableCoupons.length})`
+            : 'View available coupons'}
         </span>
         <ChevronDown className={`h-4 w-4 text-[#6B7280] transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
       </button>
@@ -54,8 +54,10 @@ const CouponAccordion: React.FC<CouponAccordionProps> = ({
         id="coupon-panel"
         className={`overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? 'max-h-[600px] opacity-100 mt-3' : 'max-h-0 opacity-0'}`}
       >
-        <div className="space-y-4">
-          {/* Personal Coupons */}
+        {availableCoupons.length === 0 ? (
+          <p className="text-sm text-[#9CA3AF] py-3">No coupons available right now.</p>
+        ) : (
+          <div className="space-y-4">
           {personalCoupons.length > 0 && (
             <div>
               <h4 className="text-xs font-semibold text-foreground uppercase tracking-wider mb-2 flex items-center gap-1.5">
@@ -145,7 +147,8 @@ const CouponAccordion: React.FC<CouponAccordionProps> = ({
               </div>
             </div>
           )}
-        </div>
+          </div>
+        )}
       </div>
     </div>
   );
