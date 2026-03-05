@@ -391,7 +391,7 @@ const ProductDetail = () => {
                   <span className="text-lg font-bold" style={{ color: '#0D1B2A' }}>₹{product.price}</span>
                 </div>
                 <div className="ml-8 mt-1 space-y-0.5">
-                  <p className="text-xs" style={{ color: '#6B7280' }}>Free gifts NOT included</p>
+                  
                   <p className="text-xs" style={{ color: '#6B7280' }}>₹{(product.price / 30).toFixed(2)} per serving</p>
                 </div>
               </button>
