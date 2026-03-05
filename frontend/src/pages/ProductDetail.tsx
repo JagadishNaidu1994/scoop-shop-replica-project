@@ -251,16 +251,22 @@ const ProductDetail = () => {
 
               {/* 3.5 Benefit Tags */}
               <div className="flex flex-wrap gap-[10px]">
-                {[
-                { icon: <Zap className="w-4 h-4" />, label: 'Cert Organic' },
-                { icon: <Brain className="w-4 h-4" />, label: 'Calm Energy' },
-                { icon: <Shield className="w-4 h-4" />, label: 'No Additives' }].
-                map((tag) =>
+                {(product.id === 2
+                  ? [
+                    { icon: <Zap className="w-4 h-4" />, label: 'Japan-Grown' },
+                    { icon: <Brain className="w-4 h-4" />, label: 'Daily Driver' },
+                    { icon: <Shield className="w-4 h-4" />, label: 'No Additives' }
+                  ]
+                  : [
+                    { icon: <Zap className="w-4 h-4" />, label: 'Cert Organic' },
+                    { icon: <Brain className="w-4 h-4" />, label: 'Calm Energy' },
+                    { icon: <Shield className="w-4 h-4" />, label: 'No Additives' }
+                  ]
+                ).map((tag) =>
                 <span
                   key={tag.label}
                   className="flex items-center gap-2 px-[14px] py-[6px] rounded-full text-sm"
                   style={{ backgroundColor: '#F9FAFB', color: '#0D1B2A' }}>
-                  
                     {tag.icon}
                     {tag.label}
                   </span>
