@@ -403,7 +403,7 @@ const ProductDetail = () => {
                 <Collapsible key={idx} open={item.open} onOpenChange={item.setOpen}>
                     <CollapsibleTrigger className="flex items-center justify-between w-full py-4 text-left" style={{ borderTop: '1px solid #E5E7EB' }}>
                       <span className="text-sm font-semibold" style={{ color: '#0D1B2A' }}>{item.label}</span>
-                      <Plus className="w-4 h-4" style={{ color: '#6B7280' }} />
+                      {item.open ? <Minus className="w-4 h-4" style={{ color: '#6B7280' }} /> : <Plus className="w-4 h-4" style={{ color: '#6B7280' }} />}
                     </CollapsibleTrigger>
                     <CollapsibleContent className="pb-4">
                       <p className="text-sm leading-relaxed whitespace-pre-line" style={{ color: '#6B7280' }}>{item.content}</p>
