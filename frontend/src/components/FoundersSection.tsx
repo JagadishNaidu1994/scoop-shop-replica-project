@@ -13,7 +13,7 @@ const FoundersSection = () => {
           {/* Left - Image */}
           <div className="relative">
             <AdminImageUpload
-              src="/lovable-uploads/da6fe5b0-6a57-4ada-a9b8-042646881f03.png"
+              src="/lovable-uploads/NDN00797-Edit.jpg"
               alt="Founders with matcha"
               className="w-full h-auto rounded-lg"
               imagePath="founders-section"
