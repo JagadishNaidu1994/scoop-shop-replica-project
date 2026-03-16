@@ -6,7 +6,7 @@ const NasteaStandard = () => {
   return (
     <section className="bg-gray-50 w-full my-[2px] py-[39px]">
       <div className="w-full px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center direction-rtl lg:[direction:rtl] [&>*]:[direction:ltr]">
           {/* Left Content */}
           <div className="space-y-8">
             <h2 className="text-4xl font-bold text-black">The NASTEA Standard</h2>
