@@ -25,9 +25,6 @@ const HeroSection = () => {
       {/* Text content overlaid on left */}
       <div className="relative z-10 flex items-end h-full w-full max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 pb-16 md:pb-20">
         <div className="space-y-5 max-w-lg">
-          <p className="text-sm tracking-widest text-white/80 uppercase">
-            ★★★★★ 4.8/5 | 1,200+ reviews
-          </p>
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight">
             Your Daily Ritual for Focus,{' '}
             <span className="text-white/90">Energy & Calm.</span>
