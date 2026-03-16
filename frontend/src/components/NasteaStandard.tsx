@@ -6,9 +6,18 @@ const NasteaStandard = () => {
   return (
     <section className="bg-gray-50 w-full my-[2px] py-[39px]">
       <div className="w-full px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center direction-rtl lg:[direction:rtl] [&>*]:[direction:ltr]">
-          {/* Left Content */}
-          <div className="space-y-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+          {/* Left Image */}
+          <div className="relative order-2 lg:order-1">
+            <AdminImageUpload
+              src="/lovable-uploads/NR_Cup.png"
+              alt="NR matcha cup"
+              className="w-full h-auto rounded-lg"
+              imagePath="nastea-standard-hands" />
+          </div>
+
+          {/* Right Content */}
+          <div className="space-y-8 order-1 lg:order-2">
             <h2 className="text-4xl font-bold text-black">The NASTEA Standard</h2>
 
             <div className="space-y-6">
@@ -32,16 +41,6 @@ const NasteaStandard = () => {
                 <p className="text-gray-600">Every batch is selected to hit the same flavour-and-colour standard—so your cup (and your café drinks) look iconic, taste smooth, and never surprise you in a bad way.</p>
               </div>
             </div>
-          </div>
-
-          {/* Right Image */}
-          <div className="relative">
-            <AdminImageUpload
-              src="/lovable-uploads/NR_Cup.png"
-              alt="NR matcha cup"
-              className="w-full h-auto rounded-lg"
-              imagePath="nastea-standard-hands" />
-
           </div>
         </div>
       </div>
