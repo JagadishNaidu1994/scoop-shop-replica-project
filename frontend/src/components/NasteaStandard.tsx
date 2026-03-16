@@ -1,6 +1,12 @@
 
 import React from 'react';
 import AdminImageUpload from './AdminImageUpload';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion';
 
 const NasteaStandard = () => {
   return (
@@ -17,35 +23,60 @@ const NasteaStandard = () => {
           </div>
 
           {/* Right Content */}
-          <div className="space-y-8 order-1 lg:order-2">
-            <h2 className="text-4xl font-bold text-black">The NASTEA Standard</h2>
+          <div className="flex flex-col justify-between order-1 lg:order-2 min-h-[500px]">
+            {/* Top: Heading + Subtitle */}
+            <div>
+              <h2 className="text-4xl md:text-5xl font-bold text-black mb-4">The NASTEA Standard:</h2>
+              <p className="text-gray-600 text-base">
+                Our matcha is sourced, stone-milled, and crafted for maximum quality—delivering real results.
+              </p>
+            </div>
 
-            <div className="space-y-6">
-              <div className="border-l-4 border-orange-400 pl-6">
-                <h3 className="text-xl font-semibold text-black mb-2">Japan-Grown, Shade-Grown</h3>
-                <p className="text-gray-600">We source Kagoshima Japanese matcha that's shade-grown for the signature umami and smoothness for your daily routine.</p>
-              </div>
+            {/* Bottom: Collapsible Items */}
+            <div className="mt-auto">
+              <Accordion type="single" collapsible className="w-full">
+                <AccordionItem value="item-1" className="border-t border-gray-300 border-b-0">
+                  <AccordionTrigger className="text-base font-semibold text-black hover:no-underline py-5">
+                    Japan-Grown, Shade-Grown
+                  </AccordionTrigger>
+                  <AccordionContent className="text-gray-600">
+                    We source Kagoshima Japanese matcha that's shade-grown for the signature umami and smoothness for your daily routine.
+                  </AccordionContent>
+                </AccordionItem>
 
-              <div className="border-l-4 border-orange-400 pl-6">
-                <h3 className="text-xl font-semibold text-black mb-2">Stone-Milled for Silk-Smooth Sips</h3>
-                <p className="text-gray-600">Our leaves are stone-milled into a fine, fluffy powder that blends clean, whisks fast, and drinks like velvet—no grit, no swampy bitterness.</p>
-              </div>
+                <AccordionItem value="item-2" className="border-t border-gray-300 border-b-0">
+                  <AccordionTrigger className="text-base font-semibold text-black hover:no-underline py-5">
+                    Stone-Milled for Silk-Smooth Sips
+                  </AccordionTrigger>
+                  <AccordionContent className="text-gray-600">
+                    Our leaves are stone-milled into a fine, fluffy powder that blends clean, whisks fast, and drinks like velvet—no grit, no swampy bitterness.
+                  </AccordionContent>
+                </AccordionItem>
 
-              <div className="border-l-4 border-orange-400 pl-6">
-                <h3 className="text-xl font-semibold text-black mb-2">Grades That Match Your Mood</h3>
-                <p className="text-gray-600">From Ceremonial for your main-character mornings to Premium for daily lattes and café menus, our lineup is built for consistency in taste, texture, and that neon-clean colour everyone notices.</p>
-              </div>
+                <AccordionItem value="item-3" className="border-t border-gray-300 border-b-0">
+                  <AccordionTrigger className="text-base font-semibold text-black hover:no-underline py-5">
+                    Grades That Match Your Mood
+                  </AccordionTrigger>
+                  <AccordionContent className="text-gray-600">
+                    From Ceremonial for your main-character mornings to Premium for daily lattes and café menus, our lineup is built for consistency in taste, texture, and that neon-clean colour everyone notices.
+                  </AccordionContent>
+                </AccordionItem>
 
-              <div className="border-l-4 border-orange-400 pl-6">
-                <h3 className="text-xl font-semibold text-black mb-2">Consistency You Can Count On</h3>
-                <p className="text-gray-600">Every batch is selected to hit the same flavour-and-colour standard—so your cup (and your café drinks) look iconic, taste smooth, and never surprise you in a bad way.</p>
-              </div>
+                <AccordionItem value="item-4" className="border-t border-gray-300 border-b border-gray-300">
+                  <AccordionTrigger className="text-base font-semibold text-black hover:no-underline py-5">
+                    Consistency You Can Count On
+                  </AccordionTrigger>
+                  <AccordionContent className="text-gray-600">
+                    Every batch is selected to hit the same flavour-and-colour standard—so your cup (and your café drinks) look iconic, taste smooth, and never surprise you in a bad way.
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
             </div>
           </div>
         </div>
       </div>
-    </section>);
-
+    </section>
+  );
 };
 
 export default NasteaStandard;
