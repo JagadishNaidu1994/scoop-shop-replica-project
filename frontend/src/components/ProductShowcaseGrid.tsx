@@ -7,8 +7,8 @@ const ProductShowcaseGrid = () => {
     id: 0,
     name: "Japan Classic",
     description: "Japan-Grown | Daily Driver | No Additives",
-    thumbnail: "/lovable-uploads/be44778f-fd8a-49f3-aef5-7422ebd30ed1.png",
-    mainImage: "/lovable-uploads/be44778f-fd8a-49f3-aef5-7422ebd30ed1.png"
+    thumbnail: "/lovable-uploads/NDN00932-Edit.jpg",
+    mainImage: "/lovable-uploads/NDN00932-Edit.jpg"
   }, {
     id: 1,
     name: "Organic Ceremonial",
