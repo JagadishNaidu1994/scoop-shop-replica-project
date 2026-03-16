@@ -10,8 +10,8 @@ const NasteaStandard = () => {
           {/* Left Image */}
           <div className="relative order-2 lg:order-1">
             <AdminImageUpload
-              src="/lovable-uploads/NR_Cup.png"
-              alt="NR matcha cup"
+              src="/lovable-uploads/NDN00797-Edit.jpg"
+              alt="Person holding NASTEA matcha cup"
               className="w-full h-auto rounded-lg"
               imagePath="nastea-standard-hands" />
           </div>
