@@ -2,7 +2,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import AdminImageUpload from '@/components/AdminImageUpload';
 
 const HeroSection = () => {
   const navigate = useNavigate();
@@ -12,34 +11,38 @@ const HeroSection = () => {
   };
 
   return (
-    <section className="bg-gray-50 min-h-screen flex items-center w-full py-12 lg:py-0">
-      <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center max-w-7xl mx-auto">
-        {/* Left Content - Increased size and spacing */}
-        <div className="space-y-8 lg:space-y-10 animate-fade-in px-4 sm:px-6 lg:px-12 lg:pr-8">
-          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-black leading-tight">
-            Your Daily Ritual for Focus,<br />
-            <span className="text-gray-700">Energy & Calm</span>
+    <section className="relative w-full h-[600px] md:h-[700px] lg:h-[85vh] overflow-hidden">
+      {/* Full-width background image */}
+      <img
+        src="/lovable-uploads/NDN00926-Edit.jpg"
+        alt="NASTEA matcha pouring setup"
+        className="absolute inset-0 w-full h-full object-cover"
+      />
+
+      {/* Subtle overlay for text readability on left */}
+      <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-black/20 to-transparent" />
+
+      {/* Text content overlaid on left */}
+      <div className="relative z-10 flex items-end h-full w-full max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 pb-16 md:pb-20">
+        <div className="space-y-5 max-w-lg">
+          <p className="text-sm tracking-widest text-white/80 uppercase">
+            ★★★★★ 4.8/5 | 1,200+ reviews
+          </p>
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight">
+            Your Daily Ritual for Focus,{' '}
+            <span className="text-white/90">Energy & Calm.</span>
           </h1>
-          
-          <p className="text-xl lg:text-2xl text-gray-600 max-w-xl leading-relaxed">
+          <p className="text-lg text-white/80">
             Premium Japanese matcha crafted for modern wellness.
           </p>
-          
-          <div className="pt-6">
-            <Button onClick={handleShopClick} className="bg-black text-white px-10 py-4 text-lg rounded-full hover:bg-gray-800 transition-colors">
-              Shop Starter Bundles
+          <div className="pt-2">
+            <Button
+              onClick={handleShopClick}
+              className="bg-white text-black px-8 py-3 text-base rounded-full hover:bg-white/90 transition-colors font-semibold"
+            >
+              SHOP STARTER BUNDLES
             </Button>
           </div>
-        </div>
-
-        {/* Right Image - Increased size */}
-        <div className="relative animate-fade-in-delay order-first lg:order-last px-4 sm:px-6 lg:px-0">
-          <AdminImageUpload 
-            src="/lovable-uploads/NDN00926-Edit.jpg" 
-            alt="NASTEA products on kitchen table setup" 
-            className="w-full h-auto max-h-[600px] lg:max-h-[700px] object-cover rounded-2xl shadow-2xl" 
-            imagePath="hero-section-main" 
-          />
         </div>
       </div>
     </section>
