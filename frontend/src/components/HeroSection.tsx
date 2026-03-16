@@ -35,7 +35,7 @@ const HeroSection = () => {
         {/* Right Image - Increased size */}
         <div className="relative animate-fade-in-delay order-first lg:order-last px-4 sm:px-6 lg:px-0">
           <AdminImageUpload 
-            src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" 
+            src="/lovable-uploads/NDN00926-Edit.jpg" 
             alt="NASTEA products on kitchen table setup" 
             className="w-full h-auto max-h-[600px] lg:max-h-[700px] object-cover rounded-2xl shadow-2xl" 
             imagePath="hero-section-main" 

@@ -37,8 +37,8 @@ const NasteaStandard = () => {
           {/* Right Image */}
           <div className="relative">
             <AdminImageUpload
-              src="/lovable-uploads/da6fe5b0-6a57-4ada-a9b8-042646881f03.png"
-              alt="Hands holding mushroom coffee cup"
+              src="/lovable-uploads/NR_Cup.png"
+              alt="NR matcha cup"
               className="w-full h-auto rounded-lg"
               imagePath="nastea-standard-hands" />
 
