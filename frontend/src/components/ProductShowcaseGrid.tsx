@@ -13,8 +13,8 @@ const ProductShowcaseGrid = () => {
     id: 1,
     name: "Organic Ceremonial",
     description: "Cert Organic | Calm Energy | No Additives",
-    thumbnail: "/lovable-uploads/18fa3a22-212e-489f-bdee-5bb2266db6a4.png",
-    mainImage: "/lovable-uploads/18fa3a22-212e-489f-bdee-5bb2266db6a4.png"
+    thumbnail: "/lovable-uploads/NDN00607-Edit.jpg",
+    mainImage: "/lovable-uploads/NDN00607-Edit.jpg"
   }];
   const nextImage = () => {
     setSelectedImage((prev) => (prev + 1) % products.length);
