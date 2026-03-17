@@ -36,6 +36,17 @@ class StatusCheck(BaseModel):
 class StatusCheckCreate(BaseModel):
     client_name: str
 
+    @validator('client_name')
+    def sanitize_client_name(cls, v):
+        if not v or not v.strip():
+            raise ValueError('client_name cannot be empty')
+        v = v.strip()
+        if len(v) > 200:
+            raise ValueError('client_name must be 200 characters or less')
+        if re.search(r'[\$\{\}]', v):
+            raise ValueError('client_name contains invalid characters')
+        return v
+
 # Add your routes to the router instead of directly to app
 @api_router.get("/")
 async def root():
