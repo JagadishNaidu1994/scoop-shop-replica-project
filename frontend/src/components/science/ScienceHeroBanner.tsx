@@ -10,8 +10,8 @@ const ScienceHeroBanner = () => {
       />
 
       {/* Centered-right text overlay */}
-      <div className="absolute inset-0 flex items-center justify-center px-4">
-        <div className="text-center max-w-xl ml-0 md:ml-[10%]">
+      <div className="absolute inset-0 flex items-center justify-center md:justify-start px-4 md:pl-[10%]">
+        <div className="text-center md:text-left max-w-xl">
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4">
             Our science
           </h1>
