@@ -5,9 +5,10 @@ from motor.motor_asyncio import AsyncIOMotorClient
 import os
 import logging
 from pathlib import Path
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, validator
 from typing import List
 import uuid
+import re
 from datetime import datetime
 
 
@@ -35,6 +36,17 @@ class StatusCheck(BaseModel):
 class StatusCheckCreate(BaseModel):
     client_name: str
 
+    @validator('client_name')
+    def sanitize_client_name(cls, v):
+        if not v or not v.strip():
+            raise ValueError('client_name cannot be empty')
+        v = v.strip()
+        if len(v) > 200:
+            raise ValueError('client_name must be 200 characters or less')
+        if re.search(r'[\$\{\}]', v):
+            raise ValueError('client_name contains invalid characters')
+        return v
+
 # Add your routes to the router instead of directly to app
 @api_router.get("/")
 async def root():
@@ -48,8 +60,12 @@ async def create_status_check(input: StatusCheckCreate):
     return status_obj
 
 @api_router.get("/status", response_model=List[StatusCheck])
-async def get_status_checks():
-    status_checks = await db.status_checks.find().to_list(1000)
+async def get_status_checks(skip: int = 0, limit: int = 100):
+    if limit > 100:
+        limit = 100
+    if skip < 0:
+        skip = 0
+    status_checks = await db.status_checks.find().skip(skip).limit(limit).to_list(limit)
     return [StatusCheck(**status_check) for status_check in status_checks]
 
 # Include the router in the main app
