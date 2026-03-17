@@ -18,7 +18,7 @@ const ScienceStepsGrid = () => {
     {
       title: "Refining & milling",
       description: "After the leaves are shade-grown and picked, they're gently processed and slowly stone-milled into an ultra-fine powder. That \"slow\" part matters: the gentler the milling, the less heat builds up helping preserve the vivid green colour, fresh aroma, and smooth mouthfeel matcha is famous for. Once milled, the powder is carefully sifted so what ends up in your tin is fluffy, even, and whiskable: no coarse bits, no gritty surprises, no clumps that ruin your latte.",
-      image: "https://images.unsplash.com/photo-1582793988951-9aed5509eb97?w=500&h=400&fit=crop",
+      image: "/lovable-uploads/NR_on_Matcha_powder.png",
       reverse: false
     },
     {
