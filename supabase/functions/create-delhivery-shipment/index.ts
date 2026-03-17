@@ -1,4 +1,5 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const DELHIVERY_API_KEY = Deno.env.get("DELHIVERY_API_KEY") || "";
 const DELHIVERY_BASE_URL = "https://track.delhivery.com/api/cmu/create.json";
