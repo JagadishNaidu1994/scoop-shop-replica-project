@@ -24,7 +24,7 @@ const ScienceStepsGrid = () => {
     {
       title: "Quality checks",
       description: "Before anything reaches you (or a café menu), matcha is checked for purity and safety, think unwanted contaminants and consistency markers. We're obsessive about the two things you can't fake: how it performs in a cup, and how clean it is behind the scenes. If it doesn't meet standard, it doesn't ship. Simple.",
-      image: "https://images.unsplash.com/photo-1532634922-8fe0b757fb13?w=500&h=400&fit=crop",
+      image: "/lovable-uploads/Wholesale_2.png",
       reverse: true
     },
     {
