@@ -12,7 +12,7 @@ const ScienceStepsGrid = () => {
     {
       title: "The \"why it tastes smooth\" explanation",
       description: "Matcha's smoothness isn't an accident, it's engineered by tradition. Shade-growing helps develop a softer, more umami-forward leaf. Then it's gently dried and prepared for milling. Finally, stone-milling turns it into a powder so fine it practically floats. That fineness matters: more even texture, better whisking, and a creamier mouthfeel so the cup feels polished, not powdery. It's a slow process, but it's the difference between \"green drink\" and \"matcha ritual.\" Genuine Japanese-style matcha is stone-ground at a speed of only 30-40g per hour to prevent heat friction, which can oxidize the tea and destroy its nutritional profile.",
-      image: "https://images.unsplash.com/photo-1615631648922-b4d5e8d1f5c6?w=500&h=400&fit=crop",
+      image: "/lovable-uploads/NDN00780-3.jpg",
       reverse: true
     },
     {
