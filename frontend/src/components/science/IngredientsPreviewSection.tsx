@@ -25,7 +25,7 @@ const IngredientsPreviewSection = () => {
           {/* Right Image */}
           <div className="relative">
             <img 
-              src="https://images.unsplash.com/photo-1581090464777-f3220bbe1b8b?w=600&h=500&fit=crop" 
+              src="/lovable-uploads/NDN00659-Edit.jpg" 
               alt="Hand holding mushroom coffee cup"
               className="w-full h-auto rounded-lg"
             />
