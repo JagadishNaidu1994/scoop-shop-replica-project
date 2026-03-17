@@ -9,7 +9,7 @@ const FarmSection = () => {
           {/* Left Image */}
           <div className="relative">
             <img
-              src="https://images.unsplash.com/photo-1564890369478-c89ca6d9cde9?w=800&h=600&fit=crop"
+              src="/lovable-uploads/Uji_Farm.webp"
               alt="Tea plantation in Kagoshima mountains"
               className="w-full h-full object-cover"
             />
