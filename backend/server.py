@@ -5,9 +5,10 @@ from motor.motor_asyncio import AsyncIOMotorClient
 import os
 import logging
 from pathlib import Path
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, validator
 from typing import List
 import uuid
+import re
 from datetime import datetime
 
 
