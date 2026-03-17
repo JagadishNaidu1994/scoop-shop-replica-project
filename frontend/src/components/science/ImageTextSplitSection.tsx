@@ -9,7 +9,7 @@ const ImageTextSplitSection = () => {
           {/* Left Image */}
           <div className="relative">
             <img 
-              src="https://images.unsplash.com/photo-1513836279014-a89f7a76ae86?w=800&h=600&fit=crop" 
+              src="/lovable-uploads/NDN00776-Edit.jpg" 
               alt="Forest canopy"
               className="w-full h-full object-cover"
             />
