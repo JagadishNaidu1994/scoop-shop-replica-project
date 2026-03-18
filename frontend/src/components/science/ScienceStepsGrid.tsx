@@ -49,12 +49,12 @@ const ScienceStepsGrid = () => {
           {steps.map((step, index) => (
             <div 
               key={index} 
-              className={`grid grid-cols-1 lg:grid-cols-2 gap-16 items-center min-h-[400px] ${
+              className={`grid grid-cols-1 lg:grid-cols-2 gap-16 items-center h-auto lg:h-[400px] ${
                 step.reverse ? 'lg:grid-flow-col-dense' : ''
               }`}
             >
               {/* Content */}
-              <div className={`flex flex-col justify-center space-y-6 ${step.reverse ? 'lg:col-start-2' : ''}`}>
+              <div className={`flex flex-col justify-center space-y-6 overflow-hidden ${step.reverse ? 'lg:col-start-2' : ''}`}>
                 <h3 className="text-3xl md:text-4xl font-bold text-black">{step.title}</h3>
                 <p className="text-base text-gray-600 leading-relaxed">
                   {step.description}
@@ -62,11 +62,11 @@ const ScienceStepsGrid = () => {
               </div>
 
               {/* Image */}
-              <div className={`relative ${step.reverse ? 'lg:col-start-1' : ''}`}>
+              <div className={`relative h-[300px] lg:h-full ${step.reverse ? 'lg:col-start-1' : ''}`}>
                 <img 
                   src={step.image} 
                   alt={step.title}
-                  className="w-full h-auto min-h-[320px] object-cover rounded-lg shadow-lg"
+                  className="w-full h-full object-cover rounded-lg shadow-lg"
                 />
               </div>
             </div>
