@@ -49,7 +49,7 @@ const ScienceStepsGrid = () => {
           {steps.map((step, index) => (
             <div 
               key={index} 
-              className={`grid grid-cols-1 lg:grid-cols-2 gap-16 items-center min-h-[500px] ${
+              className={`grid grid-cols-1 lg:grid-cols-2 gap-16 items-center min-h-[400px] ${
                 step.reverse ? 'lg:grid-flow-col-dense' : ''
               }`}
             >
