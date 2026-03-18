@@ -66,7 +66,7 @@ const ScienceStepsGrid = () => {
                 <img 
                   src={step.image} 
                   alt={step.title}
-                  className="w-full h-auto min-h-[400px] object-cover rounded-lg shadow-lg"
+                  className="w-full h-auto min-h-[320px] object-cover rounded-lg shadow-lg"
                 />
               </div>
             </div>
