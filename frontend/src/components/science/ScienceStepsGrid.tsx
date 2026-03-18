@@ -6,7 +6,7 @@ const ScienceStepsGrid = () => {
     {
       title: "Shade-grown vs. sun-grown (the matcha lesson)",
       description: "Before we get into the fun part (drinking it), here's the quick tea nerd moment because it explains why good matcha tastes so different. Green tea plants usually grow in sunlight. But matcha is made from tea leaves that are grown under shade for a period before harvest. Sun-grown leaves = more bite, more bitterness, more \"green tea\" sharpness. Shade-grown leaves = softer, smoother, more umami, more of that creamy matcha vibe. Shade changes how the plant grows—pushing it to hold onto more of the compounds that make matcha taste rounded and feel less aggressive in your cup. Then those leaves are picked, gently processed, and milled into a fine powder so you're not just steeping tea… you're drinking the leaf.",
-      image: "/lovable-uploads/NDN00780-2.jpg",
+      image: "/lovable-uploads/NDN01022-2.jpg",
       reverse: false
     },
     {
@@ -24,13 +24,13 @@ const ScienceStepsGrid = () => {
     {
       title: "Quality checks",
       description: "Before anything reaches you (or a café menu), matcha is checked for purity and safety, think unwanted contaminants and consistency markers. We're obsessive about the two things you can't fake: how it performs in a cup, and how clean it is behind the scenes. If it doesn't meet standard, it doesn't ship. Simple.",
-      image: "/lovable-uploads/NDN00802-Edit.jpg",
+      image: "/lovable-uploads/Wholesale_2.png",
       reverse: true
     },
     {
       title: "Packaging & ready-to-ritual",
       description: "Once it passes, it's packed to keep it fresh and protected so the colour stays bright, the flavour stays smooth, and the texture stays silky. Then it's ready for what it was made for: daily rituals at home, or barista-level drinks in cafés minus the drama.",
-      image: "/lovable-uploads/NDN01022-2.jpg",
+      image: "/lovable-uploads/NDN00802-Edit.jpg",
       reverse: false
     }
   ];
