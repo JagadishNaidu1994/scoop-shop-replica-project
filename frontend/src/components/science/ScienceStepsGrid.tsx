@@ -49,7 +49,7 @@ const ScienceStepsGrid = () => {
           {steps.map((step, index) => (
             <div 
               key={index} 
-              className={`grid grid-cols-1 lg:grid-cols-2 gap-16 items-center min-h-[500px] ${
+              className={`grid grid-cols-1 lg:grid-cols-2 gap-16 items-center min-h-[400px] ${
                 step.reverse ? 'lg:grid-flow-col-dense' : ''
               }`}
             >
@@ -66,7 +66,7 @@ const ScienceStepsGrid = () => {
                 <img 
                   src={step.image} 
                   alt={step.title}
-                  className="w-full h-auto min-h-[400px] object-cover rounded-lg shadow-lg"
+                  className="w-full h-auto min-h-[320px] object-cover rounded-lg shadow-lg"
                 />
               </div>
             </div>
