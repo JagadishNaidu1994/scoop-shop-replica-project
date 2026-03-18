@@ -30,7 +30,7 @@ const ScienceStepsGrid = () => {
     {
       title: "Packaging & ready-to-ritual",
       description: "Once it passes, it's packed to keep it fresh and protected so the colour stays bright, the flavour stays smooth, and the texture stays silky. Then it's ready for what it was made for: daily rituals at home, or barista-level drinks in cafés minus the drama.",
-      image: "/lovable-uploads/NDN01022-2.jpg",
+      image: "/lovable-uploads/NDN00802-Edit.jpg",
       reverse: false
     }
   ];
