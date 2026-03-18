@@ -5,13 +5,13 @@ const ScienceStepsGrid = () => {
   const steps = [
     {
       title: "Shade-grown vs. sun-grown (the matcha lesson)",
-      description: "Before we get into the fun part (drinking it), here's the quick tea nerd moment because it explains why good matcha tastes so different. Green tea plants usually grow in sunlight. But matcha is made from tea leaves that are grown under shade for a period before harvest. Sun-grown leaves = more bite, more bitterness, more \"green tea\" sharpness. Shade-grown leaves = softer, smoother, more umami, more of that creamy matcha vibe. Shade changes how the plant grows—pushing it to hold onto more of the compounds that make matcha taste rounded and feel less aggressive in your cup. Then those leaves are picked, gently processed, and milled into a fine powder so you're not just steeping tea… you're drinking the leaf.",
+      description: "Before we get into the fun part (drinking it), here's the quick tea nerd moment because it explains why good matcha tastes so different.\n\nGreen tea plants usually grow in sunlight. But matcha is made from tea leaves that are grown under shade for a period before harvest. Think of it like this:\n\nSun-grown leaves = more bite, more bitterness, more \"green tea\" sharpness.\nShade-grown leaves = softer, smoother, more umami, more of that creamy matcha vibe.\n\nShade changes how the plant grows-pushing it to hold onto more of the compounds that make matcha taste rounded and feel less aggressive in your cup. Then those leaves are picked, gently processed, and milled into a fine powder so you're not just steeping tea… you're drinking the leaf.",
       image: "/lovable-uploads/NDN01022-2.jpg",
       reverse: false
     },
     {
       title: "The \"why it tastes smooth\" explanation",
-      description: "Matcha's smoothness isn't an accident, it's engineered by tradition. Shade-growing helps develop a softer, more umami-forward leaf. Then it's gently dried and prepared for milling. Finally, stone-milling turns it into a powder so fine it practically floats. That fineness matters: more even texture, better whisking, and a creamier mouthfeel so the cup feels polished, not powdery. It's a slow process, but it's the difference between \"green drink\" and \"matcha ritual.\" Genuine Japanese-style matcha is stone-ground at a speed of only 30-40g per hour to prevent heat friction, which can oxidize the tea and destroy its nutritional profile.",
+      description: "Matcha's smoothness isn't an accident, it's engineered by tradition. Shade-growing helps develop a softer, more umami-forward leaf. Then it's gently dried and prepared for milling. Finally, stone-milling turns it into a powder so fine it practically floats.\n\nThat fineness matters: more even texture, better whisking, and a creamier mouthfeel so the cup feels polished, not powdery. It's a slow process, but it's the difference between \"green drink\" and \"matcha ritual.\"\n\nGenuine Japanese-style matcha is stone-ground at a speed of only 30-40g per hour to prevent heat friction, which can oxidize the tea and destroy its nutritional profile.",
       image: "/lovable-uploads/NDN00780-3.jpg",
       reverse: true
     },
@@ -56,7 +56,7 @@ const ScienceStepsGrid = () => {
               {/* Content */}
               <div className={`flex flex-col justify-center space-y-6 overflow-hidden ${step.reverse ? 'lg:col-start-2' : ''}`}>
                 <h3 className="text-3xl md:text-4xl font-bold text-black">{step.title}</h3>
-                <p className="text-base text-gray-600 leading-relaxed">
+                <p className="text-base text-gray-600 leading-relaxed whitespace-pre-line">
                   {step.description}
                 </p>
               </div>
