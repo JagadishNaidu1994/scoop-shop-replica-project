@@ -8,6 +8,7 @@
     "start": "cd frontend && npm run start"
   },
   "dependencies": {
+    "@vitejs/plugin-react": "^4.3.0",
     "jspdf": "^4.2.0"
   }
 }
