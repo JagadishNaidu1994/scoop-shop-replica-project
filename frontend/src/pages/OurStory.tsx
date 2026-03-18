@@ -151,7 +151,7 @@ const OurStory = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 items-center max-w-7xl mx-auto">
           <div className="h-[280px] sm:h-[350px] lg:h-[420px] overflow-hidden rounded-lg">
             <img
-              src="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+              src="/lovable-uploads/Untitled_design-9.png"
               alt="Matcha preparation"
               className="w-full h-full object-cover"
             />
