@@ -1,4 +1,4 @@
-from fastapi import FastAPI, APIRouter
+from fastapi import FastAPI, APIRouter, Depends, HTTPException, Header
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
@@ -27,6 +27,15 @@ app = FastAPI()
 api_router = APIRouter(prefix="/api")
 
 
+# API Key authentication dependency
+async def verify_api_key(x_api_key: str = Header(..., alias="X-API-Key")):
+    expected_key = os.environ.get("API_KEY")
+    if not expected_key:
+        raise HTTPException(status_code=500, detail="Server misconfiguration")
+    if x_api_key != expected_key:
+        raise HTTPException(status_code=401, detail="Invalid API key")
+
+
 # Define Models
 class StatusCheck(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
@@ -52,14 +61,14 @@ class StatusCheckCreate(BaseModel):
 async def root():
     return {"message": "Hello World"}
 
-@api_router.post("/status", response_model=StatusCheck)
+@api_router.post("/status", response_model=StatusCheck, dependencies=[Depends(verify_api_key)])
 async def create_status_check(input: StatusCheckCreate):
     status_dict = input.dict()
     status_obj = StatusCheck(**status_dict)
     _ = await db.status_checks.insert_one(status_obj.dict())
     return status_obj
 
-@api_router.get("/status", response_model=List[StatusCheck])
+@api_router.get("/status", response_model=List[StatusCheck], dependencies=[Depends(verify_api_key)])
 async def get_status_checks(skip: int = 0, limit: int = 100):
     if limit > 100:
         limit = 100
@@ -71,12 +80,18 @@ async def get_status_checks(skip: int = 0, limit: int = 100):
 # Include the router in the main app
 app.include_router(api_router)
 
+# Parse CORS origins - reject wildcard
+cors_origins_raw = os.environ.get('CORS_ORIGINS', '')
+cors_origins = [o.strip() for o in cors_origins_raw.split(',') if o.strip() and o.strip() != '*']
+if not cors_origins:
+    cors_origins = []  # No origins allowed if only wildcard or empty
+
 app.add_middleware(
     CORSMiddleware,
     allow_credentials=True,
-    allow_origins=os.environ.get('CORS_ORIGINS', '*').split(','),
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_origins=cors_origins,
+    allow_methods=["GET", "POST"],
+    allow_headers=["Content-Type", "X-API-Key"],
 )
 
 # Configure logging
