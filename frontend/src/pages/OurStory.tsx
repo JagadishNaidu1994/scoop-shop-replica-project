@@ -1,6 +1,53 @@
 import React from 'react';
 import HeaderNavBar from '@/components/HeaderNavBar';
 import Footer from '@/components/Footer';
+import NasteaStandard from '@/components/NasteaStandard';
+
+type StorySection = {
+  title: string;
+  body: string[];
+  image: string;
+  alt: string;
+  reverse?: boolean;
+};
+
+const storySections: StorySection[] = [
+  {
+    title: "Wellness, Rooted in Ritual",
+    body: [
+      "The best habits aren't forced, they're repeated. Matcha has been a daily ritual for centuries, and when it's done right, it's the simplest upgrade: clean energy, calm focus, zero drama."
+    ],
+    image: "/lovable-uploads/cfe9af70-3679-48c2-a090-99c899b9cfef.png",
+    alt: "Patterned matcha swirl"
+  },
+  {
+    title: "Japanese Craft, Made for Today",
+    body: [
+      "Matcha comes from a deep tradition of patience and precision: shade-grown leaves, careful harvests, and slow stone-milling. We keep the craft intact, then bring it into modern life with premium standards and a little personality."
+    ],
+    image: "/lovable-uploads/Uji_Farm.webp",
+    alt: "Tea farms in Japan",
+    reverse: true
+  },
+  {
+    title: "Pure Leaf, Loud Standards",
+    body: [
+      "We don't do fillers, flavour tricks, or green powder cosplay. Just Japan-grown matcha selected for the things that matter in a cup: smooth taste, vivid colour, and consistency you can trust."
+    ],
+    image: "/lovable-uploads/Untitled_design-9.png",
+    alt: "Matcha preparation setup"
+  },
+  {
+    title: "Building the Matcha movement",
+    body: [
+      "We're here to make matcha the go-to daily ritual for India's modern, style-led generation through better sourcing, better education, and cafe partnerships that raise the bar.",
+      "NR isn't a quick fix. It's choosing a cleaner, smarter way to sip and making 'I'm a matcha person' your best personality trait."
+    ],
+    image: "/lovable-uploads/NDN00797-Edit.jpg",
+    alt: "Matcha movement visual",
+    reverse: true
+  }
+];
 
 const OurStory = () => {
   return (
@@ -104,133 +151,44 @@ const OurStory = () => {
         </div>
       </section>
 
-      {/* Section 1: Health, Rooted in Nature */}
-      <section className="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 bg-white">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 items-center max-w-7xl mx-auto">
-          <div className="h-[280px] sm:h-[350px] lg:h-[420px] overflow-hidden rounded-lg">
-            <img
-              src="/lovable-uploads/cfe9af70-3679-48c2-a090-99c899b9cfef.png"
-              alt="Mycelial network pattern"
-              className="w-full h-full object-cover"
-            />
-          </div>
-          <div>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-light text-gray-900 mb-4 sm:mb-6">
-              Wellness, Rooted in Ritual
-            </h2>
-            <p className="text-base sm:text-lg text-gray-700 leading-[1.6]">
-              The best habits aren't forced - they're repeated. Matcha has been a daily ritual for centuries, and when it's done right, it's the simplest upgrade: clean energy, calm focus, zero drama.
-            </p>
+      {/* Story Process Sections */}
+      <section className="bg-white py-12 sm:py-16 lg:py-20">
+        <div className="w-full px-0">
+          <div className="space-y-6 sm:space-y-8 md:space-y-10">
+            {storySections.map((section) => {
+              const imageOrder = section.reverse ? 'order-2' : 'order-1';
+              const textOrder = section.reverse ? 'order-1' : 'order-2';
+
+              return (
+                <article key={section.title} className="grid grid-cols-2 items-stretch gap-0">
+                  <div className={imageOrder}>
+                    <img
+                      src={section.image}
+                      alt={section.alt}
+                      className="h-full min-h-[240px] w-full object-cover sm:min-h-[320px] md:min-h-[420px] lg:min-h-[520px]"
+                    />
+                  </div>
+
+                  <div className={`flex items-center ${textOrder}`}>
+                    <div className="w-full px-4 py-6 sm:px-8 sm:py-8 md:px-10 md:py-10 lg:px-12">
+                    <h2 className="text-sm font-semibold leading-snug text-black sm:text-xl md:text-[2rem] md:leading-tight">
+                      {section.title}
+                    </h2>
+                    <div className="mt-3 space-y-2 text-[10px] leading-[1.5] text-black/80 sm:mt-4 sm:text-sm sm:leading-7 md:text-xl md:leading-10">
+                      {section.body.map((paragraph) => (
+                        <p key={paragraph}>{paragraph}</p>
+                      ))}
+                    </div>
+                    </div>
+                  </div>
+                </article>
+              );
+            })}
           </div>
         </div>
       </section>
 
-      {/* Section 2: Centuries of Wisdom */}
-      <section className="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 bg-gray-50">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 items-center max-w-7xl mx-auto">
-          <div className="order-2 md:order-1">
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-light text-gray-900 mb-4 sm:mb-6">
-              Japanese Craft, Made for Today
-            </h2>
-            <p className="text-base sm:text-lg text-gray-700 leading-[1.6]">
-              Matcha comes from a deep tradition of patience and precision - shade-grown leaves, careful harvests, and slow stone-milling. We keep the craft intact, then bring it into modern life with premium standards and a little personality.
-            </p>
-          </div>
-          <div className="h-[280px] sm:h-[350px] lg:h-[420px] overflow-hidden rounded-lg order-1 md:order-2">
-            <img
-              src="https://images.unsplash.com/photo-1594736797933-d0200ba2fe65?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-              alt="Mushroom close-up"
-              className="w-full h-full object-cover"
-            />
-          </div>
-        </div>
-      </section>
-
-      {/* Section 3: Ancient Power */}
-      <section className="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 bg-white">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 items-center max-w-7xl mx-auto">
-          <div className="h-[280px] sm:h-[350px] lg:h-[420px] overflow-hidden rounded-lg">
-            <img
-              src="/lovable-uploads/Untitled_design-9.png"
-              alt="Matcha preparation"
-              className="w-full h-full object-cover"
-            />
-          </div>
-          <div>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-light text-gray-900 mb-4 sm:mb-6">
-              Pure Leaf, Loud Standards
-            </h2>
-            <p className="text-base sm:text-lg text-gray-700 leading-[1.6]">
-              We don't do fillers, flavour tricks, or "green powder" cosplay. Just Japan-grown matcha selected for the things that matter in a cup: smooth taste, vivid colour, and consistency you can trust.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Section 4: Building the Matcha Movement */}
-      <section className="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 bg-gray-50">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 items-center max-w-7xl mx-auto">
-          <div className="order-2 md:order-1">
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-light text-gray-900 mb-4 sm:mb-6">
-              Building the Matcha movement
-            </h2>
-            <p className="text-base sm:text-lg text-gray-700 leading-[1.6] mb-4">
-              We're here to make matcha the go-to daily ritual for India's modern, style-led generation through better sourcing, better education, and café partnerships that raise the bar.
-            </p>
-            <p className="text-base sm:text-lg text-gray-700 leading-[1.6]">
-              NR isn't a quick fix. It's choosing a cleaner, smarter way to sip and making "I'm a matcha person" your best personality trait.
-            </p>
-          </div>
-          <div className="h-[280px] sm:h-[320px] lg:h-[380px] overflow-hidden rounded-lg order-1 md:order-2">
-            <img
-              src="https://images.unsplash.com/photo-1571115764595-644a1f56a55c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-              alt="People discussing mushrooms"
-              className="w-full h-full object-cover"
-            />
-          </div>
-        </div>
-      </section>
-
-      {/* The NASTEA Standard Section */}
-      <section className="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 bg-gray-50">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center max-w-7xl mx-auto">
-          {/* Left Content */}
-          <div className="space-y-6 sm:space-y-8">
-            <h2 className="text-3xl sm:text-4xl font-bold text-black">The NASTEA Standard</h2>
-
-            <div className="space-y-4 sm:space-y-6">
-              <div className="border-l-4 border-orange-400 pl-4 sm:pl-6">
-                <h3 className="text-lg sm:text-xl font-semibold text-black mb-2">Japan-Grown, Shade-Grown</h3>
-                <p className="text-sm sm:text-base text-gray-600">We source Kagoshima Japanese matcha that's shade-grown for the signature umami and smoothness for your daily routine.</p>
-              </div>
-
-              <div className="border-l-4 border-orange-400 pl-4 sm:pl-6">
-                <h3 className="text-lg sm:text-xl font-semibold text-black mb-2">Stone-Milled for Silk-Smooth Sips</h3>
-                <p className="text-sm sm:text-base text-gray-600">Our leaves are stone-milled into a fine, fluffy powder that blends clean, whisks fast, and drinks like velvet—no grit, no swampy bitterness.</p>
-              </div>
-
-              <div className="border-l-4 border-orange-400 pl-4 sm:pl-6">
-                <h3 className="text-lg sm:text-xl font-semibold text-black mb-2">Grades That Match Your Mood</h3>
-                <p className="text-sm sm:text-base text-gray-600">From Ceremonial for your main-character mornings to Premium for daily lattes and café menus, our lineup is built for consistency in taste, texture, and that neon-clean colour everyone notices.</p>
-              </div>
-
-              <div className="border-l-4 border-orange-400 pl-4 sm:pl-6">
-                <h3 className="text-lg sm:text-xl font-semibold text-black mb-2">Consistency You Can Count On</h3>
-                <p className="text-sm sm:text-base text-gray-600">Every batch is selected to hit the same flavour-and-colour standard—so your cup (and your café drinks) look iconic, taste smooth, and never surprise you in a bad way.</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Right Image */}
-          <div className="relative h-[300px] sm:h-[400px] lg:h-[500px] overflow-hidden rounded-lg">
-            <img
-              src="/lovable-uploads/da6fe5b0-6a57-4ada-a9b8-042646881f03.png"
-              alt="Hands holding mushroom coffee cup"
-              className="w-full h-full object-cover"
-            />
-          </div>
-        </div>
-      </section>
+      <NasteaStandard />
 
       <Footer key={Date.now()} />
     </div>

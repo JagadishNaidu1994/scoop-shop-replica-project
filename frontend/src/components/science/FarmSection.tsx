@@ -3,7 +3,7 @@ import React from 'react';
 
 const FarmSection = () => {
   return (
-    <section className="py-20 w-full">
+    <section className="pt-20 pb-4 sm:pb-6 md:pb-8 w-full">
       <div className="w-full">
         <div className="grid grid-cols-1 lg:grid-cols-2 min-h-[600px]">
           {/* Left Image */}
