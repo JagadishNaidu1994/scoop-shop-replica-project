@@ -51,14 +51,18 @@ const ProductDetail = () => {
   const [howToUseOpen, setHowToUseOpen] = useState(false);
 
   const productImages = [
-    '/lovable-uploads/organic-ceremonial-matcha-1.jpg',
-    '/lovable-uploads/organic-ceremonial-matcha-2.jpg',
-    '/lovable-uploads/organic-ceremonial-matcha-3.jpg',
-    '/lovable-uploads/organic-ceremonial-matcha-4.jpg',
-    '/lovable-uploads/organic-ceremonial-matcha-5.jpg',
-    '/lovable-uploads/organic-ceremonial-matcha-6.jpg',
-    '/lovable-uploads/organic-ceremonial-matcha-7.jpg',
-    '/lovable-uploads/organic-ceremonial-matcha-8.jpg'];
+    '/images/strawberry-foam-hero.jpg',
+    '/images/matcha-frappe-hero.jpg',
+    '/images/iced-matcha-latte-hero.jpg',
+    '/images/hot-matcha-latte-hero.jpg',
+    '/images/organic-ceremonial-matcha-1.jpg',
+    '/images/organic-ceremonial-matcha-2.jpg',
+    '/images/organic-ceremonial-matcha-3.jpg',
+    '/images/organic-ceremonial-matcha-4.jpg',
+    '/images/organic-ceremonial-matcha-5.jpg',
+    '/images/organic-ceremonial-matcha-6.jpg',
+    '/images/organic-ceremonial-matcha-7.jpg',
+    '/images/organic-ceremonial-matcha-8.jpg'];
 
   const FaqItem = ({ q, a }: {q: string;a: string;}) => {
     const [open, setOpen] = useState(false);
