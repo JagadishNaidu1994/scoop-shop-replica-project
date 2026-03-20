@@ -9,7 +9,7 @@ const FoundersSection = () => {
   return (
     <section className="py-20 bg-white w-full">
       <div className="w-full px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-stretch max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-stretch">
           {/* Left - Image */}
           <div className="relative order-2 lg:order-1">
             <AdminImageUpload
