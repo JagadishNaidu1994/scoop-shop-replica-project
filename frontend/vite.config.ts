@@ -6,6 +6,7 @@ import { VitePWA } from "vite-plugin-pwa";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
+  base: '/scoop-shop-replica-project/',
   build: {
     outDir: '../dist',
     rollupOptions: {
