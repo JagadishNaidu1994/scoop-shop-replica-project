@@ -1,5 +1,5 @@
 -- Update recipe images for specific recipes
--- These paths should be updated with the actual uploaded image paths
+-- Use full paths for proper image loading
 
 UPDATE recipes 
 SET image_url = '/images/strawberry-foam-hero.jpg' 
