@@ -84,7 +84,7 @@ const HowToSection: React.FC = () => {
             src={howToSteps[selected].image}
             alt={howToSteps[selected].title}
             className="w-full h-full object-cover transition-all duration-300"
-            style={{ minHeight: '500px' }}
+            style={{ minHeight: '300px' }}
           />
           {/* Navigation */}
           <div className="absolute bottom-6 right-6 flex items-center gap-3">
