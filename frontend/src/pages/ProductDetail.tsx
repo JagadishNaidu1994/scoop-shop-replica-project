@@ -51,12 +51,14 @@ const ProductDetail = () => {
   const [howToUseOpen, setHowToUseOpen] = useState(false);
 
   const productImages = [
-  '/lovable-uploads/8edc40eb-3dfa-45fb-8cac-fc1a12ec6a3c.png',
-  '/lovable-uploads/8edc40eb-3dfa-45fb-8cac-fc1a12ec6a3c.png',
-  '/lovable-uploads/8edc40eb-3dfa-45fb-8cac-fc1a12ec6a3c.png',
-  '/lovable-uploads/8edc40eb-3dfa-45fb-8cac-fc1a12ec6a3c.png',
-  '/lovable-uploads/8edc40eb-3dfa-45fb-8cac-fc1a12ec6a3c.png',
-  '/lovable-uploads/8edc40eb-3dfa-45fb-8cac-fc1a12ec6a3c.png'];
+    '/lovable-uploads/organic-ceremonial-matcha-1.jpg',
+    '/lovable-uploads/organic-ceremonial-matcha-2.jpg',
+    '/lovable-uploads/organic-ceremonial-matcha-3.jpg',
+    '/lovable-uploads/organic-ceremonial-matcha-4.jpg',
+    '/lovable-uploads/organic-ceremonial-matcha-5.jpg',
+    '/lovable-uploads/organic-ceremonial-matcha-6.jpg',
+    '/lovable-uploads/organic-ceremonial-matcha-7.jpg',
+    '/lovable-uploads/organic-ceremonial-matcha-8.jpg'];
 
   const FaqItem = ({ q, a }: {q: string;a: string;}) => {
     const [open, setOpen] = useState(false);
