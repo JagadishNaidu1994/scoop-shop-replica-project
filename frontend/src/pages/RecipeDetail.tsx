@@ -112,7 +112,7 @@ const RecipeDetail = () => {
 
         {/* Recipe Header */}
         <div className="w-full mb-12">
-          <div className="aspect-[16/9] overflow-hidden rounded-2xl mb-8">
+          <div className="aspect-[16/6.3] overflow-hidden rounded-2xl mb-8">
             <img
               src={recipe.image || 'https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=800&h=600&fit=crop'}
               alt={recipe.title}
