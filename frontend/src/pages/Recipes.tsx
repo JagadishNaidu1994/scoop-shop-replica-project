@@ -126,12 +126,13 @@ const Recipes = () => {
           </div>}
 
         {allRecipes.length === 0 && !loading && <div className="text-center py-16">
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">No recipes available</h3>
+            <h3 className="text-3xl font-bold text-gray-900 mb-2">No recipes available</h3>
             <p className="text-gray-600">Check back soon for delicious new recipes!</p>
           </div>}
       </main>
 
       <Footer />
-    </div>;
+    </div>
+  );
 };
 export default Recipes;
