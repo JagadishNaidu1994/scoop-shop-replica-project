@@ -169,15 +169,19 @@ const ProductDetail = () => {
               {/* Main Image */}
               <div className="relative group">
                 <div
-                  className="aspect-square rounded-lg overflow-hidden cursor-zoom-in relative"
+                  className="aspect-[1/0.7] rounded-lg overflow-hidden cursor-zoom-in relative"
                   style={{ background: 'linear-gradient(135deg, #F9FAFB, #F3F0EB)' }}
                   onClick={() => setShowImageModal(true)}>
                   
-                  <AdminImageUpload
+                  <img
                     src={productImages[selectedImage]}
                     alt={product.name}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                    imagePath="product-detail-main" />
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.src = 'https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=600&h=600&fit=crop';
+                    }}
+                  />
                   
 
                   {/* Navigation Arrows – bottom right */}
@@ -221,7 +225,7 @@ const ProductDetail = () => {
                     border: selectedImage === index ? '2px solid #0D1B2A' : '2px solid #E5E7EB'
                   }}>
                   
-                    <AdminImageUpload src={image} alt={`${product.name} ${index + 1}`} className="w-full h-full object-cover" imagePath={`product-detail-thumbnail-${index + 1}`} />
+                    <img src={image} alt={`${product.name} ${index + 1}`} className="w-full h-full object-cover" />
                   </button>
                 )}
               </div>
