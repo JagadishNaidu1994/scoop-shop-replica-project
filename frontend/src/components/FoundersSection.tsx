@@ -9,9 +9,9 @@ const FoundersSection = () => {
   return (
     <section className="py-20 bg-white w-full">
       <div className="w-full px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-stretch max-w-7xl mx-auto">
           {/* Left - Image */}
-          <div className="relative">
+          <div className="relative order-2 lg:order-1">
             <AdminImageUpload
               src="/lovable-uploads/NDN00797-Edit-3.jpg"
               alt="Founders with matcha"
@@ -21,13 +21,13 @@ const FoundersSection = () => {
           </div>
 
           {/* Right - Content */}
-          <div className="space-y-8 bg-gray-50 p-8 lg:p-12 rounded-lg">
+          <div className="space-y-8 bg-gray-50 p-8 lg:p-12 rounded-lg order-1 lg:order-2">
             <div>
               <h2 className="text-4xl lg:text-5xl font-bold text-black mb-6 leading-tight">
                 Founded by three friends who refused to settle for mid.
               </h2>
               <p className="text-lg text-gray-700 leading-relaxed">
-                We tried the green powders, we tried the "ceremonial" that wasn't, and we tried pretending it didn't matter. It did. So we built NR around one rule: if it's not smooth, vibrant, and consistent, it's not coming home with us.
+                We tried to green powders, we tried to "ceremonial" that wasn't, and we tried pretending it didn't matter. It did. So we built NR around one rule: if it's not smooth, vibrant, and consistent, it's not coming home with us.
               </p>
             </div>
 
