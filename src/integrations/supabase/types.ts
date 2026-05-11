@@ -209,6 +209,13 @@ export type Database = {
             referencedRelation: "coupon_codes"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "coupon_usage_coupon_id_fkey"
+            columns: ["coupon_id"]
+            isOneToOne: false
+            referencedRelation: "user_visible_coupons"
+            referencedColumns: ["id"]
+          },
         ]
       }
       email_signups: {
@@ -1053,6 +1060,13 @@ export type Database = {
             referencedRelation: "coupon_codes"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "user_coupons_coupon_id_fkey"
+            columns: ["coupon_id"]
+            isOneToOne: false
+            referencedRelation: "user_visible_coupons"
+            referencedColumns: ["id"]
+          },
         ]
       }
       wholesale_enquiries: {
@@ -1123,7 +1137,42 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      user_visible_coupons: {
+        Row: {
+          code: string | null
+          description: string | null
+          discount_type: string | null
+          discount_value: number | null
+          expires_at: string | null
+          id: string | null
+          is_personal: boolean | null
+          is_redeemable: boolean | null
+          minimum_order_amount: number | null
+        }
+        Insert: {
+          code?: string | null
+          description?: string | null
+          discount_type?: string | null
+          discount_value?: number | null
+          expires_at?: string | null
+          id?: string | null
+          is_personal?: never
+          is_redeemable?: never
+          minimum_order_amount?: number | null
+        }
+        Update: {
+          code?: string | null
+          description?: string | null
+          discount_type?: string | null
+          discount_value?: number | null
+          expires_at?: string | null
+          id?: string | null
+          is_personal?: never
+          is_redeemable?: never
+          minimum_order_amount?: number | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       check_user_admin: { Args: { user_id: string }; Returns: boolean }
