@@ -464,23 +464,23 @@ const ProductDetail = () => {
           <div className="bg-white">
 
             {/* Ingredient Texture */}
-            <section className="w-full py-16">
-              <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-                <div className="relative">
-                  <div className="overflow-hidden shadow-[0_16px_40px_rgba(0,0,0,0.06)]">
-                    <AdminImageUpload src="/images/product-features.jpg" alt="Ingredient texture" className="w-full h-full object-scale-down" imagePath="texture-shot" />
+            <section className="py-20 bg-white w-full">
+              <div className="w-full px-4 sm:px-6 lg:px-8">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                  <div className="relative">
+                    <AdminImageUpload src="/images/product-features.jpg" alt="Ingredient texture" className="w-full h-auto rounded-lg" imagePath="texture-shot" />
                   </div>
-                </div>
-                <div className="space-y-6">
-                  <h3 className="text-3xl lg:text-4xl font-serif font-bold" style={{ color: '#0D1B2A' }}>Your everyday essential for sharper focus and improved productivity</h3>
-                  <p className="text-lg leading-relaxed" style={{ color: '#6B7280' }}>Ceremonial-grade matcha paired with functional mushrooms for clean energy, calm clarity, and nourished skin—all in one ritual.</p>
-                  <div className="space-y-3">
-                    {['Focus', 'Mental clarity', 'Cognitive performance'].map((label) =>
-                    <div key={label} className="flex items-center gap-3">
-                        <span className="w-2 h-2 rounded-full inline-block" style={{ backgroundColor: '#0D1B2A' }} />
-                        <p className="font-medium" style={{ color: '#0D1B2A' }}>{label}</p>
-                      </div>
-                    )}
+                  <div className="space-y-6">
+                    <h3 className="text-3xl lg:text-4xl font-serif font-bold" style={{ color: '#0D1B2A' }}>Your everyday essential for sharper focus and improved productivity</h3>
+                    <p className="text-lg leading-relaxed" style={{ color: '#6B7280' }}>Ceremonial-grade matcha paired with functional mushrooms for clean energy, calm clarity, and nourished skin—all in one ritual.</p>
+                    <div className="space-y-3">
+                      {['Focus', 'Mental clarity', 'Cognitive performance'].map((label) =>
+                      <div key={label} className="flex items-center gap-3">
+                          <span className="w-2 h-2 rounded-full inline-block" style={{ backgroundColor: '#0D1B2A' }} />
+                          <p className="font-medium" style={{ color: '#0D1B2A' }}>{label}</p>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -490,17 +490,19 @@ const ProductDetail = () => {
             <HowToSection />
 
             {/* Benefit pills */}
-            <section className="w-full py-16">
-              <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-                <div className="space-y-4">
-                  {['Mental clarity', 'Cognitive function', 'Immune support'].map((label) =>
-                  <div key={label} className="px-6 py-4 bg-white/70 shadow-[0_12px_30px_rgba(0,0,0,0.06)] text-xl font-semibold w-fit" style={{ color: '#0D1B2A' }}>
-                      {label}
-                    </div>
-                  )}
-                </div>
-                <div className="relative overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.08)]">
-                  <AdminImageUpload src="/lovable-uploads/e3cb3dde-3127-4252-8b46-ab17c78f4ad8.png" alt="Wellness lifestyle" className="w-full h-full object-scale-down" imagePath="benefit-lifestyle" />
+            <section className="py-20 bg-white w-full">
+              <div className="w-full px-4 sm:px-6 lg:px-8">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                  <div className="space-y-4">
+                    {['Mental clarity', 'Cognitive function', 'Immune support'].map((label) =>
+                    <div key={label} className="px-6 py-4 bg-white/70 shadow-[0_12px_30px_rgba(0,0,0,0.06)] text-xl font-semibold w-fit" style={{ color: '#0D1B2A' }}>
+                        {label}
+                      </div>
+                    )}
+                  </div>
+                  <div className="relative">
+                    <AdminImageUpload src="/lovable-uploads/e3cb3dde-3127-4252-8b46-ab17c78f4ad8.png" alt="Wellness lifestyle" className="w-full h-auto rounded-lg" imagePath="benefit-lifestyle" />
+                  </div>
                 </div>
               </div>
             </section>
