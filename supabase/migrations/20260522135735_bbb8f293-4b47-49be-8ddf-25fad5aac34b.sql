@@ -1,0 +1,2 @@
+UPDATE public.products SET primary_image = '/images/shop-product-2.jpg', hover_image = '/images/shop-product-2.jpg' WHERE id = 2;
+UPDATE public.products SET primary_image = '/images/shop-product-3.jpg', hover_image = '/images/shop-product-3.jpg' WHERE id = 3;
