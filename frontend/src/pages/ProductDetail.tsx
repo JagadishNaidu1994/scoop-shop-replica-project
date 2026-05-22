@@ -240,7 +240,7 @@ const ProductDetail = () => {
                     border: selectedImage === index ? '2px solid #0D1B2A' : '2px solid #E5E7EB'
                   }}>
                   
-                    <img src={image} alt={`${product.name} ${index + 1}`} className="w-full h-full object-cover" />
+                    <img src={image} alt={`${product.name} ${index + 1}`} className="w-full h-full object-scale-down" />
                   </button>
                 )}
               </div>
@@ -468,7 +468,7 @@ const ProductDetail = () => {
               <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
                 <div className="relative">
                   <div className="overflow-hidden shadow-[0_16px_40px_rgba(0,0,0,0.06)]">
-                    <AdminImageUpload src="/images/product-features.jpg" alt="Ingredient texture" className="w-full h-full object-cover" imagePath="texture-shot" />
+                    <AdminImageUpload src="/images/product-features.jpg" alt="Ingredient texture" className="w-full h-full object-scale-down" imagePath="texture-shot" />
                   </div>
                 </div>
                 <div className="space-y-6">
@@ -500,7 +500,7 @@ const ProductDetail = () => {
                   )}
                 </div>
                 <div className="relative overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.08)]">
-                  <AdminImageUpload src="/lovable-uploads/e3cb3dde-3127-4252-8b46-ab17c78f4ad8.png" alt="Wellness lifestyle" className="w-full h-full object-cover" imagePath="benefit-lifestyle" />
+                  <AdminImageUpload src="/lovable-uploads/e3cb3dde-3127-4252-8b46-ab17c78f4ad8.png" alt="Wellness lifestyle" className="w-full h-full object-scale-down" imagePath="benefit-lifestyle" />
                 </div>
               </div>
             </section>
@@ -509,7 +509,7 @@ const ProductDetail = () => {
             <section className="w-full py-16">
               <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
                 <div className="relative overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.08)]">
-                  <AdminImageUpload src="/images/product-lifestyle-cup.jpg" alt="Hand holding NASTEA matcha cup" className="w-full h-full object-cover" imagePath="compare-hand" />
+                  <AdminImageUpload src="/images/product-lifestyle-cup.jpg" alt="Hand holding NASTEA matcha cup" className="w-full h-full object-scale-down" imagePath="compare-hand" />
                 </div>
                 <div className="space-y-6">
                   <h3 className="text-3xl lg:text-4xl font-serif font-bold" style={{ color: '#0D1B2A' }}>How it Compares</h3>
@@ -537,7 +537,7 @@ const ProductDetail = () => {
               <div className="w-full space-y-10">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch bg-white/70 shadow-[0_14px_40px_rgba(0,0,0,0.06)] overflow-hidden">
                   <div className="relative">
-                    <AdminImageUpload src="/lovable-uploads/65581248-fb35-4b2f-8b55-04877e634119.png" alt="The Focus Coffee" className="w-full h-full object-cover" imagePath="focus-coffee" />
+                    <AdminImageUpload src="/lovable-uploads/65581248-fb35-4b2f-8b55-04877e634119.png" alt="The Focus Coffee" className="w-full h-full object-scale-down" imagePath="focus-coffee" />
                   </div>
                   <div className="p-8 flex flex-col justify-center space-y-4">
                     <p className="text-sm font-medium" style={{ color: '#6B7280' }}>Founder's Super Blend Recipe</p>
@@ -567,7 +567,7 @@ const ProductDetail = () => {
                     </ul>
                   </div>
                   <div className="relative order-1 lg:order-2">
-                    <AdminImageUpload src="/images/product-features.jpg" alt="The Focus Smoothie" className="w-full h-full object-cover" imagePath="focus-smoothie" />
+                    <AdminImageUpload src="/images/product-features.jpg" alt="The Focus Smoothie" className="w-full h-full object-scale-down" imagePath="focus-smoothie" />
                   </div>
                 </div>
               </div>
