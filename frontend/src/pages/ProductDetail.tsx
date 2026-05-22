@@ -464,23 +464,23 @@ const ProductDetail = () => {
           <div className="bg-white">
 
             {/* Ingredient Texture */}
-            <section className="w-full py-16">
-              <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-                <div className="relative">
-                  <div className="overflow-hidden shadow-[0_16px_40px_rgba(0,0,0,0.06)]">
-                    <AdminImageUpload src="/images/product-features.jpg" alt="Ingredient texture" className="w-full h-full object-scale-down" imagePath="texture-shot" />
+            <section className="py-20 bg-white w-full">
+              <div className="w-full px-4 sm:px-6 lg:px-8">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                  <div className="relative">
+                    <AdminImageUpload src="/images/product-features.jpg" alt="Ingredient texture" className="w-full h-auto rounded-lg" imagePath="texture-shot" />
                   </div>
-                </div>
-                <div className="space-y-6">
-                  <h3 className="text-3xl lg:text-4xl font-serif font-bold" style={{ color: '#0D1B2A' }}>Your everyday essential for sharper focus and improved productivity</h3>
-                  <p className="text-lg leading-relaxed" style={{ color: '#6B7280' }}>Ceremonial-grade matcha paired with functional mushrooms for clean energy, calm clarity, and nourished skin—all in one ritual.</p>
-                  <div className="space-y-3">
-                    {['Focus', 'Mental clarity', 'Cognitive performance'].map((label) =>
-                    <div key={label} className="flex items-center gap-3">
-                        <span className="w-2 h-2 rounded-full inline-block" style={{ backgroundColor: '#0D1B2A' }} />
-                        <p className="font-medium" style={{ color: '#0D1B2A' }}>{label}</p>
-                      </div>
-                    )}
+                  <div className="space-y-6">
+                    <h3 className="text-3xl lg:text-4xl font-serif font-bold" style={{ color: '#0D1B2A' }}>Your everyday essential for sharper focus and improved productivity</h3>
+                    <p className="text-lg leading-relaxed" style={{ color: '#6B7280' }}>Ceremonial-grade matcha paired with functional mushrooms for clean energy, calm clarity, and nourished skin—all in one ritual.</p>
+                    <div className="space-y-3">
+                      {['Focus', 'Mental clarity', 'Cognitive performance'].map((label) =>
+                      <div key={label} className="flex items-center gap-3">
+                          <span className="w-2 h-2 rounded-full inline-block" style={{ backgroundColor: '#0D1B2A' }} />
+                          <p className="font-medium" style={{ color: '#0D1B2A' }}>{label}</p>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -490,39 +490,43 @@ const ProductDetail = () => {
             <HowToSection />
 
             {/* Benefit pills */}
-            <section className="w-full py-16">
-              <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-                <div className="space-y-4">
-                  {['Mental clarity', 'Cognitive function', 'Immune support'].map((label) =>
-                  <div key={label} className="px-6 py-4 bg-white/70 shadow-[0_12px_30px_rgba(0,0,0,0.06)] text-xl font-semibold w-fit" style={{ color: '#0D1B2A' }}>
-                      {label}
-                    </div>
-                  )}
-                </div>
-                <div className="relative overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.08)]">
-                  <AdminImageUpload src="/lovable-uploads/e3cb3dde-3127-4252-8b46-ab17c78f4ad8.png" alt="Wellness lifestyle" className="w-full h-full object-scale-down" imagePath="benefit-lifestyle" />
+            <section className="py-20 bg-white w-full">
+              <div className="w-full px-4 sm:px-6 lg:px-8">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                  <div className="space-y-4">
+                    {['Mental clarity', 'Cognitive function', 'Immune support'].map((label) =>
+                    <div key={label} className="px-6 py-4 bg-white/70 shadow-[0_12px_30px_rgba(0,0,0,0.06)] text-xl font-semibold w-fit" style={{ color: '#0D1B2A' }}>
+                        {label}
+                      </div>
+                    )}
+                  </div>
+                  <div className="relative">
+                    <AdminImageUpload src="/lovable-uploads/e3cb3dde-3127-4252-8b46-ab17c78f4ad8.png" alt="Wellness lifestyle" className="w-full h-auto rounded-lg" imagePath="benefit-lifestyle" />
+                  </div>
                 </div>
               </div>
             </section>
 
             {/* Comparison */}
-            <section className="w-full py-16">
-              <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-                <div className="relative overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.08)]">
-                  <AdminImageUpload src="/images/product-lifestyle-cup.jpg" alt="Hand holding NASTEA matcha cup" className="w-full h-full object-scale-down" imagePath="compare-hand" />
-                </div>
-                <div className="space-y-6">
-                  <h3 className="text-3xl lg:text-4xl font-serif font-bold" style={{ color: '#0D1B2A' }}>How it Compares</h3>
-                  <div className="space-y-4">
-                    <div className="space-y-2">
-                      <p className="text-lg font-semibold" style={{ color: '#0D1B2A' }}>NASTEA vs Coffee</p>
-                      <div className="flex items-start gap-3"><CheckCircle className="w-5 h-5 mt-0.5" style={{ color: '#0D1B2A' }} /><p style={{ color: '#6B7280' }}>Calm, sustained energy without jitters.</p></div>
-                      <div className="flex items-start gap-3"><CheckCircle className="w-5 h-5 mt-0.5" style={{ color: '#0D1B2A' }} /><p style={{ color: '#6B7280' }}>Adaptogens to support focus and immunity.</p></div>
-                    </div>
-                    <div className="space-y-2">
-                      <p className="text-lg font-semibold" style={{ color: '#0D1B2A' }}>NASTEA vs Synthetic Nootropics</p>
-                      <div className="flex items-start gap-3"><CheckCircle className="w-5 h-5 mt-0.5" style={{ color: '#0D1B2A' }} /><p style={{ color: '#6B7280' }}>Natural ingredients, lab-tested for purity.</p></div>
-                      <div className="flex items-start gap-3"><CheckCircle className="w-5 h-5 mt-0.5" style={{ color: '#0D1B2A' }} /><p style={{ color: '#6B7280' }}>No crash, no artificial stimulants.</p></div>
+            <section className="py-20 bg-white w-full">
+              <div className="w-full px-4 sm:px-6 lg:px-8">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                  <div className="relative">
+                    <AdminImageUpload src="/images/product-lifestyle-cup.jpg" alt="Hand holding NASTEA matcha cup" className="w-full h-auto rounded-lg" imagePath="compare-hand" />
+                  </div>
+                  <div className="space-y-6">
+                    <h3 className="text-3xl lg:text-4xl font-serif font-bold" style={{ color: '#0D1B2A' }}>How it Compares</h3>
+                    <div className="space-y-4">
+                      <div className="space-y-2">
+                        <p className="text-lg font-semibold" style={{ color: '#0D1B2A' }}>NASTEA vs Coffee</p>
+                        <div className="flex items-start gap-3"><CheckCircle className="w-5 h-5 mt-0.5" style={{ color: '#0D1B2A' }} /><p style={{ color: '#6B7280' }}>Calm, sustained energy without jitters.</p></div>
+                        <div className="flex items-start gap-3"><CheckCircle className="w-5 h-5 mt-0.5" style={{ color: '#0D1B2A' }} /><p style={{ color: '#6B7280' }}>Adaptogens to support focus and immunity.</p></div>
+                      </div>
+                      <div className="space-y-2">
+                        <p className="text-lg font-semibold" style={{ color: '#0D1B2A' }}>NASTEA vs Synthetic Nootropics</p>
+                        <div className="flex items-start gap-3"><CheckCircle className="w-5 h-5 mt-0.5" style={{ color: '#0D1B2A' }} /><p style={{ color: '#6B7280' }}>Natural ingredients, lab-tested for purity.</p></div>
+                        <div className="flex items-start gap-3"><CheckCircle className="w-5 h-5 mt-0.5" style={{ color: '#0D1B2A' }} /><p style={{ color: '#6B7280' }}>No crash, no artificial stimulants.</p></div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -533,15 +537,15 @@ const ProductDetail = () => {
             <ReviewsSection productId={product.id} />
 
             {/* Recipe Cards */}
-            <section className="w-full py-16">
-              <div className="w-full space-y-10">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch bg-white/70 shadow-[0_14px_40px_rgba(0,0,0,0.06)] overflow-hidden">
+            <section className="py-20 bg-white w-full">
+              <div className="w-full px-4 sm:px-6 lg:px-8 space-y-20">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
                   <div className="relative">
-                    <AdminImageUpload src="/lovable-uploads/65581248-fb35-4b2f-8b55-04877e634119.png" alt="The Focus Coffee" className="w-full h-full object-scale-down" imagePath="focus-coffee" />
+                    <AdminImageUpload src="/lovable-uploads/65581248-fb35-4b2f-8b55-04877e634119.png" alt="The Focus Coffee" className="w-full h-auto rounded-lg" imagePath="focus-coffee" />
                   </div>
-                  <div className="p-8 flex flex-col justify-center space-y-4">
+                  <div className="space-y-4">
                     <p className="text-sm font-medium" style={{ color: '#6B7280' }}>Founder's Super Blend Recipe</p>
-                    <h4 className="text-3xl font-serif font-bold" style={{ color: '#0D1B2A' }}>Nastea Coconut Cloud Matcha</h4>
+                    <h4 className="text-3xl lg:text-4xl font-serif font-bold" style={{ color: '#0D1B2A' }}>Nastea Coconut Cloud Matcha</h4>
                     <p className="text-base" style={{ color: '#6B7280' }}>Light, tropical, and stupidly refreshing.</p>
                     <h5 className="text-lg font-bold pt-4" style={{ color: '#0D1B2A' }}>Recipe:</h5>
                     <ul className="space-y-2" style={{ color: '#6B7280' }}>
@@ -553,10 +557,10 @@ const ProductDetail = () => {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch bg-white/70 shadow-[0_14px_40px_rgba(0,0,0,0.06)] overflow-hidden">
-                  <div className="p-8 flex flex-col justify-center space-y-4 order-2 lg:order-1">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                  <div className="space-y-4 order-2 lg:order-1">
                     <p className="text-sm font-medium" style={{ color: '#6B7280' }}>The Everyday Classic</p>
-                    <h4 className="text-3xl font-serif font-bold" style={{ color: '#0D1B2A' }}>Iced Matcha Latte</h4>
+                    <h4 className="text-3xl lg:text-4xl font-serif font-bold" style={{ color: '#0D1B2A' }}>Iced Matcha Latte</h4>
                     <p className="text-base" style={{ color: '#6B7280' }}>Creamy, smooth, and steady.</p>
                     <h5 className="text-lg font-bold pt-4" style={{ color: '#0D1B2A' }}>Recipe:</h5>
                     <ul className="space-y-2" style={{ color: '#6B7280' }}>
@@ -567,7 +571,7 @@ const ProductDetail = () => {
                     </ul>
                   </div>
                   <div className="relative order-1 lg:order-2">
-                    <AdminImageUpload src="/images/product-features.jpg" alt="The Focus Smoothie" className="w-full h-full object-scale-down" imagePath="focus-smoothie" />
+                    <AdminImageUpload src="/images/product-features.jpg" alt="The Focus Smoothie" className="w-full h-auto rounded-lg" imagePath="focus-smoothie" />
                   </div>
                 </div>
               </div>
