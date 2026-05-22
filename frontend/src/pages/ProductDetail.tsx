@@ -462,22 +462,6 @@ const ProductDetail = () => {
 
           {/* ===== BELOW-FOLD SECTIONS (kept from original) ===== */}
           <div className="bg-white">
-            {/* Pure ingredients section */}
-            <section className="w-full py-16">
-              <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-                <div className="space-y-6">
-                  <p className="text-sm uppercase tracking-[0.2em]" style={{ color: '#6B7280' }}>Mushroom Matcha</p>
-                  <h2 className="text-4xl lg:text-5xl font-serif font-bold leading-tight" style={{ color: '#0D1B2A' }}>
-                    Pure ingredients,<br />powerful benefits.
-                  </h2>
-                </div>
-                <div className="relative">
-                  <div className="relative overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.08)]">
-                    <AdminImageUpload src="/lovable-uploads/b4c48a6c-d28c-480e-b907-ec5d22258308.png" alt="Pure ingredients macro" className="w-full h-full object-cover" imagePath="pure-ingredients-hero" />
-                  </div>
-                </div>
-              </div>
-            </section>
 
             {/* Ingredient Texture */}
             <section className="w-full py-16">
