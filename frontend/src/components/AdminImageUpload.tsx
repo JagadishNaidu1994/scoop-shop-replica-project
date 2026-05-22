@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Upload, Check, X } from 'lucide-react';
 import { useAdminImage } from '@/contexts/AdminImageContext';
 import { toast } from '@/hooks/use-toast';
@@ -28,6 +28,10 @@ const AdminImageUpload: React.FC<AdminImageUploadProps> = ({
   const [preview, setPreview] = useState<string | null>(null);
   const [currentImageUrl, setCurrentImageUrl] = useState(src);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    setCurrentImageUrl(src);
+  }, [src]);
 
   const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
