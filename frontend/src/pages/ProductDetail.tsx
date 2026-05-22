@@ -181,15 +181,21 @@ const ProductDetail = () => {
                   style={{ background: 'linear-gradient(135deg, #F9FAFB, #F3F0EB)' }}
                   onClick={() => setShowImageModal(true)}>
                   
-                  <img
-                    src={productImages[selectedImage]}
-                    alt={product.name}
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                    onError={(e) => {
-                      const target = e.target as HTMLImageElement;
-                      target.src = 'https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=600&h=600&fit=crop';
-                    }}
-                  />
+                  <div className="absolute inset-0 flex transition-transform duration-700 ease-in-out" style={{ transform: `translateX(-${selectedImage * 100}%)` }}>
+                    {productImages.map((image, idx) => (
+                      <img
+                        key={idx}
+                        src={image}
+                        alt={`${product.name} ${idx + 1}`}
+                        className="w-full h-full flex-shrink-0 object-cover"
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          target.src = 'https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=600&h=600&fit=crop';
+                        }}
+                      />
+                    ))}
+                  </div>
+
                   
 
                   {/* Navigation Arrows – bottom right */}
