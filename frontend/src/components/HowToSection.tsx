@@ -35,7 +35,7 @@ const HowToSection: React.FC = () => {
       <div className="w-full px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
         {/* Left side */}
-        <div className="flex flex-col" style={{ backgroundColor: '#F5F5F0' }}>
+        <div className="flex flex-col h-[500px] rounded-lg" style={{ backgroundColor: '#F5F5F0' }}>
           {/* 4 Thumbnails row */}
           <div className="flex gap-3 p-6 pb-0">
             {howToSteps.map((step, i) => (
@@ -80,12 +80,11 @@ const HowToSection: React.FC = () => {
         </div>
 
         {/* Right side - large image */}
-        <div className="relative" style={{ backgroundColor: '#F5F5F0' }}>
+        <div className="relative h-[500px]" style={{ backgroundColor: '#F5F5F0' }}>
           <img
             src={howToSteps[selected].image}
             alt={howToSteps[selected].title}
-            className="w-full h-full object-cover transition-all duration-300"
-            style={{ minHeight: '300px' }}
+            className="w-full h-full object-cover rounded-lg transition-all duration-300"
           />
           {/* Navigation */}
           <div className="absolute bottom-6 right-6 flex items-center gap-3">
