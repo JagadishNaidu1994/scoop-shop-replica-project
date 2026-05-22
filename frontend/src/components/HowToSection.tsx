@@ -31,8 +31,9 @@ const HowToSection: React.FC = () => {
   const next = () => setSelected((s) => (s + 1) % howToSteps.length);
 
   return (
-    <section className="w-full py-16">
-      <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-0">
+    <section className="py-20 bg-white w-full">
+      <div className="w-full px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
         {/* Left side */}
         <div className="flex flex-col" style={{ backgroundColor: '#F5F5F0' }}>
           {/* 4 Thumbnails row */}
