@@ -508,23 +508,25 @@ const ProductDetail = () => {
             </section>
 
             {/* Comparison */}
-            <section className="w-full py-16">
-              <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-                <div className="relative overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.08)]">
-                  <AdminImageUpload src="/images/product-lifestyle-cup.jpg" alt="Hand holding NASTEA matcha cup" className="w-full h-full object-scale-down" imagePath="compare-hand" />
-                </div>
-                <div className="space-y-6">
-                  <h3 className="text-3xl lg:text-4xl font-serif font-bold" style={{ color: '#0D1B2A' }}>How it Compares</h3>
-                  <div className="space-y-4">
-                    <div className="space-y-2">
-                      <p className="text-lg font-semibold" style={{ color: '#0D1B2A' }}>NASTEA vs Coffee</p>
-                      <div className="flex items-start gap-3"><CheckCircle className="w-5 h-5 mt-0.5" style={{ color: '#0D1B2A' }} /><p style={{ color: '#6B7280' }}>Calm, sustained energy without jitters.</p></div>
-                      <div className="flex items-start gap-3"><CheckCircle className="w-5 h-5 mt-0.5" style={{ color: '#0D1B2A' }} /><p style={{ color: '#6B7280' }}>Adaptogens to support focus and immunity.</p></div>
-                    </div>
-                    <div className="space-y-2">
-                      <p className="text-lg font-semibold" style={{ color: '#0D1B2A' }}>NASTEA vs Synthetic Nootropics</p>
-                      <div className="flex items-start gap-3"><CheckCircle className="w-5 h-5 mt-0.5" style={{ color: '#0D1B2A' }} /><p style={{ color: '#6B7280' }}>Natural ingredients, lab-tested for purity.</p></div>
-                      <div className="flex items-start gap-3"><CheckCircle className="w-5 h-5 mt-0.5" style={{ color: '#0D1B2A' }} /><p style={{ color: '#6B7280' }}>No crash, no artificial stimulants.</p></div>
+            <section className="py-20 bg-white w-full">
+              <div className="w-full px-4 sm:px-6 lg:px-8">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                  <div className="relative">
+                    <AdminImageUpload src="/images/product-lifestyle-cup.jpg" alt="Hand holding NASTEA matcha cup" className="w-full h-auto rounded-lg" imagePath="compare-hand" />
+                  </div>
+                  <div className="space-y-6">
+                    <h3 className="text-3xl lg:text-4xl font-serif font-bold" style={{ color: '#0D1B2A' }}>How it Compares</h3>
+                    <div className="space-y-4">
+                      <div className="space-y-2">
+                        <p className="text-lg font-semibold" style={{ color: '#0D1B2A' }}>NASTEA vs Coffee</p>
+                        <div className="flex items-start gap-3"><CheckCircle className="w-5 h-5 mt-0.5" style={{ color: '#0D1B2A' }} /><p style={{ color: '#6B7280' }}>Calm, sustained energy without jitters.</p></div>
+                        <div className="flex items-start gap-3"><CheckCircle className="w-5 h-5 mt-0.5" style={{ color: '#0D1B2A' }} /><p style={{ color: '#6B7280' }}>Adaptogens to support focus and immunity.</p></div>
+                      </div>
+                      <div className="space-y-2">
+                        <p className="text-lg font-semibold" style={{ color: '#0D1B2A' }}>NASTEA vs Synthetic Nootropics</p>
+                        <div className="flex items-start gap-3"><CheckCircle className="w-5 h-5 mt-0.5" style={{ color: '#0D1B2A' }} /><p style={{ color: '#6B7280' }}>Natural ingredients, lab-tested for purity.</p></div>
+                        <div className="flex items-start gap-3"><CheckCircle className="w-5 h-5 mt-0.5" style={{ color: '#0D1B2A' }} /><p style={{ color: '#6B7280' }}>No crash, no artificial stimulants.</p></div>
+                      </div>
                     </div>
                   </div>
                 </div>
