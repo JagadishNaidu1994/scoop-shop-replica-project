@@ -468,7 +468,7 @@ const ProductDetail = () => {
               <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
                 <div className="relative">
                   <div className="overflow-hidden shadow-[0_16px_40px_rgba(0,0,0,0.06)]">
-                    <AdminImageUpload src="/lovable-uploads/b9b609e5-82c9-4039-98a5-3da3b835c962.png" alt="Ingredient texture" className="w-full h-full object-cover" imagePath="texture-shot" />
+                    <AdminImageUpload src="/images/product-features.jpg" alt="Ingredient texture" className="w-full h-full object-cover" imagePath="texture-shot" />
                   </div>
                 </div>
                 <div className="space-y-6">
@@ -567,7 +567,7 @@ const ProductDetail = () => {
                     </ul>
                   </div>
                   <div className="relative order-1 lg:order-2">
-                    <AdminImageUpload src="/lovable-uploads/b9b609e5-82c9-4039-98a5-3da3b835c962.png" alt="The Focus Smoothie" className="w-full h-full object-cover" imagePath="focus-smoothie" />
+                    <AdminImageUpload src="/images/product-features.jpg" alt="The Focus Smoothie" className="w-full h-full object-cover" imagePath="focus-smoothie" />
                   </div>
                 </div>
               </div>
