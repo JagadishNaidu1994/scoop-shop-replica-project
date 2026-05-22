@@ -50,18 +50,27 @@ const ProductDetail = () => {
   const [scienceOpen, setScienceOpen] = useState(false);
   const [howToUseOpen, setHowToUseOpen] = useState(false);
 
-  const productImages = [
-    '/images/product-2-1.jpg',
-    '/images/product-2-2.jpg',
-    '/images/product-2-3.jpg',
-    '/images/product-2-4.jpg'];
+  const productId = parseInt(id as string);
+  const productImages = productId === 1
+    ? [
+        '/images/product-1-1.jpg',
+        '/images/product-1-2.jpg',
+        '/images/product-1-3.jpg',
+        '/images/product-1-4.jpg',
+        '/images/product-1-5.jpg']
+    : [
+        '/images/product-2-1.jpg',
+        '/images/product-2-2.jpg',
+        '/images/product-2-3.jpg',
+        '/images/product-2-4.jpg'];
 
   useEffect(() => {
     const interval = setInterval(() => {
       setSelectedImage((prev) => (prev + 1) % productImages.length);
-    }, 2000);
+    }, 3000);
     return () => clearInterval(interval);
   }, [productImages.length]);
+
 
   const FaqItem = ({ q, a }: {q: string;a: string;}) => {
     const [open, setOpen] = useState(false);
