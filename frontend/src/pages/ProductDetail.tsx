@@ -537,15 +537,15 @@ const ProductDetail = () => {
             <ReviewsSection productId={product.id} />
 
             {/* Recipe Cards */}
-            <section className="w-full py-16">
-              <div className="w-full space-y-10">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch bg-white/70 shadow-[0_14px_40px_rgba(0,0,0,0.06)] overflow-hidden">
+            <section className="py-20 bg-white w-full">
+              <div className="w-full px-4 sm:px-6 lg:px-8 space-y-20">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
                   <div className="relative">
-                    <AdminImageUpload src="/lovable-uploads/65581248-fb35-4b2f-8b55-04877e634119.png" alt="The Focus Coffee" className="w-full h-full object-scale-down" imagePath="focus-coffee" />
+                    <AdminImageUpload src="/lovable-uploads/65581248-fb35-4b2f-8b55-04877e634119.png" alt="The Focus Coffee" className="w-full h-auto rounded-lg" imagePath="focus-coffee" />
                   </div>
-                  <div className="p-8 flex flex-col justify-center space-y-4">
+                  <div className="space-y-4">
                     <p className="text-sm font-medium" style={{ color: '#6B7280' }}>Founder's Super Blend Recipe</p>
-                    <h4 className="text-3xl font-serif font-bold" style={{ color: '#0D1B2A' }}>Nastea Coconut Cloud Matcha</h4>
+                    <h4 className="text-3xl lg:text-4xl font-serif font-bold" style={{ color: '#0D1B2A' }}>Nastea Coconut Cloud Matcha</h4>
                     <p className="text-base" style={{ color: '#6B7280' }}>Light, tropical, and stupidly refreshing.</p>
                     <h5 className="text-lg font-bold pt-4" style={{ color: '#0D1B2A' }}>Recipe:</h5>
                     <ul className="space-y-2" style={{ color: '#6B7280' }}>
@@ -557,10 +557,10 @@ const ProductDetail = () => {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch bg-white/70 shadow-[0_14px_40px_rgba(0,0,0,0.06)] overflow-hidden">
-                  <div className="p-8 flex flex-col justify-center space-y-4 order-2 lg:order-1">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                  <div className="space-y-4 order-2 lg:order-1">
                     <p className="text-sm font-medium" style={{ color: '#6B7280' }}>The Everyday Classic</p>
-                    <h4 className="text-3xl font-serif font-bold" style={{ color: '#0D1B2A' }}>Iced Matcha Latte</h4>
+                    <h4 className="text-3xl lg:text-4xl font-serif font-bold" style={{ color: '#0D1B2A' }}>Iced Matcha Latte</h4>
                     <p className="text-base" style={{ color: '#6B7280' }}>Creamy, smooth, and steady.</p>
                     <h5 className="text-lg font-bold pt-4" style={{ color: '#0D1B2A' }}>Recipe:</h5>
                     <ul className="space-y-2" style={{ color: '#6B7280' }}>
@@ -571,7 +571,7 @@ const ProductDetail = () => {
                     </ul>
                   </div>
                   <div className="relative order-1 lg:order-2">
-                    <AdminImageUpload src="/images/product-features.jpg" alt="The Focus Smoothie" className="w-full h-full object-scale-down" imagePath="focus-smoothie" />
+                    <AdminImageUpload src="/images/product-features.jpg" alt="The Focus Smoothie" className="w-full h-auto rounded-lg" imagePath="focus-smoothie" />
                   </div>
                 </div>
               </div>
