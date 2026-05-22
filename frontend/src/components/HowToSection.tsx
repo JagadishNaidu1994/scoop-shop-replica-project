@@ -108,6 +108,7 @@ const HowToSection: React.FC = () => {
             </button>
           </div>
         </div>
+        </div>
       </div>
     </section>
   );
