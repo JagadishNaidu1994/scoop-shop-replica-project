@@ -509,7 +509,7 @@ const ProductDetail = () => {
             <section className="w-full py-16">
               <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
                 <div className="relative overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.08)]">
-                  <AdminImageUpload src="/lovable-uploads/45a06faf-330b-4d76-a34b-4c50248900a2.png" alt="Hand holding beverage" className="w-full h-full object-cover" imagePath="compare-hand" />
+                  <AdminImageUpload src="/images/product-lifestyle-cup.jpg" alt="Hand holding NASTEA matcha cup" className="w-full h-full object-cover" imagePath="compare-hand" />
                 </div>
                 <div className="space-y-6">
                   <h3 className="text-3xl lg:text-4xl font-serif font-bold" style={{ color: '#0D1B2A' }}>How it Compares</h3>
