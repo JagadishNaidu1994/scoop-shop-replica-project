@@ -13,8 +13,8 @@ const howToSteps = [
     title: 'Pour hot water and stir well',
   },
   {
-    thumbnail: '/lovable-uploads/e3cb3dde-3127-4252-8b46-ab17c78f4ad8.png',
-    image: '/lovable-uploads/e3cb3dde-3127-4252-8b46-ab17c78f4ad8.png',
+    thumbnail: '/images/howto-whisk.jpg',
+    image: '/images/howto-whisk.jpg',
     title: 'Whisk until fully dissolved',
   },
   {
