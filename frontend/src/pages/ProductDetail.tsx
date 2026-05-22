@@ -468,7 +468,7 @@ const ProductDetail = () => {
               <div className="w-full px-4 sm:px-6 lg:px-8">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
                   <div className="relative">
-                    <AdminImageUpload src="/images/product-features.jpg" alt="Ingredient texture" className="w-full h-[500px] object-cover rounded-lg" imagePath="texture-shot" />
+                    <AdminImageUpload src="/images/product-features.jpg" alt="Ingredient texture" className="w-full h-[800px] object-cover rounded-lg" imagePath="texture-shot" />
                   </div>
                   <div className="space-y-6">
                     <h3 className="text-3xl lg:text-4xl font-serif font-bold" style={{ color: '#0D1B2A' }}>Your everyday essential for sharper focus and improved productivity</h3>
@@ -501,7 +501,7 @@ const ProductDetail = () => {
                     )}
                   </div>
                   <div className="relative">
-                    <AdminImageUpload src="/lovable-uploads/e3cb3dde-3127-4252-8b46-ab17c78f4ad8.png" alt="Wellness lifestyle" className="w-full h-[500px] object-cover rounded-lg" imagePath="benefit-lifestyle" />
+                    <AdminImageUpload src="/lovable-uploads/e3cb3dde-3127-4252-8b46-ab17c78f4ad8.png" alt="Wellness lifestyle" className="w-full h-[800px] object-cover rounded-lg" imagePath="benefit-lifestyle" />
                   </div>
                 </div>
               </div>
@@ -512,7 +512,7 @@ const ProductDetail = () => {
               <div className="w-full px-4 sm:px-6 lg:px-8">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
                   <div className="relative">
-                    <AdminImageUpload src="/images/product-lifestyle-cup.jpg" alt="Hand holding NASTEA matcha cup" className="w-full h-[500px] object-cover rounded-lg" imagePath="compare-hand" />
+                    <AdminImageUpload src="/images/product-lifestyle-cup.jpg" alt="Hand holding NASTEA matcha cup" className="w-full h-[800px] object-cover rounded-lg" imagePath="compare-hand" />
                   </div>
                   <div className="space-y-6">
                     <h3 className="text-3xl lg:text-4xl font-serif font-bold" style={{ color: '#0D1B2A' }}>How it Compares</h3>
@@ -541,7 +541,7 @@ const ProductDetail = () => {
               <div className="w-full px-4 sm:px-6 lg:px-8 space-y-20">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
                   <div className="relative">
-                    <AdminImageUpload src="/lovable-uploads/65581248-fb35-4b2f-8b55-04877e634119.png" alt="The Focus Coffee" className="w-full h-[500px] object-cover rounded-lg" imagePath="focus-coffee" />
+                    <AdminImageUpload src="/lovable-uploads/65581248-fb35-4b2f-8b55-04877e634119.png" alt="The Focus Coffee" className="w-full h-[800px] object-cover rounded-lg" imagePath="focus-coffee" />
                   </div>
                   <div className="space-y-4">
                     <p className="text-sm font-medium" style={{ color: '#6B7280' }}>Founder's Super Blend Recipe</p>
@@ -571,7 +571,7 @@ const ProductDetail = () => {
                     </ul>
                   </div>
                   <div className="relative order-1 lg:order-2">
-                    <AdminImageUpload src="/images/product-features.jpg" alt="The Focus Smoothie" className="w-full h-[500px] object-cover rounded-lg" imagePath="focus-smoothie" />
+                    <AdminImageUpload src="/images/product-features.jpg" alt="The Focus Smoothie" className="w-full h-[800px] object-cover rounded-lg" imagePath="focus-smoothie" />
                   </div>
                 </div>
               </div>
