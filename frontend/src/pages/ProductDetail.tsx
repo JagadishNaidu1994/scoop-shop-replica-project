@@ -51,18 +51,17 @@ const ProductDetail = () => {
   const [howToUseOpen, setHowToUseOpen] = useState(false);
 
   const productImages = [
-    '/images/strawberry-foam-hero.jpg',
-    '/images/matcha-frappe-hero.jpg',
-    '/images/iced-matcha-latte-hero.jpg',
-    '/images/hot-matcha-latte-hero.jpg',
-    '/images/organic-ceremonial-matcha-1.jpg',
-    '/images/organic-ceremonial-matcha-2.jpg',
-    '/images/organic-ceremonial-matcha-3.jpg',
-    '/images/organic-ceremonial-matcha-4.jpg',
-    '/images/organic-ceremonial-matcha-5.jpg',
-    '/images/organic-ceremonial-matcha-6.jpg',
-    '/images/organic-ceremonial-matcha-7.jpg',
-    '/images/organic-ceremonial-matcha-8.jpg'];
+    '/images/product-2-1.jpg',
+    '/images/product-2-2.jpg',
+    '/images/product-2-3.jpg',
+    '/images/product-2-4.jpg'];
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setSelectedImage((prev) => (prev + 1) % productImages.length);
+    }, 2000);
+    return () => clearInterval(interval);
+  }, [productImages.length]);
 
   const FaqItem = ({ q, a }: {q: string;a: string;}) => {
     const [open, setOpen] = useState(false);
