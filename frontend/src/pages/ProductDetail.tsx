@@ -87,7 +87,7 @@ const ProductDetail = () => {
   };
 
   const testimonials = [
-  { name: "Cliff W.", image: "/lovable-uploads/8edc40eb-3dfa-45fb-8cac-fc1a12ec6a3c.png", review: "Most of all my memory is improving it's more that I remember rather than forget...", rating: 5 }];
+  { name: "Cliff W.", image: "/lovable-uploads/dde01f1c-2bc0-43ca-aed4-77931424ebcf.jpg", review: "Most of all my memory is improving it's more that I remember rather than forget...", rating: 5 }];
 
 
   useEffect(() => {
