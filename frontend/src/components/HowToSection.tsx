@@ -80,12 +80,11 @@ const HowToSection: React.FC = () => {
         </div>
 
         {/* Right side - large image */}
-        <div className="relative" style={{ backgroundColor: '#F5F5F0' }}>
+        <div className="relative h-[500px]" style={{ backgroundColor: '#F5F5F0' }}>
           <img
             src={howToSteps[selected].image}
             alt={howToSteps[selected].title}
-            className="w-full h-full object-cover transition-all duration-300"
-            style={{ minHeight: '300px' }}
+            className="w-full h-full object-cover rounded-lg transition-all duration-300"
           />
           {/* Navigation */}
           <div className="absolute bottom-6 right-6 flex items-center gap-3">
