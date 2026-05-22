@@ -3,8 +3,8 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const howToSteps = [
   {
-    thumbnail: '/lovable-uploads/8edc40eb-3dfa-45fb-8cac-fc1a12ec6a3c.png',
-    image: '/lovable-uploads/8edc40eb-3dfa-45fb-8cac-fc1a12ec6a3c.png',
+    thumbnail: '/lovable-uploads/dde01f1c-2bc0-43ca-aed4-77931424ebcf.jpg',
+    image: '/lovable-uploads/dde01f1c-2bc0-43ca-aed4-77931424ebcf.jpg',
     title: 'Add 2g of NASTEA powder to a cup',
   },
   {
@@ -84,7 +84,7 @@ const HowToSection: React.FC = () => {
           <img
             src={howToSteps[selected].image}
             alt={howToSteps[selected].title}
-            className="w-full h-full object-cover rounded-lg transition-all duration-300"
+            className="w-full h-full rounded-lg transition-all duration-300 object-cover mx-0 px-0"
           />
           {/* Navigation */}
           <div className="absolute bottom-6 right-6 flex items-center gap-3">
