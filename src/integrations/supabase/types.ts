@@ -1127,6 +1127,32 @@ export type Database = {
     }
     Functions: {
       check_user_admin: { Args: { user_id: string }; Returns: boolean }
+      get_available_coupons: {
+        Args: never
+        Returns: {
+          code: string
+          description: string
+          discount_type: string
+          discount_value: number
+          expires_at: string
+          id: string
+          is_active: boolean
+          minimum_order_amount: number
+        }[]
+      }
+      get_coupon_by_code: {
+        Args: { _code: string }
+        Returns: {
+          code: string
+          description: string
+          discount_type: string
+          discount_value: number
+          expires_at: string
+          id: string
+          is_active: boolean
+          minimum_order_amount: number
+        }[]
+      }
       get_user_admin_status: {
         Args: { check_user_id: string }
         Returns: boolean

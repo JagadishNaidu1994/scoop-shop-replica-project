@@ -58,54 +58,23 @@ export const CouponPopup: React.FC<CouponPopupProps> = ({
 
   const fetchCoupons = async () => {
     if (!user) return;
-    
+
     setLoading(true);
     try {
-      // Fetch general active coupons (not expired and not assigned to specific users)
-      const { data: generalData, error: generalError } = await supabase
-        .from("coupon_codes")
-        .select("*")
-        .eq("is_active", true)
-        .is("assigned_users", null)
-        .or(`expires_at.is.null,expires_at.gt.${new Date().toISOString()}`);
+      const { data, error } = await supabase.rpc('get_available_coupons');
 
-      if (generalError) {
-        console.error("Error fetching general coupons:", generalError);
+      if (error) {
+        console.error("Error fetching coupons:", error);
         setGeneralCoupons([]);
-      } else {
-        setGeneralCoupons(generalData || []);
-      }
-
-      // Fetch user-specific coupons
-      const { data: userSpecificData, error: userSpecificError } = await supabase
-        .from("coupon_codes")
-        .select("*")
-        .eq("is_active", true)
-        .not("assigned_users", "is", null)
-        .or(`expires_at.is.null,expires_at.gt.${new Date().toISOString()}`);
-
-      if (userSpecificError) {
-        console.error("Error fetching user-specific coupons:", userSpecificError);
         setUserCoupons([]);
       } else {
-        const filteredUserSpecificCoupons = [];
-        if (userSpecificData && user?.email) {
-          for (const coupon of userSpecificData) {
-            if (coupon.assigned_users && 
-                coupon.assigned_users.split(',').map((email: string) => email.trim().toLowerCase()).includes(user.email.toLowerCase())) {
-              filteredUserSpecificCoupons.push(coupon);
-            }
-          }
-        }
-
-        const userCouponsFormatted = filteredUserSpecificCoupons.map(coupon => ({
-          id: `user-${coupon.id}`,
-          coupon_id: coupon.id,
-          is_used: false,
-          assigned_at: new Date().toISOString(),
-          coupon: coupon
-        }));
-        setUserCoupons(userCouponsFormatted);
+        const all = data || [];
+        // Personalised coupons are surfaced separately by admin assignment;
+        // the safe RPC only returns coupons the user is eligible for, so
+        // treat all of them as general here and let the admin-managed
+        // user_coupons table drive the "for you" list elsewhere.
+        setGeneralCoupons(all);
+        setUserCoupons([]);
       }
     } catch (error) {
       console.error("Error fetching coupons:", error);
@@ -120,6 +89,7 @@ export const CouponPopup: React.FC<CouponPopupProps> = ({
       setLoading(false);
     }
   };
+
 
   const copyToClipboard = async (code: string) => {
     try {

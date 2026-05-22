@@ -124,18 +124,9 @@ const Checkout = () => {
   const fetchAvailableCoupons = async () => {
     if (!user) return;
     try {
-      const { data, error } = await supabase.from('coupon_codes').select('*')
-        .eq('is_active', true)
-        .or(`expires_at.is.null,expires_at.gt.${new Date().toISOString()}`);
+      const { data, error } = await supabase.rpc('get_available_coupons');
       if (error) throw error;
-      const filtered = (data || []).filter((coupon) => {
-        if (!coupon.assigned_users) return true;
-        if (user.email) {
-          return coupon.assigned_users.split(',').map((e: string) => e.trim().toLowerCase()).includes(user.email.toLowerCase());
-        }
-        return false;
-      });
-      setAvailableCoupons(filtered);
+      setAvailableCoupons(data || []);
     } catch (error) { console.error('Error fetching coupons:', error); }
   };
 
@@ -143,22 +134,17 @@ const Checkout = () => {
     if (!code.trim()) return;
     setCouponLoading(true);
     try {
-      const { data, error } = await supabase.from('coupon_codes').select('*')
-        .eq('code', code.trim().toUpperCase()).eq('is_active', true).single();
-      if (error || !data) { toast({ title: 'Invalid Coupon', description: 'This coupon code is not valid.', variant: 'destructive' }); return; }
-      if (data.expires_at && new Date(data.expires_at) < new Date()) { toast({ title: 'Expired', description: 'This coupon has expired.', variant: 'destructive' }); return; }
-      if (data.max_uses && data.used_count >= data.max_uses) { toast({ title: 'Limit Reached', description: 'This coupon has reached its usage limit.', variant: 'destructive' }); return; }
-      if (subtotal < data.minimum_order_amount) { toast({ title: 'Minimum Not Met', description: `Minimum order of ₹${data.minimum_order_amount} required.`, variant: 'destructive' }); return; }
-      if (data.assigned_users && user?.email) {
-        const allowed = data.assigned_users.split(',').map((e: string) => e.trim().toLowerCase());
-        if (!allowed.includes(user.email.toLowerCase())) { toast({ title: 'Not Eligible', description: 'This coupon is not available for your account.', variant: 'destructive' }); return; }
-      }
-      setAppliedCoupon(data);
-      setCouponCode(data.code);
-      toast({ title: 'Coupon Applied!', description: `You saved ${data.discount_type === 'percentage' ? `${data.discount_value}%` : `₹${data.discount_value}`}` });
+      const { data, error } = await supabase.rpc('get_coupon_by_code', { _code: code.trim() });
+      const coupon = Array.isArray(data) ? data[0] : data;
+      if (error || !coupon) { toast({ title: 'Invalid Coupon', description: 'This coupon code is not valid.', variant: 'destructive' }); return; }
+      if (subtotal < coupon.minimum_order_amount) { toast({ title: 'Minimum Not Met', description: `Minimum order of ₹${coupon.minimum_order_amount} required.`, variant: 'destructive' }); return; }
+      setAppliedCoupon(coupon);
+      setCouponCode(coupon.code);
+      toast({ title: 'Coupon Applied!', description: `You saved ${coupon.discount_type === 'percentage' ? `${coupon.discount_value}%` : `₹${coupon.discount_value}`}` });
     } catch (error) { toast({ title: 'Error', description: 'Failed to apply coupon.', variant: 'destructive' }); }
     finally { setCouponLoading(false); }
   };
+
 
   const removeCoupon = () => { setAppliedCoupon(null); setCouponCode(''); toast({ title: 'Coupon Removed' }); };
 
