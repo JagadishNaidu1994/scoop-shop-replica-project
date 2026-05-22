@@ -51,18 +51,19 @@ const ProductDetail = () => {
   const [howToUseOpen, setHowToUseOpen] = useState(false);
 
   const productId = parseInt(id as string);
-  const productImages = productId === 1
+  const productImages = productId === 3
     ? [
-        '/images/product-1-1.jpg',
-        '/images/product-1-2.jpg',
-        '/images/product-1-3.jpg',
-        '/images/product-1-4.jpg',
-        '/images/product-1-5.jpg']
+        '/images/product-3-1.jpg',
+        '/images/product-3-2.jpg',
+        '/images/product-3-3.jpg',
+        '/images/product-3-4.jpg',
+        '/images/product-3-5.jpg']
     : [
         '/images/product-2-1.jpg',
         '/images/product-2-2.jpg',
         '/images/product-2-3.jpg',
         '/images/product-2-4.jpg'];
+
 
   useEffect(() => {
     const interval = setInterval(() => {
