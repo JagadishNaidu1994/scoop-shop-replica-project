@@ -7,7 +7,7 @@ import ResultsStats from '@/components/ResultsStats';
 import NasteaStandard from '@/components/NasteaStandard';
 // import PressFeatures from '@/components/PressFeatures';
 import TestimonialsCarousel from '@/components/TestimonialsCarousel';
-import JournalSection from '@/components/JournalSection';
+// import JournalSection from '@/components/JournalSection';
 import FoundersSection from '@/components/FoundersSection';
 import Footer from '@/components/Footer';
 import EmailSignupPopup from '@/components/EmailSignupPopup';
@@ -35,7 +35,7 @@ const Index = () => {
         <NasteaStandard />
         {/* <PressFeatures /> */}
         <TestimonialsCarousel />
-        <JournalSection />
+        {/* <JournalSection /> */}
         <FoundersSection />
       </main>
       <Footer />
