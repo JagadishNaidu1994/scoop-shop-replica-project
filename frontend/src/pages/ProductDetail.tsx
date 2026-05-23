@@ -583,7 +583,7 @@ const ProductDetail = () => {
                     </div>
                   </div>
                   <div className="relative order-1 lg:order-2">
-                    <AdminImageUpload src="/images/product-latte.jpg" alt="The Focus Smoothie" className="w-full h-[700px] rounded-lg object-cover" imagePath="latte-image" />
+                    <AdminImageUpload src="/lovable-uploads/82851410-e92f-4e0c-8939-f7629ff84faf.png" alt="The Focus Smoothie" className="w-full h-[700px] rounded-lg object-cover" imagePath="latte-image" />
                   </div>
                 </div>
               </div>
