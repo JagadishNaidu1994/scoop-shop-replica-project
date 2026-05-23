@@ -113,12 +113,6 @@ const Footer = () => {
             <div className="text-xs text-gray-500 mb-4 md:mb-0">
               NASTEA. NASTEA is a trademark of NASTEA Limited.
             </div>
-            <div className="flex gap-2 flex-wrap justify-center">
-              <img src="https://upload.wikimedia.org/wikipedia/commons/b/b7/American_Express_logo_%282018%29.svg" alt="American Express" className="h-6" />
-              <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" alt="PayPal" className="h-6" />
-              <img src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg" alt="Visa" className="h-6" />
-              <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" alt="Mastercard" className="h-6" />
-            </div>
           </div>
         </div>
       </div>
