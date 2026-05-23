@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import HeaderNavBar from '@/components/HeaderNavBar';
 import Footer from '@/components/Footer';
 import NasteaStandard from '@/components/NasteaStandard';
+import { useImageReplacements } from '@/hooks/useImageReplacements';
 
 type StorySection = {
   title: string;
@@ -50,6 +51,18 @@ const storySections: StorySection[] = [
 ];
 
 const OurStory = () => {
+  useImageReplacements();
+
+  const [carouselSlides] = useState([
+    { src: "/lovable-uploads/dirtea-carousel-1.png", alt: "Matcha ritual", text: "Three friends, one plan: upgrade your caffeine ritual without the crashy chaos.", id: "dirtea-carousel-1" },
+    { src: "/lovable-uploads/dirtea-carousel-2.png", alt: "Japan matcha heritage", text: "Inspired by Japan's matcha heritage - delivered with NR personality.", id: "dirtea-carousel-2" },
+    { src: "/lovable-uploads/dirtea-carousel-3.png", alt: "Kagoshima landscape", text: "We went to the source (Kagoshima) to understand what separates real matcha from green imposters.", id: "dirtea-carousel-3" },
+    { src: "/lovable-uploads/dirtea-carousel-4.png", alt: "Matcha leaves", text: "We chose single-origin, shade-grown, stone-milled matcha because quality is… kind of the point.", id: "dirtea-carousel-4" },
+    { src: "/lovable-uploads/dirtea-carousel-5.png", alt: "Matcha preparation methods", text: "Designed to work everywhere: whisked, shaken, iced, latte'd, and café-served.", id: "dirtea-carousel-5" },
+    { src: "https://images.unsplash.com/photo-1582793988951-9aed5509eb97?w=800&h=800&fit=crop", alt: "Pure matcha leaf", text: "Pure leaf. Loud standards." },
+    { src: "/lovable-uploads/dirtea-carousel-7.png", alt: "Nastea Rituals", text: "Nastea Rituals was born.", id: "dirtea-carousel-7" },
+  ]);
+
   return (
     <div className="min-h-screen bg-white">
       <HeaderNavBar />
@@ -84,24 +97,16 @@ const OurStory = () => {
       {/* The DIRTEA Story Section */}
       <section className="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 bg-gray-900">
         <h2 className="text-3xl sm:text-4xl lg:text-5xl font-light text-white text-center mb-6 sm:mb-8">
-          The DIRTEA story
+          The NASTEA story
         </h2>
         <p className="text-base sm:text-lg text-white text-center mb-6 sm:mb-8 max-w-3xl mx-auto">
-          In 2016, we discovered the power of functional mushrooms and experienced a transformation in our energy, focus, and resilience.
+          We discovered the power of matcha and experienced a transformation in our energy, focus, and resilience.
         </p>
         
         {/* Carousel Container */}
         <div className="relative max-w-7xl mx-auto">
           <div className="flex gap-4 sm:gap-6 overflow-x-auto scroll-smooth scrollbar-hide snap-x snap-mandatory px-1" id="carousel">
-            {[
-              { src: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", alt: "Matcha ritual", text: "Three friends, one plan: upgrade your caffeine ritual without the crashy chaos." },
-              { src: "https://images.unsplash.com/photo-1544787219-7f47181a629a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", alt: "Japan matcha heritage", text: "Inspired by Japan's matcha heritage - delivered with NR personality." },
-              { src: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", alt: "Kagoshima landscape", text: "We went to the source (Kagoshima) to understand what separates real matcha from green imposters." },
-              { src: "https://images.unsplash.com/photo-1571115764595-644a1f56a55c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", alt: "Matcha leaves", text: "We chose single-origin, shade-grown, stone-milled matcha because quality is… kind of the point." },
-              { src: "https://images.unsplash.com/photo-1564890369478-c89ca6d9cde9?w=800&h=800&fit=crop", alt: "Matcha preparation methods", text: "Designed to work everywhere: whisked, shaken, iced, latte'd, and café-served." },
-              { src: "https://images.unsplash.com/photo-1582793988951-9aed5509eb97?w=800&h=800&fit=crop", alt: "Pure matcha leaf", text: "Pure leaf. Loud standards." },
-              { src: "https://images.unsplash.com/photo-1563822249366-707a0051d2f7?w=800&h=800&fit=crop", alt: "Nastea Rituals", text: "Nastea Rituals was born." },
-            ].map((slide, i) => (
+            {carouselSlides.map((slide, i) => (
               <div key={i} className="flex-shrink-0 w-[280px] sm:w-[340px] lg:w-[400px] snap-start">
                 <div className="relative h-[380px] sm:h-[440px] lg:h-[500px] overflow-hidden rounded-lg group cursor-pointer">
                   <img
@@ -120,7 +125,21 @@ const OurStory = () => {
             ))}
           </div>
 
-          {/* Carousel Navigation Button */}
+          {/* Carousel Navigation Buttons */}
+          <button
+            onClick={() => {
+              const carousel = document.getElementById('carousel');
+              if (carousel) {
+                carousel.scrollBy({ left: -320, behavior: 'smooth' });
+              }
+            }}
+            className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/30 backdrop-blur-sm p-3 sm:p-4 rounded-full transition-colors z-10"
+            aria-label="Previous slide"
+          >
+            <svg className="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
           <button
             onClick={() => {
               const carousel = document.getElementById('carousel');
@@ -152,20 +171,20 @@ const OurStory = () => {
       </section>
 
       {/* Story Process Sections */}
-      <section className="bg-white py-12 sm:py-16 lg:py-20">
-        <div className="w-full px-0">
+      <section className="bg-white py-12 sm:py-16 lg:py-20 px-1 sm:px-2 lg:px-3">
+        <div className="w-full">
           <div className="space-y-6 sm:space-y-8 md:space-y-10">
             {storySections.map((section) => {
               const imageOrder = section.reverse ? 'order-2' : 'order-1';
               const textOrder = section.reverse ? 'order-1' : 'order-2';
 
               return (
-                <article key={section.title} className="grid grid-cols-2 items-stretch gap-0">
+                <article key={section.title} className="grid grid-cols-2 items-stretch gap-0 rounded-lg overflow-hidden">
                   <div className={imageOrder}>
                     <img
                       src={section.image}
                       alt={section.alt}
-                      className="h-full min-h-[240px] w-full object-cover sm:min-h-[320px] md:min-h-[420px] lg:min-h-[520px]"
+                      className="h-full min-h-[192px] w-full object-cover sm:min-h-[256px] md:min-h-[336px] lg:min-h-[416px]"
                     />
                   </div>
 
@@ -174,7 +193,7 @@ const OurStory = () => {
                     <h2 className="text-sm font-semibold leading-snug text-black sm:text-xl md:text-[2rem] md:leading-tight">
                       {section.title}
                     </h2>
-                    <div className="mt-3 space-y-2 text-[10px] leading-[1.5] text-black/80 sm:mt-4 sm:text-sm sm:leading-7 md:text-xl md:leading-10">
+                    <div className="mt-4 sm:mt-6 space-y-3 sm:space-y-4 text-[10px] leading-[1.6] text-black/80 sm:text-sm sm:leading-7 md:text-base md:leading-8">
                       {section.body.map((paragraph) => (
                         <p key={paragraph}>{paragraph}</p>
                       ))}

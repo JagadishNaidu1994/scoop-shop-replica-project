@@ -3,23 +3,23 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const howToSteps = [
   {
-    thumbnail: '/lovable-uploads/dde01f1c-2bc0-43ca-aed4-77931424ebcf.jpg',
-    image: '/lovable-uploads/dde01f1c-2bc0-43ca-aed4-77931424ebcf.jpg',
+    thumbnail: '/lovable-uploads/matcha-whisk.png',
+    image: '/lovable-uploads/matcha-whisk.png',
     title: 'Add 2g of NASTEA powder to a cup',
   },
   {
-    thumbnail: '/lovable-uploads/65581248-fb35-4b2f-8b55-04877e634119.png',
-    image: '/lovable-uploads/65581248-fb35-4b2f-8b55-04877e634119.png',
+    thumbnail: '/lovable-uploads/matcha-whisk.png',
+    image: '/lovable-uploads/matcha-whisk.png',
     title: 'Pour hot water and stir well',
   },
   {
-    thumbnail: '/images/howto-whisk.jpg',
-    image: '/images/howto-whisk.jpg',
+    thumbnail: '/lovable-uploads/matcha-whisk.png',
+    image: '/lovable-uploads/matcha-whisk.png',
     title: 'Whisk until fully dissolved',
   },
   {
-    thumbnail: '/lovable-uploads/45a06faf-330b-4d76-a34b-4c50248900a2.png',
-    image: '/lovable-uploads/45a06faf-330b-4d76-a34b-4c50248900a2.png',
+    thumbnail: '/lovable-uploads/matcha-whisk.png',
+    image: '/lovable-uploads/matcha-whisk.png',
     title: 'Enjoy your perfect NASTEA drink',
   },
 ];
@@ -90,8 +90,8 @@ const HowToSection: React.FC = () => {
           <div className="absolute bottom-6 right-6 flex items-center gap-3">
             <button
               onClick={prev}
-              className="w-8 h-8 flex items-center justify-center rounded-full border transition-colors hover:bg-white/80"
-              style={{ borderColor: '#0D1B2A', color: '#0D1B2A' }}
+              className="w-9 h-9 flex items-center justify-center rounded-full text-white transition-colors hover:opacity-80"
+              style={{ backgroundColor: '#0D1B2A' }}
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
@@ -100,8 +100,8 @@ const HowToSection: React.FC = () => {
             </span>
             <button
               onClick={next}
-              className="w-8 h-8 flex items-center justify-center rounded-full border transition-colors hover:bg-white/80"
-              style={{ borderColor: '#0D1B2A', color: '#0D1B2A' }}
+              className="w-9 h-9 flex items-center justify-center rounded-full text-white transition-colors hover:opacity-80"
+              style={{ backgroundColor: '#0D1B2A' }}
             >
               <ChevronRight className="w-4 h-4" />
             </button>

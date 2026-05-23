@@ -24,10 +24,10 @@ const IngredientsPreviewSection = () => {
 
           {/* Right Image */}
           <div className="relative">
-            <img 
-              src="/lovable-uploads/NDN00659-Edit.jpg" 
+            <img
+              src="/lovable-uploads/NDN00659-Edit.jpg"
               alt="Hand holding mushroom coffee cup"
-              className="w-full h-auto rounded-lg"
+              className="w-full h-[800px] rounded-lg object-cover"
             />
           </div>
         </div>

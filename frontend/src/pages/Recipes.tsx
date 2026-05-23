@@ -4,6 +4,7 @@ import Footer from '@/components/Footer';
 import MatchaLoadingAnimation from '@/components/MatchaLoadingAnimation';
 import { supabase } from '@/integrations/supabase/client';
 import { Link } from 'react-router-dom';
+import { useImageReplacements } from '@/hooks/useImageReplacements';
 interface Recipe {
   id: string;
   title: string;
@@ -15,6 +16,8 @@ interface Recipe {
 const Recipes = () => {
   const [dbRecipes, setDbRecipes] = useState<Recipe[]>([]);
   const [loading, setLoading] = useState(true);
+  useImageReplacements();
+
   useEffect(() => {
     fetchRecipes();
   }, []);
@@ -110,7 +113,7 @@ const Recipes = () => {
         {loading ? <MatchaLoadingAnimation message="Loading recipes..." /> : <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 pb-16">
             {allRecipes.slice(1).map(recipe => <Link key={recipe.id} to={`/recipes/${recipe.id}`} className="group block">
                 <div className="aspect-[4/3] overflow-hidden rounded-lg mb-4">
-                  <img src={recipe.image} alt={recipe.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                  <img src={recipe.image} alt={recipe.title} className="w-full h-full object-cover object-right group-hover:scale-105 transition-transform duration-300" />
                 </div>
                 <div className="space-y-2">
                   <div className="flex items-center justify-between text-sm text-gray-500">

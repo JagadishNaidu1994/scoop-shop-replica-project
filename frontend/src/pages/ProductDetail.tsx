@@ -171,14 +171,14 @@ const ProductDetail = () => {
 
         <main className="pb-16">
           {/* ===== PRODUCT SECTION: 55% / 45% ===== */}
-          <div className="grid grid-cols-1 lg:grid-cols-[54%_1fr] gap-6 items-start mb-20">
+          <div className="grid grid-cols-1 lg:grid-cols-[54%_1fr] gap-8 items-start mb-20">
 
             {/* ===== LEFT SIDE – IMAGE GALLERY ===== */}
             <div className="lg:sticky lg:top-24 lg:h-fit space-y-3">
               {/* Main Image */}
               <div className="relative group">
                 <div
-                  className="aspect-[1/0.7] rounded-lg overflow-hidden cursor-zoom-in relative"
+                  className="aspect-[1/1] rounded-lg overflow-hidden cursor-zoom-in relative"
                   style={{ background: 'linear-gradient(135deg, #F9FAFB, #F3F0EB)' }}
                   onClick={() => setShowImageModal(true)}>
                   
@@ -247,7 +247,7 @@ const ProductDetail = () => {
             </div>
 
             {/* ===== RIGHT SIDE – PRODUCT INFO ===== */}
-            <div className="space-y-5">
+            <div className="space-y-8 flex flex-col h-full">
 
               {/* 3.1 Review Row */}
               
@@ -464,22 +464,25 @@ const ProductDetail = () => {
           <div className="bg-white">
 
             {/* Ingredient Texture */}
-            <section className="py-20 bg-white w-full">
+            <section className="py-10 bg-white w-full">
               <div className="w-full px-4 sm:px-6 lg:px-8">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
                   <div className="relative">
-                    <AdminImageUpload src="/images/product-features.jpg" alt="Ingredient texture" className="w-full h-[800px] rounded-lg object-cover" imagePath="texture-shot" />
+                    <AdminImageUpload src="/lovable-uploads/everyday-essential.jpg" alt="Ingredient texture" className="w-full h-[700px] rounded-lg object-cover" imagePath="texture-shot" />
                   </div>
-                  <div className="space-y-6">
-                    <h3 className="text-3xl lg:text-4xl font-serif font-bold" style={{ color: '#0D1B2A' }}>Your everyday essential for sharper focus and improved productivity</h3>
-                    <p className="text-lg leading-relaxed" style={{ color: '#6B7280' }}>Ceremonial-grade matcha paired with functional mushrooms for clean energy, calm clarity, and nourished skin—all in one ritual.</p>
-                    <div className="space-y-3">
-                      {['Focus', 'Mental clarity', 'Cognitive performance'].map((label) =>
-                      <div key={label} className="flex items-center gap-3">
-                          <span className="w-2 h-2 rounded-full inline-block" style={{ backgroundColor: '#0D1B2A' }} />
-                          <p className="font-medium" style={{ color: '#0D1B2A' }}>{label}</p>
-                        </div>
-                      )}
+                  <div className="flex flex-col h-[700px]">
+                    <h3 className="text-4xl lg:text-5xl font-bold" style={{ color: '#0D1B2A' }}>Your everyday essential for sharper focus and improved productivity</h3>
+                    <div className="flex-1"></div>
+                    <div className="space-y-6">
+                      <p className="text-lg leading-relaxed border-t border-gray-300 pt-6" style={{ color: '#6B7280' }}>Ceremonial-grade matcha paired with functional mushrooms for clean energy, calm clarity, and nourished skin—all in one ritual.</p>
+                      <div className="space-y-4 border-t border-gray-300 pt-6">
+                        {['Focus', 'Mental clarity', 'Cognitive performance'].map((label) =>
+                        <div key={label} className="flex items-center gap-4">
+                            <span className="w-3 h-3 rounded-full inline-block flex-shrink-0" style={{ backgroundColor: '#0D1B2A' }} />
+                            <p className="font-medium text-base" style={{ color: '#0D1B2A' }}>{label}</p>
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -489,43 +492,38 @@ const ProductDetail = () => {
             {/* How to use */}
             <HowToSection />
 
-            {/* Benefit pills */}
-            <section className="py-20 bg-white w-full">
-              <div className="w-full px-4 sm:px-6 lg:px-8">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-                  <div className="space-y-4">
-                    {['Mental clarity', 'Cognitive function', 'Immune support'].map((label) =>
-                    <div key={label} className="px-6 py-4 bg-white/70 shadow-[0_12px_30px_rgba(0,0,0,0.06)] text-xl font-semibold w-fit" style={{ color: '#0D1B2A' }}>
-                        {label}
-                      </div>
-                    )}
-                  </div>
-                  <div className="relative">
-                    <AdminImageUpload src="/lovable-uploads/e3cb3dde-3127-4252-8b46-ab17c78f4ad8.png" alt="Wellness lifestyle" className="w-full h-[800px] rounded-lg object-cover" imagePath="benefit-lifestyle" />
-                  </div>
-                </div>
-              </div>
-            </section>
-
             {/* Comparison */}
             <section className="py-20 bg-white w-full">
               <div className="w-full px-4 sm:px-6 lg:px-8">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
                   <div className="relative">
-                    <AdminImageUpload src="/lovable-uploads/7f66b569-d6d1-4b5a-9c09-2785eac9f9b7.jpg" alt="Hand holding NASTEA matcha cup" className="w-full h-[800px] rounded-lg object-cover" imagePath="compare-hand" />
+                    <AdminImageUpload src="/lovable-uploads/compare-hand-nastea.jpg" alt="Hand holding NASTEA matcha cup" className="w-full h-[700px] rounded-lg object-cover" imagePath="compare-hand" />
                   </div>
-                  <div className="space-y-6">
-                    <h3 className="text-3xl lg:text-4xl font-serif font-bold" style={{ color: '#0D1B2A' }}>How it Compares</h3>
-                    <div className="space-y-4">
-                      <div className="space-y-2">
-                        <p className="text-lg font-semibold" style={{ color: '#0D1B2A' }}>NASTEA vs Coffee</p>
-                        <div className="flex items-start gap-3"><CheckCircle className="w-5 h-5 mt-0.5" style={{ color: '#0D1B2A' }} /><p style={{ color: '#6B7280' }}>Calm, sustained energy without jitters.</p></div>
-                        <div className="flex items-start gap-3"><CheckCircle className="w-5 h-5 mt-0.5" style={{ color: '#0D1B2A' }} /><p style={{ color: '#6B7280' }}>Adaptogens to support focus and immunity.</p></div>
+                  <div className="flex flex-col h-[700px]">
+                    <div>
+                      <p className="text-sm font-medium mb-2" style={{ color: '#6B7280' }}>Product Benefits</p>
+                      <h3 className="text-5xl font-bold" style={{ color: '#0D1B2A' }}>How it Compares</h3>
+                    </div>
+
+                    {/* Large blank space to push content down */}
+                    <div className="flex-1"></div>
+
+                    {/* Text blocks */}
+                    <div className="space-y-8">
+                      <div className="border-t border-gray-300 pt-6">
+                        <p className="font-bold mb-4 text-lg" style={{ color: '#0D1B2A' }}>NASTEA vs Coffee</p>
+                        <div className="space-y-4">
+                          <div className="flex items-start gap-4"><CheckCircle className="w-5 h-5 mt-1 flex-shrink-0" style={{ color: '#0D1B2A' }} /><p className="text-base leading-relaxed" style={{ color: '#6B7280' }}>Calm, sustained energy without jitters.</p></div>
+                          <div className="flex items-start gap-4"><CheckCircle className="w-5 h-5 mt-1 flex-shrink-0" style={{ color: '#0D1B2A' }} /><p className="text-base leading-relaxed" style={{ color: '#6B7280' }}>Adaptogens to support focus and immunity.</p></div>
+                        </div>
                       </div>
-                      <div className="space-y-2">
-                        <p className="text-lg font-semibold" style={{ color: '#0D1B2A' }}>NASTEA vs Synthetic Nootropics</p>
-                        <div className="flex items-start gap-3"><CheckCircle className="w-5 h-5 mt-0.5" style={{ color: '#0D1B2A' }} /><p style={{ color: '#6B7280' }}>Natural ingredients, lab-tested for purity.</p></div>
-                        <div className="flex items-start gap-3"><CheckCircle className="w-5 h-5 mt-0.5" style={{ color: '#0D1B2A' }} /><p style={{ color: '#6B7280' }}>No crash, no artificial stimulants.</p></div>
+
+                      <div className="border-t border-gray-300 pt-6">
+                        <p className="font-bold mb-4 text-lg" style={{ color: '#0D1B2A' }}>NASTEA vs Synthetic Nootropics</p>
+                        <div className="space-y-4">
+                          <div className="flex items-start gap-4"><CheckCircle className="w-5 h-5 mt-1 flex-shrink-0" style={{ color: '#0D1B2A' }} /><p className="text-base leading-relaxed" style={{ color: '#6B7280' }}>Natural ingredients, lab-tested for purity.</p></div>
+                          <div className="flex items-start gap-4"><CheckCircle className="w-5 h-5 mt-1 flex-shrink-0" style={{ color: '#0D1B2A' }} /><p className="text-base leading-relaxed" style={{ color: '#6B7280' }}>No crash, no artificial stimulants.</p></div>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -541,37 +539,51 @@ const ProductDetail = () => {
               <div className="w-full px-4 sm:px-6 lg:px-8 space-y-20">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
                   <div className="relative">
-                    <AdminImageUpload src="/lovable-uploads/65581248-fb35-4b2f-8b55-04877e634119.png" alt="The Focus Coffee" className="w-full h-[800px] rounded-lg object-cover" imagePath="focus-coffee" />
+                    <AdminImageUpload src="/lovable-uploads/65581248-fb35-4b2f-8b55-04877e634119.png" alt="The Focus Coffee" className="w-full h-[700px] rounded-lg object-cover" imagePath="focus-coffee" />
                   </div>
-                  <div className="space-y-4">
-                    <p className="text-sm font-medium" style={{ color: '#6B7280' }}>Founder's Super Blend Recipe</p>
-                    <h4 className="text-3xl lg:text-4xl font-serif font-bold" style={{ color: '#0D1B2A' }}>Nastea Coconut Cloud Matcha</h4>
-                    <p className="text-base" style={{ color: '#6B7280' }}>Light, tropical, and stupidly refreshing.</p>
-                    <h5 className="text-lg font-bold pt-4" style={{ color: '#0D1B2A' }}>Recipe:</h5>
-                    <ul className="space-y-2" style={{ color: '#6B7280' }}>
-                      <li>• Whisk Nastea matcha + milk until silky and frothy.</li>
-                      <li>• Fill a glass with ice and pour in coconut water.</li>
-                      <li>• Gently pour matcha over the top.</li>
-                      <li>• Add sweetener, lime, or a pinch of salt to taste.</li>
-                    </ul>
+                  <div className="flex flex-col h-[700px]">
+                    <div>
+                      <p className="text-sm font-medium mb-2" style={{ color: '#6B7280' }}>Founder's Super Blend Recipe</p>
+                      <h4 className="text-4xl lg:text-5xl font-bold" style={{ color: '#0D1B2A' }}>Nastea Coconut Cloud Matcha</h4>
+                    </div>
+                    <div className="flex-1"></div>
+                    <div className="space-y-6">
+                      <p className="text-lg leading-relaxed border-t border-gray-300 pt-6" style={{ color: '#6B7280' }}>Light, tropical, and stupidly refreshing.</p>
+                      <div className="border-t border-gray-300 pt-6">
+                        <h5 className="text-lg font-bold mb-4" style={{ color: '#0D1B2A' }}>Recipe:</h5>
+                        <ul className="space-y-3 text-base" style={{ color: '#6B7280' }}>
+                          <li>• Whisk Nastea matcha + milk until silky and frothy.</li>
+                          <li>• Fill a glass with ice and pour in coconut water.</li>
+                          <li>• Gently pour matcha over the top.</li>
+                          <li>• Add sweetener, lime, or a pinch of salt to taste.</li>
+                        </ul>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-                  <div className="space-y-4 order-2 lg:order-1">
-                    <p className="text-sm font-medium" style={{ color: '#6B7280' }}>The Everyday Classic</p>
-                    <h4 className="text-3xl lg:text-4xl font-serif font-bold" style={{ color: '#0D1B2A' }}>Iced Matcha Latte</h4>
-                    <p className="text-base" style={{ color: '#6B7280' }}>Creamy, smooth, and steady.</p>
-                    <h5 className="text-lg font-bold pt-4" style={{ color: '#0D1B2A' }}>Recipe:</h5>
-                    <ul className="space-y-2" style={{ color: '#6B7280' }}>
-                      <li>• Add Nastea matcha + water until smooth.</li>
-                      <li>• Fill a glass with ice.</li>
-                      <li>• Pour in milk (and sweetener, if using).</li>
-                      <li>• Top with whisked matcha for the layered look.</li>
-                    </ul>
+                  <div className="flex flex-col h-[700px] order-2 lg:order-1">
+                    <div>
+                      <p className="text-sm font-medium mb-2" style={{ color: '#6B7280' }}>The Everyday Classic</p>
+                      <h4 className="text-4xl lg:text-5xl font-bold" style={{ color: '#0D1B2A' }}>Iced Matcha Latte</h4>
+                    </div>
+                    <div className="flex-1"></div>
+                    <div className="space-y-6">
+                      <p className="text-lg leading-relaxed border-t border-gray-300 pt-6" style={{ color: '#6B7280' }}>Creamy, smooth, and steady.</p>
+                      <div className="border-t border-gray-300 pt-6">
+                        <h5 className="text-lg font-bold mb-4" style={{ color: '#0D1B2A' }}>Recipe:</h5>
+                        <ul className="space-y-3 text-base" style={{ color: '#6B7280' }}>
+                          <li>• Add Nastea matcha + water until smooth.</li>
+                          <li>• Fill a glass with ice.</li>
+                          <li>• Pour in milk (and sweetener, if using).</li>
+                          <li>• Top with whisked matcha for the layered look.</li>
+                        </ul>
+                      </div>
+                    </div>
                   </div>
                   <div className="relative order-1 lg:order-2">
-                    <AdminImageUpload src="/images/product-features.jpg" alt="The Focus Smoothie" className="w-full h-[800px] rounded-lg object-cover" imagePath="focus-smoothie" />
+                    <AdminImageUpload src="/images/product-latte.jpg" alt="The Focus Smoothie" className="w-full h-[700px] rounded-lg object-cover" imagePath="latte-image" />
                   </div>
                 </div>
               </div>

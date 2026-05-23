@@ -73,13 +73,20 @@ const RecipesAdmin = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     try {
-      const recipeData = {
-        ...formData,
+      const { data: { user } } = await supabase.auth.getUser();
+
+      const recipeData: any = {
+        title: formData.title,
+        description: formData.description || null,
+        category: formData.category || null,
+        read_time: formData.read_time || null,
+        image_url: formData.image_url || null,
         ingredients: formData.ingredients ? formData.ingredients.split('\n').filter(i => i.trim()) : null,
         instructions: formData.instructions ? formData.instructions.split('\n').filter(i => i.trim()) : null,
-        nutritional_benefits: formData.nutritional_benefits ? formData.nutritional_benefits.split(',').map(b => b.trim()) : null
+        nutritional_benefits: formData.nutritional_benefits ? formData.nutritional_benefits.split(',').map(b => b.trim()) : null,
+        is_published: formData.is_published
       };
 
       if (editingRecipe) {
@@ -87,25 +94,32 @@ const RecipesAdmin = () => {
           .from('recipes')
           .update(recipeData)
           .eq('id', editingRecipe.id);
-        
-        if (error) throw error;
+
+        if (error) {
+          console.error('Update error details:', error);
+          throw error;
+        }
         toast({ title: "Success", description: "Recipe updated successfully" });
       } else {
+        recipeData.created_by = user?.id;
         const { error } = await supabase
           .from('recipes')
           .insert([recipeData]);
-        
-        if (error) throw error;
+
+        if (error) {
+          console.error('Insert error details:', error);
+          throw error;
+        }
         toast({ title: "Success", description: "Recipe created successfully" });
       }
 
       resetForm();
       fetchRecipes();
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error saving recipe:', error);
       toast({
         title: "Error",
-        description: "Failed to save recipe",
+        description: error?.message || "Failed to save recipe",
         variant: "destructive"
       });
     }

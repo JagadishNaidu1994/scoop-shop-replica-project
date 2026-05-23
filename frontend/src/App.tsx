@@ -8,6 +8,8 @@ import { CartProvider } from "@/contexts/CartContext";
 import { WishlistProvider } from "@/contexts/WishlistContext";
 import { AdminEditProvider } from "@/contexts/AdminEditContext";
 import { AdminImageProvider } from "@/contexts/AdminImageContext";
+import { DesignMode } from "@/components/DesignMode";
+import { useImageReplacements } from "@/hooks/useImageReplacements";
 import Index from "./pages/Index";
 import Shop from "./pages/Shop";
 import ProductDetail from "./pages/ProductDetail";
@@ -37,6 +39,8 @@ import RecipeDetail from "./pages/RecipeDetail";
 const queryClient = new QueryClient();
 
 const App = () => {
+  useImageReplacements();
+
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
@@ -47,6 +51,7 @@ const App = () => {
                   <TooltipProvider>
                     <Toaster />
                     <Sonner />
+                    <DesignMode />
                     <BrowserRouter>
                       <Routes>
                         <Route path="/" element={<Index />} />
