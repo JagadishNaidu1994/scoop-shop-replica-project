@@ -60,7 +60,7 @@ const Footer = () => {
             <div className="space-y-2">
               <a href="/story" className="block text-gray-400 hover:text-white transition-colors text-sm">Our Story</a>
               <a href="/science" className="block text-gray-400 hover:text-white transition-colors text-sm">Science</a>
-              <a href="#" className="block text-gray-400 hover:text-white transition-colors text-sm">Help Me Choose a Product</a>
+              
             </div>
           </div>
 
