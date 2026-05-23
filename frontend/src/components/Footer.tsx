@@ -79,8 +79,6 @@ const Footer = () => {
             <div className="space-y-2">
               <a href="/faq" className="block text-gray-400 hover:text-white transition-colors text-sm">FAQs</a>
               <a href="/contact" className="block text-gray-400 hover:text-white transition-colors text-sm">Contact Us</a>
-              <a href="#" className="block text-gray-400 hover:text-white transition-colors text-sm">Shipping & Returns</a>
-              <a href="#" className="block text-gray-400 hover:text-white transition-colors text-sm">Help Centre</a>
               <a href="/privacy" className="block text-gray-400 hover:text-white transition-colors text-sm">Privacy Policy</a>
               <a href="/terms" className="block text-gray-400 hover:text-white transition-colors text-sm">Terms & Conditions</a>
             </div>
