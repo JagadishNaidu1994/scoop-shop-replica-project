@@ -324,7 +324,7 @@ We are the wholesale arm of Nastea Rituals, we provide matcha guidance to cafes,
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             {/* Contact Form */}
             <div className="bg-gray-800 rounded-2xl p-8">
-              <h3 className="text-xl font-bold mb-6">Get in Touch</h3>
+              <h3 id="get-in-touch" className="text-xl font-bold mb-6">Get in Touch</h3>
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
                   <label className="block text-sm font-medium mb-2 text-gray-300">
