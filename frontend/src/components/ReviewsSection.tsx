@@ -6,7 +6,8 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from '@/hooks/use-toast';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
-import { sampleProductReviews } from '@/data/sampleProductReviews';
+import { ceremonialReviews } from '@/data/ceremonialReviews';
+import { japaneseClassicReviews } from '@/data/japaneseClassicReviews';
 
 type SortOption = 'latest' | 'highest' | 'lowest';
 
@@ -56,7 +57,11 @@ const ReviewsSection = ({ productId }: ReviewsSectionProps) => {
   // Use sample reviews as fallback when no DB reviews exist
   const reviews = useMemo(() => {
     if (dbReviews.length > 0) return dbReviews;
-    return sampleProductReviews.map(r => ({
+
+    // Get product-specific reviews
+    const productReviews = productId === 1 ? ceremonialReviews : japaneseClassicReviews;
+
+    return productReviews.map(r => ({
       id: r.id,
       product_id: productId,
       user_id: '',
@@ -172,9 +177,21 @@ const ReviewsSection = ({ productId }: ReviewsSectionProps) => {
           {reviews.length > 0 && (
             <div className="flex items-center justify-center gap-2 mt-3">
               <div className="flex text-yellow-400">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className={`w-5 h-5 ${i < Math.round(averageRating) ? 'fill-current' : 'text-muted-foreground/40'}`} />
-                ))}
+                {[...Array(5)].map((_, i) => {
+                  const isFilled = i < Math.floor(averageRating);
+                  const isPartial = i === Math.floor(averageRating) && averageRating % 1 !== 0;
+                  return (
+                    <div key={i} className="relative">
+                      <Star className="w-5 h-5 text-muted-foreground/40" />
+                      <div
+                        className="absolute top-0 left-0 overflow-hidden"
+                        style={{ width: isFilled ? '100%' : isPartial ? `${(averageRating % 1) * 100}%` : '0%' }}
+                      >
+                        <Star className="w-5 h-5 fill-current" />
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
               <span className="text-lg font-semibold text-foreground">{averageRating}</span>
               <span className="text-muted-foreground">based on {reviews.length} reviews</span>

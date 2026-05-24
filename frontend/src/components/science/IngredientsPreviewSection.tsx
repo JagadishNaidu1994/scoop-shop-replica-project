@@ -8,11 +8,8 @@ const IngredientsPreviewSection = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           {/* Left Content */}
           <div className="space-y-8">
-            <div className="flex items-center justify-between">
+            <div>
               <h2 className="text-4xl font-bold text-black">What goes into our products?</h2>
-              <button className="text-black hover:text-gray-600 font-medium underline">
-                View All
-              </button>
             </div>
             
             <p className="text-lg text-gray-600 leading-relaxed">

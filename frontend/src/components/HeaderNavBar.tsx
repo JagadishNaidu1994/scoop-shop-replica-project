@@ -161,7 +161,7 @@ const HeaderNavBar = () => {
             {/* Logo - Center on mobile, Left on desktop */}
             <div className="flex-shrink-0 md:order-first order-2">
               <Link to="/">
-                <h1 className="text-2xl font-bold text-black">NASTEA</h1>
+                <img src="/lovable-uploads/nastea-logo.png" alt="NASTEA" className="h-12 md:h-14 w-auto object-contain" />
               </Link>
             </div>
 

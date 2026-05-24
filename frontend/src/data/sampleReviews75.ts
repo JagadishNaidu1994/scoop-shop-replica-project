@@ -98,9 +98,10 @@ const reviewsRaw: { rating: number; comment: string }[] = [
 ];
 
 const generateDate = (index: number): string => {
-  const now = new Date();
-  const daysAgo = Math.floor(index * 3.5) + Math.floor(Math.random() * 5);
-  const date = new Date(now.getTime() - daysAgo * 24 * 60 * 60 * 1000);
+  const startDate = new Date('2026-04-20');
+  const endDate = new Date('2026-05-24');
+  const randomTime = Math.random() * (endDate.getTime() - startDate.getTime());
+  const date = new Date(startDate.getTime() + randomTime);
   return date.toISOString();
 };
 

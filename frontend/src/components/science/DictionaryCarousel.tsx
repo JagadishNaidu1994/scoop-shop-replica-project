@@ -8,7 +8,7 @@ const DictionaryCarousel = () => {
   const dictionaryTerms = [
     {
       name: "Caffeine",
-      image: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=400&h=400&fit=crop",
+      image: "/lovable-uploads/caffeine-dictionary.png",
       description: "Known as the 'Get-Up-and-Go Molecule,' caffeine has powered early mornings and late-night ideas for generations. In matcha, it shows up with a cleaner, steadier vibe—perfect for workouts, deep work, or your 'don't talk to me yet' commute.",
       tag: "Energy"
     },

@@ -54,13 +54,13 @@ const OurStory = () => {
   useImageReplacements();
 
   const [carouselSlides] = useState([
-    { src: "/lovable-uploads/dirtea-carousel-1.png", alt: "Matcha ritual", text: "Three friends, one plan: upgrade your caffeine ritual without the crashy chaos.", id: "dirtea-carousel-1" },
+    { src: "/lovable-uploads/dirtea-carousel-3.png", alt: "Matcha ritual", text: "Three friends, one plan: upgrade your caffeine ritual without the crashy chaos.", id: "dirtea-carousel-1" },
     { src: "/lovable-uploads/dirtea-carousel-2.png", alt: "Japan matcha heritage", text: "Inspired by Japan's matcha heritage - delivered with NR personality.", id: "dirtea-carousel-2" },
-    { src: "/lovable-uploads/dirtea-carousel-3.png", alt: "Kagoshima landscape", text: "We went to the source (Kagoshima) to understand what separates real matcha from green imposters.", id: "dirtea-carousel-3" },
+    { src: "/lovable-uploads/dirtea-carousel-1.png", alt: "Kagoshima landscape", text: "We went to the source (Kagoshima) to understand what separates real matcha from green imposters.", id: "dirtea-carousel-3" },
     { src: "/lovable-uploads/dirtea-carousel-4.png", alt: "Matcha leaves", text: "We chose single-origin, shade-grown, stone-milled matcha because quality is… kind of the point.", id: "dirtea-carousel-4" },
     { src: "/lovable-uploads/dirtea-carousel-5.png", alt: "Matcha preparation methods", text: "Designed to work everywhere: whisked, shaken, iced, latte'd, and café-served.", id: "dirtea-carousel-5" },
-    { src: "https://images.unsplash.com/photo-1582793988951-9aed5509eb97?w=800&h=800&fit=crop", alt: "Pure matcha leaf", text: "Pure leaf. Loud standards." },
-    { src: "/lovable-uploads/dirtea-carousel-7.png", alt: "Nastea Rituals", text: "Nastea Rituals was born.", id: "dirtea-carousel-7" },
+    { src: "/lovable-uploads/dirtea-carousel-7.png", alt: "Pure matcha leaf", text: "Pure leaf. Loud standards." },
+    { src: "https://images.unsplash.com/photo-1582793988951-9aed5509eb97?w=800&h=800&fit=crop", alt: "Nastea Rituals", text: "Nastea Rituals was born.", id: "dirtea-carousel-7" },
   ]);
 
   return (

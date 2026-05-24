@@ -6,7 +6,7 @@ const SubHeroBanner = () => {
     <section className="bg-orange-400 py-8 w-full">
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <h2 className="text-3xl lg:text-4xl font-bold text-white mb-6">
-          Heritage Power. Modern Chaos. / Ancient Ingredients. Current Chaos/Obsession
+          Heritage Power . Modern Chaos . Ancient Ingredients . Current Obsession
         </h2>
         <p className="text-white text-lg mb-6">
           Shade-grown Japanese matcha, stone-ground for clean caffeine, calm focus, and everyday glow.

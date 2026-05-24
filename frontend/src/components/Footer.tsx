@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Instagram, Facebook } from 'lucide-react';
+import { Instagram } from 'lucide-react';
 
 const Footer = () => {
   console.log("Footer component rendered");
@@ -40,16 +40,8 @@ const Footer = () => {
               </div>
             </form>
             <div className="flex space-x-4">
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                <Facebook size={20} />
-              </a>
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">
+              <a href="https://www.instagram.com/nastearituals/" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors">
                 <Instagram size={20} />
-              </a>
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
-                </svg>
               </a>
             </div>
           </div>
@@ -58,9 +50,8 @@ const Footer = () => {
           <div>
             <h4 className="text-lg font-semibold mb-4">About Us</h4>
             <div className="space-y-2">
-              <a href="/story" className="block text-gray-400 hover:text-white transition-colors text-sm">Our Story</a>
+              <a href="/our-story" className="block text-gray-400 hover:text-white transition-colors text-sm">Our Story</a>
               <a href="/science" className="block text-gray-400 hover:text-white transition-colors text-sm">Science</a>
-              <a href="#" className="block text-gray-400 hover:text-white transition-colors text-sm">Help Me Choose a Product</a>
             </div>
           </div>
 
@@ -70,9 +61,6 @@ const Footer = () => {
             <div className="space-y-2">
               <a href="/journal" className="block text-gray-400 hover:text-white transition-colors text-sm">Our Journal</a>
               <a href="/recipes" className="block text-gray-400 hover:text-white transition-colors text-sm">Recipes</a>
-              <a href="#" className="block text-gray-400 hover:text-white transition-colors text-sm">Loyalty & Rewards</a>
-              <a href="#" className="block text-gray-400 hover:text-white transition-colors text-sm">Refer a Friend</a>
-              <a href="#" className="block text-gray-400 hover:text-white transition-colors text-sm">Become an Affiliate</a>
             </div>
           </div>
 
@@ -82,9 +70,7 @@ const Footer = () => {
             <div className="space-y-2">
               <a href="/faq" className="block text-gray-400 hover:text-white transition-colors text-sm">FAQs</a>
               <a href="/contact" className="block text-gray-400 hover:text-white transition-colors text-sm">Contact Us</a>
-              <a href="#" className="block text-gray-400 hover:text-white transition-colors text-sm">Shipping & Returns</a>
-              <a href="#" className="block text-gray-400 hover:text-white transition-colors text-sm">Help Centre</a>
-              <a href="/privacy" className="block text-gray-400 hover:text-white transition-colors text-sm">Privacy Policy</a>
+              <a href="/privacy-policy" className="block text-gray-400 hover:text-white transition-colors text-sm">Privacy Policy</a>
               <a href="/terms" className="block text-gray-400 hover:text-white transition-colors text-sm">Terms & Conditions</a>
             </div>
           </div>
@@ -93,31 +79,20 @@ const Footer = () => {
           <div>
             <h4 className="text-lg font-semibold mb-4">Shop Products</h4>
             <div className="space-y-2">
-              <a href="/shop" className="block text-gray-400 hover:text-white transition-colors text-sm">Super Blends</a>
-              <a href="/shop" className="block text-gray-400 hover:text-white transition-colors text-sm">Pure Powders</a>
-              <a href="/shop" className="block text-gray-400 hover:text-white transition-colors text-sm">Gummies</a>
-              <a href="/shop" className="block text-gray-400 hover:text-white transition-colors text-sm">Stacks</a>
-              <a href="/shop" className="block text-gray-400 hover:text-white transition-colors text-sm">Accessories</a>
+              <a href="/products/1" className="block text-gray-400 hover:text-white transition-colors text-sm">Ceremonial Matcha</a>
+              <a href="/products/2" className="block text-gray-400 hover:text-white transition-colors text-sm">Classic Matcha</a>
             </div>
           </div>
         </div>
 
-        {/* Large NASTEA Branding */}
-        <div className="border-t border-gray-800 pt-1 pb-1">
-          <div className="text-center overflow-hidden">
-            <h1 className="text-[24vw] md:text-[30vw] lg:text-[26vw] font-bold leading-none tracking-tighter text-white">
-              NASTEA
-            </h1>
+        {/* Large NASTEA Logo */}
+        <div className="border-t border-gray-800 pt-8 pb-8">
+          <div className="flex justify-center mb-8 w-full -mx-4 sm:-mx-6 lg:-mx-8">
+            <img src="/lovable-uploads/footer-logo.png" alt="NASTEA Footer Logo" className="w-full h-auto object-contain px-4 sm:px-6 lg:px-8" style={{ maxHeight: '400px' }} />
           </div>
-          <div className="flex flex-col md:flex-row justify-between items-center pt-4">
+          <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="text-xs text-gray-500 mb-4 md:mb-0">
-              NASTEA. NASTEA is a trademark of NASTEA Limited.
-            </div>
-            <div className="flex gap-2 flex-wrap justify-center">
-              <img src="https://upload.wikimedia.org/wikipedia/commons/b/b7/American_Express_logo_%282018%29.svg" alt="American Express" className="h-6" />
-              <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" alt="PayPal" className="h-6" />
-              <img src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg" alt="Visa" className="h-6" />
-              <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" alt="Mastercard" className="h-6" />
+              NASTEA is a trademark of NASTEA Limited.
             </div>
           </div>
         </div>

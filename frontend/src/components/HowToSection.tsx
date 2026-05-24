@@ -35,9 +35,9 @@ const HowToSection: React.FC = () => {
       <div className="w-full px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
         {/* Left side */}
-        <div className="flex flex-col h-[800px] rounded-lg" style={{ backgroundColor: '#F5F5F0' }}>
+        <div className="flex flex-col h-[700px] rounded-lg" style={{ backgroundColor: '#F5F5F0' }}>
           {/* 4 Thumbnails row */}
-          <div className="flex gap-3 p-6 pb-0">
+          <div className="hidden flex gap-3 p-6 pb-0">
             {howToSteps.map((step, i) => (
               <button
                 key={i}
@@ -70,42 +70,42 @@ const HowToSection: React.FC = () => {
                 How to NASTEA
               </p>
               <h3
-                className="text-2xl md:text-3xl lg:text-4xl font-bold leading-tight"
+                className="text-2xl md:text-3xl lg:text-4xl font-bold leading-tight mb-6"
                 style={{ color: '#0D1B2A' }}
               >
                 {howToSteps[selected].title}
               </h3>
+              {/* Navigation - moved to text side */}
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={prev}
+                  className="w-9 h-9 flex items-center justify-center rounded-full text-white transition-colors hover:opacity-80"
+                  style={{ backgroundColor: '#0D1B2A' }}
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                </button>
+                <span className="text-sm font-medium" style={{ color: '#0D1B2A' }}>
+                  {selected + 1}/{howToSteps.length}
+                </span>
+                <button
+                  onClick={next}
+                  className="w-9 h-9 flex items-center justify-center rounded-full text-white transition-colors hover:opacity-80"
+                  style={{ backgroundColor: '#0D1B2A' }}
+                >
+                  <ChevronRight className="w-4 h-4" />
+                </button>
+              </div>
             </div>
           </div>
         </div>
 
         {/* Right side - large image */}
-        <div className="relative h-[800px]" style={{ backgroundColor: '#F5F5F0' }}>
+        <div className="relative h-[700px]" style={{ backgroundColor: '#F5F5F0' }}>
           <img
             src={howToSteps[selected].image}
             alt={howToSteps[selected].title}
             className="w-full h-full rounded-lg transition-all duration-300 object-cover mx-0 px-0"
           />
-          {/* Navigation */}
-          <div className="absolute bottom-6 right-6 flex items-center gap-3">
-            <button
-              onClick={prev}
-              className="w-9 h-9 flex items-center justify-center rounded-full text-white transition-colors hover:opacity-80"
-              style={{ backgroundColor: '#0D1B2A' }}
-            >
-              <ChevronLeft className="w-4 h-4" />
-            </button>
-            <span className="text-sm font-medium" style={{ color: '#0D1B2A' }}>
-              {selected + 1}/{howToSteps.length}
-            </span>
-            <button
-              onClick={next}
-              className="w-9 h-9 flex items-center justify-center rounded-full text-white transition-colors hover:opacity-80"
-              style={{ backgroundColor: '#0D1B2A' }}
-            >
-              <ChevronRight className="w-4 h-4" />
-            </button>
-          </div>
         </div>
         </div>
       </div>

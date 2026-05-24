@@ -106,10 +106,10 @@ const ProductDetail = () => {
 
   const getDiscountMultiplier = () => {
     if (purchaseType === 'onetime') return 1;
-    return subscriptionFrequency === '4weeks' ? 0.8 : 0.85;
+    return subscriptionFrequency === '4weeks' ? 0.85 : 0.85;
   };
 
-  const getDiscountLabel = () => subscriptionFrequency === '4weeks' ? '20%' : '15%';
+  const getDiscountLabel = () => subscriptionFrequency === '4weeks' ? '15%' : '15%';
 
   const currentPrice = product ? product.price * getDiscountMultiplier() : 0;
   const pricePerServing = product ? (currentPrice / 30).toFixed(2) : '0';
@@ -270,11 +270,6 @@ const ProductDetail = () => {
                 <span>30 servings</span>
               </div>
 
-              {/* 3.4 Description */}
-              <p className="text-[15px] leading-relaxed" style={{ color: '#6B7280' }}>
-                {product.description || 'Pure and organic Lion\'s Mane mushroom extract powder with organic zinc.'}
-              </p>
-
               {/* 3.5 Benefit Tags */}
               <div className="flex flex-wrap gap-[10px]">
                 {(product.id === 2
@@ -413,6 +408,9 @@ const ProductDetail = () => {
                     </div>
                     <span className="text-lg font-bold" style={{ color: '#0D1B2A' }}>₹{product.price}</span>
                   </div>
+                  {purchaseType === 'onetime' && (
+                    <span className="text-xs text-green-600 font-medium">First order 20% off coupon available at checkout</span>
+                  )}
 
                   {purchaseType === 'onetime' && <>
                     <div className="flex items-center gap-3" onClick={(e) => e.stopPropagation()}>
@@ -438,12 +436,16 @@ const ProductDetail = () => {
 
               {/* ===== 7. ACCORDION SECTIONS ===== */}
               <div className="space-y-0">
-                {[
-                { label: 'Why choose NASTEA', open: whyChooseOpen, setOpen: setWhyChooseOpen, content: 'Japan-sourced, shade-grown, stone-milled ceremonial matcha. Organic, lab-tested, no fillers. Clean energy meets calm focus — the way matcha was meant to be.' },
-                { label: 'Ingredients', open: ingredientsOpen, setOpen: setIngredientsOpen, content: 'Organic ceremonial grade matcha (Camellia sinensis), organic Lion\'s Mane extract, organic Tremella extract, organic zinc, B-vitamin complex.' },
-                { label: 'The Science', open: scienceOpen, setOpen: setScienceOpen, content: 'Matcha naturally contains caffeine + L-theanine — a combo linked to calmer, more focused alertness. You consume the whole leaf, getting a richer concentration of plant compounds.' },
-                { label: 'How to Use', open: howToUseOpen, setOpen: setHowToUseOpen, content: '1. Whisk 2-3g with a splash of warm water until smooth.\n2. Add ice (or keep hot).\n3. Pour in milk of choice.\n4. Stir and enjoy.' }].
-                map((item, idx) =>
+                {productId === 1 ? [
+                { label: 'Why choose Nastea Rituals', open: whyChooseOpen, setOpen: setWhyChooseOpen, content: 'Nastea Rituals isn\'t "just matcha." It\'s an Organic Ceremonial Japanese matcha built for real life - smooth enough to sip straight, bold enough to cut through milk, and vibrant enough to make every cup look like a flex. We source Japan-grown matcha (hello, Kagoshima), keep it clean, and obsess over the things that actually matter: flavour, colour, and consistency.\n\nMost matcha brands whisper and hope you don\'t notice the bitterness. We don\'t. Our matcha is shade-grown and stone-milled for a rounded, umami-forward taste that feels indulgent without being sugary. It\'s the kind of clean caffeine ritual that fits your mornings, your workouts, your deep-work blocks, and your "I\'m trying to be healthy but still fun" era - without the crashy chaos.' },
+                { label: 'Ingredients', open: ingredientsOpen, setOpen: setIngredientsOpen, content: 'Organic Ceremonial Grade Matcha' },
+                { label: 'The Science', open: scienceOpen, setOpen: setScienceOpen, content: 'Matcha comes from the Camellia sinensis plant (same as green tea), but it\'s made differently: the leaves are shade-grown, then finely milled into a powder. That means you\'re not just steeping tea and tossing the leaves - you\'re consuming the leaf itself. Result: a richer, more concentrated matcha experience in both taste and naturally occurring compounds.\n\nMatcha\'s energy also tends to feel… more composed. That\'s because matcha naturally contains caffeine + L-theanine - a tea amino acid often linked to a calmer, more focused "alert" feel compared to caffeine drinks\' spike-and-crash reputation. Translation: steady energy, cleaner headspace, fewer "why am I vibrating?" moments.\n\nDepending on the product you\'re drinking, matcha also contains a mix of plant compounds that shape how it tastes and why it\'s been respected for centuries:\n\n• L-theanine - associated with calm-focus vibes (especially alongside caffeine)\n• Catechins - the crisp, slightly bitter plant compounds in green tea (yes, the "real matcha" taste cue)\n• Chlorophyll - the pigment that makes matcha that vivid, neon-clean green (shade-growing helps)\n\nIf you\'re looking at functional blends that pair matcha with other ingredients (like mushrooms or vitamins), the goal is usually to build on matcha\'s natural "calm energy" profile - but the core is still the same: ceremonial matcha done properly, as a daily ritual that feels good and tastes even better.' },
+                { label: 'How to Nastea', open: howToUseOpen, setOpen: setHowToUseOpen, content: '1. Whisk 3g NR Matcha with a splash of warm water until smooth + frothy.\n2. Fill a glass with ice (skip ice if you want it hot).\n3. Pour in milk of choice (almond/oat milk is elite).\n4. Top with the whisked matcha, stir, sip like you\'ve got plans.' }]
+                : [
+                { label: 'Why choose Nastea Rituals', open: whyChooseOpen, setOpen: setWhyChooseOpen, content: 'Japanese Classic Matcha is our everyday workhorse - premium Japanese matcha built to perform in the real world. It\'s smooth, vibrant, and consistent enough for daily lattes, iced drinks, tonics, and café menus that can\'t afford "batch roulette." We source Japan-grown matcha (hello, Kagoshima), keep it clean, and obsess over the things that matter in-cup: flavour, colour, and reliability.\n\nMost "premium" matcha is either bitter, dull, or disappears in milk. Ours doesn\'t. Japanese Classic is shade-grown and stone-milled to keep the cup balanced and creamy - the kind of matcha you can drink every day without needing a personality transplant. Clean caffeine. Zero boring. All standards.' },
+                { label: 'Ingredients', open: ingredientsOpen, setOpen: setIngredientsOpen, content: 'Japanese Classic Grade Matcha' },
+                { label: 'The Science', open: scienceOpen, setOpen: setScienceOpen, content: 'Matcha comes from the Camellia sinensis plant (same as green tea), but it\'s made differently: the leaves are shade-grown, then finely milled into a powder. That means you\'re not just steeping tea and tossing the leaves - you\'re consuming the leaf itself. Result: a richer, more concentrated matcha experience in both taste and naturally occurring compounds.\n\nMatcha\'s energy also tends to feel… more composed. That\'s because matcha naturally contains caffeine + L-theanine - a tea amino acid often linked to a calmer, more focused "alert" feel compared to coffee\'s spike-and-crash reputation. Translation: steady energy, cleaner headspace, fewer "why am I vibrating?" moments.\n\nMatcha also contains plant compounds that shape how it tastes and why it\'s been respected for centuries:\n\n• L-theanine - associated with calm-focus vibes (especially alongside caffeine)\n• Catechins - the crisp, slightly bitter plant compounds in green tea (aka the "real matcha" taste cue)\n• Chlorophyll - the pigment behind that vivid green colour (shade-growing helps)' },
+                { label: 'How to Nastea', open: howToUseOpen, setOpen: setHowToUseOpen, content: 'Whisk 3g NR Matcha with a splash of warm water until smooth + frothy.\n\nFill a glass with ice (skip ice if you want it hot).\n\nPour in milk of choice (oat is elite; coconut is a close second).\n\nTop with the whisked matcha, stir, sip like you\'ve got plans.\n\nPure ingredients, powerful rituals.' }].map((item, idx) =>
                 <Collapsible key={idx} open={item.open} onOpenChange={item.setOpen}>
                     <CollapsibleTrigger className="flex items-center justify-between w-full py-4 text-left" style={{ borderTop: '1px solid #E5E7EB' }}>
                       <span className="text-sm font-semibold" style={{ color: '#0D1B2A' }}>{item.label}</span>
@@ -464,24 +466,40 @@ const ProductDetail = () => {
           <div className="bg-white">
 
             {/* Ingredient Texture */}
-            <section className="py-10 bg-white w-full">
+            <section className="py-20 bg-gray-100 w-full">
               <div className="w-full px-4 sm:px-6 lg:px-8">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
                   <div className="relative">
-                    <AdminImageUpload src="/lovable-uploads/everyday-essential.jpg" alt="Ingredient texture" className="w-full h-[700px] rounded-lg object-cover" imagePath="texture-shot" />
+                    <AdminImageUpload src="/lovable-uploads/everyday-essential.jpg" alt="Everyday essential" className="w-full h-[700px] rounded-lg object-cover" imagePath="everyday-essential" />
                   </div>
                   <div className="flex flex-col h-[700px]">
-                    <h3 className="text-4xl lg:text-5xl font-bold" style={{ color: '#0D1B2A' }}>Your everyday essential for sharper focus and improved productivity</h3>
+                    <div>
+                      <p className="text-sm font-medium mb-4" style={{ color: '#6B7280' }}>Your everyday essential</p>
+                      <h2 className="text-5xl lg:text-6xl font-bold mb-12 leading-tight" style={{ color: '#0D1B2A' }}>For calm energy and better focus</h2>
+                    </div>
+
                     <div className="flex-1"></div>
-                    <div className="space-y-6">
-                      <p className="text-lg leading-relaxed border-t border-gray-300 pt-6" style={{ color: '#6B7280' }}>Ceremonial-grade matcha paired with functional mushrooms for clean energy, calm clarity, and nourished skin—all in one ritual.</p>
-                      <div className="space-y-4 border-t border-gray-300 pt-6">
-                        {['Focus', 'Mental clarity', 'Cognitive performance'].map((label) =>
-                        <div key={label} className="flex items-center gap-4">
-                            <span className="w-3 h-3 rounded-full inline-block flex-shrink-0" style={{ backgroundColor: '#0D1B2A' }} />
-                            <p className="font-medium text-base" style={{ color: '#0D1B2A' }}>{label}</p>
-                          </div>
-                        )}
+
+                    <div className="space-y-8">
+                      <div className="border-b border-gray-400 pb-8">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                          <p className="font-bold text-lg" style={{ color: '#0D1B2A' }}>Good for:</p>
+                          <p className="md:col-span-2 text-base leading-relaxed" style={{ color: '#0D1B2A' }}>Baking and confectionery, iced matcha, and café-style drinks - steady energy for workdays, workouts, and "I need to lock in" moments, without the crashy chaos.</p>
+                        </div>
+                      </div>
+
+                      <div className="border-b border-gray-400 pb-8">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                          <p className="font-bold text-lg" style={{ color: '#0D1B2A' }}>Tastes like:</p>
+                          <p className="md:col-span-2 text-base leading-relaxed" style={{ color: '#0D1B2A' }}>Smooth and balanced with soft grassy notes and a clean finish - designed to taste great in milk, stay present in iced drinks, and never go swampy.</p>
+                        </div>
+                      </div>
+
+                      <div className="border-b border-gray-400 pb-8">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                          <p className="font-bold text-lg" style={{ color: '#0D1B2A' }}>Did you know?</p>
+                          <p className="md:col-span-2 text-base leading-relaxed" style={{ color: '#0D1B2A' }}>In Japan, matcha isn't a "wellness trend" - it's a ritual. The modern part is just us choosing to make it delicious and consistent.</p>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -502,7 +520,7 @@ const ProductDetail = () => {
                   <div className="flex flex-col h-[700px]">
                     <div>
                       <p className="text-sm font-medium mb-2" style={{ color: '#6B7280' }}>Product Benefits</p>
-                      <h3 className="text-5xl font-bold" style={{ color: '#0D1B2A' }}>How it Compares</h3>
+                      <h3 className="text-5xl font-bold" style={{ color: '#0D1B2A' }}>Why Nastea's matcha is better?</h3>
                     </div>
 
                     {/* Large blank space to push content down */}
@@ -511,19 +529,18 @@ const ProductDetail = () => {
                     {/* Text blocks */}
                     <div className="space-y-8">
                       <div className="border-t border-gray-300 pt-6">
-                        <p className="font-bold mb-4 text-lg" style={{ color: '#0D1B2A' }}>NASTEA vs Coffee</p>
-                        <div className="space-y-4">
-                          <div className="flex items-start gap-4"><CheckCircle className="w-5 h-5 mt-1 flex-shrink-0" style={{ color: '#0D1B2A' }} /><p className="text-base leading-relaxed" style={{ color: '#6B7280' }}>Calm, sustained energy without jitters.</p></div>
-                          <div className="flex items-start gap-4"><CheckCircle className="w-5 h-5 mt-1 flex-shrink-0" style={{ color: '#0D1B2A' }} /><p className="text-base leading-relaxed" style={{ color: '#6B7280' }}>Adaptogens to support focus and immunity.</p></div>
-                        </div>
+                        <p className="font-bold mb-4 text-lg" style={{ color: '#0D1B2A' }}>What is Nastea matcha?</p>
+                        <p className="text-base leading-relaxed" style={{ color: '#6B7280' }}>Matcha is powdered green tea made from shade-grown leaves that are stone-milled into a vivid green powder. Unlike brewed green tea, you're consuming the leaf itself - which is why it feels more like a ritual than a drink. With Nastea Rituals, you're getting premium Japanese matcha chosen for a smooth, vibrant cup that lives up to the hype.</p>
                       </div>
 
                       <div className="border-t border-gray-300 pt-6">
-                        <p className="font-bold mb-4 text-lg" style={{ color: '#0D1B2A' }}>NASTEA vs Synthetic Nootropics</p>
-                        <div className="space-y-4">
-                          <div className="flex items-start gap-4"><CheckCircle className="w-5 h-5 mt-1 flex-shrink-0" style={{ color: '#0D1B2A' }} /><p className="text-base leading-relaxed" style={{ color: '#6B7280' }}>Natural ingredients, lab-tested for purity.</p></div>
-                          <div className="flex items-start gap-4"><CheckCircle className="w-5 h-5 mt-1 flex-shrink-0" style={{ color: '#0D1B2A' }} /><p className="text-base leading-relaxed" style={{ color: '#6B7280' }}>No crash, no artificial stimulants.</p></div>
-                        </div>
+                        <p className="font-bold mb-4 text-lg" style={{ color: '#0D1B2A' }}>Matcha benefits (the real ones)</p>
+                        <p className="text-base leading-relaxed" style={{ color: '#6B7280' }}>Matcha is loved for its clean caffeine and naturally occurring tea compounds that many people associate with steadier, more focused energy. Compared to coffee, it can feel more "calm alert" than "wired." Japanese Classic is built as the daily option - easy to make, easy to love, and strong enough to hold its own in milk.</p>
+                      </div>
+
+                      <div className="border-t border-gray-300 pt-6">
+                        <p className="font-bold mb-4 text-lg" style={{ color: '#0D1B2A' }}>Where does it fit in your routine?</p>
+                        <p className="text-base leading-relaxed" style={{ color: '#6B7280' }}>Morning is the obvious move if you want energy that doesn't bully your nervous system. Early afternoon works just as well for a clean pick-me-up without risking sleep. This one shines as your daily latte - hot, iced, oat milk, coconut, even tonics.</p>
                       </div>
                     </div>
                   </div>
@@ -537,6 +554,7 @@ const ProductDetail = () => {
             {/* Recipe Cards */}
             <section className="py-20 bg-white w-full">
               <div className="w-full px-4 sm:px-6 lg:px-8 space-y-20">
+                {productId === 1 ? (
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
                   <div className="relative">
                     <AdminImageUpload src="/lovable-uploads/65581248-fb35-4b2f-8b55-04877e634119.png" alt="The Focus Coffee" className="w-full h-[700px] rounded-lg object-cover" imagePath="focus-coffee" />
@@ -561,7 +579,33 @@ const ProductDetail = () => {
                     </div>
                   </div>
                 </div>
+                ) : (
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                  <div className="relative">
+                    <AdminImageUpload src="/lovable-uploads/matcha-cheesecake.png" alt="No-bake matcha cheesecake" className="w-full h-[700px] rounded-lg object-cover" imagePath="cheesecake" />
+                  </div>
+                  <div className="flex flex-col h-[700px]">
+                    <div>
+                      <p className="text-sm font-medium mb-2" style={{ color: '#6B7280' }}>Founder's Favourite</p>
+                      <h4 className="text-4xl lg:text-5xl font-bold" style={{ color: '#0D1B2A' }}>No-bake matcha cheesecake</h4>
+                    </div>
+                    <div className="flex-1"></div>
+                    <div className="space-y-6">
+                      <div className="border-t border-gray-300 pt-6">
+                        <h5 className="text-lg font-bold mb-4" style={{ color: '#0D1B2A' }}>To make:</h5>
+                        <ul className="space-y-3 text-base" style={{ color: '#6B7280' }}>
+                          <li>• Mix 150g crushed graham crackers/digestive biscuits with 60g melted unsalted butter, press into a 6-inch springform pan, and chill.</li>
+                          <li>• Beat 400g cream cheese with 100g powdered sugar until smooth; in a separate bowl, whip 200ml heavy cream to stiff peaks.</li>
+                          <li>• Fold 15g sifted Nastea Classic Matcha into the cream cheese mixture, then gently fold in the whipped cream.</li>
+                          <li>• Pour over the crust, smooth the top, and refrigerate for at least 6 hours (overnight preferred).</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                )}
 
+                {productId === 1 ? (
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
                   <div className="flex flex-col h-[700px] order-2 lg:order-1">
                     <div>
@@ -586,6 +630,31 @@ const ProductDetail = () => {
                     <AdminImageUpload src="/images/product-latte.jpg" alt="The Focus Smoothie" className="w-full h-[700px] rounded-lg object-cover" imagePath="latte-image" />
                   </div>
                 </div>
+                ) : (
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                  <div className="flex flex-col h-[700px] order-2 lg:order-1">
+                    <div>
+                      <p className="text-sm font-medium mb-2" style={{ color: '#6B7280' }}>Easy Bake</p>
+                      <h4 className="text-4xl lg:text-5xl font-bold" style={{ color: '#0D1B2A' }}>White chocolate matcha cookies</h4>
+                    </div>
+                    <div className="flex-1"></div>
+                    <div className="space-y-6">
+                      <div className="border-t border-gray-300 pt-6">
+                        <h5 className="text-lg font-bold mb-4" style={{ color: '#0D1B2A' }}>To make:</h5>
+                        <ul className="space-y-3 text-base" style={{ color: '#6B7280' }}>
+                          <li>• Beat 115g softened butter with 100g sugar until light and fluffy, then add 1 egg and mix well.</li>
+                          <li>• Sift in 190g all-purpose flour, 12g Nastea Culinary Matcha, 1/2 tsp baking soda, and 1/4 tsp salt, then fold into a green dough.</li>
+                          <li>• Stir in 100g white chocolate chips.</li>
+                          <li>• Scoop into 2-tbsp balls and bake at 175°C for 8–10 minutes — keep them soft and vibrant green.</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="relative order-1 lg:order-2">
+                    <AdminImageUpload src="/lovable-uploads/matcha-cookies.png" alt="White chocolate matcha cookies" className="w-full h-[700px] rounded-lg object-cover" imagePath="cookies-image" />
+                  </div>
+                </div>
+                )}
               </div>
             </section>
 

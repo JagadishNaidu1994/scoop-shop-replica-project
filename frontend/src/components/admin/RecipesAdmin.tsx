@@ -75,8 +75,6 @@ const RecipesAdmin = () => {
     e.preventDefault();
 
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-
       const recipeData: any = {
         title: formData.title,
         description: formData.description || null,
@@ -93,7 +91,8 @@ const RecipesAdmin = () => {
         const { error } = await supabase
           .from('recipes')
           .update(recipeData)
-          .eq('id', editingRecipe.id);
+          .eq('id', editingRecipe.id)
+          .select();
 
         if (error) {
           console.error('Update error details:', error);
@@ -101,10 +100,10 @@ const RecipesAdmin = () => {
         }
         toast({ title: "Success", description: "Recipe updated successfully" });
       } else {
-        recipeData.created_by = user?.id;
         const { error } = await supabase
           .from('recipes')
-          .insert([recipeData]);
+          .insert([recipeData])
+          .select();
 
         if (error) {
           console.error('Insert error details:', error);

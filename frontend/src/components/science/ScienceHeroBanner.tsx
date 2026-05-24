@@ -3,8 +3,8 @@ import React from 'react';
 const ScienceHeroBanner = () => {
   return (
     <section className="relative w-full h-[400px] md:h-[500px] overflow-hidden">
-      <img 
-        src="/lovable-uploads/NDN00951.jpg" 
+      <img
+        src="/lovable-uploads/NDN00951.jpg"
         alt="Matcha whisk in bowl"
         className="w-full h-full object-cover"
       />

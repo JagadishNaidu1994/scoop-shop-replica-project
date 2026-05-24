@@ -37,7 +37,7 @@ const HeroSection = () => {
               onClick={handleShopClick}
               className="bg-white text-black px-8 py-3 text-base rounded-full hover:bg-white/90 transition-colors font-semibold"
             >
-              SHOP STARTER BUNDLES
+              Shop Nastea
             </Button>
           </div>
         </div>

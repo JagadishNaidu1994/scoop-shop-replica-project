@@ -43,11 +43,17 @@ const Shop = () => {
         setProducts([]);
       } else {
         // Filter out products with massive base64 images (> 5KB) and use placeholder
-        const processedProducts = (data || []).map(product => ({
+        let processedProducts = (data || []).map(product => ({
           ...product,
           primary_image: isValidImageUrl(product.primary_image) ? product.primary_image : '/placeholder.svg',
           hover_image: isValidImageUrl(product.hover_image) ? product.hover_image : null
         }));
+
+        // Swap first 2 products
+        if (processedProducts.length >= 2) {
+          [processedProducts[0], processedProducts[1]] = [processedProducts[1], processedProducts[0]];
+        }
+
         setProducts(processedProducts);
       }
     } catch (error) {
@@ -94,10 +100,6 @@ const Shop = () => {
           <p className="responsive-text text-gray-600">
             Discover our premium collection of matcha and wellness products
           </p>
-          <div className="flex items-center space-x-2 text-xs text-gray-600">
-            <Truck className="w-4 h-4 text-green-600" />
-            <span>Free shipping over ₹50</span>
-          </div>
         </div>
 
         <ProductGrid products={products} />

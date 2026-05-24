@@ -30,6 +30,7 @@ import OurStory from "./pages/OurStory";
 import Wholesale from "./pages/Wholesale";
 import ReferFriend from "./pages/ReferFriend";
 import TermsOfService from "./pages/TermsOfService";
+import TermsAndConditions from "./pages/TermsAndConditions";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import ReturnPolicy from "./pages/ReturnPolicy";
 import ResetPassword from "./pages/ResetPassword";
@@ -76,6 +77,7 @@ const App = () => {
                         <Route path="/wholesale" element={<Wholesale />} />
                         <Route path="/refer-friend" element={<ReferFriend />} />
                         <Route path="/terms-of-service" element={<TermsOfService />} />
+                        <Route path="/terms" element={<TermsAndConditions />} />
                         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
                         <Route path="/return-policy" element={<ReturnPolicy />} />
                         <Route path="/reset-password" element={<ResetPassword />} />

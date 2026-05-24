@@ -4,7 +4,6 @@ import Footer from '@/components/Footer';
 import MatchaLoadingAnimation from '@/components/MatchaLoadingAnimation';
 import { supabase } from '@/integrations/supabase/client';
 import { Link } from 'react-router-dom';
-import { useImageReplacements } from '@/hooks/useImageReplacements';
 interface Recipe {
   id: string;
   title: string;
@@ -16,7 +15,6 @@ interface Recipe {
 const Recipes = () => {
   const [dbRecipes, setDbRecipes] = useState<Recipe[]>([]);
   const [loading, setLoading] = useState(true);
-  useImageReplacements();
 
   useEffect(() => {
     fetchRecipes();
@@ -26,9 +24,9 @@ const Recipes = () => {
       const {
         data,
         error
-      } = await supabase.from('recipes').select('*').eq('is_published', true).order('created_at', {
+      } = await supabase.from('recipes').select('id, title, description, image_url, category, read_time').eq('is_published', true).order('created_at', {
         ascending: false
-      });
+      }).limit(50);
       if (error) {
         console.error('Error fetching recipes:', error);
         setDbRecipes([]);

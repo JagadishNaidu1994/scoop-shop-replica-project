@@ -90,7 +90,7 @@ const ProductShowcaseGrid = () => {
             
             {/* Image Counter */}
             <div className="absolute bottom-4 right-4 bg-white/80 backdrop-blur-sm px-3 py-1 rounded-full text-sm font-medium">
-              {selectedImage + 1}/3
+              {selectedImage + 1}/{products.length}
             </div>
           </div>
         </div>

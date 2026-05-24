@@ -59,33 +59,35 @@ const steps: ScienceStep[] = [
 
 const ScienceStepsGrid = () => {
   return (
-    <section className="bg-white pt-4 sm:pt-6 md:pt-8 pb-14 sm:pb-16 md:pb-20">
-      <div className="w-full px-0">
-        <div className="space-y-6 sm:space-y-8 md:space-y-10">
+    <section className="bg-white py-20 w-full">
+      <div className="w-full px-4 sm:px-6 lg:px-8">
+        <div className="space-y-20">
           {steps.map((step) => {
-            const textOrder = step.reverse ? 'order-2' : 'order-1';
-            const imageOrder = step.reverse ? 'order-1' : 'order-2';
+            const imageOrder = step.reverse ? 'order-2' : 'order-1';
+            const textOrder = step.reverse ? 'order-1' : 'order-2';
 
             return (
-              <article key={step.title} className="grid grid-cols-2 items-stretch gap-0">
-                <div className={imageOrder}>
+              <article key={step.title} className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                <div className={`${imageOrder}`}>
                   <img
                     src={step.image}
                     alt={step.title}
-                    className="h-full min-h-[240px] w-full object-cover sm:min-h-[320px] md:min-h-[420px] lg:min-h-[520px]"
+                    className="h-full min-h-[240px] w-full object-cover sm:min-h-[320px] md:min-h-[420px] lg:min-h-[520px] rounded-lg"
                   />
                 </div>
 
-                <div className={`flex items-center ${textOrder}`}>
-                  <div className="w-full px-4 py-6 sm:px-8 sm:py-8 md:px-10 md:py-10 lg:px-12">
-                    <h3 className="text-sm font-semibold leading-snug text-black sm:text-xl md:text-[2rem] md:leading-tight">
+                <div className={`space-y-8 ${textOrder}`}>
+                  <div>
+                    <h3 className="text-4xl font-bold text-black">
                       {step.title}
                     </h3>
-                    <div className="mt-3 space-y-2 text-[10px] leading-[1.5] text-black/80 sm:mt-4 sm:text-sm sm:leading-7 md:text-xl md:leading-10">
-                      {step.body.map((paragraph) => (
-                        <p key={paragraph}>{paragraph}</p>
-                      ))}
-                    </div>
+                  </div>
+                  <div className="space-y-4">
+                    {step.body.map((paragraph) => (
+                      <p key={paragraph} className="text-lg text-gray-600 leading-relaxed">
+                        {paragraph}
+                      </p>
+                    ))}
                   </div>
                 </div>
               </article>

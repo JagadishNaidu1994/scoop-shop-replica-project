@@ -27,7 +27,7 @@ const FoundersSection = () => {
                 Founded by three friends who refused to settle for mid.
               </h2>
               <p className="text-lg text-gray-700 leading-relaxed">
-                We tried to green powders, we tried to "ceremonial" that wasn't, and we tried pretending it didn't matter. It did. So we built NR around one rule: if it's not smooth, vibrant, and consistent, it's not coming home with us.
+                We tried green powders, we tried "ceremonial" that wasn't, and we tried pretending it didn't matter. It did. So we built NR around one rule: if it's not smooth, vibrant, and consistent, it's not coming home with us.
               </p>
             </div>
 
