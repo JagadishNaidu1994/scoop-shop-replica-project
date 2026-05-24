@@ -38,7 +38,7 @@ serve(async (req: Request) => {
     }
     const userId = user.id;
 
-    const { shipping_cost = 0 } = await req.json();
+    const { shipping_cost = 0, discount_amount = 0 } = await req.json();
 
     // Fetch cart items from DB — never trust frontend amount
     const { data: cartItems, error: cartError } = await supabase
@@ -97,7 +97,7 @@ serve(async (req: Request) => {
       subtotal += unitPrice * item.quantity;
     }
 
-    const totalAmount = subtotal + shipping_cost;
+    const totalAmount = subtotal - discount_amount + shipping_cost;
     const amountInPaise = Math.round(totalAmount * 100);
 
     // Create Razorpay order

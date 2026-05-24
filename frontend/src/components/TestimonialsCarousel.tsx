@@ -88,21 +88,21 @@ const TestimonialsCarousel = () => {
 
                   if (isFilled) {
                     return (
-                      <svg key={i} className="w-5 h-5 md:w-6 md:h-6 text-black" viewBox="0 0 24 24" fill="black" stroke="black" strokeWidth="0.5">
+                      <svg key={i} className="w-5 h-5 md:w-6 md:h-6" viewBox="0 0 24 24" strokeWidth="0.5" style={{ fill: 'rgba(101, 36, 131, 1)', stroke: 'rgba(101, 36, 131, 1)' }}>
                         <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
                       </svg>
                     );
                   } else if (isPartial) {
                     return (
                       <div key={i} className="relative inline-block">
-                        <svg className="w-5 h-5 md:w-6 md:h-6" viewBox="0 0 24 24" fill="white" stroke="black" strokeWidth="0.5">
+                        <svg className="w-5 h-5 md:w-6 md:h-6" viewBox="0 0 24 24" fill="white" stroke="rgba(101, 36, 131, 1)" strokeWidth="0.5">
                           <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
                         </svg>
                         <div
                           className="absolute top-0 left-0 overflow-hidden"
                           style={{ width: `${(rating % 1) * 100}%` }}
                         >
-                          <svg className="w-5 h-5 md:w-6 md:h-6" viewBox="0 0 24 24" fill="black" stroke="black" strokeWidth="0.5">
+                          <svg className="w-5 h-5 md:w-6 md:h-6" viewBox="0 0 24 24" strokeWidth="0.5" style={{ fill: 'rgba(101, 36, 131, 1)', stroke: 'rgba(101, 36, 131, 1)' }}>
                             <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
                           </svg>
                         </div>
@@ -110,7 +110,7 @@ const TestimonialsCarousel = () => {
                     );
                   } else {
                     return (
-                      <svg key={i} className="w-5 h-5 md:w-6 md:h-6" viewBox="0 0 24 24" fill="white" stroke="black" strokeWidth="0.5">
+                      <svg key={i} className="w-5 h-5 md:w-6 md:h-6" viewBox="0 0 24 24" fill="white" stroke="rgba(101, 36, 131, 1)" strokeWidth="0.5">
                         <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
                       </svg>
                     );

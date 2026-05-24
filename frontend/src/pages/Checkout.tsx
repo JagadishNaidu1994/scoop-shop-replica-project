@@ -196,7 +196,7 @@ const Checkout = () => {
     setLoading(true);
     try {
       const { data: orderData, error: orderError } = await supabase.functions.invoke('create-razorpay-order', {
-        body: { shipping_address: shippingAddress, shipping_cost: shippingCost }
+        body: { shipping_address: shippingAddress, shipping_cost: shippingCost, coupon_id: appliedCoupon?.id || null, discount_amount: discount }
       });
       if (orderError || !orderData?.razorpay_order_id) throw new Error(orderData?.error || orderError?.message || 'Failed to create payment order');
       const options = {
@@ -222,7 +222,8 @@ const Checkout = () => {
           razorpay_order_id: response.razorpay_order_id, razorpay_payment_id: response.razorpay_payment_id,
           razorpay_signature: response.razorpay_signature, shipping_address: shippingAddress,
           shipping_cost: shippingCost, is_subscription: hasSubscription,
-          subscription_frequency: subscriptionItem?.subscription_frequency || null
+          subscription_frequency: subscriptionItem?.subscription_frequency || null,
+          coupon_id: appliedCoupon?.id || null, discount_amount: discount
         }
       });
       if (verifyError || !verifyData?.success) throw new Error(verifyData?.error || verifyError?.message || 'Payment verification failed');

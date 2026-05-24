@@ -56,7 +56,7 @@ const ProductShowcaseGrid = () => {
             {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row gap-4">
               <a href="/shop">
-                <button className="bg-black text-white px-8 py-3 rounded-full text-lg font-semibold hover:bg-gray-800 transition-colors">
+                <button className="text-white px-8 py-3 rounded-full text-lg font-semibold hover:opacity-90 transition-colors" style={{ backgroundColor: 'rgba(101, 36, 131, 1)' }}>
                   Shop Now
                 </button>
               </a>

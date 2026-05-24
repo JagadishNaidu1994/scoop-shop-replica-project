@@ -52,6 +52,8 @@ serve(async (req: Request) => {
       shipping_cost = 0,
       is_subscription = false,
       subscription_frequency = null,
+      coupon_id = null,
+      discount_amount = 0,
     } = await req.json();
 
     // 1. Verify HMAC signature
@@ -125,7 +127,7 @@ serve(async (req: Request) => {
       if (item.is_subscription) unitPrice *= 0.8;
       subtotal += unitPrice * item.quantity;
     }
-    const totalAmount = subtotal + shipping_cost;
+    const totalAmount = subtotal - discount_amount + shipping_cost;
 
     // 5. Generate order number
     const orderNumber = `ORD-${new Date().getFullYear()}-${String(Date.now()).slice(-5)}`;
@@ -136,6 +138,8 @@ serve(async (req: Request) => {
       order_number: orderNumber,
       total_amount: totalAmount,
       shipping_cost: shipping_cost,
+      discount_amount: discount_amount,
+      coupon_id: coupon_id,
       status: "processing",
       payment_method: "razorpay",
       tracking_number: razorpay_payment_id, // store payment_id for idempotency

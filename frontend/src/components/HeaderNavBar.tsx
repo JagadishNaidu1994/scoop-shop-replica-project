@@ -167,19 +167,19 @@ const HeaderNavBar = () => {
 
             {/* Desktop Navigation - Center */}
             <nav className="hidden md:flex md:space-x-3 lg:space-x-6 xl:space-x-8">
-              <Link to="/recipes" className="text-black hover:text-gray-600 transition-colors font-medium md:text-xs lg:text-sm xl:text-base whitespace-nowrap">
+              <Link to="/recipes" className="font-medium md:text-xs lg:text-sm xl:text-base whitespace-nowrap hover:opacity-70 transition-opacity" style={{ color: 'rgba(101, 36, 131, 1)' }}>
                 RECIPES
               </Link>
-              <Link to="/journal" className="text-black hover:text-gray-600 transition-colors font-medium md:text-xs lg:text-sm xl:text-base whitespace-nowrap">
+              <Link to="/journal" className="font-medium md:text-xs lg:text-sm xl:text-base whitespace-nowrap hover:opacity-70 transition-opacity" style={{ color: 'rgba(101, 36, 131, 1)' }}>
                 JOURNAL
               </Link>
-              <Link to="/science" className="text-black hover:text-gray-600 transition-colors font-medium md:text-xs lg:text-sm xl:text-base whitespace-nowrap">
+              <Link to="/science" className="font-medium md:text-xs lg:text-sm xl:text-base whitespace-nowrap hover:opacity-70 transition-opacity" style={{ color: 'rgba(101, 36, 131, 1)' }}>
                 SCIENCE
               </Link>
-              <Link to="/our-story" className="text-black hover:text-gray-600 transition-colors font-medium md:text-xs lg:text-sm xl:text-base whitespace-nowrap">
+              <Link to="/our-story" className="font-medium md:text-xs lg:text-sm xl:text-base whitespace-nowrap hover:opacity-70 transition-opacity" style={{ color: 'rgba(101, 36, 131, 1)' }}>
                 OUR STORY
               </Link>
-              <Link to="/wholesale" className="text-black hover:text-gray-600 transition-colors font-medium md:text-xs lg:text-sm xl:text-base whitespace-nowrap">
+              <Link to="/wholesale" className="font-medium md:text-xs lg:text-sm xl:text-base whitespace-nowrap hover:opacity-70 transition-opacity" style={{ color: 'rgba(101, 36, 131, 1)' }}>
                 WHOLESALE
               </Link>
             </nav>
@@ -296,41 +296,46 @@ const HeaderNavBar = () => {
                   SHOP NASTEA
                 </Link>
                 
-                <Link 
-                  to="/recipes" 
-                  className="block text-2xl font-semibold text-black hover:text-gray-600 border-b border-gray-200 pb-4"
+                <Link
+                  to="/recipes"
+                  className="block text-2xl font-semibold hover:opacity-70 border-b border-gray-200 pb-4 transition-opacity"
+                  style={{ color: 'rgba(101, 36, 131, 1)' }}
                   onClick={() => setIsMenuOpen(false)}
                 >
                   RECIPES
                 </Link>
-                
-                <Link 
-                  to="/journal" 
-                  className="block text-2xl font-semibold text-black hover:text-gray-600 border-b border-gray-200 pb-4"
+
+                <Link
+                  to="/journal"
+                  className="block text-2xl font-semibold hover:opacity-70 border-b border-gray-200 pb-4 transition-opacity"
+                  style={{ color: 'rgba(101, 36, 131, 1)' }}
                   onClick={() => setIsMenuOpen(false)}
                 >
                   JOURNAL
                 </Link>
-                                   
-                <Link 
-                  to="/science" 
-                  className="block text-2xl font-semibold text-black hover:text-gray-600 border-b border-gray-200 pb-4"
+
+                <Link
+                  to="/science"
+                  className="block text-2xl font-semibold hover:opacity-70 border-b border-gray-200 pb-4 transition-opacity"
+                  style={{ color: 'rgba(101, 36, 131, 1)' }}
                   onClick={() => setIsMenuOpen(false)}
                 >
                   SCIENCE
                 </Link>
-                
-                <Link 
-                  to="/our-story" 
-                  className="block text-2xl font-semibold text-black hover:text-gray-600 border-b border-gray-200 pb-4"
+
+                <Link
+                  to="/our-story"
+                  className="block text-2xl font-semibold hover:opacity-70 border-b border-gray-200 pb-4 transition-opacity"
+                  style={{ color: 'rgba(101, 36, 131, 1)' }}
                   onClick={() => setIsMenuOpen(false)}
                 >
                   OUR STORY
                 </Link>
-                
-                <Link 
-                  to="/wholesale" 
-                  className="block text-2xl font-semibold text-black hover:text-gray-600 border-b border-gray-200 pb-4"
+
+                <Link
+                  to="/wholesale"
+                  className="block text-2xl font-semibold hover:opacity-70 border-b border-gray-200 pb-4 transition-opacity"
+                  style={{ color: 'rgba(101, 36, 131, 1)' }}
                   onClick={() => setIsMenuOpen(false)}
                 >
                   WHOLESALE

@@ -40,7 +40,8 @@ const FoundersSection = () => {
 
             <Button
               onClick={() => navigate('/our-story')}
-              className="bg-black text-white hover:bg-gray-800 font-bold text-base px-8 py-6 rounded-full transition-all duration-300"
+              className="text-white font-bold text-base px-8 py-6 rounded-full transition-all duration-300 hover:opacity-90"
+              style={{ backgroundColor: 'rgba(101, 36, 131, 1)' }}
             >
               OUR STORY
             </Button>
