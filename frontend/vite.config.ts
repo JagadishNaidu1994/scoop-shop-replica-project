@@ -8,7 +8,7 @@ import { VitePWA } from "vite-plugin-pwa";
 export default defineConfig(({ mode }) => ({
   base: '/',
   build: {
-    outDir: '../dist',
+    outDir: 'dist',
     rollupOptions: {
       output: {
         manualChunks: {
