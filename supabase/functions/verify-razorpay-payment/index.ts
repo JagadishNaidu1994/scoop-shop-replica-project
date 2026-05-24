@@ -209,7 +209,9 @@ serve(async (req: Request) => {
     // 10. Trigger Delhivery shipment (fire and forget)
     try {
       const delhiveryKey = Deno.env.get("DELHIVERY_API_KEY");
-      if (delhiveryKey && shipping_address) {
+      if (!delhiveryKey) {
+        console.warn("DELHIVERY_API_KEY not configured - shipment will not be created automatically");
+      } else if (shipping_address) {
         const delhiveryPayload = {
           orderData: {
             order_number: orderNumber,
@@ -229,6 +231,7 @@ serve(async (req: Request) => {
 
         // Call the delhivery edge function internally
         const delhiveryUrl = `${Deno.env.get("SUPABASE_URL")}/functions/v1/create-delhivery-shipment`;
+        console.log("Calling Delhivery function:", delhiveryUrl);
         const delhiveryResp = await fetch(delhiveryUrl, {
           method: "POST",
           headers: {
@@ -239,16 +242,19 @@ serve(async (req: Request) => {
         });
 
         const delhiveryResult = await delhiveryResp.json();
+        console.log("Delhivery response:", JSON.stringify(delhiveryResult));
+
         if (delhiveryResult.success && delhiveryResult.packages?.length > 0) {
           const awb = delhiveryResult.packages[0].waybill;
           if (awb) {
+            console.log("Shipment created with AWB:", awb);
             await adminClient
               .from("orders")
               .update({ tracking_number: awb, status: "shipped" })
               .eq("id", order.id);
           }
         } else {
-          console.warn("Delhivery shipment not created:", delhiveryResult);
+          console.warn("Delhivery shipment not created:", JSON.stringify(delhiveryResult));
         }
       }
     } catch (delhiveryError) {

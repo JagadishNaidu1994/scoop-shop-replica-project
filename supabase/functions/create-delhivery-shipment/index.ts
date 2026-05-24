@@ -1,7 +1,7 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-const DELHIVERY_API_KEY = Deno.env.get("DELHIVERY_API_KEY") || "";
+const DELHIVERY_API_KEY = Deno.env.get("cfd9a034f9f8becf1e48ed158f046a6852a7267c") || "";
 const DELHIVERY_BASE_URL = "https://track.delhivery.com/api/cmu/create.json";
 
 const corsHeaders = {
@@ -61,18 +61,18 @@ function buildDelhiveryPayload(orderData: OrderData) {
         phone: orderData.shipping_address.phone,
         order: orderData.order_number,
         payment_mode: orderData.payment_method === "COD" ? "COD" : "Prepaid",
-        return_pin: "",
-        return_city: "",
-        return_phone: "",
-        return_add: "",
-        return_state: "",
-        return_country: "",
+        return_pin: Deno.env.get("DELHIVERY_RETURN_PIN") || "500068",
+        return_city: Deno.env.get("DELHIVERY_RETURN_CITY") || "Hyderabad",
+        return_phone: Deno.env.get("DELHIVERY_RETURN_PHONE") || "",
+        return_add: Deno.env.get("DELHIVERY_RETURN_ADDRESS") || "Durga Elevate, Hyderabad",
+        return_state: Deno.env.get("DELHIVERY_RETURN_STATE") || "Telangana",
+        return_country: "India",
         products_desc: productDesc,
         hsn_code: "",
         cod_amount: orderData.payment_method === "COD" ? orderData.total_amount.toString() : "0",
         order_date: new Date().toISOString().split("T")[0],
         total_amount: orderData.total_amount.toString(),
-        seller_add: "",
+        seller_add: Deno.env.get("DELHIVERY_SELLER_ADDRESS") || "Durga Elevate, Hyderabad, Telangana",
         seller_name: "NASTEA",
         seller_inv: "",
         quantity: totalQty.toString(),
@@ -80,13 +80,13 @@ function buildDelhiveryPayload(orderData: OrderData) {
         shipment_width: "",
         shipment_height: "",
         weight: "",
-        seller_gst_tin: "",
+        seller_gst_tin: Deno.env.get("DELHIVERY_SELLER_GST") || "",
         shipping_mode: "Surface",
         address_type: "",
       },
     ],
     pickup_location: {
-      name: "NASTEA Warehouse",
+      name: Deno.env.get("DELHIVERY_PICKUP_LOCATION_NAME") || "Durga Elevate",
     },
   };
 }
@@ -207,11 +207,24 @@ serve(async (req: Request) => {
       );
     }
 
-    const { orderData } = await req.json();
+    const requestBody = await req.json();
+    console.log("Received request body:", JSON.stringify(requestBody));
+
+    const orderData = requestBody.orderData || requestBody;
 
     if (!orderData) {
       return new Response(
         JSON.stringify({ error: "Order data is required" }),
+        {
+          status: 400,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        }
+      );
+    }
+
+    if (!orderData.order_number || !orderData.shipping_address) {
+      return new Response(
+        JSON.stringify({ error: "Missing required order fields" }),
         {
           status: 400,
           headers: { ...corsHeaders, "Content-Type": "application/json" },
