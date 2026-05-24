@@ -60,7 +60,7 @@ const Footer = () => {
             <div className="space-y-2">
               <a href="/story" className="block text-gray-400 hover:text-white transition-colors text-sm">Our Story</a>
               <a href="/science" className="block text-gray-400 hover:text-white transition-colors text-sm">Science</a>
-              <a href="#" className="block text-gray-400 hover:text-white transition-colors text-sm">Help Me Choose a Product</a>
+              
             </div>
           </div>
 
@@ -70,9 +70,6 @@ const Footer = () => {
             <div className="space-y-2">
               <a href="/journal" className="block text-gray-400 hover:text-white transition-colors text-sm">Our Journal</a>
               <a href="/recipes" className="block text-gray-400 hover:text-white transition-colors text-sm">Recipes</a>
-              <a href="#" className="block text-gray-400 hover:text-white transition-colors text-sm">Loyalty & Rewards</a>
-              <a href="#" className="block text-gray-400 hover:text-white transition-colors text-sm">Refer a Friend</a>
-              <a href="#" className="block text-gray-400 hover:text-white transition-colors text-sm">Become an Affiliate</a>
             </div>
           </div>
 
@@ -82,8 +79,6 @@ const Footer = () => {
             <div className="space-y-2">
               <a href="/faq" className="block text-gray-400 hover:text-white transition-colors text-sm">FAQs</a>
               <a href="/contact" className="block text-gray-400 hover:text-white transition-colors text-sm">Contact Us</a>
-              <a href="#" className="block text-gray-400 hover:text-white transition-colors text-sm">Shipping & Returns</a>
-              <a href="#" className="block text-gray-400 hover:text-white transition-colors text-sm">Help Centre</a>
               <a href="/privacy" className="block text-gray-400 hover:text-white transition-colors text-sm">Privacy Policy</a>
               <a href="/terms" className="block text-gray-400 hover:text-white transition-colors text-sm">Terms & Conditions</a>
             </div>
@@ -112,12 +107,6 @@ const Footer = () => {
           <div className="flex flex-col md:flex-row justify-between items-center pt-4">
             <div className="text-xs text-gray-500 mb-4 md:mb-0">
               NASTEA. NASTEA is a trademark of NASTEA Limited.
-            </div>
-            <div className="flex gap-2 flex-wrap justify-center">
-              <img src="https://upload.wikimedia.org/wikipedia/commons/b/b7/American_Express_logo_%282018%29.svg" alt="American Express" className="h-6" />
-              <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" alt="PayPal" className="h-6" />
-              <img src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg" alt="Visa" className="h-6" />
-              <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" alt="Mastercard" className="h-6" />
             </div>
           </div>
         </div>

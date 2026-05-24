@@ -238,6 +238,33 @@ export type Database = {
         }
         Relationships: []
       }
+      image_replacements: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          id: string
+          original_src: string
+          replacement_url: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          original_src: string
+          replacement_url: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          original_src?: string
+          replacement_url?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       inventory_history: {
         Row: {
           created_at: string | null

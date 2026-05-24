@@ -539,7 +539,7 @@ const ProductDetail = () => {
               <div className="w-full px-4 sm:px-6 lg:px-8 space-y-20">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
                   <div className="relative">
-                    <AdminImageUpload src="/lovable-uploads/65581248-fb35-4b2f-8b55-04877e634119.png" alt="The Focus Coffee" className="w-full h-[700px] rounded-lg object-cover" imagePath="focus-coffee" />
+                    <AdminImageUpload src="/lovable-uploads/d6c2dc1c-57f6-4e32-afd0-029902775ebc.png" alt="The Focus Coffee" className="w-full h-[700px] rounded-lg object-cover" imagePath="focus-coffee" />
                   </div>
                   <div className="flex flex-col h-[700px]">
                     <div>
@@ -583,7 +583,7 @@ const ProductDetail = () => {
                     </div>
                   </div>
                   <div className="relative order-1 lg:order-2">
-                    <AdminImageUpload src="/images/product-latte.jpg" alt="The Focus Smoothie" className="w-full h-[700px] rounded-lg object-cover" imagePath="latte-image" />
+                    <AdminImageUpload src="/lovable-uploads/82851410-e92f-4e0c-8939-f7629ff84faf.png" alt="The Focus Smoothie" className="w-full h-[700px] rounded-lg object-cover" imagePath="latte-image" />
                   </div>
                 </div>
               </div>

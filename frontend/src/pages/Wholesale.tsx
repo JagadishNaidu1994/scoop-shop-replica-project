@@ -143,7 +143,7 @@ Premium Japanese matcha, barista training, menu support, flexible bulk packs, an
             </div>
             <div className="relative">
               <AdminImageUpload
-                src="https://images.unsplash.com/photo-1559056199-641a0ac8b55e?w=600&h=400&fit=crop"
+                src="/lovable-uploads/d8ad0379-dbdb-4ad5-ade1-1bdf63e51cc9.png"
                 alt="Professional coffee setup"
                 className="rounded-2xl shadow-2xl"
                 imagePath="wholesale-hero" />
