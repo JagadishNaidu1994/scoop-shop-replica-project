@@ -189,7 +189,7 @@ const HeaderNavBar = () => {
               {/* Desktop actions */}
               <div className="hidden md:flex items-center md:space-x-2 lg:space-x-3">
                 <Link to="/shop">
-                  <button className="bg-black text-white md:px-4 md:py-1.5 md:text-xs lg:px-6 lg:py-2 lg:text-sm rounded-full font-medium hover:bg-gray-800 transition-colors whitespace-nowrap">
+                  <button className="text-white md:px-4 md:py-1.5 md:text-xs lg:px-6 lg:py-2 lg:text-sm rounded-full font-medium hover:opacity-90 transition-colors whitespace-nowrap" style={{ backgroundColor: 'rgba(101, 36, 131, 1)' }}>
                     SHOP NASTEA
                   </button>
                 </Link>
