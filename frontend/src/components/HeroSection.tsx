@@ -35,7 +35,8 @@ const HeroSection = () => {
           <div className="pt-2">
             <Button
               onClick={handleShopClick}
-              className="bg-white text-black px-8 py-3 text-base rounded-full hover:bg-white/90 transition-colors font-semibold"
+              className="px-8 py-3 text-base rounded-full hover:opacity-90 transition-colors font-semibold text-white"
+              style={{ backgroundColor: 'rgba(101, 36, 131, 1)' }}
             >
               Shop Nastea
             </Button>
