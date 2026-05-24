@@ -1,7 +1,7 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-const DELHIVERY_API_KEY = Deno.env.get("cfd9a034f9f8becf1e48ed158f046a6852a7267c") || "";
+const DELHIVERY_API_KEY = Deno.env.get("DELHIVERY_API_KEY") || "";
 const DELHIVERY_BASE_URL = "https://track.delhivery.com/api/cmu/create.json";
 
 const corsHeaders = {
@@ -136,19 +136,28 @@ async function createDelhiveryShipment(orderData: OrderData) {
 
     console.log("Delhivery parsed response:", JSON.stringify(result));
 
+    // Log detailed response for debugging
+    console.log("Response keys:", Object.keys(result));
+    console.log("Response success field:", result.success);
+    console.log("Response packages:", result.packages);
+    console.log("Response error/rmk:", result.error || result.rmk || result.message);
+
     // Delhivery returns { success: true, packages: [...] } on success
     if (result.success || result.packages?.length > 0) {
+      console.log("✅ Shipment creation successful");
       return {
         success: true,
         packages: result.packages || [],
         message: "Shipment created successfully",
       };
     } else {
+      console.log("❌ Shipment creation failed:", result);
       return {
         success: false,
-        error: result.rmk || result.error || JSON.stringify(result),
+        error: result.rmk || result.error || result.message || JSON.stringify(result),
         packages: result.packages || [],
         message: "Failed to create Delhivery shipment",
+        full_response: result,
       };
     }
   } catch (error) {

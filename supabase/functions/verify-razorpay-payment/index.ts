@@ -59,6 +59,7 @@ serve(async (req: Request) => {
     // 1. Verify HMAC signature
     const keySecret = Deno.env.get("RAZORPAY_KEY_SECRET");
     if (!keySecret) {
+      console.error("RAZORPAY_KEY_SECRET not configured");
       return new Response(
         JSON.stringify({ success: false, error: "Payment verification not configured" }),
         { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
@@ -67,6 +68,8 @@ serve(async (req: Request) => {
 
     const body = `${razorpay_order_id}|${razorpay_payment_id}`;
     const expectedSignature = createHmac("sha256", keySecret).update(body).digest("hex");
+
+    console.log("Signature verification - Order:", razorpay_order_id, "Expected:", expectedSignature.substring(0, 10) + "...", "Received:", razorpay_signature.substring(0, 10) + "...");
 
     if (expectedSignature !== razorpay_signature) {
       console.error("Signature mismatch for order:", razorpay_order_id);
@@ -102,8 +105,10 @@ serve(async (req: Request) => {
       .select("product_id, product_name, product_price, quantity, is_subscription, subscription_frequency")
       .eq("user_id", userId);
 
+    console.log("Cart fetch - User ID:", userId, "Cart items count:", cartItems?.length || 0, "Cart error:", cartError);
+
     if (cartError || !cartItems || cartItems.length === 0) {
-      console.error("Cart fetch error:", cartError);
+      console.error("Cart fetch error:", cartError, "Cart items:", cartItems);
       return new Response(
         JSON.stringify({ success: false, error: "Cart is empty" }),
         { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
@@ -152,16 +157,25 @@ serve(async (req: Request) => {
       orderPayload.subscription_frequency = subscription_frequency;
     }
 
+    console.log("Creating order with payload:", JSON.stringify({
+      user_id: orderPayload.user_id,
+      order_number: orderPayload.order_number,
+      total_amount: orderPayload.total_amount,
+      status: orderPayload.status
+    }));
+
     const { data: order, error: orderError } = await adminClient
       .from("orders")
       .insert(orderPayload)
       .select()
       .single();
 
+    console.log("Order creation response - Error:", orderError, "Order ID:", order?.id);
+
     if (orderError || !order) {
-      console.error("Order creation error:", orderError);
+      console.error("Order creation error:", JSON.stringify(orderError));
       return new Response(
-        JSON.stringify({ success: false, error: "Failed to create order" }),
+        JSON.stringify({ success: false, error: "Failed to create order", details: orderError?.message }),
         { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
