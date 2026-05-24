@@ -1,11 +1,7 @@
 [build]
-  # Build command to run from the root directory
-  command = "npm run build"
-  # Publish directory where Vite outputs the build artifacts
-  publish = "dist"
+command = "cd frontend && npm run build"
+publish = "frontend/dist"
 
-[[redirects]]
-  # Redirect rules for SPA (single page application)
-  from = "/*"
-  to = "/index.html"
-  status = 200
+[context.production]
+command = "cd frontend && npm run build"
+publish = "frontend/dist"
