@@ -1,11 +1,5 @@
 {
-  "buildCommand": "cd frontend && npm run build",
+  "buildCommand": "bash build.sh",
   "installCommand": "cd frontend && npm install",
-  "outputDirectory": "dist",
-  "rewrites": [
-    {
-      "source": "/(.*)",
-      "destination": "/index.html"
-    }
-  ]
+  "outputDirectory": "dist"
 }
