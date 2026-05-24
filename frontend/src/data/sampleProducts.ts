@@ -54,7 +54,7 @@ export const sampleProducts = [
     price: 2199,
     description: "Special blend perfect for cold matcha drinks",
     primary_image: "/lovable-uploads/5fe87a68-79b4-4785-8a77-b100edfbcbf6.png",
-    hover_image: "/lovable-uploads/65581248-fb35-4b2f-8b55-04877e634119.png",
+    hover_image: "/lovable-uploads/d6c2dc1c-57f6-4e32-afd0-029902775ebc.png",
     category: "matcha",
     benefits: ["Dissolves easily", "Refreshing taste", "Summer perfect"],
     in_stock: true,
