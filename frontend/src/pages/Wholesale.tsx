@@ -1,5 +1,6 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import HeaderNavBar from '@/components/HeaderNavBar';
 import Footer from '@/components/Footer';
 import AdminImageUpload from '@/components/AdminImageUpload';
@@ -7,6 +8,7 @@ import { Phone, Mail, MapPin, Coffee, Users, Award, Truck, Package, IndianRupee,
 import { useWholesaleForm } from '@/hooks/useWholesaleForm';
 
 const Wholesale = () => {
+  const location = useLocation();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -23,6 +25,17 @@ const Wholesale = () => {
   });
 
   const { submitForm, isSubmitting } = useWholesaleForm();
+
+  useEffect(() => {
+    if (location.hash) {
+      const element = document.querySelector(location.hash);
+      if (element) {
+        setTimeout(() => {
+          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 100);
+      }
+    }
+  }, [location.hash]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
