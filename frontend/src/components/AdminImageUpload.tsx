@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Upload, Check, X } from 'lucide-react';
 import { useAdminImage } from '@/contexts/AdminImageContext';
+import { useAdminCheck } from '@/hooks/useAdminCheck';
 import { toast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -24,6 +25,7 @@ const AdminImageUpload: React.FC<AdminImageUploadProps> = ({
   onImageUpdate,
 }) => {
   const { isAdminMode, isEditingImages } = useAdminImage();
+  const { isAdmin } = useAdminCheck();
   const [isUploading, setIsUploading] = useState(false);
   const [preview, setPreview] = useState<string | null>(null);
   const [currentImageUrl, setCurrentImageUrl] = useState(src);
@@ -159,8 +161,8 @@ const AdminImageUpload: React.FC<AdminImageUploadProps> = ({
     }
   };
 
-  // If not in admin mode or not editing images, render the original content
-  if (!isAdminMode || !isEditingImages) {
+  // Only show image upload tools if user is an actual admin AND in edit mode
+  if (!isAdmin || !isAdminMode || !isEditingImages) {
     return children || <img src={currentImageUrl} alt={alt} className={className} style={style} />;
   }
 
