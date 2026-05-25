@@ -5,7 +5,7 @@ const howToSteps = [
   {
     thumbnail: '/lovable-uploads/matcha-whisk.png',
     image: '/lovable-uploads/matcha-whisk.png',
-    title: 'Add NASTEA matcha with a splash of warm water and whisk',
+    title: 'Add NASTEA matcha in a cup',
   },
   {
     thumbnail: '/lovable-uploads/matcha-whisk.png',
