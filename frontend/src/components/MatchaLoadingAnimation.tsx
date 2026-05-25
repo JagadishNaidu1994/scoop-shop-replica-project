@@ -15,11 +15,11 @@ const MatchaLoadingAnimation: React.FC<MatchaLoadingAnimationProps> = ({
       <div className="flex flex-col items-center justify-center py-16 mb-8">
         <div className="relative">
           {/* Matcha Bowl */}
-          <div className="w-24 h-24 rounded-full bg-gradient-to-b from-green-100 to-green-200 border-4 border-green-800 relative overflow-hidden animate-pulse">
+          <div className="w-24 h-24 rounded-full bg-gradient-to-b from-purple-100 to-purple-200 border-4 border-purple-800 relative overflow-hidden animate-pulse">
             {/* Matcha Liquid */}
-            <div className="absolute bottom-0 w-full h-3/4 bg-gradient-to-t from-green-400 to-green-300 rounded-b-full animate-[wave_2s_ease-in-out_infinite]"></div>
+            <div className="absolute bottom-0 w-full h-3/4 bg-gradient-to-t from-purple-400 to-purple-300 rounded-b-full animate-[wave_2s_ease-in-out_infinite]"></div>
             {/* Foam/Bubbles */}
-            <div className="absolute top-1/4 left-1/2 transform -translate-x-1/2 w-8 h-8 bg-green-200 rounded-full opacity-60 animate-ping"></div>
+            <div className="absolute top-1/4 left-1/2 transform -translate-x-1/2 w-8 h-8 bg-purple-200 rounded-full opacity-60 animate-ping"></div>
           </div>
           {/* Steam */}
           <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 flex gap-2">
