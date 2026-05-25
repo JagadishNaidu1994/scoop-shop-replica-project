@@ -117,6 +117,11 @@ serve(async (req: Request) => {
     const razorpayKeyId = Deno.env.get("RAZORPAY_KEY_ID");
     const razorpayKeySecret = Deno.env.get("RAZORPAY_KEY_SECRET");
 
+    console.log("RAZORPAY_KEY_ID exists:", !!razorpayKeyId);
+    console.log("RAZORPAY_KEY_SECRET exists:", !!razorpayKeySecret);
+    console.log("RAZORPAY_KEY_ID length:", razorpayKeyId?.length || 0);
+    console.log("RAZORPAY_KEY_SECRET length:", razorpayKeySecret?.length || 0);
+
     if (!razorpayKeyId || !razorpayKeySecret) {
       console.error("Razorpay credentials not configured");
       return new Response(
@@ -128,11 +133,18 @@ serve(async (req: Request) => {
     const receipt = `rcpt_${Date.now()}_${userId.slice(0, 8)}`;
     console.log("Creating Razorpay order - Receipt:", receipt, "Amount:", amountInPaise);
 
+    // Create Basic Auth header for Razorpay
+    const authString = `${razorpayKeyId}:${razorpayKeySecret}`;
+    const encodedAuth = btoa(authString);
+
+    console.log("Razorpay API Key ID (first 10 chars):", razorpayKeyId.substring(0, 10) + "...");
+    console.log("Making request to Razorpay API");
+
     const rpResponse = await fetch("https://api.razorpay.com/v1/orders", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: "Basic " + btoa(`${razorpayKeyId}:${razorpayKeySecret}`),
+        Authorization: `Basic ${encodedAuth}`,
       },
       body: JSON.stringify({
         amount: amountInPaise,
