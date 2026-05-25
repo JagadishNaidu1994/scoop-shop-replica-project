@@ -127,7 +127,7 @@ const HeaderNavBar = () => {
         isHeaderVisible ? 'translate-y-0' : '-translate-y-full'
       }`}>
         {/* Top promotional banner */}
-        <div style={{ backgroundColor: 'rgba(101, 36, 131, 0.08)', color: 'rgba(101, 36, 131, 1)' }} className="py-2 text-sm font-medium overflow-hidden" aria-label="Promotional announcements">
+        <div style={{ backgroundColor: 'rgba(101, 36, 131, 0.08)', color: 'rgba(101, 36, 131, 1)' }} className="w-full py-2 text-sm font-medium overflow-hidden" aria-label="Promotional announcements">
           <div className="whitespace-nowrap inline-flex hover:[animation-play-state:paused]" style={{ animation: 'scroll-seamless 20s linear infinite' }}>
             {[0, 1].map((setIndex) => (
               <div key={setIndex} className="inline-flex items-center">
