@@ -62,7 +62,7 @@ const Journal = () => {
       <HeaderNavBar />
       
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-green-50 to-green-100 py-16">
+      <section className="bg-gradient-to-r from-purple-50 to-purple-100 py-16">
         <div className="w-full px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
             JOURNAL
@@ -99,12 +99,12 @@ const Journal = () => {
                     </div>
                     <div className="p-6">
                       <div className="flex items-center text-sm text-gray-500 mb-3">
-                        <span className="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium mr-3">
+                        <span className="bg-purple-100 text-purple-800 px-2 py-1 rounded-full text-xs font-medium mr-3">
                           {journal.category}
                         </span>
                         <span>{journal.read_time}</span>
                       </div>
-                      <h2 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-green-600 transition-colors line-clamp-2">
+                      <h2 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-purple-600 transition-colors line-clamp-2">
                         {journal.title}
                       </h2>
                       <p className="text-gray-600 text-sm line-clamp-3 mb-4">

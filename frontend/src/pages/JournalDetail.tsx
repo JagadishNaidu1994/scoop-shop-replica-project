@@ -69,7 +69,7 @@ const JournalDetail = () => {
           <div className="text-center">
             <h1 className="text-2xl font-bold text-gray-900 mb-4">Article Not Found</h1>
             <p className="text-gray-600 mb-8">The article you're looking for doesn't exist or has been removed.</p>
-            <Link to="/journal" className="text-green-600 hover:text-green-700 font-medium">
+            <Link to="/journal" className="text-purple-600 hover:text-purple-700 font-medium">
               ← Back to Journal
             </Link>
           </div>
@@ -85,9 +85,9 @@ const JournalDetail = () => {
       
       <article className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Back Button */}
-        <Link 
-          to="/journal" 
-          className="inline-flex items-center text-green-600 hover:text-green-700 font-medium mb-8"
+        <Link
+          to="/journal"
+          className="inline-flex items-center text-purple-600 hover:text-purple-700 font-medium mb-8"
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
           Back to Journal
@@ -96,7 +96,7 @@ const JournalDetail = () => {
         {/* Article Header */}
         <header className="mb-8">
           <div className="flex items-center text-sm text-gray-500 mb-4">
-            <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-xs font-medium mr-4">
+            <span className="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-xs font-medium mr-4">
               {journal.category}
             </span>
             <span>{journal.read_time}</span>
