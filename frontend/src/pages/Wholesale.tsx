@@ -460,7 +460,7 @@ We are the wholesale arm of Nastea Rituals, we provide matcha guidance to cafes,
               </div>
               
               <div>
-                <h4 className="text-lg font-bold mb-6 text-purple-400">Why Choose The Missing Bean?</h4>
+                <h4 className="text-lg font-bold mb-6 text-purple-400">Why Choose Nastea Rituals?</h4>
                 <div className="space-y-4">
                   <div className="flex items-start space-x-3">
                     <Users className="text-purple-400 flex-shrink-0 mt-1" size={20} />
