@@ -165,7 +165,7 @@ const AuthModal = ({ isOpen, onClose }: AuthModalProps) => {
 
         {/* Logo/Brand */}
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-black mb-2">NASTEA</h1>
+          <img src="/lovable-uploads/nastea-logo.png" alt="NASTEA Rituals" className="h-12 mx-auto mb-4 object-contain" />
           <div className="w-8 h-1 bg-gradient-to-r from-teal-500 to-blue-500 mx-auto rounded-full"></div>
         </div>
 
