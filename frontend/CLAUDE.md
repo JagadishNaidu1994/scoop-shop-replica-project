@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is an e-commerce web application for NASTEA (premium matcha & wellness products), built as a "Scoop Shop Replica Project" using the Lovable platform. It includes a full-featured online shop, user authentication, admin dashboard, content management (blog/journal/recipes), and PWA support.
+This is an e-commerce web application for NASTEA (premium matcha & wellness products). It includes a full-featured online shop, user authentication, admin dashboard, content management (blog/journal/recipes), and PWA support.
 
 ## Development Commands
 
@@ -155,8 +155,7 @@ Required environment variables (in `.env`):
 
 ## Key Considerations
 
-- This project was built with Lovable, a visual development platform
-- Changes can be synced bidirectionally between local development and Lovable
-- The project uses Bun lock file (`bun.lockb`) but package.json scripts use npm
+- The project uses npm for package management
 - Server runs on port 8080 by default (not 5173)
 - Admin permissions are role-based via Supabase
+- All images are stored in `/lovable-uploads/` directory for easy management

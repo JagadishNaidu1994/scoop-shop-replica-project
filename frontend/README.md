@@ -1,73 +1,112 @@
-# Welcome to your Lovable project
+# NASTEA - Premium Matcha & Wellness E-commerce
 
-## Project info
+A full-featured e-commerce web application for premium matcha and wellness products.
 
-**URL**: https://lovable.dev/projects/27c29e49-64d4-4282-b949-e09e654f3cd1
+## Project Info
 
-## How can I edit this code?
+This is a Vite + React + TypeScript project with Supabase backend integration.
 
-There are several ways of editing your application.
+## How to Edit This Code
 
-**Use Lovable**
+### Using Your Preferred IDE
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/27c29e49-64d4-4282-b949-e09e654f3cd1) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
+Clone the repo and work locally:
 
 ```sh
-# Step 1: Clone the repository using the project's Git URL.
+# Step 1: Clone the repository
 git clone <YOUR_GIT_URL>
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+# Step 2: Navigate to the project directory
+cd scoop-shop-replica-project
 
-# Step 3: Install the necessary dependencies.
+# Step 3: Install dependencies
 npm i
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Step 4: Start the development server
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+The server will start on `http://localhost:8080` with auto-reloading.
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+### Edit Files in GitHub
 
-**Use GitHub Codespaces**
+- Navigate to the desired file(s)
+- Click the "Edit" button (pencil icon) at the top right
+- Make your changes and commit
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+### Using GitHub Codespaces
 
-## What technologies are used for this project?
+- Go to your repository main page
+- Click the "Code" button (green button)
+- Select "Codespaces" tab
+- Click "New codespace" to launch
+- Edit files and commit your changes
+
+## Technology Stack
 
 This project is built with:
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+- **Vite** - Fast build tool
+- **React 18** - UI framework
+- **TypeScript** - Type safety
+- **Tailwind CSS** - Styling
+- **shadcn-ui** - Component library
+- **Supabase** - Backend & Authentication
+- **React Query** - Data fetching
+- **React Router** - Navigation
+- **Razorpay** - Payment processing
 
-## How can I deploy this project?
+## Development Commands
 
-Simply open [Lovable](https://lovable.dev/projects/27c29e49-64d4-4282-b949-e09e654f3cd1) and click on Share -> Publish.
+```bash
+# Install dependencies
+npm i
 
-## Can I connect a custom domain to my Lovable project?
+# Start development server (port 8080)
+npm run dev
 
-Yes, you can!
+# Build for production
+npm run build
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+# Build for development
+npm run build:dev
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+# Run linter
+npm run lint
+
+# Preview production build
+npm run preview
+```
+
+## Project Structure
+
+- `src/pages/` - Page components
+- `src/components/` - Reusable components
+- `src/contexts/` - React context providers
+- `src/hooks/` - Custom React hooks
+- `src/integrations/supabase/` - Supabase configuration
+- `supabase/functions/` - Edge functions
+- `supabase/migrations/` - Database migrations
+
+## Deployment
+
+Build the project and deploy the `dist/` directory to your hosting:
+
+```bash
+npm run build
+```
+
+## Features
+
+- Product catalog and shopping cart
+- User authentication
+- Checkout with Razorpay payment
+- Admin dashboard
+- Order management
+- Recipe and journal content
+- Blog functionality
+- PWA support
+
+## Learn More
+
+For more information about the project structure and development workflow, see `CLAUDE.md`.
