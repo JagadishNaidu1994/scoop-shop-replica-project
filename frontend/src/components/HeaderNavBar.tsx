@@ -127,18 +127,18 @@ const HeaderNavBar = () => {
         isHeaderVisible ? 'translate-y-0' : '-translate-y-full'
       }`}>
         {/* Top promotional banner */}
-        <div className="bg-gray-100 py-2 text-sm font-medium text-black overflow-hidden" aria-label="Promotional announcements">
+        <div style={{ backgroundColor: 'rgba(101, 36, 131, 0.08)', color: 'rgba(101, 36, 131, 1)' }} className="py-2 text-sm font-medium overflow-hidden" aria-label="Promotional announcements">
           <div className="whitespace-nowrap inline-flex hover:[animation-play-state:paused]" style={{ animation: 'scroll-seamless 20s linear infinite' }}>
             {[0, 1].map((setIndex) => (
               <div key={setIndex} className="inline-flex items-center">
                 <span className="inline-block mx-6 sm:mx-8">15% OFF EVERY SUBSCRIPTION</span>
-                <span className="inline-block mx-2 text-gray-400">•</span>
+                <span className="inline-block mx-2" style={{ color: 'rgba(101, 36, 131, 0.3)' }}>•</span>
                 <span className="inline-block mx-6 sm:mx-8">20% OFF FIRST ORDER</span>
-                <span className="inline-block mx-2 text-gray-400">•</span>
+                <span className="inline-block mx-2" style={{ color: 'rgba(101, 36, 131, 0.3)' }}>•</span>
                 <span className="inline-block mx-6 sm:mx-8">FREE SHIPPING ON ORDERS ABOVE INR 1000</span>
-                <span className="inline-block mx-2 text-gray-400">•</span>
+                <span className="inline-block mx-2" style={{ color: 'rgba(101, 36, 131, 0.3)' }}>•</span>
                 <span className="inline-block mx-6 sm:mx-8">HYDERABAD'S FIRST MATCHA BRAND</span>
-                <span className="inline-block mx-2 text-gray-400">•</span>
+                <span className="inline-block mx-2" style={{ color: 'rgba(101, 36, 131, 0.3)' }}>•</span>
               </div>
             ))}
           </div>

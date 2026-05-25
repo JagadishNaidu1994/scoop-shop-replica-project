@@ -85,7 +85,8 @@ const RecipeDetail = () => {
             <h1 className="text-2xl font-bold text-gray-900 mb-4">Recipe Not Found</h1>
             <button
               onClick={() => navigate('/recipes')}
-              className="bg-black text-white px-6 py-2 rounded-full hover:bg-gray-800 transition-colors"
+              style={{ backgroundColor: 'rgba(101, 36, 131, 1)' }}
+              className="text-white px-6 py-2 rounded-full hover:opacity-90 transition-opacity"
             >
               Back to Recipes
             </button>
@@ -151,7 +152,7 @@ const RecipeDetail = () => {
               <ul className="space-y-3">
                 {recipe.ingredients?.map((ingredient: string, index: number) => (
                   <li key={index} className="flex items-start space-x-3">
-                    <div className="w-2 h-2 bg-black rounded-full mt-2 flex-shrink-0"></div>
+                    <div style={{ backgroundColor: 'rgba(101, 36, 131, 1)' }} className="w-2 h-2 rounded-full mt-2 flex-shrink-0"></div>
                     <span className="text-gray-700">{ingredient}</span>
                   </li>
                 ))}
@@ -179,7 +180,7 @@ const RecipeDetail = () => {
             <div className="space-y-6">
               {recipe.instructions?.map((instruction: string, index: number) => (
                 <div key={index} className="flex space-x-4">
-                  <div className="flex-shrink-0 w-8 h-8 bg-black text-white rounded-full flex items-center justify-center text-sm font-medium">
+                  <div style={{ backgroundColor: 'rgba(101, 36, 131, 1)' }} className="flex-shrink-0 w-8 h-8 text-white rounded-full flex items-center justify-center text-sm font-medium">
                     {index + 1}
                   </div>
                   <p className="text-gray-700 pt-1 leading-relaxed">{instruction}</p>
@@ -204,7 +205,8 @@ const RecipeDetail = () => {
         <div className="w-full text-center mt-16 pt-16 border-t border-gray-200">
           <button
             onClick={() => navigate('/recipes')}
-            className="bg-black text-white px-8 py-3 rounded-full hover:bg-gray-800 transition-colors"
+            style={{ backgroundColor: 'rgba(101, 36, 131, 1)' }}
+            className="text-white px-8 py-3 rounded-full hover:opacity-90 transition-opacity"
           >
             ← Back to All Recipes
           </button>

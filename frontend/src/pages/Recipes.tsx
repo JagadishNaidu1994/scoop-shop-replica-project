@@ -78,7 +78,8 @@ const Recipes = () => {
                   </p>
                   <Link
                     to={`/recipes/${allRecipes[0].id}`}
-                    className="inline-block bg-white text-gray-900 px-8 py-3 rounded-full font-medium hover:bg-gray-100 transition-colors"
+                    style={{ backgroundColor: 'rgba(101, 36, 131, 1)' }}
+                    className="inline-block text-white px-8 py-3 rounded-full font-medium hover:opacity-90 transition-opacity"
                   >
                     View Recipe
                   </Link>

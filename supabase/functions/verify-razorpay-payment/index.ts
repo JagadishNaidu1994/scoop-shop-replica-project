@@ -226,6 +226,18 @@ serve(async (req: Request) => {
       if (!delhiveryKey) {
         console.warn("DELHIVERY_API_KEY not configured - shipment will not be created automatically");
       } else if (shipping_address) {
+        console.log("Delhivery config check:", {
+          apiKeySet: !!delhiveryKey,
+          shipping_address: {
+            firstName: shipping_address.firstName,
+            lastName: shipping_address.lastName,
+            city: shipping_address.city,
+            state: shipping_address.state,
+            postalCode: shipping_address.postalCode,
+            phone: shipping_address.phone?.substring(0, 2) + "***" || "missing",
+          }
+        });
+
         const delhiveryPayload = {
           orderData: {
             order_number: orderNumber,
@@ -268,11 +280,19 @@ serve(async (req: Request) => {
               .eq("id", order.id);
           }
         } else {
-          console.warn("Delhivery shipment not created:", JSON.stringify(delhiveryResult));
+          console.warn("Delhivery shipment not created. Response:", JSON.stringify(delhiveryResult));
+          // Log specific error details for debugging
+          if (delhiveryResult.error) {
+            console.error("Delhivery error message:", delhiveryResult.error);
+          }
+          if (delhiveryResult.full_response) {
+            console.error("Delhivery full response:", JSON.stringify(delhiveryResult.full_response));
+          }
         }
       }
     } catch (delhiveryError) {
       console.error("Delhivery error (non-fatal):", delhiveryError);
+      console.error("Delhivery error details:", (delhiveryError as Error).message);
     }
 
     // 11. Send order confirmation email (fire and forget)

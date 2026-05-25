@@ -48,6 +48,24 @@ function buildDelhiveryPayload(orderData: OrderData) {
 
   const totalQty = orderData.items.reduce((sum, i) => sum + i.quantity, 0);
 
+  // Get environment variables with logging
+  const returnPin = Deno.env.get("DELHIVERY_RETURN_PIN") || "500068";
+  const returnCity = Deno.env.get("DELHIVERY_RETURN_CITY") || "Hyderabad";
+  const returnPhone = Deno.env.get("DELHIVERY_RETURN_PHONE") || "9999999999";
+  const returnAdd = Deno.env.get("DELHIVERY_RETURN_ADDRESS") || "Durga Elevate, Hyderabad";
+  const returnState = Deno.env.get("DELHIVERY_RETURN_STATE") || "Telangana";
+  const sellerAdd = Deno.env.get("DELHIVERY_SELLER_ADDRESS") || "Durga Elevate, Hyderabad, Telangana";
+  const sellerGst = Deno.env.get("DELHIVERY_SELLER_GST") || "";
+  const pickupName = Deno.env.get("DELHIVERY_PICKUP_LOCATION_NAME") || "Durga Elevate";
+
+  console.log("Delhivery environment vars:", {
+    returnPin,
+    returnCity,
+    returnPhone: returnPhone ? "***set***" : "***not set***",
+    returnState,
+    sellerGst: sellerGst ? "***set***" : "***not set***"
+  });
+
   return {
     shipments: [
       {
@@ -61,18 +79,18 @@ function buildDelhiveryPayload(orderData: OrderData) {
         phone: orderData.shipping_address.phone,
         order: orderData.order_number,
         payment_mode: orderData.payment_method === "COD" ? "COD" : "Prepaid",
-        return_pin: Deno.env.get("DELHIVERY_RETURN_PIN") || "500068",
-        return_city: Deno.env.get("DELHIVERY_RETURN_CITY") || "Hyderabad",
-        return_phone: Deno.env.get("DELHIVERY_RETURN_PHONE") || "",
-        return_add: Deno.env.get("DELHIVERY_RETURN_ADDRESS") || "Durga Elevate, Hyderabad",
-        return_state: Deno.env.get("DELHIVERY_RETURN_STATE") || "Telangana",
+        return_pin: returnPin,
+        return_city: returnCity,
+        return_phone: returnPhone,
+        return_add: returnAdd,
+        return_state: returnState,
         return_country: "India",
         products_desc: productDesc,
         hsn_code: "",
         cod_amount: orderData.payment_method === "COD" ? orderData.total_amount.toString() : "0",
         order_date: new Date().toISOString().split("T")[0],
         total_amount: orderData.total_amount.toString(),
-        seller_add: Deno.env.get("DELHIVERY_SELLER_ADDRESS") || "Durga Elevate, Hyderabad, Telangana",
+        seller_add: sellerAdd,
         seller_name: "NASTEA",
         seller_inv: "",
         quantity: totalQty.toString(),
@@ -80,13 +98,13 @@ function buildDelhiveryPayload(orderData: OrderData) {
         shipment_width: "",
         shipment_height: "",
         weight: "",
-        seller_gst_tin: Deno.env.get("DELHIVERY_SELLER_GST") || "",
+        seller_gst_tin: sellerGst,
         shipping_mode: "Surface",
         address_type: "",
       },
     ],
     pickup_location: {
-      name: Deno.env.get("DELHIVERY_PICKUP_LOCATION_NAME") || "Durga Elevate",
+      name: pickupName,
     },
   };
 }
