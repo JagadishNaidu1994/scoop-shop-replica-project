@@ -3,7 +3,7 @@ import { Check } from 'lucide-react';
 
 const SubHeroBanner = () => {
   return (
-    <section className="bg-orange-400 py-8 w-full">
+    <section style={{ backgroundColor: 'rgba(101, 36, 131, 1)' }} className="py-8 w-full">
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <h2 className="text-3xl lg:text-4xl font-bold text-white mb-6">
           Heritage Power . Modern Chaos . Ancient Ingredients . Current Obsession
