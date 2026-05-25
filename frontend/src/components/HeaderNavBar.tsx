@@ -123,7 +123,7 @@ const HeaderNavBar = () => {
   return (
     <>
       {/* Header wrapper for both banner and main header */}
-      <div className={`fixed top-0 left-0 right-0 z-50 transition-transform duration-300 ${
+      <div className={`fixed top-0 left-0 right-0 z-50 transition-transform duration-300 bg-white ${
         isHeaderVisible ? 'translate-y-0' : '-translate-y-full'
       }`}>
         {/* Top promotional banner */}
