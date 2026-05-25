@@ -36,6 +36,16 @@ const HowToSection: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
         {/* Left side */}
         <div className="flex flex-col h-[700px] rounded-lg" style={{ backgroundColor: '#F5F5F0' }}>
+          {/* Top heading */}
+          <div className="p-6 pb-4">
+            <h2
+              className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight"
+              style={{ color: '#0D1B2A' }}
+            >
+              How to Prepare Nastea Matcha
+            </h2>
+          </div>
+
           {/* 4 Thumbnails row */}
           <div className="hidden flex gap-3 p-6 pb-0">
             {howToSteps.map((step, i) => (
@@ -63,12 +73,6 @@ const HowToSection: React.FC = () => {
           {/* Text content pinned to bottom */}
           <div className="flex-1 flex flex-col justify-end p-6 pt-0">
             <div className="mt-auto">
-              <p
-                className="text-sm font-semibold tracking-wide mb-3"
-                style={{ color: '#0D1B2A' }}
-              >
-                How to Prepare Nastea Matcha
-              </p>
               <h3
                 className="text-2xl md:text-3xl lg:text-4xl font-bold leading-tight mb-6"
                 style={{ color: '#0D1B2A' }}
