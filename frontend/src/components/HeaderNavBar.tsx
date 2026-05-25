@@ -203,9 +203,10 @@ const HeaderNavBar = () => {
                 
                 {/* Admin Icon */}
                 {isAdmin && (
-                  <Link 
-                    to="/admin/dashboard" 
-                    className="text-black hover:text-gray-600 transition-colors rounded-full p-1.5 lg:p-2 hover:bg-gray-100"
+                  <Link
+                    to="/admin/dashboard"
+                    style={{ color: 'rgba(101, 36, 131, 1)' }}
+                    className="hover:opacity-70 transition-opacity rounded-full p-1.5 lg:p-2 hover:bg-gray-100"
                     title="Admin Dashboard"
                   >
                     <Shield size={20} className="lg:w-6 lg:h-6" />
@@ -213,9 +214,10 @@ const HeaderNavBar = () => {
                 )}
                 
                 {/* Account Icon */}
-                <button 
+                <button
                   onClick={handleAuthClick}
-                  className="text-black hover:text-gray-600 transition-colors rounded-full p-1.5 lg:p-2 hover:bg-gray-100"
+                  style={{ color: 'rgba(101, 36, 131, 1)' }}
+                  className="hover:opacity-70 transition-opacity rounded-full p-1.5 lg:p-2 hover:bg-gray-100"
                   title={user ? "Account" : "Sign In"}
                 >
                   <User size={20} className="lg:w-6 lg:h-6" />
@@ -225,18 +227,20 @@ const HeaderNavBar = () => {
               {/* Mobile account and admin icons */}
               <div className="md:hidden flex items-center space-x-2">
                 {isAdmin && (
-                  <Link 
-                    to="/admin/dashboard" 
-                    className="text-black hover:text-gray-600 transition-colors rounded-full p-2 hover:bg-gray-100"
+                  <Link
+                    to="/admin/dashboard"
+                    style={{ color: 'rgba(101, 36, 131, 1)' }}
+                    className="hover:opacity-70 transition-opacity rounded-full p-2 hover:bg-gray-100"
                     title="Admin Dashboard"
                   >
                     <Shield size={24} />
                   </Link>
                 )}
                 
-                <button 
+                <button
                   onClick={handleAuthClick}
-                  className="text-black hover:text-gray-600 transition-colors rounded-full p-2 hover:bg-gray-100"
+                  style={{ color: 'rgba(101, 36, 131, 1)' }}
+                  className="hover:opacity-70 transition-opacity rounded-full p-2 hover:bg-gray-100"
                 >
                   <User size={24} />
                 </button>
@@ -244,14 +248,15 @@ const HeaderNavBar = () => {
               
               {/* Cart with dropdown */}
               <div className="relative">
-                <button 
-                  className="text-black hover:text-gray-600 transition-colors flex items-center space-x-1 rounded-full p-1.5 lg:p-2 hover:bg-gray-100"
+                <button
+                  style={{ color: 'rgba(101, 36, 131, 1)' }}
+                  className="hover:opacity-70 transition-opacity flex items-center space-x-1 rounded-full p-1.5 lg:p-2 hover:bg-gray-100"
                   onClick={handleCartClick}
                   title="Shopping Cart"
                 >
                   <ShoppingCart size={20} className="lg:w-6 lg:h-6" />
                   {getTotalItems() > 0 && (
-                    <span className="bg-black text-white text-xs rounded-full w-5 h-5 flex items-center justify-center absolute -top-1 -right-1">
+                    <span style={{ backgroundColor: 'rgba(101, 36, 131, 1)' }} className="text-white text-xs rounded-full w-5 h-5 flex items-center justify-center absolute -top-1 -right-1">
                       {getTotalItems()}
                     </span>
                   )}
