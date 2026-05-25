@@ -1,6 +1,5 @@
 
 import React, { useState, useEffect } from 'react';
-import { useScrollToTop } from '@/hooks/useScrollToTop';
 import { useLocation } from 'react-router-dom';
 import HeaderNavBar from '@/components/HeaderNavBar';
 import Footer from '@/components/Footer';
@@ -9,7 +8,6 @@ import { Phone, Mail, MapPin, Coffee, Users, Award, Truck, Package, IndianRupee,
 import { useWholesaleForm } from '@/hooks/useWholesaleForm';
 
 const Wholesale = () => {
-  useScrollToTop();
   const location = useLocation();
   const [formData, setFormData] = useState({
     name: '',

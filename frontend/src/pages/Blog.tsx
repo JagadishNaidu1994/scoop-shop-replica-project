@@ -1,6 +1,5 @@
 
 import React, { useState, useEffect } from 'react';
-import { useScrollToTop } from '@/hooks/useScrollToTop';
 import { Link } from 'react-router-dom';
 import HeaderNavBar from '@/components/HeaderNavBar';
 import Footer from '@/components/Footer';
@@ -22,7 +21,6 @@ interface BlogPost {
 }
 
 const Blog = () => {
-  useScrollToTop();
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);

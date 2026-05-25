@@ -1,5 +1,4 @@
 import React from 'react';
-import { useScrollToTop } from '@/hooks/useScrollToTop';
 import HeaderNavBar from '@/components/HeaderNavBar';
 import Footer from '@/components/Footer';
 import ScienceHeroBanner from '@/components/science/ScienceHeroBanner';
@@ -12,7 +11,6 @@ import FarmSection from '@/components/science/FarmSection';
 import ScienceStepsGrid from '@/components/science/ScienceStepsGrid';
 
 const Science = () => {
-  useScrollToTop();
   return (
     <div className="min-h-screen bg-white">
       <HeaderNavBar />

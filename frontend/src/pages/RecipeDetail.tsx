@@ -1,6 +1,5 @@
 
 import React, { useEffect, useState } from 'react';
-import { useScrollToTop } from '@/hooks/useScrollToTop';
 import { useParams, useNavigate } from 'react-router-dom';
 import HeaderNavBar from '@/components/HeaderNavBar';
 import Footer from '@/components/Footer';
@@ -21,7 +20,6 @@ interface Recipe {
 }
 
 const RecipeDetail = () => {
-  useScrollToTop();
   const { id } = useParams();
   const navigate = useNavigate();
   const [recipe, setRecipe] = useState<any>(null);

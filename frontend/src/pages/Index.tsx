@@ -1,5 +1,4 @@
 import React from 'react';
-import { useScrollToTop } from '@/hooks/useScrollToTop';
 import HeaderNavBar from '@/components/HeaderNavBar';
 import HeroSection from '@/components/HeroSection';
 import SubHeroBanner from '@/components/SubHeroBanner';
@@ -15,7 +14,6 @@ import AdminEditableText from '@/components/admin/AdminEditableText';
 import AdminEditableImage from '@/components/admin/AdminEditableImage';
 import { useEmailPopup } from '@/hooks/useEmailPopup';
 const Index = () => {
-  useScrollToTop();
   const {
     showPopup,
     closePopup

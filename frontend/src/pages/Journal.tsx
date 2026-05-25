@@ -1,6 +1,5 @@
 
 import React, { useState, useEffect } from 'react';
-import { useScrollToTop } from '@/hooks/useScrollToTop';
 import HeaderNavBar from '@/components/HeaderNavBar';
 import Footer from '@/components/Footer';
 import MatchaLoadingAnimation from '@/components/MatchaLoadingAnimation';
@@ -20,7 +19,6 @@ interface Journal {
 }
 
 const Journal = () => {
-  useScrollToTop();
   const [journals, setJournals] = useState<Journal[]>([]);
   const [loading, setLoading] = useState(true);
 

@@ -1,6 +1,5 @@
 
 import React, { useState } from 'react';
-import { useScrollToTop } from '@/hooks/useScrollToTop';
 import HeaderNavBar from '@/components/HeaderNavBar';
 import Footer from '@/components/Footer';
 import { Copy, Share2, Gift, Users } from 'lucide-react';
@@ -8,7 +7,6 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
 
 const ReferFriend = () => {
-  useScrollToTop();
   const [referralLink, setReferralLink] = useState('');
   const { user } = useAuth();
   const { toast } = useToast();

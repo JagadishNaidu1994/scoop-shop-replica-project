@@ -1,12 +1,10 @@
 import React from 'react';
-import { useScrollToTop } from '@/hooks/useScrollToTop';
 import HeaderNavBar from '@/components/HeaderNavBar';
 import Footer from '@/components/Footer';
 import { ArrowLeft, Package, Clock, CheckCircle, XCircle, RefreshCw, Mail } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const ReturnPolicy = () => {
-  useScrollToTop();
   return (
     <div className="min-h-screen bg-background">
       <HeaderNavBar />

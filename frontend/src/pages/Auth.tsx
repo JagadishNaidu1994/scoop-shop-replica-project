@@ -1,6 +1,5 @@
 
 import React, { useState, useEffect } from 'react';
-import { useScrollToTop } from '@/hooks/useScrollToTop';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -14,7 +13,6 @@ import HeaderNavBar from '@/components/HeaderNavBar';
 import { Mail } from 'lucide-react';
 
 const Auth = () => {
-  useScrollToTop();
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');

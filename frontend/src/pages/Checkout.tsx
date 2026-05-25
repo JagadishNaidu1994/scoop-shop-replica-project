@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useScrollToTop } from '@/hooks/useScrollToTop';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useCart } from '@/contexts/CartContext';
@@ -61,7 +60,6 @@ interface Coupon {
 }
 
 const Checkout = () => {
-  useScrollToTop();
   const { user } = useAuth();
   const { items, getTotalPrice, clearCart } = useCart();
   const { toast } = useToast();

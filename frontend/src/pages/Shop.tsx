@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { useScrollToTop } from '@/hooks/useScrollToTop';
 import HeaderNavBar from '@/components/HeaderNavBar';
 import Footer from '@/components/Footer';
 import ProductGrid from '@/components/shop/ProductGrid';
@@ -21,7 +20,6 @@ interface Product {
 }
 
 const Shop = () => {
-  useScrollToTop();
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
 

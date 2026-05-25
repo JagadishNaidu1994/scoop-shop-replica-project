@@ -1,6 +1,5 @@
 
 import React, { useState } from 'react';
-import { useScrollToTop } from '@/hooks/useScrollToTop';
 import HeaderNavBar from '@/components/HeaderNavBar';
 import Footer from '@/components/Footer';
 import { Input } from '@/components/ui/input';
@@ -21,7 +20,6 @@ interface Store {
 }
 
 const StoreLocator = () => {
-  useScrollToTop();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedStore, setSelectedStore] = useState<Store | null>(null);
 

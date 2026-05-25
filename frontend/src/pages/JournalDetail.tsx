@@ -1,6 +1,5 @@
 
 import React, { useState, useEffect } from 'react';
-import { useScrollToTop } from '@/hooks/useScrollToTop';
 import { useParams, Link } from 'react-router-dom';
 import HeaderNavBar from '@/components/HeaderNavBar';
 import Footer from '@/components/Footer';
@@ -20,7 +19,6 @@ interface Journal {
 }
 
 const JournalDetail = () => {
-  useScrollToTop();
   const { id } = useParams<{ id: string }>();
   const [journal, setJournal] = useState<Journal | null>(null);
   const [loading, setLoading] = useState(true);
