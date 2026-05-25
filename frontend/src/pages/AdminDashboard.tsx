@@ -1,5 +1,6 @@
 
 import React, { useState } from "react";
+import { useScrollToTop } from '@/hooks/useScrollToTop';
 import { useAuth } from "@/contexts/AuthContext";
 import { Navigate, useNavigate } from "react-router-dom";
 import { useAdminCheck } from "@/hooks/useAdminCheck";
@@ -25,6 +26,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft, Menu, X } from "lucide-react";
 
 const AdminDashboard = () => {
+  useScrollToTop();
   const { user } = useAuth();
   const { isAdmin, loading } = useAdminCheck();
   const [activeTab, setActiveTab] = useState("dashboard");

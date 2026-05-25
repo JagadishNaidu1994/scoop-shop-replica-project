@@ -1,5 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
+import { useScrollToTop } from '@/hooks/useScrollToTop';
 import { useNavigate } from 'react-router-dom';
 import HeaderNavBar from '@/components/HeaderNavBar';
 import Footer from '@/components/Footer';
@@ -28,6 +29,7 @@ interface Journal {
 }
 
 const AdminJournals = () => {
+  useScrollToTop();
   const { user } = useAuth();
   const navigate = useNavigate();
   const { isAdmin, loading } = useAdminCheck();

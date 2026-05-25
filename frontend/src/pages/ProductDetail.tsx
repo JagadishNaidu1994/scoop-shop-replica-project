@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useScrollToTop } from '@/hooks/useScrollToTop';
 import { useParams, useNavigate } from 'react-router-dom';
 
 import ReviewsSection from '@/components/ReviewsSection';
@@ -33,6 +34,7 @@ interface Product {
 }
 
 const ProductDetail = () => {
+  useScrollToTop();
   const { id } = useParams();
   const navigate = useNavigate();
   const { addToCart } = useCart();

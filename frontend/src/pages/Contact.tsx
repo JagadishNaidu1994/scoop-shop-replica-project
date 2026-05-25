@@ -1,5 +1,6 @@
 
 import React, { useState } from 'react';
+import { useScrollToTop } from '@/hooks/useScrollToTop';
 import HeaderNavBar from '@/components/HeaderNavBar';
 import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
@@ -10,6 +11,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Mail, Phone, MapPin } from 'lucide-react';
 
 const Contact = () => {
+  useScrollToTop();
   const { toast } = useToast();
   const [formData, setFormData] = useState({
     name: '',

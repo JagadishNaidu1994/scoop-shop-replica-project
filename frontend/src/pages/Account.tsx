@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useScrollToTop } from '@/hooks/useScrollToTop';
 import { useAuth } from '@/contexts/AuthContext';
 import { useCart } from '@/contexts/CartContext';
 import { useWishlist } from '@/contexts/WishlistContext';
@@ -94,6 +95,7 @@ interface Product {
 }
 
 const Account = () => {
+  useScrollToTop();
   const { user, signOut } = useAuth();
   const { addToCart } = useCart();
   const { items: wishlistItems, removeFromWishlist } = useWishlist();

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useScrollToTop } from '@/hooks/useScrollToTop';
 import HeaderNavBar from '@/components/HeaderNavBar';
 import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
@@ -15,6 +16,7 @@ interface BeforeInstallPromptEvent extends Event {
 }
 
 const Install = () => {
+  useScrollToTop();
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [isInstalled, setIsInstalled] = useState(false);
   const [isIOS, setIsIOS] = useState(false);

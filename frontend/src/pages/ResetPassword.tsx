@@ -1,5 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
+import { useScrollToTop } from '@/hooks/useScrollToTop';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Eye, EyeOff, Lock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -10,6 +11,7 @@ import { supabase } from '@/integrations/supabase/client';
 import HeaderNavBar from '@/components/HeaderNavBar';
 
 const ResetPassword = () => {
+  useScrollToTop();
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);

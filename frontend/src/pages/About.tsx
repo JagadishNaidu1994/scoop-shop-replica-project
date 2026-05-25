@@ -1,10 +1,12 @@
 
 import React from 'react';
+import { useScrollToTop } from '@/hooks/useScrollToTop';
 import HeaderNavBar from '@/components/HeaderNavBar';
 import Footer from '@/components/Footer';
 import AdminImageUpload from '@/components/AdminImageUpload';
 
 const About = () => {
+  useScrollToTop();
   return (
     <div className="min-h-screen bg-white">
       <HeaderNavBar />

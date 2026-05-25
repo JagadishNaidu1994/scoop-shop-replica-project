@@ -1,5 +1,6 @@
 
 import React, { useState } from 'react';
+import { useScrollToTop } from '@/hooks/useScrollToTop';
 import HeaderNavBar from '@/components/HeaderNavBar';
 import Footer from '@/components/Footer';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
@@ -7,6 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Search } from 'lucide-react';
 
 const FAQ = () => {
+  useScrollToTop();
   const [searchTerm, setSearchTerm] = useState('');
 
   const faqs = [

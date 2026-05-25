@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useScrollToTop } from '@/hooks/useScrollToTop';
 import HeaderNavBar from '@/components/HeaderNavBar';
 import Footer from '@/components/Footer';
 import MatchaLoadingAnimation from '@/components/MatchaLoadingAnimation';
@@ -13,6 +14,7 @@ interface Recipe {
   read_time: string;
 }
 const Recipes = () => {
+  useScrollToTop();
   const [dbRecipes, setDbRecipes] = useState<Recipe[]>([]);
   const [loading, setLoading] = useState(true);
 

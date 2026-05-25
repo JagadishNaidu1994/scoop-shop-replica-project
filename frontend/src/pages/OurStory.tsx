@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useScrollToTop } from '@/hooks/useScrollToTop';
 import HeaderNavBar from '@/components/HeaderNavBar';
 import Footer from '@/components/Footer';
 import NasteaStandard from '@/components/NasteaStandard';
@@ -13,6 +14,7 @@ type StorySection = {
 };
 
 const storySections: StorySection[] = [
+  useScrollToTop();
   {
     title: "Wellness, Rooted in Ritual",
     body: [
