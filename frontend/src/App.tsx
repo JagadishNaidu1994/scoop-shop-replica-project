@@ -11,6 +11,7 @@ import { AdminImageProvider } from "@/contexts/AdminImageContext";
 import { DesignMode } from "@/components/DesignMode";
 import { useImageReplacements } from "@/hooks/useImageReplacements";
 import { useScrollToTop } from "@/hooks/useScrollToTop";
+import ScrollProgressBar from "@/components/ScrollProgressBar";
 import Index from "./pages/Index";
 import Shop from "./pages/Shop";
 import ProductDetail from "./pages/ProductDetail";
@@ -50,6 +51,7 @@ const App = () => {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <ScrollProgressBar />
       <AuthProvider>
           <CartProvider>
             <WishlistProvider>
