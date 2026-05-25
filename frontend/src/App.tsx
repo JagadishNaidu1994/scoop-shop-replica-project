@@ -10,6 +10,7 @@ import { AdminEditProvider } from "@/contexts/AdminEditContext";
 import { AdminImageProvider } from "@/contexts/AdminImageContext";
 import { DesignMode } from "@/components/DesignMode";
 import { useImageReplacements } from "@/hooks/useImageReplacements";
+import { useScrollToTop } from "@/hooks/useScrollToTop";
 import Index from "./pages/Index";
 import Shop from "./pages/Shop";
 import ProductDetail from "./pages/ProductDetail";
@@ -39,6 +40,11 @@ import RecipeDetail from "./pages/RecipeDetail";
 
 const queryClient = new QueryClient();
 
+const ScrollToTop = () => {
+  useScrollToTop();
+  return null;
+};
+
 const App = () => {
   useImageReplacements();
 
@@ -54,6 +60,7 @@ const App = () => {
                     <Sonner />
                     <DesignMode />
                     <BrowserRouter>
+                      <ScrollToTop />
                       <Routes>
                         <Route path="/" element={<Index />} />
                         <Route path="/shop" element={<Shop />} />
