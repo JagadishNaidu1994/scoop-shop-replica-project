@@ -5,7 +5,7 @@ const howToSteps = [
   {
     thumbnail: '/lovable-uploads/matcha-whisk.png',
     image: '/lovable-uploads/matcha-whisk.png',
-    title: 'Add 2g of NASTEA powder to a cup',
+    title: 'Add NASTEA matcha with a splash of warm water and whisk',
   },
   {
     thumbnail: '/lovable-uploads/matcha-whisk.png',
@@ -67,7 +67,7 @@ const HowToSection: React.FC = () => {
                 className="text-sm font-semibold tracking-wide mb-3"
                 style={{ color: '#0D1B2A' }}
               >
-                How to NASTEA
+                How to Prepare Nastea Matcha
               </p>
               <h3
                 className="text-2xl md:text-3xl lg:text-4xl font-bold leading-tight mb-6"
