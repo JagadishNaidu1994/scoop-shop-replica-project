@@ -1,5 +1,5 @@
-supabase
-.supabase
+/supabase
+/.supabase
 .git
 .gitignore
 README.md
