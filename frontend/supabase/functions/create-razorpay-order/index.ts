@@ -8,18 +8,13 @@ const corsHeaders = {
 };
 
 serve(async (req: Request) => {
-  console.log("=== create-razorpay-order called ===");
-
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders });
   }
 
   try {
-    console.log("Starting payment order creation...");
-
     // Authenticate user
     const authHeader = req.headers.get("Authorization");
-    console.log("Auth header present:", !!authHeader);
     if (!authHeader?.startsWith("Bearer ")) {
       return new Response(JSON.stringify({ error: "Unauthorized" }), {
         status: 401,
@@ -36,16 +31,14 @@ serve(async (req: Request) => {
     const { data: { user }, error: userError } = await supabase.auth.getUser();
     if (userError || !user) {
       console.error("Auth error:", userError);
-      return new Response(JSON.stringify({ error: "Unauthorized", userError: userError?.message }),{
+      return new Response(JSON.stringify({ error: "Unauthorized" }), {
         status: 401,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
     const userId = user.id;
-    console.log("User authenticated:", userId);
 
-    const { shipping_cost = 0, discount_amount = 0 } = await req.json();
-    console.log("Request body parsed - shipping:", shipping_cost, "discount:", discount_amount);
+    const { shipping_cost = 0 } = await req.json();
 
     // Fetch cart items from DB — never trust frontend amount
     const { data: cartItems, error: cartError } = await supabase
@@ -104,7 +97,7 @@ serve(async (req: Request) => {
       subtotal += unitPrice * item.quantity;
     }
 
-    const totalAmount = subtotal - discount_amount + shipping_cost;
+    const totalAmount = subtotal + shipping_cost;
     const amountInPaise = Math.round(totalAmount * 100);
 
     // Create Razorpay order
@@ -112,9 +105,8 @@ serve(async (req: Request) => {
     const razorpayKeySecret = Deno.env.get("RAZORPAY_KEY_SECRET");
 
     if (!razorpayKeyId || !razorpayKeySecret) {
-      console.error("Missing Razorpay config - KEY_ID:", !!razorpayKeyId, "KEY_SECRET:", !!razorpayKeySecret);
       return new Response(
-        JSON.stringify({ error: "Payment service not configured. Missing: " + (!razorpayKeyId ? "RAZORPAY_KEY_ID " : "") + (!razorpayKeySecret ? "RAZORPAY_KEY_SECRET" : "") }),
+        JSON.stringify({ error: "Payment service not configured" }),
         { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
@@ -154,10 +146,9 @@ serve(async (req: Request) => {
       { headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   } catch (error: any) {
-    console.error("Error creating order:", error.message || error);
-    console.error("Stack:", error.stack);
+    console.error("Error creating order:", error);
     return new Response(
-      JSON.stringify({ error: "Internal server error", message: error.message }),
+      JSON.stringify({ error: "Internal server error" }),
       { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   }
