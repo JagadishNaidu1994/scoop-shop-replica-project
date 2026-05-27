@@ -32,10 +32,23 @@ const CartDropdown = () => {
       </div>
       
       <div className="max-h-60 sm:max-h-80 overflow-y-auto">
-        {items.map((item) => (
+        {items.map((item) => {
+          let cartImage = item.product_image;
+
+          // Fallback image for Organic Ceremonial Matcha
+          if (!cartImage && item.product_name && item.product_name.toLowerCase().includes('organic ceremonial')) {
+            cartImage = '/lovable-uploads/NDN00607-Edit.jpg';
+          }
+
+          // Default fallback if still no image
+          if (!cartImage) {
+            cartImage = "https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=60&h=60&fit=crop";
+          }
+
+          return (
           <div key={item.id} className="p-3 sm:p-4 border-b border-gray-100 flex items-center space-x-3 sm:space-x-4">
-            <img 
-              src={item.product_image || "https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=60&h=60&fit=crop"} 
+            <img
+              src={cartImage}
               alt={item.product_name}
               className="w-12 h-12 sm:w-16 sm:h-16 object-cover rounded flex-shrink-0"
             />
@@ -79,7 +92,8 @@ const CartDropdown = () => {
               <X size={14} />
             </button>
           </div>
-        ))}
+        );
+        })}
       </div>
       
       <div className="p-3 sm:p-4 border-t border-gray-200">

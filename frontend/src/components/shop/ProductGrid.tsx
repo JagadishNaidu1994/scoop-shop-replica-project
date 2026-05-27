@@ -45,13 +45,30 @@ const ProductGridComponent: React.FC<ProductGridProps> = ({ products }) => {
   return (
     <div className={`grid ${isMobile ? 'grid-cols-1 gap-6' : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'}`}>
       {products.map((product) => {
+        let primaryImage = product.primary_image || '/placeholder.svg';
+        let hoverImage = product.hover_image || '/placeholder.svg';
+        let benefits = product.benefits || [];
+
+        // Add fallback images for specific products
+        if (product.name && product.name.toLowerCase().includes('organic ceremonial') && !product.primary_image) {
+          primaryImage = '/lovable-uploads/NDN00607-Edit.jpg';
+          hoverImage = '/lovable-uploads/NDN00607-Edit.jpg';
+        }
+
+        // Override benefits with custom packaging taglines
+        if (product.name && product.name.toLowerCase().includes('organic ceremonial')) {
+          benefits = ['Rich Umami', 'Creamy texture', 'Handpicked'];
+        } else if (product.name && product.name.toLowerCase().includes('japanese classic')) {
+          benefits = ['Strong Aroma', 'Vibrant Green', 'Smooth texture'];
+        }
+
         const productData = {
           id: product.id,
           name: product.name,
           price: `₹${product.price}`, // Remove toFixed since price is already a number
-          primaryImage: product.primary_image || '/placeholder.svg',
-          hoverImage: product.hover_image || '/placeholder.svg',
-          benefits: product.benefits || []
+          primaryImage,
+          hoverImage,
+          benefits
         };
 
         return isMobile ? (

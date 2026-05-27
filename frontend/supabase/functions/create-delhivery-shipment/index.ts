@@ -1,4 +1,5 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const DELHIVERY_API_KEY = Deno.env.get("DELHIVERY_API_KEY") || "";
 const DELHIVERY_BASE_URL = "https://track.delhivery.com/api/cmu/create.json";
@@ -47,6 +48,24 @@ function buildDelhiveryPayload(orderData: OrderData) {
 
   const totalQty = orderData.items.reduce((sum, i) => sum + i.quantity, 0);
 
+  // Get environment variables with logging
+  const returnPin = Deno.env.get("DELHIVERY_RETURN_PIN") || "500068";
+  const returnCity = Deno.env.get("DELHIVERY_RETURN_CITY") || "Hyderabad";
+  const returnPhone = Deno.env.get("DELHIVERY_RETURN_PHONE") || "9999999999";
+  const returnAdd = Deno.env.get("DELHIVERY_RETURN_ADDRESS") || "Durga Elevate, Hyderabad";
+  const returnState = Deno.env.get("DELHIVERY_RETURN_STATE") || "Telangana";
+  const sellerAdd = Deno.env.get("DELHIVERY_SELLER_ADDRESS") || "Durga Elevate, Hyderabad, Telangana";
+  const sellerGst = Deno.env.get("DELHIVERY_SELLER_GST") || "";
+  const pickupName = Deno.env.get("DELHIVERY_PICKUP_LOCATION_NAME") || "Durga Elevate";
+
+  console.log("Delhivery environment vars:", {
+    returnPin,
+    returnCity,
+    returnPhone: returnPhone ? "***set***" : "***not set***",
+    returnState,
+    sellerGst: sellerGst ? "***set***" : "***not set***"
+  });
+
   return {
     shipments: [
       {
@@ -60,18 +79,18 @@ function buildDelhiveryPayload(orderData: OrderData) {
         phone: orderData.shipping_address.phone,
         order: orderData.order_number,
         payment_mode: orderData.payment_method === "COD" ? "COD" : "Prepaid",
-        return_pin: "",
-        return_city: "",
-        return_phone: "",
-        return_add: "",
-        return_state: "",
-        return_country: "",
+        return_pin: returnPin,
+        return_city: returnCity,
+        return_phone: returnPhone,
+        return_add: returnAdd,
+        return_state: returnState,
+        return_country: "India",
         products_desc: productDesc,
         hsn_code: "",
         cod_amount: orderData.payment_method === "COD" ? orderData.total_amount.toString() : "0",
         order_date: new Date().toISOString().split("T")[0],
         total_amount: orderData.total_amount.toString(),
-        seller_add: "",
+        seller_add: sellerAdd,
         seller_name: "NASTEA",
         seller_inv: "",
         quantity: totalQty.toString(),
@@ -79,13 +98,13 @@ function buildDelhiveryPayload(orderData: OrderData) {
         shipment_width: "",
         shipment_height: "",
         weight: "",
-        seller_gst_tin: "",
+        seller_gst_tin: sellerGst,
         shipping_mode: "Surface",
         address_type: "",
       },
     ],
     pickup_location: {
-      name: "NASTEA Warehouse",
+      name: pickupName,
     },
   };
 }
@@ -135,19 +154,28 @@ async function createDelhiveryShipment(orderData: OrderData) {
 
     console.log("Delhivery parsed response:", JSON.stringify(result));
 
+    // Log detailed response for debugging
+    console.log("Response keys:", Object.keys(result));
+    console.log("Response success field:", result.success);
+    console.log("Response packages:", result.packages);
+    console.log("Response error/rmk:", result.error || result.rmk || result.message);
+
     // Delhivery returns { success: true, packages: [...] } on success
     if (result.success || result.packages?.length > 0) {
+      console.log("✅ Shipment creation successful");
       return {
         success: true,
         packages: result.packages || [],
         message: "Shipment created successfully",
       };
     } else {
+      console.log("❌ Shipment creation failed:", result);
       return {
         success: false,
-        error: result.rmk || result.error || JSON.stringify(result),
+        error: result.rmk || result.error || result.message || JSON.stringify(result),
         packages: result.packages || [],
         message: "Failed to create Delhivery shipment",
+        full_response: result,
       };
     }
   } catch (error) {
@@ -177,11 +205,59 @@ serve(async (req: Request) => {
       );
     }
 
-    const { orderData } = await req.json();
+    // Authentication check - accept either user JWT or service role key
+    const authHeader = req.headers.get("Authorization");
+    if (!authHeader?.startsWith("Bearer ")) {
+      return new Response(
+        JSON.stringify({ error: "Unauthorized" }),
+        {
+          status: 401,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        }
+      );
+    }
+
+    const token = authHeader.replace("Bearer ", "");
+    const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") || "";
+    const isServiceRole = token === serviceRoleKey;
+
+    if (!isServiceRole) {
+      const supabase = createClient(
+        Deno.env.get("SUPABASE_URL")!,
+        Deno.env.get("SUPABASE_ANON_KEY")!,
+        { global: { headers: { Authorization: authHeader } } }
+      );
+
+      const { data: { user }, error: authError } = await supabase.auth.getUser();
+      if (authError || !user) {
+        return new Response(
+          JSON.stringify({ error: "Unauthorized" }),
+          {
+            status: 401,
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+          }
+        );
+      }
+    }
+
+    const requestBody = await req.json();
+    console.log("Received request body:", JSON.stringify(requestBody));
+
+    const orderData = requestBody.orderData || requestBody;
 
     if (!orderData) {
       return new Response(
         JSON.stringify({ error: "Order data is required" }),
+        {
+          status: 400,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        }
+      );
+    }
+
+    if (!orderData.order_number || !orderData.shipping_address) {
+      return new Response(
+        JSON.stringify({ error: "Missing required order fields" }),
         {
           status: 400,
           headers: { ...corsHeaders, "Content-Type": "application/json" },

@@ -7,13 +7,20 @@ export const useImageReplacements = () => {
 
     const loadReplacementsFromDB = async () => {
       try {
-        const { data, error } = await supabase
+        // Add timeout - if it takes more than 5 seconds, skip it
+        const timeoutPromise = new Promise((_, reject) =>
+          setTimeout(() => reject(new Error("Image replacements load timeout")), 5000)
+        );
+
+        const queryPromise = supabase
           .from("image_replacements")
           .select("original_src, replacement_url");
 
+        const { data, error } = await Promise.race([queryPromise, timeoutPromise]) as any;
+
         if (error) {
-          console.error("Failed to load image replacements:", error);
-          return null;
+          console.warn("Failed to load image replacements:", error);
+          return new Map();
         }
 
         if (!data || data.length === 0) {
@@ -22,8 +29,8 @@ export const useImageReplacements = () => {
 
         return new Map(data.map((r) => [r.original_src, r.replacement_url]));
       } catch (err) {
-        console.error("Error loading image replacements:", err);
-        return null;
+        console.warn("Image replacements skipped (non-critical):", (err as Error).message);
+        return new Map();
       }
     };
 

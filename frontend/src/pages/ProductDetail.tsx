@@ -100,13 +100,18 @@ const ProductDetail = () => {
       if (isNaN(productId)) {navigate('/shop');return;}
       const { data, error } = await supabase.from('products').select('*').eq('id', productId).eq('is_active', true).single();
       if (error) {navigate('/shop');return;}
+
+      // Add fallback image for Organic Ceremonial Matcha if primary_image is missing
+      if (data.name && data.name.toLowerCase().includes('organic ceremonial') && !data.primary_image) {
+        data.primary_image = '/lovable-uploads/NDN00607-Edit.jpg';
+      }
+
       setProduct(data);
     } catch {navigate('/shop');} finally {setLoading(false);}
   };
 
   const getDiscountMultiplier = () => {
-    if (purchaseType === 'onetime') return 1;
-    return subscriptionFrequency === '4weeks' ? 0.85 : 0.85;
+    return 0.85;
   };
 
   const getDiscountLabel = () => subscriptionFrequency === '4weeks' ? '15%' : '15%';
@@ -427,7 +432,7 @@ const ProductDetail = () => {
                         onClick={handleAddToCart}
                         className="flex-1 h-[52px] rounded-full font-semibold text-sm transition-all hover:opacity-90"
                         style={{ backgroundColor: '#0D1B2A', color: '#FFFFFF' }}>
-                        ADD TO CART – ₹{(product.price * quantity).toFixed(0)}
+                        ADD TO CART – ₹{(currentPrice * quantity).toFixed(0)}
                       </button>
                     </div>
                   </>}
@@ -442,8 +447,8 @@ const ProductDetail = () => {
                 { label: 'The Science', open: scienceOpen, setOpen: setScienceOpen, content: 'Matcha comes from the Camellia sinensis plant (same as green tea), but it\'s made differently: the leaves are shade-grown, then finely milled into a powder. That means you\'re not just steeping tea and tossing the leaves - you\'re consuming the leaf itself. Result: a richer, more concentrated matcha experience in both taste and naturally occurring compounds.\n\nMatcha\'s energy also tends to feel… more composed. That\'s because matcha naturally contains caffeine + L-theanine - a tea amino acid often linked to a calmer, more focused "alert" feel compared to caffeine drinks\' spike-and-crash reputation. Translation: steady energy, cleaner headspace, fewer "why am I vibrating?" moments.\n\nDepending on the product you\'re drinking, matcha also contains a mix of plant compounds that shape how it tastes and why it\'s been respected for centuries:\n\n• L-theanine - associated with calm-focus vibes (especially alongside caffeine)\n• Catechins - the crisp, slightly bitter plant compounds in green tea (yes, the "real matcha" taste cue)\n• Chlorophyll - the pigment that makes matcha that vivid, neon-clean green (shade-growing helps)\n\nIf you\'re looking at functional blends that pair matcha with other ingredients (like mushrooms or vitamins), the goal is usually to build on matcha\'s natural "calm energy" profile - but the core is still the same: ceremonial matcha done properly, as a daily ritual that feels good and tastes even better.' },
                 { label: 'How to Prepare Nastea Matcha', open: howToUseOpen, setOpen: setHowToUseOpen, content: '1. Add NASTEA matcha with a splash of warm water and whisk until smooth + frothy.\n2. Fill a glass with ice (skip ice if you want it hot).\n3. Pour in milk of choice (almond/oat milk is elite).\n4. Top with the whisked matcha, stir, sip like you\'ve got plans.' }]
                 : [
-                { label: 'Why choose Nastea Rituals', open: whyChooseOpen, setOpen: setWhyChooseOpen, content: 'Japanese Classic Matcha is our everyday workhorse - premium Japanese matcha built to perform in the real world. It\'s smooth, vibrant, and consistent enough for daily lattes, iced drinks, tonics, and café menus that can\'t afford "batch roulette." We source Japan-grown matcha (hello, Kagoshima), keep it clean, and obsess over the things that matter in-cup: flavour, colour, and reliability.\n\nMost "premium" matcha is either bitter, dull, or disappears in milk. Ours doesn\'t. Japanese Classic is shade-grown and stone-milled to keep the cup balanced and creamy - the kind of matcha you can drink every day without needing a personality transplant. Clean caffeine. Zero boring. All standards.' },
-                { label: 'Ingredients', open: ingredientsOpen, setOpen: setIngredientsOpen, content: 'Japanese Classic Grade Matcha' },
+                { label: 'Why choose Nastea Rituals', open: whyChooseOpen, setOpen: setWhyChooseOpen, content: 'Organic Ceremonial Matcha is our everyday workhorse - premium Japanese matcha built to perform in the real world. It\'s smooth, vibrant, and consistent enough for daily lattes, iced drinks, tonics, and café menus that can\'t afford "batch roulette." We source Japan-grown matcha (hello, Kagoshima), keep it clean, and obsess over the things that matter in-cup: flavour, colour, and reliability.\n\nMost "premium" matcha is either bitter, dull, or disappears in milk. Ours doesn\'t. Organic Ceremonial is shade-grown and stone-milled to keep the cup balanced and creamy - the kind of matcha you can drink every day without needing a personality transplant. Clean caffeine. Zero boring. All standards.' },
+                { label: 'Ingredients', open: ingredientsOpen, setOpen: setIngredientsOpen, content: 'Organic Ceremonial Matcha' },
                 { label: 'The Science', open: scienceOpen, setOpen: setScienceOpen, content: 'Matcha comes from the Camellia sinensis plant (same as green tea), but it\'s made differently: the leaves are shade-grown, then finely milled into a powder. That means you\'re not just steeping tea and tossing the leaves - you\'re consuming the leaf itself. Result: a richer, more concentrated matcha experience in both taste and naturally occurring compounds.\n\nMatcha\'s energy also tends to feel… more composed. That\'s because matcha naturally contains caffeine + L-theanine - a tea amino acid often linked to a calmer, more focused "alert" feel compared to coffee\'s spike-and-crash reputation. Translation: steady energy, cleaner headspace, fewer "why am I vibrating?" moments.\n\nMatcha also contains plant compounds that shape how it tastes and why it\'s been respected for centuries:\n\n• L-theanine - associated with calm-focus vibes (especially alongside caffeine)\n• Catechins - the crisp, slightly bitter plant compounds in green tea (aka the "real matcha" taste cue)\n• Chlorophyll - the pigment behind that vivid green colour (shade-growing helps)' },
                 { label: 'How to Prepare Nastea Matcha', open: howToUseOpen, setOpen: setHowToUseOpen, content: 'Add NASTEA matcha with a splash of warm water and whisk until smooth + frothy.\n\nFill a glass with ice (skip ice if you want it hot).\n\nPour in milk of choice (oat is elite; coconut is a close second).\n\nTop with the whisked matcha, stir, sip like you\'ve got plans.\n\nPure ingredients, powerful rituals.' }].map((item, idx) =>
                 <Collapsible key={idx} open={item.open} onOpenChange={item.setOpen}>
@@ -470,7 +475,7 @@ const ProductDetail = () => {
               <div className="w-full px-4 sm:px-6 lg:px-8">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
                   <div className="relative">
-                    <AdminImageUpload src="/lovable-uploads/everyday-essential.jpg" alt="Everyday essential" className="w-full h-[700px] rounded-lg object-cover" imagePath="everyday-essential" />
+                    <AdminImageUpload src="/lovable-uploads/everyday-essential.jpg" alt="Everyday essential" className="w-full h-[700px] rounded-lg object-cover object-center" imagePath="everyday-essential" />
                   </div>
                   <div className="flex flex-col h-[700px]">
                     <div>

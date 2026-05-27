@@ -52,11 +52,14 @@ serve(async (req: Request) => {
       shipping_cost = 0,
       is_subscription = false,
       subscription_frequency = null,
+      coupon_id = null,
+      discount_amount = 0,
     } = await req.json();
 
     // 1. Verify HMAC signature
     const keySecret = Deno.env.get("RAZORPAY_KEY_SECRET");
     if (!keySecret) {
+      console.error("RAZORPAY_KEY_SECRET not configured");
       return new Response(
         JSON.stringify({ success: false, error: "Payment verification not configured" }),
         { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
@@ -65,6 +68,8 @@ serve(async (req: Request) => {
 
     const body = `${razorpay_order_id}|${razorpay_payment_id}`;
     const expectedSignature = createHmac("sha256", keySecret).update(body).digest("hex");
+
+    console.log("Signature verification - Order:", razorpay_order_id, "Expected:", expectedSignature.substring(0, 10) + "...", "Received:", razorpay_signature.substring(0, 10) + "...");
 
     if (expectedSignature !== razorpay_signature) {
       console.error("Signature mismatch for order:", razorpay_order_id);
@@ -100,8 +105,10 @@ serve(async (req: Request) => {
       .select("product_id, product_name, product_price, quantity, is_subscription, subscription_frequency")
       .eq("user_id", userId);
 
+    console.log("Cart fetch - User ID:", userId, "Cart items count:", cartItems?.length || 0, "Cart error:", cartError);
+
     if (cartError || !cartItems || cartItems.length === 0) {
-      console.error("Cart fetch error:", cartError);
+      console.error("Cart fetch error:", cartError, "Cart items:", cartItems);
       return new Response(
         JSON.stringify({ success: false, error: "Cart is empty" }),
         { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
@@ -125,7 +132,7 @@ serve(async (req: Request) => {
       if (item.is_subscription) unitPrice *= 0.8;
       subtotal += unitPrice * item.quantity;
     }
-    const totalAmount = subtotal + shipping_cost;
+    const totalAmount = subtotal - discount_amount + shipping_cost;
 
     // 5. Generate order number
     const orderNumber = `ORD-${new Date().getFullYear()}-${String(Date.now()).slice(-5)}`;
@@ -136,6 +143,8 @@ serve(async (req: Request) => {
       order_number: orderNumber,
       total_amount: totalAmount,
       shipping_cost: shipping_cost,
+      discount_amount: discount_amount,
+      coupon_id: coupon_id,
       status: "processing",
       payment_method: "razorpay",
       tracking_number: razorpay_payment_id, // store payment_id for idempotency
@@ -148,16 +157,25 @@ serve(async (req: Request) => {
       orderPayload.subscription_frequency = subscription_frequency;
     }
 
+    console.log("Creating order with payload:", JSON.stringify({
+      user_id: orderPayload.user_id,
+      order_number: orderPayload.order_number,
+      total_amount: orderPayload.total_amount,
+      status: orderPayload.status
+    }));
+
     const { data: order, error: orderError } = await adminClient
       .from("orders")
       .insert(orderPayload)
       .select()
       .single();
 
+    console.log("Order creation response - Error:", orderError, "Order ID:", order?.id);
+
     if (orderError || !order) {
-      console.error("Order creation error:", orderError);
+      console.error("Order creation error:", JSON.stringify(orderError));
       return new Response(
-        JSON.stringify({ success: false, error: "Failed to create order" }),
+        JSON.stringify({ success: false, error: "Failed to create order", details: orderError?.message }),
         { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
@@ -205,7 +223,21 @@ serve(async (req: Request) => {
     // 10. Trigger Delhivery shipment (fire and forget)
     try {
       const delhiveryKey = Deno.env.get("DELHIVERY_API_KEY");
-      if (delhiveryKey && shipping_address) {
+      if (!delhiveryKey) {
+        console.warn("DELHIVERY_API_KEY not configured - shipment will not be created automatically");
+      } else if (shipping_address) {
+        console.log("Delhivery config check:", {
+          apiKeySet: !!delhiveryKey,
+          shipping_address: {
+            firstName: shipping_address.firstName,
+            lastName: shipping_address.lastName,
+            city: shipping_address.city,
+            state: shipping_address.state,
+            postalCode: shipping_address.postalCode,
+            phone: shipping_address.phone?.substring(0, 2) + "***" || "missing",
+          }
+        });
+
         const delhiveryPayload = {
           orderData: {
             order_number: orderNumber,
@@ -225,6 +257,7 @@ serve(async (req: Request) => {
 
         // Call the delhivery edge function internally
         const delhiveryUrl = `${Deno.env.get("SUPABASE_URL")}/functions/v1/create-delhivery-shipment`;
+        console.log("Calling Delhivery function:", delhiveryUrl);
         const delhiveryResp = await fetch(delhiveryUrl, {
           method: "POST",
           headers: {
@@ -235,20 +268,31 @@ serve(async (req: Request) => {
         });
 
         const delhiveryResult = await delhiveryResp.json();
+        console.log("Delhivery response:", JSON.stringify(delhiveryResult));
+
         if (delhiveryResult.success && delhiveryResult.packages?.length > 0) {
           const awb = delhiveryResult.packages[0].waybill;
           if (awb) {
+            console.log("Shipment created with AWB:", awb);
             await adminClient
               .from("orders")
               .update({ tracking_number: awb, status: "shipped" })
               .eq("id", order.id);
           }
         } else {
-          console.warn("Delhivery shipment not created:", delhiveryResult);
+          console.warn("Delhivery shipment not created. Response:", JSON.stringify(delhiveryResult));
+          // Log specific error details for debugging
+          if (delhiveryResult.error) {
+            console.error("Delhivery error message:", delhiveryResult.error);
+          }
+          if (delhiveryResult.full_response) {
+            console.error("Delhivery full response:", JSON.stringify(delhiveryResult.full_response));
+          }
         }
       }
     } catch (delhiveryError) {
       console.error("Delhivery error (non-fatal):", delhiveryError);
+      console.error("Delhivery error details:", (delhiveryError as Error).message);
     }
 
     // 11. Send order confirmation email (fire and forget)
